@@ -1,0 +1,105 @@
+<div class="control-group">
+	<label class="control-label" for="firstname">{% trans "Firstname" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[firstname]" id="firstname" value="{{ invoice_contact.firstname }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="lastname">{% trans "Lastname" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[lastname]" id="lastname" value="{{ invoice_contact.lastname }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="company">{% trans "Company" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[company]" id="company" value="{{ invoice_contact.company }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="phone">{% trans "Phone" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[phone]" id="phone" value="{{ invoice_contact.phone }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="fax">{% trans "Fax" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[fax]" id="fax" value="{{ invoice_contact.fax }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="mobile">{% trans "Mobile" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[mobile]" id="mobile" value="{{ invoice_contact.mobile }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="street">{% trans "Street" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[street]" id="street" value="{{ invoice_contact.street }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="housenumber">{% trans "Housenumber" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[housenumber]" id="housenumber" value="{{ invoice_contact.housenumber }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="zipcode">{% trans "Zipcode" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[zipcode]" id="zipcode" value="{{ invoice_contact.zipcode }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="city">{% trans "City" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[city]" id="city" value="{{ invoice_contact.city }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="state">{% trans "State" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[state]" id="state" value="{{ invoice_contact.state }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="country">{% trans "Country" %}</label>
+	<div class="controls">
+		<select name="invoice_contact[country_id]" id="country">
+			{% for key, country_group in countries %} 
+				<optgroup label="{{ key }}">			
+				{% for country in country_group %} 
+					<option value="{{ country.id }}" {% if country.id == invoice_contact.country_id %}selected{% endif %} >{{ country.name }}</option>
+				{% endfor %} 
+				</optgroup>
+			{% endfor %} 
+		</select>
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="state">{% trans "VAT" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[vat]" id="vat" value="{{ invoice_contact.vat }}" />
+	</div>
+</div>
+
+<div class="control-group">
+	<label class="control-label" for="email">{% trans "Email" %}</label>
+	<div class="controls">
+		<input type="text" name="invoice_contact[email]" id="email" value="{{ invoice_contact.email }}" />
+	</div>
+</div>

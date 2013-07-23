@@ -1,0 +1,30 @@
+{% extends "base.layout.twig" %}
+
+{% block content %}
+	<h1 style="font-size: 12pt; color: #333333; margin-bottom: 15px">{% trans "Invoice reminder" %}</h1>
+	<p>{% trans "Dear customer" %},</p>
+	<p>{% trans "We noticed that you have one or more unpaid invoices for" %} {{ company_info.company }}.<br />
+	{% trans "In attachment you'll find the unpaid invoices" %}.<br />
+	{% trans "If you recently paid the invoices, you can ignore this email. It can take up to a week for your payment to be processed" %}.
+	</p>
+
+	<h2 style="font-size: 10pt; color: #444444; padding: 2px">{% trans "Unpaid invoices" %}</h2>
+	<table cellpadding="0" cellspacing="0" border="0" style="border: solid 1px #cccccc">
+	<thead>
+		<tr>
+			<th>{% trans "Nr" %}</th>
+			<th>{% trans "Price incl" %}.</th>
+			<th>{% trans "Expiration date" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for invoice in invoices %}
+		<tr>
+			<td>{% trans "Invoice" %} {{ invoice.id }}</td>
+			<td>€ {{ "%.2f"|format(invoice.get_price_incl()) }}</td>
+			<td>{{ invoice.expiration_date|date('d/m/Y') }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+{% endblock %}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>{{ company }} {% trans "invoicing" %}</title>
+
+	<script type="text/javascript" src="/jquery.js"></script>
+	<script type="text/javascript" src="/bootstrap.js"></script>
+	<script type="text/javascript" src="/bootstrap-wysiwyg.js"></script>
+	<script type="text/javascript" src="/jquery.autogrow.js"></script>
+	<script type="text/javascript" src="/base.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="/bootstrap.css&/style.css" rel="stylesheet">
+</head>
+<body>
+	<div id="wrap">
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<a class="brand" href="#">{{ company }} {% trans "invoicing" %}</a>
+
+					{% if env.session.user is not null %}
+						<div class="nav-collapse collapse">
+							<p class="navbar-text pull-right">Logged in as <a href="/login?action=logout" class="navbar-link">{{ env.session.user.username }}</a></p>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+
+				{% if env.session.user is not null %}
+					<!-- Page content -->
+					<div class="span2">
+						<div class="well sidebar-nav">
+							<ul class="nav nav-list ">
+								<li class="nav-header">{% trans "Settings" %}</li>
+								<li {% if env.module == 'user' %}class="active"{% endif %}>
+									<a href="/user"><i class="icon-cog"></i>{% trans "Users" %}</a>
+								</li>
+
+								<li class="nav-header">{% trans "Administrative" %} </li>
+								<li {% if env.module == 'administrative_customer' %}class="active"{% endif %}>
+									<a href="/administrative/customer"><i class="icon-user"></i>{% trans "Customers" %}</a>
+								</li>
+								<li {% if env.module == 'administrative_invoice' %}class="active"{% endif %}>
+									<a href="/administrative/invoice"><i class="icon-shopping-cart"></i>{% trans "Invoices" %}</a>
+								</li>
+								<li {% if env.module == 'administrative_document' %}class="active"{% endif %}>
+									<a href="/administrative/document"><i class="icon-file"></i>{% trans "Documents" %}</a>
+								</li>
+								<li {% if env.module == 'administrative_tag' %}class="active"{% endif %}>
+									<a href="/administrative/tag"><i class="icon-tag"></i>{% trans "Tags" %}</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<div class="span10">
+						{% block content %}{% endblock %}
+					</div>
+				{% else %}
+					<!-- Login page -->
+					<div class="span4"></div>
+					<div class="span4">
+						{% if error %}
+							<div class="alert alert-error">
+								{% trans "Incorrect username or password" %}
+							</div>
+						{% endif %}
+						<div class="hero-unit">
+							<form class="form-signin" action="/login" method="post">
+								<input type="hidden" name="action" value="login" />
+								<h2 class="form-signin-heading">{% trans "Please sign in" %}</h2>
+								<input type="text" name="username" class="input-block-level" placeholder="{% trans "Username" %}">
+								<input type="password" name="password" class="input-block-level" placeholder="{% trans "Password" %} ">
+								<button class="btn btn-primary" type="submit">Sign in</button>
+							</form>
+						</div><!--/span-->
+					</div>
+					<div class="span4"></div>
+				{% endif %}
+			  </div>
+		</div>
+
+		<div id="push"></div>
+	</div>
+
+	<footer>
+		<div class="container">
+		<p class="muted credit">&copy; {{ company }} 2013</p>
+		</div>
+	</footer>
+</body>
+</html>

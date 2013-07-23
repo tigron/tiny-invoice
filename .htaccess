@@ -1,0 +1,7 @@
+# Rewrite all requests to the handler file
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/handler.php
+RewriteRule ^.* /handler.php [L,NS]
+
+# Force everything to be handled as UTF-8
+AddDefaultcharset UTF-8

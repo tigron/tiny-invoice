@@ -1,0 +1,19 @@
+{% extends "base.layout_text.twig" %}
+
+{% block content %}
+{% trans "Invoice reminder" %}
+
+{% trans "Dear customer" %},
+
+{% trans "We noticed that you have one or more unpaid invoices for" %} {{ company_info.company }}.
+{% trans "In attachment you'll find the unpaid invoices" %}.
+{% trans "If you recently paid the invoices, you can ignore this email. It can take up to a week for your payment to be processed" %}.
+
+{% trans "Unpaid invoices" %}
+
+{% trans "Nr" %} // {% trans "Price incl" %}. // {% trans "Expiration date" %}
+{% for invoice in invoices %}
+{% trans "Invoice" %} {{ invoice.id }} // € {{ invoice.get_price_incl() }} // {{ invoice.expiration_date|date('d/m/Y') }}
+{% endfor %}
+
+{% endblock %}

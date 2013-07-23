@@ -1,0 +1,497 @@
+{% extends "base.layout.twig" %}
+
+{% block content %}
+
+{% if action == 'create_step3' %} 
+	<script type="text/javascript">
+		function add_item() {
+			$('#last').before( $('#cloneable tbody').html() );
+			$('textarea.autogrow').autogrow();
+		}
+	</script>
+	<ul class="breadcrumb">
+		<li><a href="/administrative/invoice">{% trans "Invoices" %}</a> <span class="divider">/</span></li>
+		<li class="active">{% trans "Create invoice" %}</li>
+	</ul>
+	<div class="page-header">
+		<h3>{% trans "Create invoice" %}</h3>
+	</div>
+
+
+	<form class="form-horizontal" action="{{ env.server.REQUEST_URI }}" method="post">
+		<input type="hidden" name="customer_id" value="{{ customer.id }}" />
+		<input type="hidden" name="invoice_contact_id" value="{{ invoice_contact.id }}" />
+		<input type="hidden" name="action" value="create" />
+		<table class="table table-striped table-condensed">
+			<thead>
+				<tr>
+					<th>{% trans "Description" %} </th>
+					<th>{% trans "Price" %}</th>
+					<th>{% trans "VAT" %}</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr id="last">
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;" colspan="4">
+						<button type="button" onClick="javascript:add_item()">
+							<i class="icon-plus"></i> {% trans "Add item" %}
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="form-actions">
+			<button type="submit" class="btn">{% trans "Next" %} <i class="icon-arrow-right"></i></button>
+		</div>
+	</form>
+
+	<table class="hide" id="cloneable">
+		<tr>
+			<td width="314">
+				<textarea class="autogrow input-xxlarge" name="invoice_item[description][]"></textarea>
+			</td>
+			<td width="100"><input type="text" name="invoice_item[price][]"></td>
+			<td width="100">
+				<select name="invoice_item[vat][]" class="input-small">
+					<option value="0">0%</option>
+					<option value="0.06">6%</option>
+					<option value="0.12">12%</option>
+					<option value="0.21" selected>21%</option>
+				</select>
+
+			</td>
+			<td width="100"><a href="javascript:void(0);" onClick="$(this).parents('tr').remove()"><i class="icon-remove"></i></a></td>
+		</tr>
+	</table>
+{% elseif action == 'create_step2' %}
+	<script type="text/javascript">
+		var invoice_contacts =  {
+								0: {
+									"firstname":"",
+									"lastname":"",
+									"company":"",
+									"street":"",
+									"housenumber":"",
+									"city":"",
+									"country":"203",
+									"state":"",
+									"zipcode":"",
+									"country":"",
+									"mobile":"",
+									"phone":"",
+									"email":"",
+									"vat":"",
+									"fax":""
+								},
+								{% for invoice_contact in invoice_contacts %}
+									{{ invoice_contact.id }}: {
+										"firstname":"{{ invoice_contact.firstname }}",
+										"lastname":"{{ invoice_contact.lastname }}",
+										"company":"{{ invoice_contact.company }}",
+										"street":"{{ invoice_contact.street }}",
+										"housenumber":"{{ invoice_contact.housenumber }}",
+										"city":"{{ invoice_contact.city }}",
+										"state":"{{ invoice_contact.state }}",
+										"zipcode":"{{ invoice_contact.zipcode }}",
+										"country":"{{ invoice_contact.country_id }}",
+										"mobile":"{{ invoice_contact.mobile }}",
+										"phone":"{{ invoice_contact.phone }}",
+										"email":"{{ invoice_contact.email }}",
+										"vat":"{{ invoice_contact.vat }}",
+										"fax":"{{ invoice_contact.fax }}"
+									}
+									{% if not loop.last %}, {% endif %}
+								{% else %}
+									'-1': {
+										"firstname":"{{ customer.firstname }}",
+										"lastname":"{{ customer.lastname }}",
+										"company":"{{ customer.company }}",
+										"street":"{{ customer.street }}",
+										"housenumber":"{{ customer.housenumber }}",
+										"city":"{{ customer.city }}",
+										"state":"{{ customer.state }}",
+										"zipcode":"{{ customer.zipcode }}",
+										"country":"{{ customer.country_id }}",
+										"mobile":"{{ customer.mobile }}",
+										"phone":"{{ customer.phone }}",
+										"email":"{{ customer.email }}",
+										"vat":"{{ customer.vat }}",
+										"fax":"{{ customer.fax }}"
+									}
+								{% endfor %}
+						};
+
+		function get_invoice_contact_data(invoice_contact){
+			ct = invoice_contacts[invoice_contact[invoice_contact.selectedIndex].value];
+			for (var lbl in ct){
+				if(document.getElementById(lbl)!=null){
+					document.getElementById(lbl).value = ct[lbl];
+				}
+			}
+		}
+	</script>
+	<ul class="breadcrumb">
+		<li><a href="/administrative/invoice">{% trans "Invoices" %}</a> <span class="divider">/</span></li>
+		<li class="active">{% trans "Create invoice" %}</li>
+	</ul>
+
+	<div class="page-header">
+		<h3>{% trans "Create invoice" %}</h3>
+	</div>
+
+	<form class="form-horizontal well form-condensed" action="{{ env.server.REQUEST_URI }}" method="post">
+	<fieldset>
+		<legend>{% trans "Select invoice contact" %}</legend>
+		<input type="hidden" name="customer_id" value="{{ customer.id }}" />
+		<div class="control-group">
+			<label class="control-label" for="invoice_contact">{% trans "Choose invoice contact" %}</label>
+			<div class="controls">
+				<select name="invoice_contact_id" class="input-xlarge" onchange="get_invoice_contact_data(this);">
+					<option value="0">{% trans "Create contact" %}</option>
+					{% for invoice_contact in invoice_contacts %}
+						<option value="{{ invoice_contact.id }}">
+							{{ invoice_contact.firstname }} {{ invoice_contact.lastname }} ({{ invoice_contact.company }})
+						</option>
+					{% else %}
+						<option value="-1">{{ customer.firstname }} {{ customer.lastname }} ({{ customer.company }})</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		{% include 'snippet/form/invoice_contact.twig' with countries %}
+
+		<div class="form-actions">
+			<button type="submit" class="btn">{% trans "Next" %} <i class="icon-arrow-right"></i></button>
+		</div>
+	</fieldset>
+	</form>
+
+{% elseif action == 'create_step1' %}
+	<ul class="breadcrumb">
+		<li><a href="/administrative/invoice">{% trans "Invoices" %}</a> <span class="divider">/</span></li>
+		<li class="active">{% trans "Create invoice" %}</li>
+	</ul>
+
+	<div class="page-header">
+		<h3>{% trans "Create invoice" %}</h3>
+	</div>
+
+	{% if error %}
+		<div class="alert alert-error">
+			{% trans "Please choose a customer" %}
+		</div>
+	{% endif %}
+
+	<form class="form-horizontal well" action="{{ env.server.REQUEST_URI }}" method="post">
+	<fieldet>
+		<legend>{% trans "Choose customer" %}</legend>
+		<div class="control-group">
+			<label class="control-label" for="customer" >{% trans "Search" %}</label>
+
+			<div class="controls">
+				<input type="text" id="customer" name="customer" class="typeahead" autocomplete="off" >
+				<input type="hidden" id="customer_id" name="customer_id" class="" value="0" />
+			</div>
+		</div>
+		<div class="form-actions">
+			<button type="submit" class="btn">{% trans "Next" %} <i class="icon-arrow-right"></i></button>
+		</div>
+	</fieldset>
+	</form>
+
+	<script type="text/javascript">
+		$('.typeahead').typeahead({
+			source: function(query, process) {
+					$.post('/administrative/invoice', { action: "ajax_search_customer", search: query },
+					function(results){
+						var data = [];
+						for (var i = 0; i < results.length; i++) {
+							data.push(results[i].id + '|' + results[i].firstname + ' ' + results[i].lastname + ' (' + results[i].company + ')');
+						}
+
+						process(data);
+					}, "json");
+			},
+			highlighter: function (item) {
+				var parts = item.split('|');
+				parts.shift();
+				return parts.join('|');
+			},
+			updater: function (item) {
+				var parts = item.split('|');
+				$('input[id="customer_id"]').val(parts.shift());
+				return parts.join('|');
+			}
+		});
+	</script>
+{% elseif action == 'edit' %}
+
+	<ul class="breadcrumb">
+		<li><a href="/administrative/invoice">{% trans "Invoices" %}</a> <span class="divider">/</span></li>
+		<li class="active">{% trans "Edit invoice" %}</li>
+	</ul>
+	<div class="page-header">
+		<h3>{% trans "Edit invoice" %} {{ invoice.id }}
+			<div class="pull-right">
+				<a class="btn" href="/administrative/invoice?action=download&id={{ invoice.id }}"><i class="icon-download"></i> {% trans "Download" %}</a>
+				{{ base.modal('Add transfer'|trans, 'button', 'icon-plus-sign', 'form/transfer', 'Add transfer'|trans) }}
+			</div>
+		</h3>
+	</div>
+
+	{% if saved %}
+	<div class="alert alert-success">
+		{% trans "User details saved" %}
+	</div>
+	{% endif %}
+
+	<fieldset>
+		<legend>{% trans "Details" %}</legend>
+		<dl class="dl-horizontal">
+			<dt>{% trans "Invoice number" %}</dt>
+			<dd>{{ invoice.id }}</dd>
+
+			<dt>{% trans "Created" %}</dt>
+			<dd>{{ invoice.created|datetime() }}</dd>
+
+			<dt>{% trans "Price excl VAT" %}</dt>
+			<dd>{{ "€%.2f"|format(invoice.get_price()) }}</dd>
+
+			<dt>{% trans "Price incl VAT" %}</dt>
+			<dd>{{ "€%.2f"|format(invoice.get_price_incl()) }}</dd>
+
+			<dt>{% trans "Paid" %}</dt>
+			<dd>{% if invoice.paid %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</dd>
+		</dl>
+	</fieldset>
+
+	<div class="row-fluid">
+		<div class="span5">
+			<fieldset>
+				<legend>{% trans "Customer" %}</legend>
+				<dl class="dl-horizontal">
+					<dt>{% trans "Name" %}</dt>
+					<dd>{{ invoice.customer.firstname }}</dd>
+
+					<dt>{% trans "Company" %}</dt>
+					<dd>{{ invoice.customer.company }}</dd>
+
+					<dt>{% trans "Address" %}</dt>
+					<dd>{{ invoice.customer.street }} {{ invoice.customer.housenumber }}</dd>
+
+					<dt>&nbsp;</dt>
+					<dd>{{ invoice.customer.zipcode }} {{ invoice.customer.city }}</dd>
+				</dl>
+			</fieldset>
+		</div>
+		<div class="span5">
+			<fieldset>
+				<legend>{% trans "Invoice contact" %}</legend>
+				<dl class="dl-horizontal">
+					<dt>{% trans "Name" %}</dt>
+					<dd>{{ invoice.invoice_contact.firstname }}</dd>
+
+					<dt>{% trans "Company" %}</dt>
+					<dd>{{ invoice.invoice_contact.company }}</dd>
+
+					<dt>{% trans "Address" %}</dt>
+					<dd>{{ invoice.invoice_contact.street }} {{ invoice.invoice_contact.housenumber }}</dd>
+
+					<dt>&nbsp;</dt>
+					<dd>{{ invoice.invoice_contact.zipcode }} {{ invoice.invoice_contact.city }}</dd>
+
+					<dt>{% trans "VAT" %}</dt>
+					<dd>{{ invoice.invoice_contact.vat }}</dd>
+				</dl>
+			</fieldset>
+		</div>
+	</div>
+
+	<fieldset>
+		<legend>{% trans "Invoice details" %}</legend>
+		<table class="table table-striped table-hover table-condensed">
+			<thead>
+				<tr>
+					<th>{% trans "Description" %}</th>
+					<th>{% trans "VAT" %}</th>
+					<th>{% trans "Price" %}</th>
+				</tr>
+			</thead>
+			{% for invoice_item in invoice.get_invoice_items() %}
+				<tr>
+					<td>{{ invoice_item.description|nl2br }}</td>
+					<td>{{ invoice_item.vat/0.01 }}%</td>
+					<td>&euro;{{ "%.2f"|format(invoice_item.price) }}</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td colspan="2"><strong>{% trans "Total excl VAT" %}</strong></td>
+				<td><strong>&euro;{{ "%.2f"|format(invoice.get_price()) }}</strong></td>
+			</tr>
+			{% for key, value in invoice.get_vat_array() %}
+				<tr>
+					<td colspan="2">{% trans "VAT" %} ({{ key/0.01 }}%)</td>
+					<td>&euro;{{ "%.2f"|format(value) }}</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td colspan="2"><strong>{% trans "Total incl VAT" %}</strong></td>
+				<td><strong>&euro;{{ "%.2f"|format(invoice.get_price_incl()) }}</strong></td>
+			</tr>
+		</table>
+	</fieldset>
+
+	<form class="form-horizontal" action="{{ env.server.REQUEST_URI }}" method="post">
+	<fieldset>
+		<legend>{% trans "Invoice settings" %}</legend>
+		<dl class="dl-horizontal">
+			<dt>{% trans "Send reminder mails" %}</dt>
+			<dd>
+				<label class="radio inline">
+					<input type="radio" name="invoice[send_reminder_mail]" value="1"{% if invoice.send_reminder_mail == 1 %} checked{% endif %}> {% trans "Yes" %}
+				</label>
+				<label class="radio inline">
+					<input type="radio" name="invoice[send_reminder_mail]" value="0"{% if invoice.send_reminder_mail == 0 %} checked{% endif %}> {% trans "No" %}
+				</label>
+			</dd>
+		</dl>
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+		</div>
+	</fieldset>
+	</form>
+
+	<fieldset>
+		<legend>{% trans "Logs" %}</legend>
+		<dl class="dl-horizontal">
+		{% set transfers = invoice.get_transfers() %}
+		{% for transfer in transfers %}
+
+			{% if loop.first %}
+			<dt>{% trans "Payments" %}</dt>
+			{% else %}
+			<dt>&nbsp;</dt>
+			{% endif %}
+
+			<dd>
+				{{ transfer.created|datetime() }}:
+				{% if transfer.type == 1 %}
+				{% trans "Manual payment added" %}
+				{% endif %}
+
+				{{ "€%.2f"|format(transfer.amount) }}
+			</dd>
+
+		{% else %}
+			<dt>{% trans "Payments" %}</dt>
+			<dd>{% trans "No payments added yet" %}.</dd>
+		{% endfor %}
+
+			<dt>&nbsp;</dt>
+			<dd>&nbsp;</dd>
+
+		{% set logs = invoice.get_logs() %}
+		{% for log in logs %}
+
+			{% if loop.first %}
+			<dt>{% trans "Logs" %}</dt>
+			{% else %}
+			<dt>&nbsp;</dt>
+			{% endif %}
+
+			<dd>
+				{{ log.created|datetime() }}: {{ log.content }} ({{ log.user.firstname }})
+			</dd>
+
+		{% endfor %}
+		</dl>
+	</fieldset>
+
+{% else %}
+	<ul class="breadcrumb">
+		<li class="active">{% trans "Invoices" %}</li>
+	</ul>
+
+	<div class="page-header">
+	<h3>{% trans "Invoices" %}
+
+		<div class="pull-right">
+			<a class="btn" href="/administrative/invoice?action=create"><i class="icon-plus-sign"></i> {% trans "Create invoice" %}</a>
+		</div>
+	</h3>
+	</div>
+
+	{% if message == 'invoice_sent' %}
+	<div class="alert alert-success">
+		{% trans "Invoice sent by email" %}
+	</div>
+	{% endif %}
+
+	<form class="well form-horizontal" method="post" action="{{ env.server.REQUEST_URI }}" >
+		<div class="control-group">
+			<label class="control-label" for="search">{% trans "Search" %}</label>
+			<div class="controls">
+				<div class="input-append">
+					<input type="text" name="search" value="{{ pager.get_search() }}"/>
+					<button class="btn" type="submit">{% trans "Search" %}</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	{% for invoice in pager.items %}
+		{% if loop.first %}
+			<table class="table table-striped table-hover table-condensed">
+				<thead>
+					<tr>
+						<th>{% trans "ID" %}</th>
+						<th>{% trans "Date" %}</th>
+						<th>{% trans "Customer" %}</th>
+						<th>{% trans "Amount" %}</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+		{% endif %}
+
+		<tr>
+			<td>{{ invoice.id }}</td>
+			<td>{{ invoice.created|date }}
+			<td>{{ invoice.customer.firstname }} {{ invoice.customer.lastname }} </td>
+			<td>&euro;{{ "%.2f"|format(invoice.get_price_incl()) }} </td>
+			<td>
+				<a href="/administrative/invoice?action=edit&id={{ invoice.id }}">
+					<i class="icon-edit"></i>
+				</a>
+			</td>
+			<td>
+				<a href="/administrative/invoice?action=send_invoice&id={{ invoice.id }}" rel="tooltip" data-toggle="tooltip" title="{% trans "Send PDF" %}">
+					<i class="icon-envelope"></i>
+				</a>
+			</td>
+			<td>
+				<a href="/administrative/invoice?action=download&id={{ invoice.id }}" rel="tooltip" data-toggle="tooltip" title="{% trans "Download PDF" %}">
+					<i class="icon-download"></i>
+				</a>
+			</td>
+		</tr>
+
+		{% if loop.last %}
+				</tbody>
+			</table>
+			{{ pager.links }}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+{% endblock content %}
