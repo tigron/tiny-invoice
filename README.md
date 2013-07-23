@@ -20,3 +20,13 @@ A non-exhaustive list of requirements:
   * php-mysql
   * php-gd
   * MySQL >= 5.1
+
+## Features
+
+  * Create customers
+  * Customers can have multiple invoice contacts
+  * Create invoices linked to an invoice contact
+  * Configurable VAT rate per invoice item
+  * Automatically creates a PDF for your invoices
+  * Send your invoices via e-mail
+  * Automatic reminder mails for unpaid invoices
