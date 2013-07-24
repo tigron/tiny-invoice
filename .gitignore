@@ -1,3 +1,4 @@
 config/Config.php
 tmp/*
 store/file/*
+lib/external/packages/vendor/*
