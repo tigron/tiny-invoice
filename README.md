@@ -11,15 +11,16 @@ Installation is fairly straightforward.
   * Use the database.sql file in the config/ directory to bootstrap the database
   * Make sure that tmp/ and store/ are writeable by your webserver user
   * Create config/Config.php from config/Config.sample.php
+  * Execute composer.phar residing in lib/external/packages/
 
 This should allow you to log in with the default credentials (user/user).
 
 A non-exhaustive list of requirements:
 
   * PHP >= 5.4
-  * php-mysql
-  * php-gd
-  * MySQL >= 5.1
+  * The PHP MySQLi extension
+  * The PHP GD extension
+  * A MySQL server >= 5.1
 
 ## Features
 
