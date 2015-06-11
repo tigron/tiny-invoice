@@ -1,0 +1,37 @@
+{% macro select_country(countries, name, id, selected) %}
+	<select name="{{ name }}" class="form-control" id="{{ id }}">
+	{% for group in countries|keys  %}
+		{% if group == 'european' %}
+		    <optgroup label="{% trans "European" %}">
+		{% else %}
+		    <optgroup label="{% trans "Rest of the world" %}">
+		{% endif %}
+
+		{% for country in countries[group] %}
+		    <option value="{{ country.id }}" {% if selected == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>
+		{% endfor %}
+		</optgroup>
+	{% endfor %}
+	</select>
+{% endmacro %}
+
+{% macro invalid_input(field, errors) %}
+	{% if field in errors|keys %}
+		<div class="help-block">
+			<span class="glyphicon glyphicon-exclamation-sign"></span>
+			{% if attribute(errors, field) == 'required' %}{% trans "This field is required." %}
+			{% elseif attribute(errors, field) == 'already_exists' %}{% trans "The e-mail address has already been entered before." %}
+			{% elseif attribute(errors, field) == 'invalid_email' %}{% trans "The e-mail address is invalid." %}
+			{% else %}{{ attribute(errors, field) }}
+			{% endif %}
+		</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro select_language(languages, name, id, selected) %}
+	<select name="{{ name }}" class="form-control" id="{{ id }}">
+	{% for language in languages %}
+		<option value="{{ language.id }}"{% if language.id == selected %} selected{% endif %}>{{ language.name }}</option>
+	{% endfor %}
+	</select>
+{% endmacro %}

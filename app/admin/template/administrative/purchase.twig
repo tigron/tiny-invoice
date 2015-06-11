@@ -1,0 +1,147 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+
+	{% if action == 'edit' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/purchase">{% trans "Purchases" %}</a></li>
+			<li class="active">{% trans "Edit purchase" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "The form contains mistakes. Please correct them." %}
+		</div>
+		{% elseif env.session_sticky.message is defined %}
+			{{ base.display_flash_message(env.session_sticky.message, 'purchase') }}
+		{% endif %}
+
+		<form class="form" method="post" action="/administrative/purchase?action=edit&id={{ purchase.id }}">
+
+
+
+			<div class="form-group">
+				<button class="btn btn-primary">
+					{% trans "Save" %}
+				</button>
+			</div>
+		</form>
+
+	{% elseif action == 'add' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/purchase">{% trans "Purchases" %}</a></li>
+			<li class="active">{% trans "Add purchase" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "The form contains mistakes. Please correct them." %}
+		</div>
+		{% endif %}
+
+		<form class="form" method="post" action="/administrative/purchase?action=add">
+
+			<div class="form-group">
+				<button class="btn btn-primary">
+					{% trans "Save" %}
+				</button>
+			</div>
+		</form>
+
+
+	{% else %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li class="active">{% trans "Purchases" %}</li>
+		</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Filter" %}
+			</div>
+			<div class="panel-body">
+				<form method="post" action="/administrative/purchase" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-xs-3">{% trans "Search" %}</label>
+						<div class="col-xs-6">
+							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Search" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		{% if env.session_sticky.message is defined %}
+			{{ base.display_flash_message(env.session_sticky.message, 'purchase') }}
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Purchases" %}
+			</div>
+			<div class="panel-body">
+			{% for purchase in pager.items %}
+			{% if loop.first %}
+				<table class="table table-hover table-striped table-condensed table-responsive" id="purchase-list">
+				<thead>
+					<tr>
+						<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
+						<th width="15%">{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
+						<th width="35%">{{ pager.create_header('Supplier'|trans, 'supplier')|raw }}</th>
+						<th width="20%" class="text-right">{{ pager.create_header('Amount'|trans, 'amount')|raw }}</th>
+						<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
+						<th style="width: 10%" colspan="3">&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+			{% endif %}
+
+					<tr>
+						<td>{{ purchase.number }}</td>
+						<td>{{ purchase.date|date }}</td>
+						<td>{{ purchase.customer.company }}</td>
+						<td class="text-right">€{{ purchase.price_incl|number_format }}</td>
+						<td>
+						{% if purchase.paid %}
+							<span class="glyphicon glyphicon-ok"></span>
+						{% else %}
+							<span class="glyphicon glyphicon-remove"></span>
+						{% endif %}
+						</td>
+						<td>
+							<a href="/administrative/purchase?action=download&id={{ purchase.id }}">
+								<span class="glyphicon glyphicon-download"></span>
+							</a>
+						</td>
+						<td class="text-right">
+							<a href="/administrative/purchase?action=edit&id={{ purchase.id }}" title="">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a>
+						</td>
+					</tr>
+
+			{% if loop.last %}
+				</tbody>
+				</table>
+
+				{{ pager.links|raw }}
+			{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+
+	{% endif %}
+
+{% endblock content %}

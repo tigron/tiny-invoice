@@ -1,0 +1,19 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Add New Payment" %}{% endblock header %}
+
+{% block body %}
+	<form class="form-horizontal" action="/administrative/invoice?action=edit&id={{ invoice.id }}" method="post">
+		<div class="form-group">
+			<label class="control-label col-md-3">{% trans "Amount" %}</label>
+			<div class="col-md-9">
+				<input type="text" placeholder="{% trans "Amount" %}" name="transfer[amount]" value="{{ transfer.amount }}" class="form-control">
+			</div>
+		</div>
+	</form>
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).parent('.modal-content').find('form').submit();">{% trans "Save" %} </button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}
+{% endblock footer %}

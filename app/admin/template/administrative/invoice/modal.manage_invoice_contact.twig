@@ -1,0 +1,183 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Manage invoice contact" %}{% endblock header %}
+
+{% block body %}
+
+	<div class="alert alert-danger hide">
+		{% trans "Some fields were not filled in correctly" %}. {% trans "Please correct them" %}.
+	</div>
+
+	<form class="form-horizontal" method="post" id="invoice-contact-form" onsubmit="return validate_invoice_contact();">
+		<input type="hidden" name="invoice_contact[customer_id]" id="customer_id" value="">
+
+		<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
+			<label for="company" class="col-xs-3">{% trans "Company" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[company]" id="company" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'firstname' in errors|keys %} has-error{% endif %}">
+			<label for="firstname" class="col-xs-3">{% trans "Firstname" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[firstname]" id="firstname" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'lastname' in errors|keys %} has-error{% endif %}">
+			<label for="lastname" class="col-xs-3">{% trans "Lastname" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[lastname]" id="lastname" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'street' in errors|keys %} has-error{% endif %}">
+			<label for="street" class="col-xs-3">{% trans "Street" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[street]" id="street" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'housenumber' in errors|keys %} has-error{% endif %}">
+			<label for="housenumber" class="col-xs-3">{% trans "Housenumber" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[housenumber]" id="housenumber" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'city' in errors|keys %} has-error{% endif %}">
+			<label for="city" class="col-xs-3">{% trans "City" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[city]" id="city" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'zipcode' in errors|keys %} has-error{% endif %}">
+			<label for="zipcode" class="col-xs-3">{% trans "Zip code" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[zipcode]" id="zipcode" class="form-control" value="">
+			</div>
+
+		</div>
+
+		<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
+			<label for="country_id" class="col-xs-3">{% trans "Country" %}</label>
+			<div class="col-xs-9">
+				{{ form.select_country(countries, 'invoice_contact[country_id]', 'country_id', 0) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'email' in errors|keys %} has-error{% endif %}">
+			<label for="email" class="col-xs-3">{% trans "Email" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[email]" id="email" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'phone' in errors|keys %} has-error{% endif %}">
+			<label for="phone" class="col-xs-3">{% trans "Phone" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[phone]" id="phone" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'mobile' in errors|keys %} has-error{% endif %}">
+			<label for="mobile" class="col-xs-3">{% trans "Mobile" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[mobile]" id="mobile" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'fax' in errors|keys %} has-error{% endif %}">
+			<label for="fax" class="col-xs-3">{% trans "Fax" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[fax]" id="fax" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
+			<label for="vat" class="col-xs-3">{% trans "Vat" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="invoice_contact[vat]" id="vat" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="language_id" class="col-xs-3">{% trans "Language" %}</label>
+			<div class="col-xs-9">
+				{{ form.select_language(languages, 'invoice_contact[language_id]', 'language_id', 0) }}
+			</div>
+		</div>
+	</form>
+
+	<script type="text/javascript">
+
+		$('#manage-invoice-contact').on('show.bs.modal', function (e) {
+
+			$('#invoice-contact-form input, select').val('');
+			$('.form-group').removeClass('has-error');
+
+			current_invoice_contact_id = 0;
+
+			var $invoker = $(e.relatedTarget);
+			if($invoker.data('customer-contacts') == 0) {
+				load_customer_data($invoker.data('customer-id'));
+			} else if($invoker.data('invoice-contact-id')) {
+				load_invoice_contact_data($invoker.data('invoice-contact-id'));
+			}
+
+			$('#invoice-contact-form #customer_id').val($invoker.data('customer-id'));
+		});
+
+		function load_customer_data(id) {
+			$.get('/administrative/customer?action=load_customer&id=' + id, function(data) {
+				$.each(data, function(key, value) {
+					if($('#invoice-contact-form #' + key).length == 1) {
+						$('#invoice-contact-form #' + key).val(value);
+					}
+				});
+
+			}, 'json');
+		}
+
+		function load_invoice_contact_data(id) {
+			$.get('/administrative/invoice/contact?action=load_invoice_contact&id=' + id, function(data) {
+				$.each(data, function(key, value) {
+					if($('#invoice-contact-form #' + key).length == 1) {
+						$('#invoice-contact-form #' + key).val(value);
+					}
+				});
+
+				current_invoice_contact_id = id;
+			}, 'json');
+		}
+
+		function validate_invoice_contact() {
+			data = $('#invoice-contact-form').serialize();
+
+			$('.form-group').removeClass('has-error');
+
+			$.post('/administrative/invoice/contact?action=manage&id=' + current_invoice_contact_id, data, function(data) {
+				if ("id" in data) {
+					window.location = '/administrative/invoice?action=create_step2';
+				} else {
+					$('.alert').removeClass('hide');
+					$.each(data, function(key, value) {
+						$('#invoice-contact-form #' + key).parents('.form-group').addClass('has-error');
+					});
+				}
+				return false;
+			}, 'json');
+
+			return false;
+		}
+
+	</script>
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+{% endblock footer %}

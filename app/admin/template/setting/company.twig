@@ -1,0 +1,123 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+
+{% if message == 'saved' %}
+	<div class="alert alert-success">
+		{% trans "Settings saved" %}
+	</div>
+{% endif %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">{% trans "Company Settings" %}</div>
+	<div class="panel-body">
+	<form action="/setting/company" method="post" class="form-horizontal form-condensed">
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Name" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[company]" value="{{ settings.company }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Street" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[street]" value="{{ settings.street }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Housenumber" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[housenumber]" value="{{ settings.housenumber }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Zipcode" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[zipcode]" value="{{ settings.zipcode }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "City" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[city]" value="{{ settings.city }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-md-3">{% trans "Country" %}</label>
+			<div class="col-md-9">
+				<select name="setting[country_id]" class="form-control" >
+					{% for key, country_group in countries %}
+						<optgroup label="{{ key }}">
+						{% for country in country_group %}
+							<option value="{{ country.id }}" {% if settings.country_id == country.id %}selected{% endif %} >{{ country.name }}</option>
+						{% endfor %}
+						</optgroup>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Phone" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[phone]" value="{{ settings.phone }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Email" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[email]" value="{{ settings.email }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Website" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[website]" value="{{ settings.website }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "VAT" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[vat]" value="{{ settings.vat }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Bank" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[bank]" value="{{ settings.bank }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "Bank IBAN" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[iban]" value="{{ settings.iban }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="control-label col-xs-3">{% trans "BIC" %}</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" name="setting[bic]" value="{{ settings.bic }}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-9 col-xs-offset-3">
+				<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+			</div>
+		</div>
+	</form>
+	</div>
+</div>
+
+{% endblock content %}

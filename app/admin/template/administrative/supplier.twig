@@ -1,0 +1,184 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+
+	{% if action == 'edit' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/supplier">{% trans "Suppliers" %}</a></li>
+			<li class="active">{% trans "Edit supplier" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "The form contains mistakes. Please correct them." %}
+		</div>
+		{% elseif env.session_sticky.message is defined %}
+			{{ base.display_flash_message(env.session_sticky.message, 'supplier') }}
+		{% endif %}
+
+		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=edit&id={{ supplier.id }}">
+
+			<div class="panel panel-default">
+				<div class="panel-body">
+
+					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
+						<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="supplier[company]" id="company" class="form-control" value="{{ supplier.company }}">
+							{{ form.invalid_input('company', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
+						<label for="vat" class="control-label col-xs-3">{% trans "Vat" %}</label>
+						<div class="col-xs-5">
+							<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ supplier.vat }}">
+							{{ form.invalid_input('vat', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Save" %}
+							</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</form>
+
+	{% elseif action == 'add' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/supplier">{% trans "Suppliers" %}</a></li>
+			<li class="active">{% trans "Add supplier" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "The form contains mistakes. Please correct them." %}
+		</div>
+		{% endif %}
+
+		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=add">
+
+			<div class="panel panel-default">
+				<div class="panel-body">
+
+					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
+						<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="supplier[company]" id="company" class="form-control" value="{{ env.post.supplier.company }}">
+							{{ form.invalid_input('company', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
+						<label for="vat" class="control-label col-xs-3">{% trans "Vat" %}</label>
+						<div class="col-xs-5">
+							<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ env.post.supplier.vat }}">
+							{{ form.invalid_input('vat', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Save" %}
+							</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</form>
+
+
+	{% else %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li class="active">{% trans "Suppliers" %}</li>
+		</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Filter" %}
+			</div>
+			<div class="panel-body">
+				<form method="post" action="/administrative/supplier" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-xs-3">{% trans "Search" %}</label>
+						<div class="col-xs-6">
+							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Search" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		{% if env.session_sticky.message is defined %}
+			{{ base.display_flash_message(env.session_sticky.message, 'supplier') }}
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="pull-right">
+					<a href="/administrative/supplier?action=add" title="">
+						<span class="glyphicon glyphicon-plus-sign"></span>
+						{% trans "Add supplier" %}
+					</a>
+				</div>
+				{% trans "Suppliers" %}
+			</div>
+			<div class="panel-body">
+			{% for supplier in pager.items %}
+			{% if loop.first %}
+				<table class="table table-hover table-striped table-condensed table-responsive">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>{{ pager.create_header('Company'|trans, 'company')|raw }}</th>
+						<th>{{ pager.create_header('Vat'|trans, 'vat')|raw }}</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+			{% endif %}
+
+					<tr>
+						<td>{{ supplier.id }}</td>
+						<td>{{ supplier.company }}</td>
+						<td>{{ supplier.vat }}</td>
+						<td>
+							<a href="/administrative/supplier?action=edit&id={{ supplier.id }}" title="">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a>
+						</td>
+					</tr>
+
+			{% if loop.last %}
+				</tbody>
+				</table>
+
+				{{ pager.links|raw }}
+			{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+
+	{% endif %}
+
+{% endblock content %}

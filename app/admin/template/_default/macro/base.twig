@@ -1,0 +1,24 @@
+{% macro display_flash_message(message, object_string) %}
+	{% if message == 'error_delete' %}
+	<div class="alert alert-danger alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<strong>{% trans "Error" %}</strong> {{ "Could not delete selected %object_string%"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
+	</div>
+	{% elseif message == 'created' %}
+	<div class="alert alert-success alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		{{ "%object_string% successfully created."|trans|replace({'%object_string%': object_string|capitalize})|raw }}
+	</div>
+	{% elseif message == 'updated' %}
+	<div class="alert alert-success alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		{{ "%object_string% successfully updated"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
+	</div>
+	{% elseif message == 'deleted' %}
+	<div class="alert alert-success alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		{{ "%object_string% successfully removed"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
+	</div>
+	{% endif %}
+
+{% endmacro display_flash_message %}
