@@ -511,6 +511,8 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO `user` (`id`, `language_id`, `firstname`, `lastname`, `username`, `email`, `password`, `admin`, `created`, `updated`) VALUES
+(1,	1,	'',	'',	'user',	'',	'12dea96fec20593566ab75692c9949596833adc9',	0,	'0000-00-00 00:00:00',	NULL);
 
 DROP TABLE IF EXISTS `vat_check_cache`;
 CREATE TABLE `vat_check_cache` (
