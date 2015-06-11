@@ -8,7 +8,7 @@
 
 require_once LIB_PATH . '/model/Picture.php';
 
-class Module_Picture extends Web_Module {
+class Web_Module_Picture extends Web_Module {
 	/**
 	 * Login required ?
 	 * Default = yes

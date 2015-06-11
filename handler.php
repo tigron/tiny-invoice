@@ -8,4 +8,5 @@
 
 require_once 'config/global.php';
 require_once LIB_PATH . '/base/Web/Handler.php';
+
 Web_Handler::Run();

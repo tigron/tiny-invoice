@@ -1,14 +1,20 @@
-{% extends "base.layout.twig" %}
+{% extends "layout.base.twig" %}
 
 {% block head %}
+
 	<style type="text/css">
+
 		#main_info {
 			margin-bottom: 5mm;
-			width: 100%
+			width: 100%;
 		}
 
 			#main_info td {
 				padding: 1.5mm 2mm
+			}
+
+			#main_info th {
+				border-bottom: solid 1px #ccc;
 			}
 
 		#invoice_items {
@@ -17,7 +23,7 @@
 		}
 
 			#invoice_items td {
-				padding: 1mm 2mm 0.5mm 2mm;
+				padding: 1mm 2mm
 			}
 
 		#payment_info {
@@ -37,12 +43,23 @@
 		}
 
 		.item_price {
-			vertical-align: top
+			vertical-align: top;
+			background: #f6f6f6;
+			text-align: right
+		}
+
+		#invoice_items th {
+			border-bottom: solid 1px #9ccb3b;
+		}
+
+		#invoice_items .even td {
+			background-color: #f6f6f6
 		}
 
 	</style>
 
 {% endblock head %}
+
 
 {% block php_script %}
 
@@ -51,17 +68,18 @@
 	if ( isset($pdf) ) {
 		$pdf->page_script('
 			if ($PAGE_NUM == 1) {
-				$x = 62;
+				$x = 64;
 				$y = 210;
 			} else {
-				$x = 62;
-				$y = 60;
+				$x = 64;
+				$y = 50;
 			}
 
-			$font = Font_Metrics::get_font("verdana", "bold");
-			$size = 12;
-			$invoice_label = "factuur {{ invoice.id }} ";
+			$font = Font_Metrics::get_font("calibri", "bold");
+			$size = 14;
+			$invoice_label = "{% trans "Invoice" %} {{ invoice.number }} ";
 			$pdf->text($x, $y, $invoice_label, $font, $size);
+
 		');
 	}
 
@@ -71,18 +89,20 @@
 
 {% block content %}
 
-	<table cellpadding="0" cellspacing="0" border="0" id="main_info">
+	<table cellpadding="0" cellspacing="10" border="0" id="main_info">
 	<thead>
 		<tr>
-			<th style="width: 42%">
+			<th style="width: 25mm">
 			{% if recipient_info.vat != '' %}
-				BTW klant
+				{% trans "VAT customer" %}
 			{% else %}
+				{% trans "Customer" %}
 				&nbsp;
 			{% endif %}
 			</th>
-			<th style="width: 43%">Vervaldatum</th>
-			<th style="width: 15%">Datum</th>
+			<th style="width: 25mm">{% trans "Expiration date" %}</th>
+			<th style="width: 25mm">{% trans "Date" %}</th>
+			<th style="width: 50mm">{% trans "Reference" %}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -91,37 +111,44 @@
 			{% if recipient_info.vat != '' %}
 				{{ recipient_info.get_vat_formatted() }}
 			{% else %}
-				&nbsp;
+				{% if recipient_info.company != '' %}
+					{{ recipient_info.company }}
+				{% else %}
+					{{ recipient_info.firstname }} {{ recipient_info.lastname }}
+				{% endif %}
 			{% endif %}
 			</td>
 			<td>{{ invoice.expiration_date|date('d/m/Y') }}</td>
 			<td>{{ invoice.created|date('d/m/Y') }}</td>
+			<td>{{ invoice.reference }}</td>
 		</tr>
 	</tbody>
 	</table>
 
 	{% set invoice_items = invoice.get_invoice_items() %}
-	<table cellpadding="0" cellspacing="0" border="0" id="invoice_items">
+	<table cellpadding="0" cellspacing="10" border="0" id="invoice_items">
 	<thead>
 		<tr>
-			<th style="width: 70%">Omschrijving</th>
-			<th style="width: 2%">&nbsp;</th>
-			<th style="width: 10%">BTW</th>
-			<th style="width: 15%">Prijs</th>
+
+			<th style="width: 100mm">{% trans "Description" %}</th>
+			<th style="width: 15mm">{% trans "Qty" %}</th>
+			<th style="width: 15mm">{% trans "Unit price" %}</th>
+			<th style="width: 20mm">{% trans "Price" %}</th>
 		</tr>
 	</thead>
 	<tbody>
 
-	{% for invoice_item in invoice_items %}
+	{% for key_ii, invoice_item in invoice_items %}
 		{% set name = invoice_item.description|split("\n") %}
 		{% for paragraph in name %}
-		<tr>
+		<tr class="{{ cycle(['odd', 'even'], key_ii) }}">
 			<td>{{ paragraph }}</td>
-			<td>&nbsp;</td>
 		{% if loop.first %}
-			<td>{{ invoice_item.vat/0.01 }}%</td>
-			<td class="item_price">&euro;{{ invoice_item.price }}</td>
+			<td>{{ invoice_item.qty }}</td>
+			<td style="text-align: right">&euro;{{ invoice_item.price }}</td>
+			<td style="text-align: right">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
 		{% else %}
+			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		{% endif %}
@@ -135,44 +162,52 @@
 	</table>
 
 	<div id="payment_info">
-		<table cellpadding="0" cellspacing="0" border="0">
+		<table cellpadding="0" cellspacing="10" border="0">
 		<tr>
-			<td style="width: 100mm; vertical-align: bottom">
+			<td style="width: 100mm; vertical-align">
 			{% if invoice.paid != 1 %}
-				Deze factuur is betaalbaar op rekening: <br />
-				Bank {{ company_info.bank }} IBAN {{ company_info.iban }} {% if company_info.bic %}(BIC: {{ company_info.bic }}){% endif %}
+				{% trans "This invoice is payable to account" %} ({{ settings.bank }}): <br />
+				 IBAN {{ settings.iban }} // BIC {{ settings.bic }}<br>
+				{{ invoice.get_ogm() }}
 			{% else %}
-				Factuur is VOLDAAN
+				{% trans "Invoice is PAID" %}
 			{% endif %}
 			</td>
-			<td  style="width: 60mm">
+			<td  style="width: 50mm; border-top: solid 2px #ccc">
 				{% set vat_array = invoice.get_vat_array() %}
 				<table cellpadding="0" cellspacing="0" border="0">
 				<tbody>
 					<tr>
-						<td style="width: 35mm; text-align: right; padding-top: 2mm">
-							Subtotaal
+						<td style="width: 35mm; text-align: left; padding-top: 2mm">
+							{% trans "Subtotal" %}
 						</td>
-						<td style="width: 20mm; padding-top: 2mm">&euro;{{ "%.2f"|format(invoice.get_price()) }}</td>
+						<td style="width: 20mm; padding-top: 2mm; text-align: right">&euro;{{ "%.2f"|format(invoice.get_price_excl()) }}</td>
 					</tr>
 					{% for key, vat_subtotal in vat_array %}
 					<tr>
-						<td style="text-align: right; padding-bottom: 6px">
-							BTW ({{ key * 100 }}%)
+						<td style="text-align: left; padding-bottom: 6px">
+							{% trans "VAT" %} ({{ key }}%)
 						</td>
-						<td style="padding-bottom: 6px">
+						<td style="padding-bottom: 6px; text-align: right">
 							&euro;{{ "%.2f"|format(vat_subtotal) }}
 						</td>
 					</tr>
 					{% endfor %}
 					<tr>
-						<td style="border-top: solid 1px #ccc; font-weight: bold; text-align: right; padding: 2mm; font-size:12px">Totaal te betalen</td>
-						<td style="border-top: solid 1px #ccc; font-weight: bold; padding: 2mm; font-size:12px">&euro;{{ "%.2f"|format(invoice.get_price_incl()) }}</td>
+						<td height="5mm" colspan="2"></td>
+					</tr>
+					<tr>
+						<td style="border-top: solid 1px #ccc; font-weight: bold; text-align: left; background-color: #333; color: #fff">{% trans "Total to pay" %}</td>
+						<td style="border-top: solid 1px #ccc; font-weight: bold; background-color: #000; color: #fff; text-align: center; font-size: 14pt">&euro;{{ invoice.get_price_incl()|number_format }}</td>
 					</tr>
 				</tbody>
 				</table>
 			</td>
 		</tr>
 		</table>
+
+
+
 	</div>
+
 {% endblock content %}

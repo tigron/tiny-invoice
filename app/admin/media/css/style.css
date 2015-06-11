@@ -1,48 +1,78 @@
-#wrap > .container-fluid {
-	padding-top: 60px;
+#login {
+	background-color: #ddd;
+	color: #fff
 }
 
-.pull-up-h3 {
-	margin-top: -45px;
+	#login-wrapper {
+		max-width: 460px;
+		margin: 0 auto;
+		margin-top: 40px
+	}
+
+	#login-content {
+		color: #222;
+		padding: 42px 48px;
+		background: #fff;
+		border-radius: 3px;
+		margin-top: 15px
+	}
+
+body {
+	font-size: 12px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
 }
 
-/*
-.sidebar-nav {
-	padding: 9px 0;
+.panel-body .actions {
+	position: absolute;
+	right: 25px;
+	top: 10px
 }
-*/
+
+.dropdown-menu {
+	font-size: 12px
+}
+
+#invoice-list .glyphicon-ok {
+	color: #8bc512
+}
+
+#invoice-list .glyphicon-remove {
+	color: #db2e1b
+}
 
 /**
- * Sticky footer styles
+ * Dropzone
  */
-html, body {
-	height: 100%;
-	/* The html and body elements cannot have any padding or margin. */
+.dropzone, .dropzone-wrapper {
+	position: relative;
+	background: #fcfcfc;
+	border: dashed 1px #ddd;
+	padding: 20px;
+	cursor: pointer
 }
 
-/* Wrapper for page content to push down footer */
-#wrap {
-	min-height: 100%;
-	height: auto !important;
-	height: 100%;
-	/* Negative indent footer by it's height */
-	margin: 0 auto -60px;
-}
+	.dropzone .dz-message, .dropzone-wrapper .dz-message {
+		width: 190px;
+		opacity: .5;
+		margin: 0 auto;
+		text-align: center
+	}
 
-/* Set the fixed height of the footer here */
-#push, footer {
-	height: 60px;
-}
+		.dropzone .dz-message span, .dropzone-wrapper .dz-message span {
+			display: block;
+		}
 
-footer {
-	background-color: #f5f5f5;
-}
+		.dropzone .progress, .dropzone-wrapper .progress {
+			position: absolute;
+			left: 20px;
+			bottom: 0;
+			height: 15px;
+			display: none;
+			width: 180px;
+			left: 50%;
+			margin-left: -90px
+		}
 
-.container .credit {
-	margin: 20px 0;
-}
-
-.form-condensed .control-group {
-    margin-top: 0;
-    margin-bottom: 5px;
+.dz-preview {
+	display: none
 }

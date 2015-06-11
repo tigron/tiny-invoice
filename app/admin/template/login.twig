@@ -1,4 +1,59 @@
-{% extends "base.layout.twig" %}
+<!doctype html>
+<html class="no-js" lang="{{ env.session.language.name_short }}">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Backoffice</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% block content %}
-{% endblock content %}
+	<link rel="shortcut icon" href="http://www.pixelwest.be/favicon.ico">
+	<link rel="stylesheet" href="/bootstrap.min.css" type="text/css" media="handheld, all">
+	<link rel="stylesheet" href="/style.css" type="text/css" media="handheld, all">
+	<script type="text/javascript" src="/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="/bootstrap.min.js"></script>
+</head>
+<body id="login">
+
+	<div id="login-wrapper">
+
+		<div id="login-content">
+
+			{% if error %}
+				<div class="alert alert-danger">
+					{% trans "Username and/or password is incorrect" %}
+				</div>
+			{% endif %}
+
+			<form action="/login" method="post">
+				<div class="form-group">
+					<label>{% trans "Username" %}</label>
+					<input type="text" name="username" class="form-control" placeholder="{% trans "Username" %}" />
+				</div>
+				<div class="form-group">
+					<label>{% trans "Password" %}</label>
+					<input type="password" name="password" class="form-control" placeholder="{% trans "Password" %}" />
+				</div>
+
+				<hr />
+
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary">
+						{% trans "Login" %} <span class="glyphicon glyphicon-arrow-right"></span>
+					</button>
+				</div>
+			</form>
+
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+			$('input[name=username]').focus();
+		});
+
+	</script>
+</body>
+</html>

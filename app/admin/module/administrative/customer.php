@@ -1,15 +1,11 @@
 <?php
 /**
- * Module Index
+ * Web Module Administrative Customer
  *
- * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/model/Customer.php';
-require_once LIB_PATH . '/base/Web/Pager.php';
-
-class Module_Administrative_Customer extends Web_Module {
+class Web_Module_Administrative_Customer extends Web_Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -33,24 +29,48 @@ class Module_Administrative_Customer extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		if (isset($_POST['customer'])) {
-			$customer = new Customer();
-			$customer->load_array($_POST['customer']);
-			$customer->save();
-			Web_Session::Redirect('/administrative/customer');
-		}
+		$template = Web_Template::Get();
 
-		$extra_conditions = array();
+		$pager = new Web_Pager('customer');
+		$permissions = [
+			'company' => 'company',
+			'firstname' => 'firstname',
+			'lastname' => 'lastname'
+		];
+		$pager->set_sort_permissions($permissions);
+
 		if (isset($_POST['search'])) {
-			$extra_conditions['%search%'] = $_POST['search'];
-			$pager = new Web_Pager('customer', 'id', 'ASC', 1, $extra_conditions);
-		} else {
-			$pager = new Web_Pager('customer');
+			$pager->set_search($_POST['search']);
 		}
+		$pager->page();
 
 		$template = Web_Template::Get();
 		$template->assign('pager', $pager);
+	}
 
+	/**
+	 * Add
+	 *
+	 * @access public
+	 */
+	public function display_add() {
+		$template = Web_Template::Get();
+
+		if (isset($_POST['customer'])) {
+			$customer = new Customer();
+			$customer->load_array($_POST['customer']);
+			if ($customer->validate($errors) === false) {
+				$template->assign('errors', $errors);
+			} else {
+				$customer->save();
+
+				$session = Web_Session_Sticky::Get();
+				$session->message = 'created';
+				Web_Session::Redirect('/administrative/customer');
+			}
+		}
+
+		$template->assign('languages', Language::get_all());
 		$template->assign('countries', Country::get_grouped());
 	}
 
@@ -65,11 +85,61 @@ class Module_Administrative_Customer extends Web_Module {
 
 		if (isset($_POST['customer'])) {
 			$customer->load_array($_POST['customer']);
-			$customer->save();
-			$template->assign('saved', true);
-		}
+			if ($customer->validate($errors) === false) {
+				$template->assign('errors', $errors);
+			} else {
+				$customer->save();
 
-		$template->assign('countries', Country::get_grouped());
+				$session = Web_Session_Sticky::Get();
+				$session->message = 'updated';
+				Web_Session::Redirect('/administrative/customer?action=edit&id=' . $customer->id);
+			}
+		}
 		$template->assign('customer', $customer);
+		$template->assign('languages', Language::get_all());
+		$template->assign('countries', Country::get_grouped());
 	}
+
+	/**
+	 * Search customer (Ajax)
+	 *
+	 * @access public
+	 */
+	public function display_ajax_search() {
+		$this->template = null;
+
+		$pager = new Web_Pager('customer');
+		$permissions = [
+			'lastname' => 'lastname'
+		];
+		$pager->set_sort_permissions($permissions);
+		$pager->set_search($_GET['search']);
+		$pager->page();
+
+		$data = [];
+		foreach ($pager->items as $customer) {
+			$name = $customer->firstname . ' ' . $customer->lastname;
+			if ($customer->company != '') {
+				$name .= ' (' . $customer->company . ')';
+			}
+			$data[] = [
+				'id' => $customer->id,
+				'value' => $name
+			];
+		}
+		echo json_encode($data);
+	}
+
+	/**
+	 * Load customer (Ajax)
+	 *
+	 * @access public
+	 */
+	public function display_load_customer() {
+		$this->template = null;
+
+		$customer = Customer::get_by_id($_GET['id']);
+		echo json_encode($customer->get_info());
+	}
+
 }

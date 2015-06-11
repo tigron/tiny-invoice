@@ -2,15 +2,11 @@
 /**
  * Invoice_Contact class
  *
- * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
  * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/model/Invoice.php';
-
 class Invoice_Contact {
-	use Model, Get, Save, Delete, Page;
+	use Get, Delete, Model, Save, Page;
 
 	/**
 	 * Get VAT formatted
@@ -31,19 +27,133 @@ class Invoice_Contact {
 	}
 
 	/**
-	 * Get by Customer
+	 * Validate user data
+	 *
+	 * @access public
+	 * @param array $errors
+	 * @return bool $validated
+	 */
+	public function validate(&$errors = array()) {
+		$required_fields = array('firstname', 'lastname', 'email', 'street', 'housenumber', 'city', 'zipcode', 'vat');
+		foreach ($required_fields as $required_field) {
+			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
+				$errors[$required_field] = 'required';
+			}
+		}
+
+		if (!Util::validate_email($this->details['email'])) {
+			$errors['email'] = 'syntax error';
+		}
+
+		if (isset($this->details['vat']) AND $this->details['vat'] != '') {
+			if (!Util::validate_vat($this->details['vat'], $this->country)) {
+				$errors['vat'] = 'incorrect';
+			}
+		}
+
+		if (count($errors) > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Check if this contact is VAT bound
+	 *
+	 * @return bool
+	 * @access public
+	 */
+	public function vat_bound() {
+
+		/* If the customer:
+		 *  - Is a European resident
+		 *  - Not a Belgian citizen
+		 *  - Has a VAT number
+		 * he is not bound to VAT
+		 */
+		if ($this->country->european == true && $this->country->iso2 != 'BE' && $this->vat != '') {
+			return false;
+		}
+
+		/* If the customer is not a European resident, he is not VAT bound */
+		else if ($this->country->european == false) {
+			return false;
+		}
+
+		/* If the customer is anything else, he is VAT bound */
+		else {
+			return true;
+		}
+	}
+
+	/**
+	 * Get Vat Rate Country
+	 *
+	 * @access public
+	 * @param Vat_Rate $vat_rate
+	 * @return Vat_Rate_Country $vat_rate_country
+	 */
+	public function get_vat_rate_country(Vat_Rate $vat_rate) {
+		if (isset($this->details['vat_bound']) AND $this->vat_bound == 0) {
+			throw new Exception('No Vat_Rate_Country');
+		} elseif (isset($this->details['vat_bound']) AND $this->vat_bound == 1) {
+			return Vat_Rate_Country::get_by_vat_rate_country($vat_rate, $this->country);
+		}  else {
+			/* If the customer:
+			 *  - Is a European resident
+			 *  - Not a Belgian citizen
+			 *  - Has a VAT number
+			 * he is not bound to VAT
+			 */
+			if ($this->country->european == true && $this->country->iso2 != 'BE' && $this->vat != '') {
+				throw new Exception('No Vat_Rate_Country');
+			}
+
+			/* If the customer is not a European resident, he is not VAT bound */
+			else if ($this->country->european == false) {
+				throw new Exception('No Vat_Rate_Country');
+			}
+
+			/* If the customer is anything else, he is VAT bound */
+			else {
+				return Vat_Rate_Country::get_by_vat_rate_country($vat_rate, $this->country);
+			}
+		}
+	}
+
+	/**
+	 * Get VAT
+	 *
+	 * @access public
+	 * @return double $vat
+	 */
+	public function get_vat(Vat_Rate $vat_rate) {
+		try {
+			$vat_rate_country = $this->get_vat_rate_country($vat_rate);
+			return $vat_rate_country->vat;
+		} catch (Exception $e) {
+			return 0;
+		}
+	}
+
+	/**
+	 * Get active by Customer
 	 *
 	 * @access public
 	 * @param Customer $customer
-	 * @return array $invoice_contacts
+	 * @return array Invoice_Contact $items
 	 */
-	public static function get_by_customer(Customer $customer) {
+	public static function get_active_by_customer(Customer $customer) {
+		$table = self::trait_get_database_table();
 		$db = Database::Get();
-		$ids = $db->getCol('SELECT id FROM invoice_contact WHERE customer_id=?', array($customer->id));
-		$invoice_contacts = array();
+		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE customer_id = ? AND active = 1 ORDER BY created DESC', [ $customer->id ]);
+
+		$items = [];
 		foreach ($ids as $id) {
-			$invoice_contacts[] = Invoice_Contact::get_by_id($id);
+			$items[] = self::get_by_id($id);
 		}
-		return $invoice_contacts;
+
+		return $items;
 	}
 }

@@ -1,14 +1,30 @@
 <?php
 /**
- * User class
+ * Tag class
  *
  * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
  * @author David Vandemaele <david@tigron.be>
  */
 
 class Tag {
-	use Model, Get, Save, Delete, Page;
+	use Model, Get, Save, Page;
+	use Delete {
+		delete as trait_delete;
+	}
+
+	/**
+	 * Delete
+	 *
+	 * @access public
+	 */
+	public function delete() {
+		$document_tags = Document_Tag::get_by_tag($this);
+		foreach ($document_tags as $document_tag) {
+			$document_tag->delete();
+		}
+
+		$this->trait_delete();
+	}
 
 	/**
 	 * Validate a tag object
@@ -17,8 +33,8 @@ class Tag {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = array()) {
-		$required_fields = array('name', 'identifier');
+	public function validate(&$errors = []) {
+		$required_fields = [ 'name', 'identifier' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
@@ -27,7 +43,9 @@ class Tag {
 
 		try {
 			$tag = Tag::get_by_identifier($this->details['identifier']);
-			$errors['identifier'] = 'already_exists';
+			if (isset($this->id) AND $tag->id != $this->id) {
+				$errors['identifier'] = 'already_exists';
+			}
 		} catch (Exception $e) {}
 
 		if (count($errors) == 0) {
@@ -45,9 +63,9 @@ class Tag {
 	 * @return Tag $tag
 	 */
 	public static function get_by_identifier($identifier) {
-		$db = Database::Get();
 		$table = self::trait_get_database_table();
-		$id = $db->getOne('SELECT id FROM ' . $table . ' WHERE identifier = ?', array($identifier));
+		$db = self::trait_get_database();
+		$id = $db->getOne('SELECT id FROM ' . $table . ' WHERE identifier = ?', [ $identifier ]);
 
 		if ($id === null) {
 			throw new Exception('Tag not found');
@@ -55,4 +73,5 @@ class Tag {
 
 		return self::get_by_id($id);
 	}
+
 }

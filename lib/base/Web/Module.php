@@ -4,20 +4,24 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
-
-require_once LIB_PATH . '/base/Web/Session/Sticky.php';
 
 abstract class Web_Module {
 
 	/**
-	 * Login required ?
-	 * Default = yes
+	 * Login required
 	 *
-	 * @access public
-	 * @var bool $login_required
+	 * @var $login_required
 	 */
-	public $login_required = true;
+	protected $login_required = true;
+
+	/**
+	 * Template
+	 *
+	 * @var $template
+	 */
+	protected $template = null;
 
 	/**
 	 * Accept request and dispatch it to the module
@@ -25,34 +29,39 @@ abstract class Web_Module {
 	 * @access public
 	 */
 	public function accept_request() {
-		$application = APP_NAME;
-		if (is_callable(array($this, 'pre_' . $application))) {
-			call_user_func_array(array($this, 'pre_' . $application), array());
+		/**
+		 * Initialize sticky sessions
+		 */
+		Web_Session_Sticky::clear(get_class($this));
+		$session = Web_Session_Sticky::Get();
+		$session->module = get_class($this);
+
+		/**
+		 * Pre-boot actions
+		 **/
+		if (Application::Get()->name == 'admin') {
+			$this->pre_admin();
 		}
 
 		$template = Web_Template::Get();
-		$template->surrounding = false;
-		$module = get_class($this);
-		$module = str_replace('module_', '', strtolower($module));
-		$template->add_env('module', $module);
+		$template->assign('session', $_SESSION);
+		$template->assign('MODULE', get_class($this));
 
-		$session = Web_Session_Sticky::Get();
-		$session->module = $module;
-
-		$is_ajax = false;
-		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-			$is_ajax = true;
+		if (method_exists($this, 'secure')) {
+			$allowed = $this->secure();
+			if (!$allowed) {
+				throw new Exception('Possible security breach');
+			}
 		}
-		$_SESSION['is_ajax'] = $is_ajax;
 
-		if (isset($_REQUEST['action']) AND is_callable(array($this, 'display_'.$_REQUEST['action']))) {
+		if (isset($_REQUEST['action']) AND method_exists($this, 'display_' . $_REQUEST['action'])) {
 			$template->assign('action', $_REQUEST['action']);
-			call_user_func_array(array($this, 'display_'.$_REQUEST['action']), array());
+			call_user_func(array($this, 'display_'.$_REQUEST['action']));
 		} else {
 			$this->display();
 		}
 
-		if ($this->template != null) {
+		if ($this->template !== null and $this->template != false) {
 			$template->display($this->template);
 		}
 	}
@@ -61,17 +70,9 @@ abstract class Web_Module {
 	 * Pre-admin function
 	 */
 	private function pre_admin() {
-		if (!isset($_SESSION['user']) AND $this->login_required) {
+		if (!isset($_SESSION['user']) AND $this->login_required === true) {
 			Web_Session::Redirect('/login');
 		}
-
-		if (isset($_SESSION['user'])) {
-			User::Set($_SESSION['user']);
-		}
-
-		$config = Config::Get();
-		$template = Web_Template::Get();
-		$template->assign('company', $config->company_info['company']);
 	}
 
 	/**

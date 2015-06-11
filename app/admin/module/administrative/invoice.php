@@ -1,17 +1,11 @@
 <?php
 /**
- * Module Index
+ * Web Module Administrative Invoice
  *
- * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/model/Invoice.php';
-require_once LIB_PATH . '/model/Customer.php';
-require_once LIB_PATH . '/model/Invoice/Contact.php';
-require_once LIB_PATH . '/base/Web/Pager.php';
-
-class Module_Administrative_Invoice extends Web_Module {
+class Web_Module_Administrative_Invoice extends Web_Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -35,43 +29,146 @@ class Module_Administrative_Invoice extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$extra_conditions = array();
+		$template = Web_Template::Get();
+
+		$pager = new Web_Pager('invoice');
+		$permissions = array(
+			'number' => 'number',
+			'created' => 'invoice.created',
+			'customer' => 'customer.lastname',
+			'company' => 'customer.company',
+			'amount' => 'customer.price_incl',
+			'paid' => 'paid'
+		);
+		$pager->set_sort_permissions($permissions);
+		$pager->set_direction('desc');
+
 		if (isset($_POST['search'])) {
-			$extra_conditions['%search%'] = $_POST['search'];
-			$pager = new Web_Pager('invoice', 'id', 'DESC', 1, $extra_conditions);
-		} else {
-			$pager = new Web_Pager('invoice', 'id', 'DESC');
+			$pager->set_search($_POST['search']);
 		}
+		$pager->page();
 
 		$template = Web_Template::Get();
-		$session = Web_Session_Sticky::Get();
-		if (isset($session->message)) {
-			$template->assign('message', $session->message);
-			unset($session->message);
-		}
-
 		$template->assign('pager', $pager);
 	}
 
 	/**
-	 * AJAX search customer
+	 * Create an invoice: select customer
 	 *
 	 * @access public
 	 */
-	public function display_ajax_search_customer() {
-		$extra_conditions = array( '%search%' => $_POST['search']);
-		$customers = Customer::get_paged(1, 'ASC', 1, $extra_conditions);
+	public function display_create_step1() {
+		$template = Web_Template::Get();
 
-		$data = array();
-		foreach ($customers as $customer) {
-			$data[] = $customer->get_info();
+		if (!isset($_SESSION['invoice'])) {
+			$_SESSION['invoice'] = new Invoice();
+			$_SESSION['invoice']->load_array(array('customer_id'=>0, 'invoice_contact_id' => 0, 'type' => 'D'));
 		}
-		echo json_encode($data);
-		exit;
+
+		if (isset($_GET['customer_id']) AND isset($_GET['invoice_contact_id'])) {
+			$_SESSION['invoice']->customer_id = $_GET['customer_id'];
+			$_SESSION['invoice']->invoice_contact_id = $_GET['invoice_contact_id'];
+			Web_Session::Redirect('/administrative/invoice?action=create_step3');
+		}
+
+		if (isset($_POST['customer_id'])) {
+			if ($_POST['customer_id'] == '') {
+				$template->assign('errors', 'select_customer');
+			} else {
+				$_SESSION['invoice']->customer_id = $_POST['customer_id'];
+				$_SESSION['invoice']->type = $_POST['type'];
+				Web_Session::Redirect('/administrative/invoice?action=create_step2');
+			}
+		}
+
+
+		$template->assign('action', 'create_step1');
 	}
 
 	/**
-	 * Edit
+	 * Create an invoice: select invoice contact
+	 *
+	 * @access public
+	 */
+	public function display_create_step2() {
+		$template = Web_Template::Get();
+		if (isset($_POST['invoice_contact_id'])) {
+			if ($_POST['invoice_contact_id'] == '') {
+				$template->assign('errors', 'select_invoice_contact');
+			} else {
+				$_SESSION['invoice']->invoice_contact_id = $_POST['invoice_contact_id'];
+				Web_Session::Redirect('/administrative/invoice?action=create_step3');
+			}
+		}
+
+		$invoice_contacts = $_SESSION['invoice']->customer->get_active_invoice_contacts();
+
+		$template->assign('invoice_contacts', $invoice_contacts);
+		$template->assign('customer', $_SESSION['invoice']->customer);
+		$template->assign('languages', Language::get_all());
+		$template->assign('countries', Country::get_grouped());
+		$template->assign('action', 'create_step2');
+	}
+
+	/**
+	 * Create an invoice: add invoice items
+	 *
+	 * @access public
+	 */
+	public function display_create_step3() {
+		$template = Web_Template::Get();
+
+		if (isset($_POST['invoice_item'])) {
+
+			$errors = [];
+			$invoice_items = [];
+			foreach ($_POST['invoice_item'] as $row => $item) {
+				$invoice_item = new Invoice_Item();
+				$invoice_item->load_array($item);
+				if ($invoice_item->validate($item_errors) === false) {
+					$errors[$row] = $item_errors;
+				} else {
+					$invoice_items[] = $invoice_item;
+				}
+			}
+
+			if (count($errors) > 0) {
+				$template->assign('errors', $errors);
+			} else {
+				$invoice = $_SESSION['invoice'];
+				$invoice->expiration_date = date('YmdHis', strtotime('+2 weeks'));
+				$invoice->save();
+
+				foreach ($invoice_items as $invoice_item) {
+					$invoice_queue_id = $invoice_item->invoice_queue_id;
+					unset($invoice_item->invoice_queue_id);
+
+					$invoice_item->invoice_id = $invoice->id;
+					$invoice_item->save();
+
+					if ($invoice_queue_id != '') {
+						$invoice_queue = Invoice_Queue::get_by_id($invoice_queue_id);
+						$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
+						$invoice_queue->save();
+					}
+				}
+
+				unset($_SESSION['invoice']);
+
+				Web_Session::Redirect('/administrative/invoice');
+
+			}
+
+		}
+
+		$invoice_queue_items = Invoice_Queue::get_unprocessed_by_invoice_contact($_SESSION['invoice']->invoice_contact);
+		$template->assign('invoice_queue_items', $invoice_queue_items);
+		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->invoice_contact->country));
+		$template->assign('action', 'create_step3');
+	}
+
+	/**
+	 * Edit an invoice
 	 *
 	 * @access public
 	 */
@@ -82,7 +179,10 @@ class Module_Administrative_Invoice extends Web_Module {
 		if (isset($_POST['invoice'])) {
 			$invoice->send_reminder_mail = $_POST['invoice']['send_reminder_mail'];
 			$invoice->save();
-			$template->assign('saved', true);
+
+			$session = Web_Session_Sticky::Get();
+			$session->message = 'updated';
+			Web_Session::Redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
 		}
 
 		if (isset($_POST['transfer'])) {
@@ -90,135 +190,6 @@ class Module_Administrative_Invoice extends Web_Module {
 		}
 
 		$template->assign('invoice', $invoice);
-	}
-
-	/**
-	 * Create an invoice
-	 *
-	 * @access public
-	 */
-	public function display_create() {
-		if (!isset($_POST['customer_id'])) {
-			$this->display_create_step1();
-		} elseif (!isset($_POST['invoice_contact_id'])) {
-			$this->display_create_step2();
-		} elseif (!isset($_POST['invoice_item'])) {
-			$this->display_create_step3();
-		} else {
-			$this->display_create_step4();
-		}
-	}
-
-	/**
-	 * Create invoice: step1
-	 * Choose a customer
-	 *
-	 * @access public
-	 */
-	public function display_create_step1() {
-		$template = Web_Template::Get();
-		$template->assign('action', 'create_step1');
-	}
-
-	/**
-	 * Create invoice: step2
-	 * Choose an invoice contact
-	 *
-	 * @access public
-	 */
-	public function display_create_step2() {
-		$template = Web_Template::Get();
-		$template->assign('action', 'create_step2');
-		try {
-			$customer = Customer::get_by_id($_POST['customer_id']);
-		} catch (Exception $e) {
-			$template->assign('error', true);
-			$this->display_create_step1();
-			return;
-		}
-
-		$template->assign('customer', $customer);
-		$invoice_contacts = Invoice_Contact::get_by_customer($customer);
-		$template->assign('invoice_contacts', $invoice_contacts);
-		$template->assign('countries', Country::get_grouped());
-	}
-
-	/**
-	 * Create invoice: step3
-	 * Choose the invoice items
-	 *
-	 * @access public
-	 */
-	public function display_create_step3() {
-		if (isset($_POST['invoice_contact'])) {
-			if ($_POST['invoice_contact_id'] == 0 OR $_POST['invoice_contact_id'] == -1) {
-				$invoice_contact = new Invoice_Contact();
-			} else {
-				$invoice_contact = Invoice_Contact::get_by_id($_POST['invoice_contact_id']);
-			}
-			$invoice_contact->load_array($_POST['invoice_contact']);
-			$invoice_contact->customer_id = $_POST['customer_id'];
-			$invoice_contact->save();
-		}
-
-		$template = Web_Template::Get();
-		$template->assign('action', 'create_step3');
-		$template->assign('invoice_contact', $invoice_contact);
-		$template->assign('customer', Customer::get_by_id($_POST['customer_id']));
-	}
-
-	/**
-	 * Create invoice: step4
-	 * Create the invoice
-	 *
-	 * @access public
-	 */
-	public function display_create_step4() {
-		$template = Web_Template::get();
-		$invoice = new Invoice();
-		$invoice->customer_id = $_POST['customer_id'];
-		$invoice->invoice_contact_id = $_POST['invoice_contact_id'];
-		$invoice->expiration_date = date('Y-m-d H:i:s', strtotime('+1 month'));
-		$invoice->save();
-
-		foreach($_POST['invoice_item']['description'] as $key => $value) {
-			$invoice_item = new Invoice_Item();
-			$invoice_item->description = $value;
-			$invoice_item->price = $_POST['invoice_item']['price'][$key];
-			$invoice_item->vat = $_POST['invoice_item']['vat'][$key];
-			$invoice_item->save();
-			$invoice->add_invoice_item($invoice_item);
-		}
-
-		// If you want to send the invoice automatically after creation, uncomment this line
-		//$invoice->send_invoice_email();
-
-		Web_Session::Redirect('/administrative/invoice');
-	}
-
-	/**
-	 * Download PDF
-	 *
-	 * @access public
-	 */
-	public function display_download() {
-		$invoice = Invoice::get_by_id($_GET['id']);
-		$invoice->render()->client_download();
-	}
-
-	/**
-	 * Email PDF
-	 *
-	 * @access public
-	 */
-	public function display_send_invoice() {
-		$invoice = Invoice::get_by_id($_GET['id']);
-		$invoice->send_invoice_email();
-
-		$session = Web_Session_Sticky::Get();
-		$session->message = 'invoice_sent';
-
-		Web_Session::Redirect('/administrative/invoice');
 	}
 
 	/**
@@ -243,4 +214,31 @@ class Module_Administrative_Invoice extends Web_Module {
 
 		Web_Session::Redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
 	}
+
+	/**
+	 * Download PDF
+	 *
+	 * @access public
+	 */
+	public function display_download() {
+		$invoice = Invoice::get_by_id($_GET['id']);
+		$file = $invoice->get_pdf();
+		$file->client_inline();
+	}
+
+	/**
+	 * Email PDF
+	 *
+	 * @access public
+	 */
+	public function display_send() {
+		$invoice = Invoice::get_by_id($_GET['id']);
+		$invoice->send_invoice_email();
+
+		$session = Web_Session_Sticky::Get();
+		$session->message = 'invoice_sent';
+
+		Web_Session::Redirect('/administrative/invoice');
+	}
+
 }

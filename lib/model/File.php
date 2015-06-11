@@ -9,7 +9,30 @@
 require_once LIB_PATH . '/base/File/Store.php';
 
 class File {
-	use Model, Save, Get, Delete;
+	use Model, Save, Get;
+
+	/**
+	 * Get information related to this object
+	 *
+	 * @param bool $exclude_content
+	 * @return array An array containing the information
+	 */
+	public function get_info($exclude_content = false) {
+		$info = [
+			'id' => $this->id,
+			'name' => $this->name,
+			'mime_type' => $this->mime_type,
+			'size' => $this->size,
+			'created' => $this->created,
+			'human_size' => $this->get_human_size(),
+		];
+
+		if ($exclude_content === false) {
+			$info['content'] = base64_encode($this->get_contents());
+		}
+
+		return $info;
+	}
 
 	/**
 	 * Is this a picture
@@ -35,15 +58,105 @@ class File {
 	}
 
 	/**
+	 * is pdf
+	 *
+	 * @access public
+	 * @return bool $is_pdf
+	 */
+	public function is_pdf() {
+		if ($this->mime_type == 'application/pdf') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Copy
+	 *
+	 * @access public
+	 * @return File $file
+	 */
+	public function copy() {
+		$file = File_Store::store($this->name, $this->get_contents());
+		return $file;
+	}
+
+	/**
+	 * Delete a file
+	 *
+	 * @access public
+	 */
+	public function delete() {
+		File_Store::delete_file($this);
+		$db = Database::Get();
+		$db->query('DELETE FROM file WHERE id=?', array($this->id));
+	}
+
+	/**
+	* Set expiration date
+	*
+	* @access public
+	*/
+	public function expire($delay = '+2 hours') {
+		$this->expiration_date = date('Y-m-d H:i:s', strtotime($delay));
+		$this->save();
+	}
+
+	/**
+	* Clear expiration mark
+	*
+	* @access public
+	*/
+	public function cancel_expiration() {
+		$this->expiration_date = NULL;
+		$this->save();
+	}
+
+	/**
+	 * Get expired files
+	 *
+	 * @access public
+	 * @return array File $items
+	 */
+	public static function get_expired() {
+		$db = Database::Get();
+		$ids = $db->getCol('SELECT id FROM file WHERE expiration_date IS NOT NULL AND expiration_date < NOW()');
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = File::get_by_id($id);
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Get a human readable version of the size
+	 *
+	 * @access public
+	 */
+	public function get_human_size() {
+		return Util::file_humanize_size($this->size);
+	}
+
+	/**
+	 * Get content of the file
+	 *
+	 * @access public
+	 */
+	public function get_contents() {
+		return file_get_contents($this->get_path());
+	}
+
+	/**
 	 * Get path
 	 *
 	 * @access public
 	 * @return string $path
 	 */
 	public function get_path() {
-		$created = strtotime($this->created);
-		$path = STORE_PATH . '/file/' . date('Y', $created) . '/' . date('m', $created) . '/' . date('d', $created) . '/' . $this->unique_name;
-		return $path;
+		return File_Store::get_path($this);
 	}
 
 	/**
@@ -71,31 +184,16 @@ class File {
 	}
 
 	/**
-	 * Get content of the file
+	 * Get File by id
 	 *
 	 * @access public
-	 */
-	public function get_contents() {
-		return file_get_contents($this->get_path());
-	}
-
-	/**
-	 * Get by unique_name
-	 *
-	 * @access public
-	 * @param string $unique_name
+	 * @param int $id
 	 * @return File $file
 	 */
-	public static function get_by_unique_name($name) {
-		$db = Database::Get();
-		$id = $db->getOne('SELECT id FROM file WHERE unique_name=?', array($name));
-		if ($id === null) {
-			throw new Exception('File not found');
-		}
-
-		$file = File::get_by_id($id);
+	public static function get_by_id($id) {
+		$file = new File($id);
 		if ($file->is_picture()) {
-			return Picture::get_by_id($file->id);
+			return Picture::get_by_id($id);
 		} else {
 			return $file;
 		}

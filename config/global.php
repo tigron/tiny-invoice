@@ -5,7 +5,10 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
+
+date_default_timezone_set('Europe/Brussels');
 
 /**
  * Define the Root path
@@ -42,10 +45,15 @@ define('PO_PATH', realpath(ROOT_PATH . '/po'));
  */
 define('STORE_PATH', realpath(ROOT_PATH . '/store'));
 
-require_once ROOT_PATH . '/config/Config.php';
-require_once LIB_PATH . '/base/Errorhandling.php';
+require_once LIB_PATH . '/base/Application.php';
+require_once 'Config.php';
+require_once LIB_PATH . '/base/ErrorHandling.php';
 require_once LIB_PATH . '/base/Database.php';
-require_once PACKAGE_PATH . '/vendor/autoload.php';
+require_once LIB_PATH . '/base/Util.php';
+
+require_once EXT_PATH . '/packages/vendor/autoload.php';
+require_once LIB_PATH . '/base/Util/Autoload.php';
+spl_autoload_register('Util_Autoload::classname');
 
 /**
  * Require all traits

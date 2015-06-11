@@ -21,12 +21,13 @@ class Transfer {
 	 * @return array Transfer $items
 	 */
 	public static function get_by_invoice(Invoice $invoice) {
-		$db = Database::Get();
-		$ids = $db->getCol('SELECT id FROM transfer WHERE invoice_id = ?', array($invoice->id));
+		$table = self::trait_get_database_table();
+		$db = self::trait_get_database();
+		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
 
-		$items = array();
+		$items = [];
 		foreach ($ids as $id) {
-			$items[] = Transfer::get_by_id($id);
+			$items[] = self::get_by_id($id);
 		}
 
 		return $items;
@@ -37,12 +38,12 @@ class Transfer {
 	 *
 	 * @access public
 	 * @param Invoice $invoice
-	 * @return array Transfer $items
+	 * @return descimal $amount
 	 */
 	public static function get_amount_by_invoice(Invoice $invoice) {
-		$db = Database::Get();
-		$amount = $db->getOne('SELECT SUM(amount) FROM transfer WHERE invoice_id = ?', array($invoice->id));
-
+		$table = self::trait_get_database_table();
+		$db = self::trait_get_database();
+		$amount = $db->getOne('SELECT SUM(amount) FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
 		return $amount;
 	}
 }

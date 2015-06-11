@@ -113,6 +113,7 @@ class Util_CSV {
 				$delimiter = $possible_delimiter;
 			}
 		}
+
 		return $delimiter;
 	}
 }

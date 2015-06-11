@@ -33,13 +33,7 @@ class Util_Rewrite {
 		if (!isset($data[3])) {
 			return $data[0];
 		}
-
-		try {
-			$new_link = Util::rewrite_reverse_link($data[3]);
-		} catch (Exception $e) {
-			return $data[0];
-		}
-
+		$new_link = Util::rewrite_reverse_link($data[3]);
 		return str_replace($data[3], $new_link, $data[0]);
 	}
 
@@ -50,10 +44,8 @@ class Util_Rewrite {
 	 * @param string $url
 	 * @return string $reverse_rewrite
 	 */
-	public static function reverse_link($url) {
-		$config = Config::Get();
-		$language = Language::Get();
-		$url = parse_url($url);
+	public static function reverse_link($url_raw) {
+		$url = parse_url($url_raw);
 
 		$params = array();
 		if (isset($url['query'])) {
@@ -62,76 +54,139 @@ class Util_Rewrite {
 			parse_str($url['query'], $params);
 		}
 
-		if (isset($config->routes[APP_NAME])) {
-			$routes = $config->routes[APP_NAME];
-		} else {
-			throw new Exception('No routes found for current application');
+		$application = Application::Get();
+		$language = $application->language;
+		$routes = $application->config->routes;
+
+		/**
+		 * Add language to the known parameters
+		 */
+		$params['language'] = $language->name_short;
+
+		/**
+		 * Search for the requested module
+		 */
+		if (!isset($url['path'])) {
+			return $url_raw;
 		}
+		if ($url['path'] != '' AND $url['path'][0] == '/') {
+			$url['path'] = substr($url['path'], 1);
+		}
+		$module_name = 'web_module_' . str_replace('/', '_', $url['path']);
+
+		$module_defined = false;
+
+		if (isset($routes[$module_name])) {
+			$module_defined = true;
+		} elseif (isset($routes[$module_name . '_index'])) {
+			$module_name = $module_name . '_index';
+			$module_defined = true;
+		}
+
+		if (!$module_defined) {
+			return $url_raw;
+		}
+
+		$routes = $routes[$module_name];
 
 		$correct_route = null;
-		if (isset($routes[$url['path']]['routes'][$language->name_short])) {
-			$correct_route = $routes[$url['path']];
-		} elseif (isset($routes[$url['path']]['routes']['default'])) {
-			$correct_route = $routes[$url['path']];
-		} else {
-			throw new Exception('No available route found');
-		}
+		foreach ($routes as $route) {
+			$route_parts = explode('/', $route);
+			$route_part_matches = 0;
 
-		// We have a possible correct route
-		$variables = $correct_route['variables'];
-		$correct_variable_string = null;
+			foreach ($route_parts as $key => $route_part) {
+				if (trim($route_part) == '') {
+					unset($route_parts[$key]);
+					continue;
+				}
+				if ($route_part[0] != '$') {
+					$route_part_matches++;
+					continue;
+				}
+				/**
+				 * $language[en,nl] => language[en,nl]
+				 */
+				$route_part = substr($route_part, 1);
 
-		if (count($params) == 0 AND in_array('', $correct_route['variables'])) {
-			$correct_variable_string = '';
-		} else {
-			foreach ($variables as $variable_string) {
-				if (substr_count($variable_string, '$') == count($params)) {
-					$correct_variable_string = $variable_string;
-					break;
+				/**
+				 * Fetch required values
+				 */
+				$required_values = array();
+				preg_match_all('/(\[(.*?)\])/', $route_part, $matches);
+				if (count($matches[2]) > 0) {
+					/**
+					 * There are required values, parse them
+					 */
+					$required_values = explode(',', $matches[2][0]);
+					$route_part = str_replace($matches[0][0], '', $route_part);
+					$route_parts[$key] = '$' . $route_part;
+				}
+
+				if (isset($params[$route_part])) {
+					/**
+					 * if there are no required values => Proceed
+					 */
+					if (count($required_values) == 0) {
+						$route_part_matches++;
+						continue;
+					}
+
+					/**
+					 * Check the required values
+					 */
+					$values_ok = false;
+					foreach ($required_values as $required_value) {
+						if ($required_value == $params[$route_part]) {
+							$values_ok = true;
+						}
+					}
+
+					if ($values_ok) {
+						$route_part_matches++;
+						continue;
+					}
 				}
 			}
-		}
 
-		if ($correct_variable_string === null) {
-			throw new Exception('Route found but variables incorrect');
-		}
-
-		// See if all variables match
-		$correct_variables = explode('/', $correct_variable_string);
-		$variables_matches = true;
-
-		foreach ($correct_variables as $key => $correct_variable) {
-			$correct_variable = str_replace('$', '', $correct_variable);
-			if (!isset($params[$correct_variable]) AND $correct_variable != '') {
-				$variables_matches = false;
-				break;
-			}
-			$correct_variables[$key] = $correct_variable;
-		}
-
-		if (!$variables_matches) {
-			throw new Exception('Route found but variables incorrect');
-		}
-
-		// Now build the new querystring
-		if (isset($correct_route['routes'][$language->name_short])) {
-			$querystring = $correct_route['routes'][$language->name_short];
-		} else {
-			$querystring = $correct_route['routes']['default'];
-		}
-
-		foreach ($correct_variables as $correct_variable) {
-			if ($correct_variable != '') {
-				$querystring .= '/' . $params[$correct_variable];
+			if ($route_part_matches == count($route_parts)) {
+				$correct_route = $route_parts;
 			}
 		}
 
-		// fragment (after '#') available?
+		if ($correct_route === null) {
+			return $url_raw;
+		}
+
+		$new_url = '';
+		foreach ($correct_route as $url_part) {
+			if ($url_part[0] !== '$') {
+				$new_url .= '/' . $url_part;
+				continue;
+			}
+
+			$url_part = substr($url_part, 1);
+			$new_url .= '/' . $params[$url_part];
+			unset($params[$url_part]);
+		}
+
+		/**
+		 * If the first character is a /, remove it
+		 */
+		if ($new_url[0] == '/') {
+			$new_url = substr($new_url, 1);
+		}
+
+		if (count($params) > 0) {
+			$new_url .= '?' . urldecode(http_build_query($params));
+		}
+
+		/**
+		 * Is there a fragment ('#') available?
+		 */
 		if (isset($url['fragment'])) {
-			return $language->name_short . $querystring . '#' . $url['fragment'];
-		} else {
-			return $language->name_short . $querystring;
+			$new_url .= '#' . $url['fragment'];
 		}
 
+		return $new_url;
 	}
 }

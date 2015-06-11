@@ -1,497 +1,669 @@
-{% extends "base.layout.twig" %}
+{% extends "_default/layout.base.twig" %}
 
 {% block content %}
 
-{% if action == 'create_step3' %} 
-	<script type="text/javascript">
-		function add_item() {
-			$('#last').before( $('#cloneable tbody').html() );
-			$('textarea.autogrow').autogrow();
-		}
-	</script>
-	<ul class="breadcrumb">
-		<li><a href="/administrative/invoice">{% trans "Invoices" %}</a> <span class="divider">/</span></li>
-		<li class="active">{% trans "Create invoice" %}</li>
-	</ul>
-	<div class="page-header">
-		<h3>{% trans "Create invoice" %}</h3>
-	</div>
+	{% if action == 'edit' %}
 
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/invoice" title="">{% trans "Invoices" %}</a></li>
+			<li class="active">{% trans "Details" %}</li>
+		</ol>
 
-	<form class="form-horizontal" action="{{ env.server.REQUEST_URI }}" method="post">
-		<input type="hidden" name="customer_id" value="{{ customer.id }}" />
-		<input type="hidden" name="invoice_contact_id" value="{{ invoice_contact.id }}" />
-		<input type="hidden" name="action" value="create" />
-		<table class="table table-striped table-condensed">
-			<thead>
-				<tr>
-					<th>{% trans "Description" %} </th>
-					<th>{% trans "Price" %}</th>
-					<th>{% trans "VAT" %}</th>
-					<th>&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr id="last">
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td style="text-align: right;" colspan="4">
-						<button type="button" onClick="javascript:add_item()">
-							<i class="icon-plus"></i> {% trans "Add item" %}
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="form-actions">
-			<button type="submit" class="btn">{% trans "Next" %} <i class="icon-arrow-right"></i></button>
-		</div>
-	</form>
-
-	<table class="hide" id="cloneable">
-		<tr>
-			<td width="314">
-				<textarea class="autogrow input-xxlarge" name="invoice_item[description][]"></textarea>
-			</td>
-			<td width="100"><input type="text" name="invoice_item[price][]"></td>
-			<td width="100">
-				<select name="invoice_item[vat][]" class="input-small">
-					<option value="0">0%</option>
-					<option value="0.06">6%</option>
-					<option value="0.12">12%</option>
-					<option value="0.21" selected>21%</option>
-				</select>
-
-			</td>
-			<td width="100"><a href="javascript:void(0);" onClick="$(this).parents('tr').remove()"><i class="icon-remove"></i></a></td>
-		</tr>
-	</table>
-{% elseif action == 'create_step2' %}
-	<script type="text/javascript">
-		var invoice_contacts =  {
-								0: {
-									"firstname":"",
-									"lastname":"",
-									"company":"",
-									"street":"",
-									"housenumber":"",
-									"city":"",
-									"country":"203",
-									"state":"",
-									"zipcode":"",
-									"country":"",
-									"mobile":"",
-									"phone":"",
-									"email":"",
-									"vat":"",
-									"fax":""
-								},
-								{% for invoice_contact in invoice_contacts %}
-									{{ invoice_contact.id }}: {
-										"firstname":"{{ invoice_contact.firstname }}",
-										"lastname":"{{ invoice_contact.lastname }}",
-										"company":"{{ invoice_contact.company }}",
-										"street":"{{ invoice_contact.street }}",
-										"housenumber":"{{ invoice_contact.housenumber }}",
-										"city":"{{ invoice_contact.city }}",
-										"state":"{{ invoice_contact.state }}",
-										"zipcode":"{{ invoice_contact.zipcode }}",
-										"country":"{{ invoice_contact.country_id }}",
-										"mobile":"{{ invoice_contact.mobile }}",
-										"phone":"{{ invoice_contact.phone }}",
-										"email":"{{ invoice_contact.email }}",
-										"vat":"{{ invoice_contact.vat }}",
-										"fax":"{{ invoice_contact.fax }}"
-									}
-									{% if not loop.last %}, {% endif %}
-								{% else %}
-									'-1': {
-										"firstname":"{{ customer.firstname }}",
-										"lastname":"{{ customer.lastname }}",
-										"company":"{{ customer.company }}",
-										"street":"{{ customer.street }}",
-										"housenumber":"{{ customer.housenumber }}",
-										"city":"{{ customer.city }}",
-										"state":"{{ customer.state }}",
-										"zipcode":"{{ customer.zipcode }}",
-										"country":"{{ customer.country_id }}",
-										"mobile":"{{ customer.mobile }}",
-										"phone":"{{ customer.phone }}",
-										"email":"{{ customer.email }}",
-										"vat":"{{ customer.vat }}",
-										"fax":"{{ customer.fax }}"
-									}
-								{% endfor %}
-						};
-
-		function get_invoice_contact_data(invoice_contact){
-			ct = invoice_contacts[invoice_contact[invoice_contact.selectedIndex].value];
-			for (var lbl in ct){
-				if(document.getElementById(lbl)!=null){
-					document.getElementById(lbl).value = ct[lbl];
-				}
-			}
-		}
-	</script>
-	<ul class="breadcrumb">
-		<li><a href="/administrative/invoice">{% trans "Invoices" %}</a> <span class="divider">/</span></li>
-		<li class="active">{% trans "Create invoice" %}</li>
-	</ul>
-
-	<div class="page-header">
-		<h3>{% trans "Create invoice" %}</h3>
-	</div>
-
-	<form class="form-horizontal well form-condensed" action="{{ env.server.REQUEST_URI }}" method="post">
-	<fieldset>
-		<legend>{% trans "Select invoice contact" %}</legend>
-		<input type="hidden" name="customer_id" value="{{ customer.id }}" />
-		<div class="control-group">
-			<label class="control-label" for="invoice_contact">{% trans "Choose invoice contact" %}</label>
-			<div class="controls">
-				<select name="invoice_contact_id" class="input-xlarge" onchange="get_invoice_contact_data(this);">
-					<option value="0">{% trans "Create contact" %}</option>
-					{% for invoice_contact in invoice_contacts %}
-						<option value="{{ invoice_contact.id }}">
-							{{ invoice_contact.firstname }} {{ invoice_contact.lastname }} ({{ invoice_contact.company }})
-						</option>
-					{% else %}
-						<option value="-1">{{ customer.firstname }} {{ customer.lastname }} ({{ customer.company }})</option>
-					{% endfor %}
-				</select>
-			</div>
-		</div>
-
-		{% include 'snippet/form/invoice_contact.twig' with countries %}
-
-		<div class="form-actions">
-			<button type="submit" class="btn">{% trans "Next" %} <i class="icon-arrow-right"></i></button>
-		</div>
-	</fieldset>
-	</form>
-
-{% elseif action == 'create_step1' %}
-	<ul class="breadcrumb">
-		<li><a href="/administrative/invoice">{% trans "Invoices" %}</a> <span class="divider">/</span></li>
-		<li class="active">{% trans "Create invoice" %}</li>
-	</ul>
-
-	<div class="page-header">
-		<h3>{% trans "Create invoice" %}</h3>
-	</div>
-
-	{% if error %}
-		<div class="alert alert-error">
-			{% trans "Please choose a customer" %}
-		</div>
-	{% endif %}
-
-	<form class="form-horizontal well" action="{{ env.server.REQUEST_URI }}" method="post">
-	<fieldet>
-		<legend>{% trans "Choose customer" %}</legend>
-		<div class="control-group">
-			<label class="control-label" for="customer" >{% trans "Search" %}</label>
-
-			<div class="controls">
-				<input type="text" id="customer" name="customer" class="typeahead" autocomplete="off" >
-				<input type="hidden" id="customer_id" name="customer_id" class="" value="0" />
-			</div>
-		</div>
-		<div class="form-actions">
-			<button type="submit" class="btn">{% trans "Next" %} <i class="icon-arrow-right"></i></button>
-		</div>
-	</fieldset>
-	</form>
-
-	<script type="text/javascript">
-		$('.typeahead').typeahead({
-			source: function(query, process) {
-					$.post('/administrative/invoice', { action: "ajax_search_customer", search: query },
-					function(results){
-						var data = [];
-						for (var i = 0; i < results.length; i++) {
-							data.push(results[i].id + '|' + results[i].firstname + ' ' + results[i].lastname + ' (' + results[i].company + ')');
-						}
-
-						process(data);
-					}, "json");
-			},
-			highlighter: function (item) {
-				var parts = item.split('|');
-				parts.shift();
-				return parts.join('|');
-			},
-			updater: function (item) {
-				var parts = item.split('|');
-				$('input[id="customer_id"]').val(parts.shift());
-				return parts.join('|');
-			}
-		});
-	</script>
-{% elseif action == 'edit' %}
-
-	<ul class="breadcrumb">
-		<li><a href="/administrative/invoice">{% trans "Invoices" %}</a> <span class="divider">/</span></li>
-		<li class="active">{% trans "Edit invoice" %}</li>
-	</ul>
-	<div class="page-header">
-		<h3>{% trans "Edit invoice" %} {{ invoice.id }}
-			<div class="pull-right">
-				<a class="btn" href="/administrative/invoice?action=download&id={{ invoice.id }}"><i class="icon-download"></i> {% trans "Download" %}</a>
-				{{ base.modal('Add transfer'|trans, 'button', 'icon-plus-sign', 'form/transfer', 'Add transfer'|trans) }}
-			</div>
-		</h3>
-	</div>
-
-	{% if saved %}
-	<div class="alert alert-success">
-		{% trans "User details saved" %}
-	</div>
-	{% endif %}
-
-	<fieldset>
-		<legend>{% trans "Details" %}</legend>
-		<dl class="dl-horizontal">
-			<dt>{% trans "Invoice number" %}</dt>
-			<dd>{{ invoice.id }}</dd>
-
-			<dt>{% trans "Created" %}</dt>
-			<dd>{{ invoice.created|datetime() }}</dd>
-
-			<dt>{% trans "Price excl VAT" %}</dt>
-			<dd>{{ "€%.2f"|format(invoice.get_price()) }}</dd>
-
-			<dt>{% trans "Price incl VAT" %}</dt>
-			<dd>{{ "€%.2f"|format(invoice.get_price_incl()) }}</dd>
-
-			<dt>{% trans "Paid" %}</dt>
-			<dd>{% if invoice.paid %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</dd>
-		</dl>
-	</fieldset>
-
-	<div class="row-fluid">
-		<div class="span5">
-			<fieldset>
-				<legend>{% trans "Customer" %}</legend>
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Details" %}</div>
+			<div class="panel-body">
 				<dl class="dl-horizontal">
-					<dt>{% trans "Name" %}</dt>
-					<dd>{{ invoice.customer.firstname }}</dd>
+					<dt>{% trans "Invoice number" %}</dt>
+					<dd>{{ invoice.id }}</dd>
 
-					<dt>{% trans "Company" %}</dt>
-					<dd>{{ invoice.customer.company }}</dd>
+					<dt>{% trans "Created" %}</dt>
+					<dd>{{ invoice.created|datetime() }}</dd>
 
-					<dt>{% trans "Address" %}</dt>
-					<dd>{{ invoice.customer.street }} {{ invoice.customer.housenumber }}</dd>
+					<dt>{% trans "Price excl VAT" %}</dt>
+					<dd>{{ "€%.2f"|format(invoice.get_price_excl()) }}</dd>
 
-					<dt>&nbsp;</dt>
-					<dd>{{ invoice.customer.zipcode }} {{ invoice.customer.city }}</dd>
+					<dt>{% trans "Price incl VAT" %}</dt>
+					<dd>{{ "€%.2f"|format(invoice.get_price_incl()) }}</dd>
+
+					<dt>{% trans "Paid" %}</dt>
+					<dd>{% if invoice.paid %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</dd>
+
+					<dt>{% trans "Reference" %}</dt>
+					<dd>{{ invoice.reference }}</dd>
+
+					<dt>{% trans "Download PDF" %}</dt>
+					<dd>
+						<a href="/administrative/invoice?action=download&id={{ invoice.id }}">{% trans "Download" %}</a>
+					</dd>
 				</dl>
-			</fieldset>
-		</div>
-		<div class="span5">
-			<fieldset>
-				<legend>{% trans "Invoice contact" %}</legend>
-				<dl class="dl-horizontal">
-					<dt>{% trans "Name" %}</dt>
-					<dd>{{ invoice.invoice_contact.firstname }}</dd>
 
-					<dt>{% trans "Company" %}</dt>
-					<dd>{{ invoice.invoice_contact.company }}</dd>
-
-					<dt>{% trans "Address" %}</dt>
-					<dd>{{ invoice.invoice_contact.street }} {{ invoice.invoice_contact.housenumber }}</dd>
-
-					<dt>&nbsp;</dt>
-					<dd>{{ invoice.invoice_contact.zipcode }} {{ invoice.invoice_contact.city }}</dd>
-
-					<dt>{% trans "VAT" %}</dt>
-					<dd>{{ invoice.invoice_contact.vat }}</dd>
-				</dl>
-			</fieldset>
-		</div>
-	</div>
-
-	<fieldset>
-		<legend>{% trans "Invoice details" %}</legend>
-		<table class="table table-striped table-hover table-condensed">
-			<thead>
-				<tr>
-					<th>{% trans "Description" %}</th>
-					<th>{% trans "VAT" %}</th>
-					<th>{% trans "Price" %}</th>
-				</tr>
-			</thead>
-			{% for invoice_item in invoice.get_invoice_items() %}
-				<tr>
-					<td>{{ invoice_item.description|nl2br }}</td>
-					<td>{{ invoice_item.vat/0.01 }}%</td>
-					<td>&euro;{{ "%.2f"|format(invoice_item.price) }}</td>
-				</tr>
-			{% endfor %}
-			<tr>
-				<td colspan="2"><strong>{% trans "Total excl VAT" %}</strong></td>
-				<td><strong>&euro;{{ "%.2f"|format(invoice.get_price()) }}</strong></td>
-			</tr>
-			{% for key, value in invoice.get_vat_array() %}
-				<tr>
-					<td colspan="2">{% trans "VAT" %} ({{ key/0.01 }}%)</td>
-					<td>&euro;{{ "%.2f"|format(value) }}</td>
-				</tr>
-			{% endfor %}
-			<tr>
-				<td colspan="2"><strong>{% trans "Total incl VAT" %}</strong></td>
-				<td><strong>&euro;{{ "%.2f"|format(invoice.get_price_incl()) }}</strong></td>
-			</tr>
-		</table>
-	</fieldset>
-
-	<form class="form-horizontal" action="{{ env.server.REQUEST_URI }}" method="post">
-	<fieldset>
-		<legend>{% trans "Invoice settings" %}</legend>
-		<dl class="dl-horizontal">
-			<dt>{% trans "Send reminder mails" %}</dt>
-			<dd>
-				<label class="radio inline">
-					<input type="radio" name="invoice[send_reminder_mail]" value="1"{% if invoice.send_reminder_mail == 1 %} checked{% endif %}> {% trans "Yes" %}
-				</label>
-				<label class="radio inline">
-					<input type="radio" name="invoice[send_reminder_mail]" value="0"{% if invoice.send_reminder_mail == 0 %} checked{% endif %}> {% trans "No" %}
-				</label>
-			</dd>
-		</dl>
-		<div class="form-actions">
-			<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-		</div>
-	</fieldset>
-	</form>
-
-	<fieldset>
-		<legend>{% trans "Logs" %}</legend>
-		<dl class="dl-horizontal">
-		{% set transfers = invoice.get_transfers() %}
-		{% for transfer in transfers %}
-
-			{% if loop.first %}
-			<dt>{% trans "Payments" %}</dt>
-			{% else %}
-			<dt>&nbsp;</dt>
-			{% endif %}
-
-			<dd>
-				{{ transfer.created|datetime() }}:
-				{% if transfer.type == 1 %}
-				{% trans "Manual payment added" %}
-				{% endif %}
-
-				{{ "€%.2f"|format(transfer.amount) }}
-			</dd>
-
-		{% else %}
-			<dt>{% trans "Payments" %}</dt>
-			<dd>{% trans "No payments added yet" %}.</dd>
-		{% endfor %}
-
-			<dt>&nbsp;</dt>
-			<dd>&nbsp;</dd>
-
-		{% set logs = invoice.get_logs() %}
-		{% for log in logs %}
-
-			{% if loop.first %}
-			<dt>{% trans "Logs" %}</dt>
-			{% else %}
-			<dt>&nbsp;</dt>
-			{% endif %}
-
-			<dd>
-				{{ log.created|datetime() }}: {{ log.content }} ({{ log.user.firstname }})
-			</dd>
-
-		{% endfor %}
-		</dl>
-	</fieldset>
-
-{% else %}
-	<ul class="breadcrumb">
-		<li class="active">{% trans "Invoices" %}</li>
-	</ul>
-
-	<div class="page-header">
-	<h3>{% trans "Invoices" %}
-
-		<div class="pull-right">
-			<a class="btn" href="/administrative/invoice?action=create"><i class="icon-plus-sign"></i> {% trans "Create invoice" %}</a>
-		</div>
-	</h3>
-	</div>
-
-	{% if message == 'invoice_sent' %}
-	<div class="alert alert-success">
-		{% trans "Invoice sent by email" %}
-	</div>
-	{% endif %}
-
-	<form class="well form-horizontal" method="post" action="{{ env.server.REQUEST_URI }}" >
-		<div class="control-group">
-			<label class="control-label" for="search">{% trans "Search" %}</label>
-			<div class="controls">
-				<div class="input-append">
-					<input type="text" name="search" value="{{ pager.get_search() }}"/>
-					<button class="btn" type="submit">{% trans "Search" %}</button>
+				<div class="col-xs-12 text-right">
+					<a href="/administrative/invoice?action=delete&id={{ invoice.id }}" class="btn btn-danger" data-confirm-message="{% trans "Are you really sure" %}?" data-confirm-title="{% trans "Please confirm" %}">
+						{% trans "Delete Invoice" %}
+					</a>
 				</div>
 			</div>
 		</div>
-	</form>
 
-	{% for invoice in pager.items %}
-		{% if loop.first %}
-			<table class="table table-striped table-hover table-condensed">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">{% trans "Customer" %}</div>
+					<div class="panel-body">
+						<dl class="dl-horizontal">
+							<dt>{% trans "Name" %}</dt>
+							<dd>
+								<a href="/administrative/customer?action=edit&id={{ invoice.customer.id }}" title="">
+									{{ invoice.customer.firstname }} {{ invoice.customer.lastname }}
+								</a>
+							</dd>
+
+							<dt>{% trans "Company" %}</dt>
+							<dd>{{ invoice.customer.company }}</dd>
+
+							<dt>{% trans "Address" %}</dt>
+							<dd>{{ invoice.customer.street }} {{ invoice.customer.housenumber }}</dd>
+
+							<dt>&nbsp;</dt>
+							<dd>{{ invoice.customer.zipcode }} {{ invoice.customer.city }}</dd>
+
+							<dt>&nbsp;</dt>
+							<dd>{{ invoice.customer.country.name }}</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">{% trans "Invoice Contact" %}</div>
+					<div class="panel-body">
+						<dl class="dl-horizontal">
+							<dt>{% trans "Name" %}</dt>
+							<dd>{{ invoice.invoice_contact.firstname }} {{ invoice.invoice_contact.lastname }}</dd>
+
+							<dt>{% trans "Company" %}</dt>
+							<dd>{{ invoice.invoice_contact.company }}</dd>
+
+							<dt>{% trans "Address" %}</dt>
+							<dd>{{ invoice.invoice_contact.street }} {{ invoice.invoice_contact.housenumber }}</dd>
+
+							<dt>&nbsp;</dt>
+							<dd>{{ invoice.invoice_contact.zipcode }} {{ invoice.invoice_contact.city }}</dd>
+
+							<dt>&nbsp;</dt>
+							<dd>{{ invoice.invoice_contact.country.name }}</dd>
+
+							<dt>{% trans "VAT" %}</dt>
+							<dd>{{ invoice.invoice_contact.get_vat_formatted() }}</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Invoice Details" %}</div>
+			<div class="panel-body">
+				<table class="table table-striped table-hover table-condensed">
+					<thead>
+						<tr>
+							<th>{% trans "Description" %}</th>
+							<th>{% trans "VAT" %}</th>
+							<th>{% trans "Qty" %}</th>
+							<th class="text-right">{% trans "Price" %}</th>
+							<th class="text-right">{% trans "Subtotal" %}</th>
+						</tr>
+					</thead>
+					{% for invoice_item in invoice.get_invoice_items() %}
+						<tr>
+							<td>{{ invoice_item.description|nl2br }}</td>
+							<td>{{ invoice_item.vat|number_format }}%</td>
+							<td>{{ invoice_item.qty|number_format }}</td>
+							<td class="text-right">&euro;{{ invoice_item.price|number_format }}</td>
+							<td class="text-right">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
+						</tr>
+					{% endfor %}
+					<tr>
+						<td colspan="4"><strong>{% trans "Total excl VAT" %}</strong></td>
+						<td class="text-right"><strong>&euro;{{ invoice.get_price_excl()|number_format }}</strong></td>
+					</tr>
+					{% for key, value in invoice.get_vat_array() %}
+						<tr>
+							<td colspan="4">{% trans "VAT" %} ({{ key }}%)</td>
+							<td class="text-right">&euro;{{ value|number_format }}</td>
+						</tr>
+					{% endfor %}
+					<tr>
+						<td colspan="4"><strong>{% trans "Total incl VAT" %}</strong></td>
+						<td class="text-right"><strong>&euro;{{ invoice.get_price_incl()|number_format }}</strong></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		{% include 'administrative/invoice/modal.transfer.twig' with {id: 'add_transfer', 'invoice': invoice}  %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Payments" %}
+				<div class="pull-right">
+					<a href="#add_transfer" data-toggle="modal">
+						<span class="glyphicon glyphicon-plus-sign"></span> {% trans "Add Transfer" %}
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+			{% for transfer in invoice.get_transfers() %}
+				{% if loop.first %}
+					<table class="table table-hover table-alternate">
+						<thead>
+							<tr>
+								<th width="15%">{% trans "Date" %}</th>
+								<th>{% trans "Amount" %}</th>
+							</tr>
+						</thead>
+						<tbody>
+				{% endif %}
+				<tr>
+					<td>{{ transfer.created|datetime }}</td>
+					<td>&euro;{{ transfer.amount }}</td>
+				</tr>
+				{% if loop.last %}
+					</tbody>
+					</table>
+				{% endif %}
+			{% else %}
+				<p>{% trans "No payments added yet" %}</p>
+			{% endfor %}
+			</div>
+		</div>
+
+		<form class="form-horizontal" action="/administrative/invoice?action=edit&id={{ invoice.id }}" method="post">
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Invoice Settings" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="control-label col-md-3">{% trans "Send reminder mails" %}</label>
+					<div class="col-md-9">
+						<label class="radio inline">
+							<input type="radio" name="invoice[send_reminder_mail]" value="1"{% if invoice.send_reminder_mail == 1 %} checked{% endif %}> {% trans "Yes" %}
+						</label>
+						<label class="radio inline">
+							<input type="radio" name="invoice[send_reminder_mail]" value="0"{% if invoice.send_reminder_mail == 0 %} checked{% endif %}> {% trans "No" %}
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-md-9 col-md-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		</form>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Logs" %}</div>
+			<div class="panel-body">
+				<dl class="dl-horizontal">
+				{% set transfers = invoice.get_transfers() %}
+				{% for transfer in transfers %}
+
+					{% if loop.first %}
+					<dt>{% trans "Payments" %}</dt>
+					{% else %}
+					<dt>&nbsp;</dt>
+					{% endif %}
+
+					<dd>
+						{{ transfer.created|datetime() }}:
+						{% if transfer.type == 1 %}
+						{% trans "Manual payment added" %}
+						{% endif %}
+
+						{{ "€%.2f"|format(transfer.amount) }}
+					</dd>
+
+				{% else %}
+					<dt>{% trans "Payments" %}</dt>
+					<dd>{% trans "No payments added yet" %}.</dd>
+				{% endfor %}
+
+					<dt>&nbsp;</dt>
+					<dd>&nbsp;</dd>
+
+				{% set logs = invoice.get_logs() %}
+				{% for log in logs %}
+
+					{% if loop.first %}
+					<dt>{% trans "Logs" %}</dt>
+					{% else %}
+					<dt>&nbsp;</dt>
+					{% endif %}
+
+					<dd>
+						{{ log.created|datetime() }}: {{ log.content }} ({{ log.user.firstname }})
+					</dd>
+
+				{% endfor %}
+				</dl>
+			</div>
+		</div>
+
+	{% elseif action == 'create_step1' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/invoice" title="">{% trans "Invoices" %}</a></li>
+			<li>{% trans "Create invoice" %}</li>
+			<li class="active">{% trans "Select customer" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "Please select a customer." %}
+		</div>
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Select customer" %}
+			</div>
+			<div class="panel-body">
+				<form method="post" action="/administrative/invoice?action=create_step1" class="form-horizontal" id="invoice-create-step1">
+
+					<div class="form-group">
+						<label class="col-xs-3">{% trans "Type" %}</label>
+						<div class="col-xs-6">
+							<div class="btn-group" data-toggle="buttons">
+								<label class="btn btn-primary{% if env.session.invoice.type == 'D' %} active{% endif %}">
+								<input type="radio" name="type" id="type_d" value="D"{% if env.session.invoice.type == 'D' %} checked{% endif %}>{% trans "Invoice" %}</label>
+
+								<label class="btn btn-primary{% if env.session.invoice.type == 'C' %} active{% endif %}">
+								<input type="radio" name="type" id="type_c" value="C"{% if env.session.invoice.type == 'C' %} checked{% endif %}>{% trans "Credit note" %}</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3">{% trans "Customer" %}</label>
+						<div class="col-xs-6">
+							<input type="text" id="autocomplete_customer" name="customer" class="form-control typeahead" value="{% if env.session.invoice.customer_id > 0 %}{{ env.session.invoice.customer.firstname }} {{ env.session.invoice.customer.lastname }}{% endif %}">
+							<input type="hidden" id="customer_id" name="customer_id" value="{% if env.session.invoice.customer_id > 0 %}{{ env.session.invoice.customer.id }}{% endif %}">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Next" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	{% elseif action == 'create_step2' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/invoice" title="">{% trans "Invoices" %}</a></li>
+			<li>{% trans "Create invoice" %}</li>
+			<li class="active">{% trans "Select invoice contact" %}</li>
+		</ol>
+
+		{% include 'administrative/invoice/modal.manage_invoice_contact.twig' with {'id': 'manage-invoice-contact'} %}
+
+		{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "Please select an invoice contact." %}
+		</div>
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Select a invoice contact" %}
+			</div>
+			<div class="panel-body">
+				<div class="row">
+				{% for invoice_contact in invoice_contacts %}
+					<div class="col-xs-3 invoice_contact" id="invoice-contact-{{ invoice_contact.id }}">
+						<div class="panel panel-default">
+							<div class="panel-body{% if invoice_contacts|length == 1 %} bg-info{% endif %}">
+								<div class="actions hide">
+									<a href="#manage-invoice-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-invoice-contact-id="{{ invoice_contact.id }}">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</a>
+									<a href="javascript:void(0);" onclick="delete_contact({{ invoice_contact.id }})">
+										<span class="glyphicon glyphicon-trash"></span>
+									</a>
+
+								</div>
+
+								{% if invoice_contact.company != '' %}{{ invoice_contact.company }}<br>{% endif %}
+								{{ invoice_contact.firstname }} {{ invoice_contact.lastname }}<br>
+								{{ invoice_contact.street }} {{ invoice_contact.housenumber }}<br>
+								{{ invoice_contact.zipcode }} {{ invoice_contact.city }}<br>
+								{{ invoice_contact.country.name }}
+								{% if invoice_contact.vat != '' %}<br>{{ invoice_contact.get_vat_formatted() }}{% endif %}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+					<div class="col-xs-3">
+						<div class="panel panel-default">
+							<div class="panel-body text-center">
+								<a class="btn btn-default" href="#manage-invoice-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ invoice_contacts|length }}">
+									{% trans "Create new" %}
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<form method="post" action="/administrative/invoice?action=create_step2" id="invoice-create-step2">
+					<input type="hidden" name="invoice_contact_id" value="{% if invoice_contacts|length == 1 %}{{ invoice_contacts.0.id }}{% endif %}">
+					<button class="btn btn-primary">
+						{% trans "Next" %}
+					</button>
+				</form>
+			</div>
+		</div>
+
+
+
+		<script type="text/javascript">
+
+			$('.invoice_contact').on({
+				mouseenter: function() {
+					$(this).find('.actions').toggleClass('hide');
+				},
+				mouseleave: function() {
+					$(this).find('.actions').toggleClass('hide');
+				},
+				click: function() {
+					$('.invoice_contact').find('.panel-body').removeClass('bg-info');
+					$(this).find('.panel-body').first().addClass('bg-info');
+					$('#invoice-create-step2 input').val($(this).prop('id').replace('invoice-contact-', ''));
+				}
+			});
+
+			function delete_contact(id) {
+				$.get('/administrative/invoice/contact?action=delete&id=' + id, function(data) {
+					if(data['status'] == 1) {
+						$('#invoice-contact-' + id).remove();
+						$('#invoice-create-step2 input').val('');
+					} else {
+						alert('Error deleting contact');
+					}
+				}, 'json');
+			}
+
+		</script>
+
+	{% elseif action == 'create_step3' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/invoice" title="">{% trans "Invoices" %}</a></li>
+			<li>{% trans "Create invoice" %}</li>
+			<li class="active">{% trans "Add items" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+		<div class="alert alert-danger">
+			{{ errors|print_r }}
+		</div>
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Add items" %}
+			</div>
+			<div class="panel-body">
+
+				<form method="post" action="/administrative/invoice?action=create_step3">
+					<table class="table table-hover table-striped table-condensed">
+						<thead>
+							<tr>
+								<th width="50%">{% trans "Description" %}</th>
+								<th width="10%">{% trans "Qty" %}</th>
+								<th width="10%">{% trans "Price" %}</th>
+								<th>&nbsp;</th>
+								<th>&nbsp;</th>
+							</tr>
+						</thead>
+						<tbody id="invoice-items"></tbody>
+					</table>
+
+					<div class="text-right">
+						<button type="button" onclick="javascript:add_item({})" class="btn btn-default">
+							<span class="glyphicon glyphicon-plus"></span> {% trans "Add item" %}
+						</button>
+						<button type="submit" class="btn btn-primary">
+							{% trans "Save" %} <span class="glyphicon glyphicon-arrow-right"></span>
+						</button>
+					</div>
+				</form>
+
+			</div>
+		</div>
+
+		<script type="text/x-handlebars-template" id="new-invoice-item-tmpl">
+			<tr>
+				<td>
+					<input type="hidden" name="invoice_item[((nr))][invoice_queue_id]" value="((invoice_queue_id))">
+					<textarea class="form-control" name="invoice_item[((nr))][description]">((description))</textarea>
+				</td>
+				<td>
+					<input type="text" class="form-control" name="invoice_item[((nr))][qty]" value="((qty))">
+				</td>
+				<td>
+					<input type="text" class="form-control" name="invoice_item[((nr))][price]" value="((price))">
+				</td>
+				<td>
+					<select name="invoice_item[((nr))][vat]" class="form-control">
+					{% for vat_rate in vat_rates %}
+						<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
+					{% endfor %}
+					</select>
+				</td>
+				<td>
+					<a href="javascript:void(0);" onclick="remove_item($(this));">
+						<span class="glyphicon glyphicon-trash"></span>
+					</a>
+				</td>
+			</tr>
+		</script>
+		<script type="text/javascript">
+
+			$(document).ready(function() {
+				{% for invoice_queue_item in invoice_queue_items %}
+					add_item({'invoice_queue_id': {{ invoice_queue_item.id }}, 'qty': {{ invoice_queue_item.qty }}, 'price': '{{ invoice_queue_item.price }}', 'description': '{{ invoice_queue_item.description }}'});
+				{% else %}
+					add_item({});
+				{% endfor %}
+			});
+
+			function add_item(data) {
+
+				items = $('#invoice-items').find('tr input[name*="qty"]');
+				ids = [];
+				items.each(function(){
+					id = parseInt($(this).prop('name').match(/\d+/));
+					ids.push(id);
+				});
+
+				nr = ids.length == 0 ? 0 : ids.max()+1;
+				$.extend(data, {'nr': nr});
+
+				var source = $("#new-invoice-item-tmpl").html();
+				Handlebars.setDelimiter('(',')');
+				var template = Handlebars.compile(source);
+				$('#invoice-items').append(template(data));
+			}
+
+			function remove_item(obj) {
+				if($('#invoice-items').find('tr').length > 1) {
+					obj.parents('tr').remove();
+				}
+			}
+
+		</script>
+
+	{% else %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li class="active">{% trans "Invoices" %}</li>
+		</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Filter" %}
+			</div>
+			<div class="panel-body">
+				<form method="post" action="/administrative/invoice" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-xs-3">{% trans "Search" %}</label>
+						<div class="col-xs-6">
+							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Search" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		{% if env.session_sticky.message is defined %}
+			{{ base.display_flash_message(env.session_sticky.message, 'invoice') }}
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="pull-right">
+					<a href="/administrative/invoice?action=create_step1" title="">
+						<span class="glyphicon glyphicon-plus-sign"></span>
+						{% trans "Add invoice" %}
+					</a>
+				</div>
+				{% trans "Invoices" %}
+			</div>
+			<div class="panel-body">
+			{% for invoice in pager.items %}
+			{% if loop.first %}
+				<table class="table table-hover table-striped table-condensed table-responsive" id="invoice-list">
 				<thead>
 					<tr>
-						<th>{% trans "ID" %}</th>
-						<th>{% trans "Date" %}</th>
-						<th>{% trans "Customer" %}</th>
-						<th>{% trans "Amount" %}</th>
-						<th>&nbsp;</th>
-						<th>&nbsp;</th>
-						<th>&nbsp;</th>
+						<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
+						<th width="15%">{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+						<th width="35%">{{ pager.create_header('Customer'|trans, 'customer')|raw }}</th>
+						<th width="35%">{{ pager.create_header('Company'|trans, 'company')|raw }}</th>
+						<th width="20%" class="text-right">{{ pager.create_header('Amount'|trans, 'amount')|raw }}</th>
+						<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
+						<th style="width: 10%" colspan="3">&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
-		{% endif %}
+			{% endif %}
 
-		<tr>
-			<td>{{ invoice.id }}</td>
-			<td>{{ invoice.created|date }}
-			<td>{{ invoice.customer.firstname }} {{ invoice.customer.lastname }} </td>
-			<td>&euro;{{ "%.2f"|format(invoice.get_price_incl()) }} </td>
-			<td>
-				<a href="/administrative/invoice?action=edit&id={{ invoice.id }}">
-					<i class="icon-edit"></i>
-				</a>
-			</td>
-			<td>
-				<a href="/administrative/invoice?action=send_invoice&id={{ invoice.id }}" rel="tooltip" data-toggle="tooltip" title="{% trans "Send PDF" %}">
-					<i class="icon-envelope"></i>
-				</a>
-			</td>
-			<td>
-				<a href="/administrative/invoice?action=download&id={{ invoice.id }}" rel="tooltip" data-toggle="tooltip" title="{% trans "Download PDF" %}">
-					<i class="icon-download"></i>
-				</a>
-			</td>
-		</tr>
+					<tr>
+						<td>
+							<a href="/administrative/invoice?action=edit&id={{ invoice.id }}" title="">
+								{{ invoice.number }}
+							</a>
+						</td>
+						<td>{{ invoice.created|date }}</td>
+						<td>
+							<a href="/administrative/customer?action=edit&id={{ invoice.customer.id }}" title="">
+								{{ invoice.customer.firstname }} {{ invoice.customer.lastname }}
+							</a>
+						</td>
+						<td>{{ invoice.customer.company }}</td>
+						<td class="text-right">€{{ invoice.get_price_incl()|number_format }}</td>
+						<td>
+						{% if invoice.paid %}
+							<span class="glyphicon glyphicon-ok"></span>
+						{% else %}
+							<span class="glyphicon glyphicon-remove"></span>
+						{% endif %}
+						</td>
+						<td>
+							<a href="/administrative/invoice?action=download&id={{ invoice.id }}">
+								<span class="glyphicon glyphicon-download"></span>
+							</a>
+						</td>
+						<td>
+							<a href="/administrative/invoice?action=send&id={{ invoice.id }}">
+								<span class="glyphicon glyphicon-envelope"></span>
+							</a>
+						</td>
+						<td class="text-right">
+							<a href="/administrative/invoice?action=edit&id={{ invoice.id }}" title="">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a>
+						</td>
+					</tr>
 
-		{% if loop.last %}
+			{% if loop.last %}
 				</tbody>
-			</table>
-			{{ pager.links }}
-		{% endif %}
-	{% endfor %}
-{% endif %}
+				</table>
+
+				{{ pager.links|raw }}
+			{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+
+	{% endif %}
 
 {% endblock content %}
+
+{% block javascript %}
+
+	{% if action == 'create_step1' %}
+		<script type="text/javascript" src="/bloodhound.min.js"></script>
+		<script type="text/javascript" src="/typeahead.min.js"></script>
+		<script type="text/javascript">
+
+			var customers = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				remote: '/administrative/customer?action=ajax_search&search=%QUERY'
+			});
+
+			customers.initialize();
+
+			$('#autocomplete_customer').typeahead({
+				hint: true,
+				highlight: true,
+				minLength: 2
+			},{
+				name:	'customer',
+				displayKey: 'value',
+				source:	customers.ttAdapter()
+			});
+			$('#autocomplete_customer').on('typeahead:selected typeahead:autocompleted', function(e,data) {
+				$('#customer_id').val(data.id);
+			});
+		</script>
+	{% endif %}
+
+{% endblock javascript %}
+
+{% block head %}
+
+	{% if action == 'create_step1' %}
+		<link rel="stylesheet" type="text/css" href="/typeahead.css">
+	{% endif %}
+
+{% endblock head %}

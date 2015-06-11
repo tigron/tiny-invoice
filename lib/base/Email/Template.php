@@ -2,19 +2,10 @@
 /**
  * Mail Template class
  *
- * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/base/Translation.php';
-
 class Email_Template {
-	/**
-	 * Local Twig instance
-	 *
-	 * @var Twig_Environment $twig
-	 */
-	private $twig = null;
 
 	/**
 	 * Template name
@@ -35,7 +26,14 @@ class Email_Template {
 	 *
 	 * @var array $parameters
 	 */
-	private $variables = array();
+	private $variables = [];
+
+	/**
+	 * Template
+	 *
+	 * @var Template $template
+	 */
+	private $template = null;
 
 	/**
 	 * Constructor
@@ -47,27 +45,9 @@ class Email_Template {
 		$this->name = $name;
 		$this->language = $language;
 
-		Twig_Autoloader::register();
-
-		$loader_paths[] = STORE_PATH . '/email/template/';
-		$loader = new Twig_Loader_Filesystem($loader_paths);
-
-		$this->twig = new Twig_Environment(
-			$loader,
-			array(
-				'cache' => TMP_PATH . '/twig/email/',
-				'auto_reload' => true,
-			)
-		);
-
-		$this->twig->addExtension(
-			new Twig_Extensions_Extension_I18n(
-				array(
-					'function_translation' => 'Translation::translate',
-					'function_translation_plural' => 'Translation::translate_plural',
-				)
-			)
-		);
+		$this->template = new Template();
+		$this->template->set_template_directory(STORE_PATH . '/email/template');
+		$this->template->set_translation(Translation::Get($this->language, 'email'));
 	}
 
 	/**
@@ -83,35 +63,14 @@ class Email_Template {
 	/**
 	 * Render the template
 	 *
-	 * @param string $name The name of the email
 	 * @param string $type The type of output (html, txt, subject)
-	 * @param Language $language The language to render the email in
 	 * @return string
 	 */
 	public function render($type) {
-		if (!file_exists(STORE_PATH . '/email/template/' . $this->name . '/' . $type . '.twig')) {
-			return '';
+		foreach ($this->variables as $key => $value) {
+			$this->template->assign($key, $value);
 		}
 
-		// FIXME
-		// Overriding Translation and setting it back is quite ugly :(
-		$current_language = Language::Get();
-		Translation::configure($this->language, 'email');
-
-		$variables = array(
-			'template' => $this,
-			'now' => time()
-		);
-		$this->twig->addGlobal('env', $variables);
-
-		$return = '';
-		$twig_template = $this->twig->loadTemplate($this->name . '/' . $type . '.twig');
-		$return .= Util::rewrite_reverse_html($twig_template->render($this->variables));
-
-		// If an application was running, fix it
-		if (defined('APP_NAME')) {
-			Translation::configure($current_language, APP_NAME);
-		}
-		return $return;
+		return $this->template->render($this->name . '/' . $type . '.twig');
 	}
 }

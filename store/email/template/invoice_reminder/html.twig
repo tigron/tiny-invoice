@@ -1,9 +1,9 @@
-{% extends "base.layout.twig" %}
+{% extends "layout.base.twig" %}
 
 {% block content %}
 	<h1 style="font-size: 12pt; color: #333333; margin-bottom: 15px">{% trans "Invoice reminder" %}</h1>
 	<p>{% trans "Dear customer" %},</p>
-	<p>{% trans "We noticed that you have one or more unpaid invoices for" %} {{ company_info.company }}.<br />
+	<p>{% trans "We noticed that you have one or more unpaid invoices for Tigron DC" %}.<br />
 	{% trans "In attachment you'll find the unpaid invoices" %}.<br />
 	{% trans "If you recently paid the invoices, you can ignore this email. It can take up to a week for your payment to be processed" %}.
 	</p>

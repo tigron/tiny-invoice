@@ -1,14 +1,11 @@
 <?php
 /**
- * Module Index
+ * Web Module User
  *
- * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/model/User.php';
-
-class Module_User extends Web_Module {
+class Web_Module_User extends Web_Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -32,17 +29,48 @@ class Module_User extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
+		$template = Web_Template::Get();
+
+		$pager = new Web_Pager('user');
+		$permissions = array(
+			'username' => 'username',
+			'firstname' => 'firstname',
+			'lastname' => 'lastname'
+		);
+		$pager->set_sort_permissions($permissions);
+
+		if (isset($_POST['search'])) {
+			$pager->set_condition('%search%', $_POST['search']);
+		}
+		$pager->page();
+
+		$template = Web_Template::Get();
+		$template->assign('pager', $pager);
+	}
+
+	/**
+	 * Add
+	 *
+	 * @access public
+	 */
+	public function display_add() {
+		$template = Web_Template::Get();
+
 		if (isset($_POST['user'])) {
 			$user = new User();
 			$user->load_array($_POST['user']);
-			$user->set_password($_POST['user']['password']);
-			$user->save();
-			Web_Session::Redirect('/user');
+			if ($user->validate($errors) === false) {
+				$template->assign('errors', $errors);
+			} else {
+				$user->save();
+
+				$session = Web_Session_Sticky::Get();
+				$session->message = 'created';
+				Web_Session::Redirect('/user');
+			}
 		}
 
-		$template = Web_Template::Get();
-		$users = User::get_paged();
-		$template->assign('users', $users);
+		$template->assign('languages', Language::get_all());
 	}
 
 	/**
@@ -56,15 +84,41 @@ class Module_User extends Web_Module {
 
 		if (isset($_POST['user'])) {
 			$user->load_array($_POST['user']);
-
-			if (isset($_POST['user']['password'])) {
-				$user->set_password($_POST['user']['password']);
-				unset($_POST['user']['password']);
-			}
-
 			$user->save();
-			$template->assign('saved', true);
+
+			$session = Web_Session_Sticky::Get();
+			$session->message = 'updated';
+			Web_Session::Redirect('/user?action=edit&id=' . $user->id);
 		}
 		$template->assign('user', $user);
+		$template->assign('languages', Language::get_all());
+	}
+
+	/**
+	 * Delete
+	 *
+	 * @access public
+	 */
+	public function display_delete() {
+		if ($_SESSION['user']->admin != 1) {
+			Web_Session::Redirect('/user');
+		}
+
+		$session = Web_Session_Sticky::Get();
+
+		try {
+			$user = User::get_by_id($_GET['id']);
+			if ($user->id == $_SESSION['user']->id) {
+				throw new Exception('Not allowed to delete your own');
+			}
+
+			$user->delete();
+			$message = 'deleted';
+		} catch (Exception $e) {
+			$message = 'error_delete';
+		}
+
+		$session->message = $message;
+		Web_Session::Redirect('/user');
 	}
 }

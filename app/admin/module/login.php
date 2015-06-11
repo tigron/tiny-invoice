@@ -1,14 +1,12 @@
 <?php
 /**
- * Module Index
+ * Module Login
  *
- * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/model/User.php';
+class Web_Module_Login extends Web_Module {
 
-class Module_Login extends Web_Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -32,21 +30,17 @@ class Module_Login extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-	}
-
-	/**
-	 * Login
-	 *
-	 * @access public
-	 */
-	public function display_login() {
 		$template = Web_Template::Get();
-		try {
-			$user = User::authenticate($_POST['username'], $_POST['password']);
-			$_SESSION['user'] = $user;
-			Web_Session::Redirect('/');
-		} catch (Exception $e) {
-			$template->assign('error', true);
+
+		if (isset($_POST['username']) AND isset($_POST['password'])) {
+			try {
+				$user = User::authenticate($_POST['username'], $_POST['password']);
+				Object_Log::create('User logged in', $user);
+				$_SESSION['user'] = $user;
+				Web_Session::Redirect('/');
+			} catch (Exception $e) {
+				$template->assign('error', true);
+			}
 		}
 	}
 

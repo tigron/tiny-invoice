@@ -4,14 +4,10 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/base/Web/Module.php';
-require_once LIB_PATH . '/base/Web/Media.php';
 require_once LIB_PATH . '/base/Web/Session.php';
-require_once LIB_PATH . '/base/Request/Log.php';
-require_once LIB_PATH . '/model/Language.php';
-require_once LIB_PATH . '/model/User.php';
 
 class Web_Handler {
 	/**
@@ -24,6 +20,7 @@ class Web_Handler {
 		 * Record the start time in microseconds
 		 */
 		$start = microtime(true);
+		mb_internal_encoding('utf-8');
 
 		/**
 		 * Start the session
@@ -59,51 +56,60 @@ class Web_Handler {
 		$request_parts = array_merge($request_parts, array());
 
 		/**
-		* Get the config
-		*/
-		$config = Config::Get();
-		/**
 		 * Define the application
 		 */
-		$applications = $config->applications;
-		if (!isset($applications[$_SERVER['SERVER_NAME']])) {
+		try {
+			$application = Application::Detect();
+		} catch (Exception $e) {
 			echo '404';
 			return;
 		}
 
-		$application = $applications[$_SERVER['SERVER_NAME']];
-
-		if (!is_array($application)) {
-			$application = array('name' => $application);
-		}
-
-		$default_settings = array(
-			'media' => true,
-			'module' => array(
-				'default' => 'index',
-				'404' => '404',
-			)
-		);
-
-		$application = array_merge($default_settings, $application);
-
-		define('APP_NAME',		$application['name']);
-		define('APP_PATH',		realpath(ROOT_PATH . '/app/' . $application['name']));
-		define('MEDIA_PATH',	APP_PATH . '/media');
-		define('MODULE_PATH',	APP_PATH . '/module');
-		define('TEMPLATE_PATH',	APP_PATH . '/template');
+		/**
+		* Get the config
+		*/
+		$config = Config::Get();
 
 		/**
-		 * Check if this is an image or a media type
+		 * Handle the media
 		 */
-		if ($application['media'] == true) {
-			Web_Media::Detect($request_parts);
-		}
+		Web_Media::Detect($request_parts);
 
 		/**
-		 * Set the language to the template
+		 * Find the module to load
 		 */
-		require_once LIB_PATH . '/base/Web/Template.php';
+		try {
+			$module = $application->route($query_string[0]);
+		} catch (Exception $e) {
+
+			// So there is no route defined.
+
+			/**
+			 * 1. Try to look for the exact module
+			 * 2. Take the default module
+			 * 3. Load 404 module
+			 */
+			$filename = implode('/', $request_parts);
+
+			if (file_exists($application->module_path . '/' . $filename . '.php')) {
+				require $application->module_path . '/' . $filename . '.php';
+				$classname = 'Web_Module_' . implode('_', $request_parts);
+			} elseif (file_exists($application->module_path . '/' . $filename . '/' . $config->module_default . '.php')) {
+				require $application->module_path . '/' . $filename . '/' . $config->module_default . '.php';
+				if ($filename == '') {
+					$classname = 'Web_Module_' . $config->module_default;
+				} else {
+					$classname = 'Web_Module_' . implode('_', $request_parts) . '_' . $config->module_default;
+				}
+			} elseif (file_exists($application->module_path . '/' . $config->module_404 . '.php')) {
+				require $application->module_path . '/' . $config->module_404 . '.php';
+				$classname = 'Web_Module_' . $config->module_404;
+			} else {
+				header('HTTP/1.0 404 Module not found');
+				exit;
+			}
+			$module = new $classname;
+		}
 
 		/**
 		 * Set language
@@ -127,7 +133,6 @@ class Web_Handler {
 			}
 		}
 
-		// If the user explicitly asked for a language, try to set it
 		if (isset($_GET['language'])) {
 			try {
 				$language = Language::get_by_name_short($_GET['language']);
@@ -136,132 +141,16 @@ class Web_Handler {
 				$_SESSION['language'] = Language::get_by_name_short($config->default_language);
 			}
 		}
+		$application->language = $_SESSION['language'];
 
-		// If the user explicitly asked for a language in the URI, try to set it
-		if (isset($request_parts[0]) AND strlen($request_parts[0]) == 2) {
-			try {
-				$language = Language::get_by_name_short($request_parts[0]);
-				$_SESSION['language'] = $language;
-				array_shift($request_parts);
-			} catch (Exception $e) { }
-		}
-
-		Language::set($_SESSION['language']);
-
-		$template = Web_Template::Get();
-		$template->assign('language', $_SESSION['language']);
-
-		/**
-		 * Look for the Module, try to match routes
-		 */
-		if (count($request_parts) == 0) {
-			// If no module was requested, default to 'index'
-			$request_parts[] = 'index';
-		} elseif (isset($config->routes[APP_NAME])) {
-			// Check if there is a route defined for the request
-			$language = Language::get();
-
-			$routes = array();
-			foreach ($config->routes[APP_NAME] as $module => $route) {
-				if (isset($route['routes'][$language->name_short])) {
-					$routes[$route['routes'][$language->name_short]] = array(
-						'target' => $module,
-						'variables' => $route['variables'],
-					);
-				} elseif (isset($route['routes']['default'])) {
-					$routes[$route['routes']['default']] = array(
-						'target' => $module,
-						'variables' => $route['variables'],
-					);
-				}
-			}
-
-			$route = '';
-			foreach($request_parts as $key => $request_part) {
-				$route .= '/' . $request_part;
-
-				// Check if the request is defined by a route
-				if (array_key_exists($route, $routes)) {
-					$template->add_env('route', $route);
-
-					// Check if the route matches without variables and if it's allowed to do so
-					if ($route != '/' . implode($request_parts, '/')) {
-						$variables = array_slice($request_parts, $key+1);
-
-						$variable_match = null;
-						foreach ($routes[$route]['variables'] as $variable_possibility) {
-							if (count($variables) == substr_count($variable_possibility, '$')) {
-								$variable_match = $variable_possibility;
-								$template->add_env('variables', $variable_match);
-								break;
-							}
-						}
-
-						if ($variable_match === null) {
-							throw new Exception('Route matches but no variable match found');
-						}
-
-						// Replace all the variables passed through the URI by the ones defined in the pattern
-						$variable_parts = explode('/', $variable_match);
-						foreach($variable_parts as $key => $variable_part) {
-							$_GET[str_replace('$', '', $variable_part)] = $variables[$key];
-						}
-
-						$_REQUEST = array_merge($_REQUEST, $_GET);
-					} elseif (!in_array('', $routes[$route]['variables'])) {
-						break;
-					}
-
-					$request_parts = explode('/', $routes[$route]['target']);
-					break;
-				}
-			}
-		}
-
-		$last_part = $request_parts[count($request_parts)-1];
-		if (strpos($last_part,'?')) {
-			$last_part = substr($last_part, 0, strpos($last_part, '?'));
-			$request_parts[count($request_parts)] = $last_part;
-		}
-
-		header('Content-type: text/html; charset=utf-8');
-
-		$possible_modules = array(
-			// Module was called directly
-			array(
-				'file' => implode('/', $request_parts) . '.php',
-				'classname' => 'Module_' . implode('_', $request_parts),
-			),
-			// Directory was called, start default module
-			array(
-				'file' => implode('/', $request_parts) . '/' . $application['module']['default'] . '.php',
-				'classname' => 'Module_' . implode('_', $request_parts) . '_' . $application['module']['default'],
-			),
-			// Nothing found, start 404
-			array(
-				'file' => $application['module']['404'] . '.php',
-				'classname' => 'Module_' . $application['module']['404'],
-			),
-		);
-
-		foreach ($possible_modules as $possible_module) {
-			$filename = strtolower(MODULE_PATH . '/' .  $possible_module['file']);
-			if (file_exists($filename)) {
-				require_once($filename);
-
-				$module = new $possible_module['classname'];
-				$module->accept_request();
-				break;
-			}
-		}
+		$module->accept_request();
 
 		// Record debug information
-		if ($config->debug == true) {
-			$database = Database::get();
-			$queries = $database->queries;
-			$execution_time = microtime(true) - $start;
+		$database = Database::get();
+		$queries = $database->queries;
+		$execution_time = microtime(true) - $start;
 
-			Request_Log::log_request('Request: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . ' -- IP: ' . $_SERVER['REMOTE_ADDR'] . ' -- Queries: ' . $queries . ' -- Time: ' . $execution_time);
-		}
+		Util::log_request('Request: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . ' -- IP: ' . $_SERVER['REMOTE_ADDR'] . ' -- Queries: ' . $queries . ' -- Time: ' . $execution_time);
+
 	}
 }

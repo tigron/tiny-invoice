@@ -4,6 +4,7 @@
  *
  * @author Christophe Gosiau <christophe.gosiau@tigron.be>
  * @author Gerry Demaret <gerry.demaret@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
 trait Model {
@@ -19,7 +20,32 @@ trait Model {
 	 * @var array $details
 	 * @access private
 	 */
-	private $details = array();
+	protected $details = array();
+
+	/**
+	 * Dirty fields
+	 * Unsaved fields
+	 *
+	 * @var array $dirty_fields
+	 * @access private
+	 */
+	private $dirty_fields = array();
+
+	/**
+	 * Object text cache
+	 *
+	 * @access private
+	 * @var array $object_text_cache
+	 */
+	private $object_text_cache = array();
+
+	/**
+	 * Object text update
+	 *
+	 * @access private
+	 * @var array $object_text_updated
+	 */
+	private $object_text_updated = array();
 
 	/**
 	 * Constructor
@@ -39,7 +65,7 @@ trait Model {
 	 *
 	 * @access private
 	 */
-	private function get_details() {
+	protected function get_details() {
 		$table = self::trait_get_database_table();
 
 		if (!isset($this->id) OR $this->id === null) {
@@ -47,13 +73,14 @@ trait Model {
 		}
 
 		$db = self::trait_get_database();
-		$details = $db->getRow('SELECT * FROM ' . $table . ' WHERE id=?', array($this->id));
+		$details = $db->getRow('SELECT * FROM ' . $db->quoteIdentifier($table) . ' WHERE id=?', array($this->id));
 
 		if ($details === null) {
 			throw new Exception('Could not fetch ' . $table . ' data: none found with id ' . $this->id);
 		}
 
 		$this->details = $details;
+		$this->reset_dirty_fields();
 	}
 
 	/**
@@ -75,11 +102,88 @@ trait Model {
 			}
 		}
 
+		if (is_callable(array($this, 'set_' . $key))) {
+			$method = 'set_' . $key;
+			$this->$method($value);
+			return;
+		}
+
 		if (is_object($value) AND property_exists($value, 'id')) {
-			$this->details[$key . '_id'] = $value->id;
+			$key = $key . '_id';
+			$this->$key = $value->id;
+			return;
+		}
+
+		if (isset(self::$object_text_fields)) {
+			if (strpos($key, 'text_') === 0) {
+				$this->trait_set_object_text($key, $value);
+				return;
+			}
+		}
+
+		if (!isset($this->details[$key])) {
+			$this->dirty_fields[$key] = '';
+		}
+
+		if (isset($this->details[$key]) AND $this->details[$key] != $value) {
+			// A new value is set, let's tag it as dirty
+
+			if (!isset($this->dirty_fields[$key])) {
+				$this->dirty_fields[$key] = $this->details[$key];
+			}
 		}
 
 		$this->details[$key] = $value;
+	}
+
+	/**
+	 * set an object text
+	 *
+	 * @access private
+	 * @param string $key
+	 * @param string $value
+	 */
+	private function trait_set_object_text($key, $value) {
+		list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
+
+		if (!in_array($label, self::$object_text_fields)) {
+			throw new Exception('Incorrect text field:' . $label);
+		}
+
+		if (!isset($this->object_text_cache[$key])) {
+			$this->trait_get_object_text($key);
+		}
+
+		if ($this->object_text_cache[$key] != $value) {
+			$this->object_text_cache[$key] = $value;
+			$this->object_text_updated[$key] = $value;
+		}
+	}
+
+	/**
+	 * set an object text
+	 *
+	 * @access private
+	 * @param string $key
+	 * @param string $value
+	 */
+	private function trait_get_object_text($key) {
+		list($language, $label) = explode('_', str_replace('text_', '', $key), 2);
+
+		if (!in_array($label, self::$object_text_fields)) {
+			throw new Exception('Incorrect text field:' . $label);
+		}
+
+		if ($this->id === null) {
+			$this->object_text_cache[$key] = '';
+		}
+
+		if (!isset($this->object_text_cache[$key])) {
+			$language = Language::get_by_name_short($language);
+			$this->object_text_cache[$key] = Object_Text::get_by_object_label_language($this, $label, $language)->content;
+		}
+
+		return $this->object_text_cache[$key];
 	}
 
 	/**
@@ -94,11 +198,17 @@ trait Model {
 			return $key::get_by_id($this->details[strtolower($key) . '_id']);
 		}
 
-		if (!isset($this->details[$key])) {
-			throw new Exception('Unknown key requested: ' . $key);
-		} else {
+		if (array_key_exists($key, $this->details)) {
 			return $this->details[$key];
 		}
+
+		if (isset(self::$object_text_fields)) {
+			if (strpos($key, 'text_') === 0) {
+				return $this->trait_get_object_text($key);
+			}
+		}
+
+		throw new Exception('Unknown key requested: ' . $key);
 	}
 
 	/**
@@ -111,11 +221,60 @@ trait Model {
 	public function __isset($key) {
 		if (isset($this->details[strtolower($key) . '_id']) AND class_exists($key)) {
 			return true;
-		} elseif (isset($this->details[$key])) {
+		}
+
+		if (array_key_exists($key, $this->details)) {
 			return true;
-		} else {
+		}
+
+		if (isset(self::$object_text_fields)) {
+			if (strpos($key, 'text_') === 0) {
+				list($language, $label) = explode('_',  str_replace('text_', '', $key), 2);
+
+				if (!in_array($label, self::$object_text_fields)) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Is Dirty
+	 *
+	 * @access public
+	 * @return bool $dirty
+	 */
+	public function is_dirty() {
+		$dirty_fields = $this->get_dirty_fields();
+		if (count($dirty_fields) == 0) {
 			return false;
 		}
+
+		return true;
+	}
+
+	/**
+	 * Get dirty fields
+	 *
+	 * @access public
+	 * @return array $dirty_fields
+	 */
+	public function get_dirty_fields() {
+		return array_merge($this->dirty_fields, $this->object_text_updated);
+	}
+
+	/**
+	 * Reset dirty fields
+	 *
+	 * @access public
+	 */
+	public function reset_dirty_fields() {
+		$this->dirty_fields = array();
+		$this->object_text_updated = array();
+		$this->object_text_cache = array();
 	}
 
 	/**
@@ -157,5 +316,32 @@ trait Model {
 		} else {
 			return strtolower(get_class());
 		}
+	}
+
+	/**
+	 * Trait_get_link_tables
+	 *
+	 * @access private
+	 * @return array $tables
+	 */
+	private static function trait_get_link_tables() {
+		$db = Database::Get();
+		$table = self::trait_get_database_table();
+		$fields = Util::mysql_get_table_fields($table);
+		$tables = $db->getCol('SHOW tables');
+
+		$joins = array();
+		foreach ($fields as $field) {
+			if (substr($field, -3) != '_id') {
+				continue;
+			}
+
+			$link_table = substr($field, 0, -3);
+
+			if (in_array($link_table, $tables)) {
+				$joins[] = $link_table;
+			}
+		}
+		return $joins;
 	}
 }

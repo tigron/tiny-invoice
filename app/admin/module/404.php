@@ -6,7 +6,7 @@
  * @author Gerry Demaret <gerry@tigron.be>
  */
 
-class Module_404 extends Web_Module {
+class Web_Module_404 extends Web_Module {
 	/**
 	 * Login required ?
 	 * Default = yes

@@ -41,4 +41,16 @@ class Util_Validate {
 			return true;
 		}
 	}
+
+	/**
+	 * Validate a VAT number
+	 *
+	 * @access public
+	 * @return bool
+	 * @param string $vat
+	 * @param Country $country
+	 */
+	public static function vat($vat, Country $country) {
+		return Vat_Check::check($vat, $country);
+	}
 }

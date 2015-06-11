@@ -4,18 +4,10 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/base/Translation.php';
-require_once LIB_PATH . '/base/Web/Template/Twig/Extension/Default.php';
-
 class PDF_Template {
-	/**
-	 * Local Twig instance
-	 *
-	 * @var Twig_Environment $twig
-	 */
-	private $twig = null;
 
 	/**
 	 * Template name
@@ -36,7 +28,7 @@ class PDF_Template {
 	 *
 	 * @var array $parameters
 	 */
-	private $variables = array();
+	private $variables = [];
 
 	/**
 	 * Constructor
@@ -47,32 +39,6 @@ class PDF_Template {
 	public function __construct($name, Language $language) {
 		$this->name = $name;
 		$this->language = $language;
-
-		Twig_Autoloader::register();
-
-		$loader_paths[] = STORE_PATH . '/pdf/template/';
-		$loader = new Twig_Loader_Filesystem($loader_paths);
-
-		$this->twig = new Twig_Environment(
-			$loader,
-			array(
-				'cache' => TMP_PATH . '/twig/pdf/',
-				'auto_reload' => true,
-				'debug' => false
-			)
-		);
-
-		$this->twig->addExtension(new Template_Twig_Extension_Default());
-		$this->twig->addExtension(new Twig_Extensions_Extension_Text());
-		$this->twig->addExtension(new Twig_Extension_Debug());
-		$this->twig->addExtension(
-			new Twig_Extensions_Extension_I18n(
-				array(
-					'function_translation' => 'Translation::translate',
-					'function_translation_plural' => 'Translation::translate_plural',
-				)
-			)
-		);
 	}
 
 	/**
@@ -88,9 +54,7 @@ class PDF_Template {
 	/**
 	 * Render the template
 	 *
-	 * @param string $name The name of the PDF document
 	 * @param string $type The type of output (html, txt, subject)
-	 * @param Language $language The language to render the PDF in
 	 * @return string
 	 */
 	public function render($type) {
@@ -98,16 +62,12 @@ class PDF_Template {
 			return '';
 		}
 
-		$variables = array(
-			'template' => $this,
-			'now' => time()
-		);
-		$this->twig->addGlobal('env', $variables);
-
-		$return = '';
-		$twig_template = $this->twig->loadTemplate($this->name . '/' . $type . '.twig');
-		$return .= $twig_template->render($this->variables);
-
-		return $return;
+		$template = new Template();
+		$template->set_template_directory(STORE_PATH . '/pdf/template/');
+		$template->set_translation(Translation::Get($this->language, 'pdf'));
+		foreach ($this->variables as $key => $value) {
+			$template->assign($key, $value);
+		}
+		return $template->render($this->name . '/' . $type . '.twig');
 	}
 }

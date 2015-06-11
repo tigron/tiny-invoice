@@ -4,6 +4,7 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
 class Web_Media {
@@ -21,11 +22,24 @@ class Web_Media {
 			'png',
 			'ico',
 		),
+		'doc' => array(
+			'pdf',
+		),
 		'css' => array(
 			'css',
 		),
+		'font' => array(
+			'woff',
+			'ttf',
+			'otf',
+			'eot'
+		),
 		'javascript' => array(
 			'js',
+		),
+		'tools' => array(
+			'html',
+			'htm'
 		),
 	);
 
@@ -125,17 +139,17 @@ class Web_Media {
 	private static function fetch($type, $path, $extension) {
 		foreach (self::$filetypes as $filetype => $extensions) {
 			if (in_array($extension, $extensions)) {
-				if (file_exists(MEDIA_PATH . '/' . $filetype . '/' . $path)) {
+				if (file_exists(Application::Get()->media_path . '/' . $filetype . '/' . $path)) {
 					if ($type == 'mtime') {
-						return filemtime(MEDIA_PATH . '/' . $filetype . '/' . $path);
+						return filemtime(Application::Get()->media_path . '/' . $filetype . '/' . $path);
 					} else {
-						return file_get_contents(MEDIA_PATH . '/' . $filetype . '/' . $path);
+						return file_get_contents(Application::Get()->media_path . '/' . $filetype . '/' . $path);
 					}
-				} else if ((file_exists(MEDIA_PATH . '/tools/' . $path))) {
+				} else if ((file_exists(Application::Get()->media_path . '/tools/' . $path))) {
 					if ($type == 'mtime') {
-						return filemtime(MEDIA_PATH . '/tools/' . $path);
+						return filemtime(Application::Get()->media_path . '/tools/' . $path);
 					} else {
-						return file_get_contents(MEDIA_PATH . '/tools/' . $path);
+						return file_get_contents(Application::Get()->media_path . '/tools/' . $path);
 					}
 				} else {
 					return false;
@@ -190,8 +204,10 @@ class Web_Media {
 			case 'jpg' :
 			case 'jpeg': $mime_type = 'image/jpeg';
 			             break;
+			case 'pdf' : $mime_type = 'application/pdf';
+						 break;
 
-			default    : $mime_type = 'text/plain';
+			default    : $mime_type = 'application/octet-stream';
 		}
 
 		return $mime_type;

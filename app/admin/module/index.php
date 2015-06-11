@@ -4,25 +4,25 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-class Module_Index extends Web_Module {
-	/**
-	 * Login required ?
-	 * Default = yes
-	 *
-	 * @access public
-	 * @var bool $login_required
-	 */
-	public $login_required = true;
+class Web_Module_Index extends Web_Module {
 
 	/**
-	 * Template to use
+	 * Login required
 	 *
-	 * @access public
+	 * @var $login_required
+	 */
+	protected $login_required = true;
+
+	/**
+	 * Template
+	 *
+	 * @access protected
 	 * @var string $template
 	 */
-	public $template = 'index.twig';
+	protected $template = 'index.twig';
 
 	/**
 	 * Display method
@@ -32,4 +32,5 @@ class Module_Index extends Web_Module {
 	public function display() {
 
 	}
+
 }

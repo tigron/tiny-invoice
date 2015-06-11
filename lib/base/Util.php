@@ -31,107 +31,6 @@ class Util {
 	}
 
 	/**
-	 * Get table fields
-	 *
-	 * @access public
-	 * @param string $table
-	 * @param Database $db
-	 * @return array $fields
-	 */
-	public static function get_table_columns($table, $db = null) {
-		if ($db === null) {
-			$db = Database::Get();
-		}
-		$fields = $db->get_columns(strtolower($table));
-		return $fields;
-	}
-
-	/**
-	 * Get table definition
-	 *
-	 * @access public
-	 * @param string $table
-	 * @param Database $db
-	 * @return array $definition
-	 */
-	public static function get_table_definition($table, $db = null) {
-		if ($db === null) {
-			$db = Datbase::Get();
-		}
-		return $db->get_table_definition(strtolower($table));
-	}
-
-	/**
-	 * Filter fields to insert/update table
-	 *
-	 * @access public
-	 * @param string $table
-	 * @param array $data
-	 * @param Database $db
-	 * @return $filtered_data
-	 */
-	public static function filter_table_data($table, $data, $db = null) {
-		$table_fields = Util::get_table_columns($table, $db);
-		$result = array();
-		foreach ($table_fields as $field) {
-			if (isset($data[$field])) {
-				$result[$field] = $data[$field];
-			}
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Fetches the mime type for a certain file
-	 *
-	 * @param string $file The path to the file
-	 * @return string $mime_type
-	 */
-    public static function mime_type($file)  {
-		$handle = finfo_open(FILEINFO_MIME);
-		$mime_type = finfo_file($handle,$file);
-
-		if (strpos($mime_type, ';')) {
-			$mime_type = preg_replace('/;.*/', ' ', $mime_type);
-		}
-
-		return trim($mime_type);
-    }
-
-	/**
-	 * Sanitize filenames
-	 *
-	 * @access public
-	 * @param string $name
-	 * @return string $name
-	 */
-	public static function sanitize_filename($name) {
-		$special_chars = array ('#','$','%','^','&','*','!','~','‘','"','’','\'','=','?','/','[',']','(',')','|','<','>',';','\\',',');
-		$name = preg_replace('/^[.]*/','',$name); // remove leading dots
-		$name = preg_replace('/[.]*$/','',$name); // remove trailing dots
-		$name = str_replace($special_chars, '', $name);// remove special characters
-		$name = str_replace(' ','_',$name); // replace spaces with _
-
-		$name_array = explode('.', $name);
-
-		if (count($name_array) > 1) {
-			$extension = array_pop($name_array);
-		} else {
-			$extension = null;
-		}
-
-		$name = implode('.', $name_array);
-		$name = substr($name, 0, 50);
-
-		if ($extension != null) {
-			$name = $name . '.' . $extension;
-		}
-
-		return $name;
-	}
-
-	/**
 	 * Sanitize strings to ascii-only URL safe strings
 	 *
 	 * @access public
@@ -155,6 +54,28 @@ class Util {
 	}
 
 	/**
+	 * Check if a directory is empty
+	 *
+	 * @access public
+	 * @param string $directory
+	 * @return bool $exists
+	 */
+	public static function is_dir_empty($dir) {
+		if (!is_readable($dir)) {
+			return null;
+		}
+
+		$handle = opendir($dir);
+		while (false !== ($entry = readdir($handle))) {
+			if ($entry != "." && $entry != "..") {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Call
 	 *
 	 * @access public
@@ -163,12 +84,20 @@ class Util {
 	 */
 	public static function __callstatic($method, $arguments) {
 		list($classname, $method) = explode('_', $method, 2);
-		$class = ucfirst($classname) . '.php';
-		require_once LIB_PATH . '/base/Util/' . $class;
+
+		$classname = ucfirst($classname);
+		$filename = LIB_PATH . '/base/Util/' . $classname . '.php';
+
+		if (file_exists($filename)) {
+			require_once $filename;
+		} else {
+			throw new Exception('File does not exist: ' . $filename);
+		}
+
 		$classname = 'Util_' . $classname;
 
 		if (!method_exists($classname, $method)) {
-			throw new Exception('method ' . $method . ' does not exists');
+			throw new Exception('Method ' . $method . ' does not exists, in autoloaded class ' . $classname);
 		}
 
 		$result = forward_static_call_array(array($classname, $method), $arguments);

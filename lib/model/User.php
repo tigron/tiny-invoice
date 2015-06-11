@@ -7,10 +7,6 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/model/Country.php';
-require_once LIB_PATH . '/model/Log.php';
-require_once LIB_PATH . '/model/Language.php';
-
 class User {
 	use Model, Get, Save, Delete, Page;
 
@@ -21,13 +17,56 @@ class User {
 	private static $user = null;
 
 	/**
+	 * Validate user data
+	 *
+	 * @access public
+	 * @param array $errors
+	 * @return bool $validated
+	 */
+	public function validate(&$errors = array()) {
+		$required_fields = array('username', 'password', 'firstname', 'lastname', 'email');
+		foreach ($required_fields as $required_field) {
+			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
+				$errors[$required_field] = 'required';
+			}
+		}
+
+		if (!Util::validate_email($this->details['email'])) {
+			$errors['email'] = 'syntax error';
+		}
+
+		if ($this->id === null) {
+			try {
+				$user = self::get_by_username($this->details['username']);
+				$errors['username'] = 'already exists';
+			} catch (Exception $e) { }
+		}
+
+		if ($this->id === null) {
+			try {
+				$user = self::get_by_email($this->details['email']);
+				$errors['email'] = 'already exists';
+			} catch (Exception $e) { }
+		}
+
+		if (count($errors) > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
 	 * Set password
 	 *
 	 * @access public
 	 * @param string $password
 	 */
 	public function set_password($password) {
-		$this->password = sha1($password);
+		if ($password == '') {
+			return;
+		}
+		$this->details['password'] = sha1($password);
 	}
 
 	/**
@@ -108,4 +147,5 @@ class User {
 	public static function set(User $user) {
 		self::$user = $user;
 	}
+
 }

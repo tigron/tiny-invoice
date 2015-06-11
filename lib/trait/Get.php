@@ -38,11 +38,23 @@ trait Get {
 	 * @access public
 	 * @return array objects
 	 */
-	public static function get_all() {
+	public static function get_all($sort = null, $direction = null) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
 
-		$ids = $db->getCol('SELECT id FROM ' . $table, array());
+		$where = '';
+		if (property_exists(get_class(), 'class_configuration') AND isset(self::$class_configuration['soft_delete']) AND self::$class_configuration['soft_delete'] === TRUE) {
+			$where = ' AND deleted = 0';
+		}
+		
+		if (is_null($sort)) {
+			$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE 1' . $where, []);
+		} else {
+			if (is_null($direction)) {
+				$direction = 'ASC';
+			}
+			$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE 1' . $where . ' ORDER BY ' . $sort . ' ' . $direction);
+		}
 
 		$objects = array();
 		foreach ($ids as $id) {

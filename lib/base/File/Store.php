@@ -4,12 +4,12 @@
  *
  * Stores and retrieves files
  *
+ * @package %%PACKAGE%%
  * @author Gerry Demaret <gerry@tigron.be>
  * @author Christophe Gosiau <christophe@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
+ * @version $Id$
  */
-
-require_once LIB_PATH . '/model/File.php';
-require_once LIB_PATH . '/model/Picture.php';
 
 class File_Store {
 
@@ -23,40 +23,44 @@ class File_Store {
 	/**
 	 * Store a file
 	 *
-	 * @param string $name
-	 * @param string $mimetype
-	 * @param mixed $content
 	 * @access public
+	 * @param string $name
+	 * @param mixed $content
+	 * @param datetime $created
+	 * @return File $file
 	 */
-	public static function store($name, $content) {
+	public static function store($name, $content, $created = null) {
 		$file = new File();
 		$file->name = $name;
+		$file->md5sum = hash('md5', $content);
 		$file->save();
 
-		$created = strtotime($file->created);
-		$dir = STORE_PATH . '/file/' . date('Y', $created) . '/' . date('m', $created) . '/' . date('d', $created);
-
-		if (!file_exists($dir)) {
-			mkdir($dir, 0755, true);
+		if (is_null($created)) {
+			$created = time();
+		} else {
+			$created = strtotime($created);
 		}
 
-		$unique_name = $dir . '/' . str_replace('.', '', microtime(true)) . '-' . Util::sanitize_filename($file->name);
-
-		file_put_contents($unique_name, $content);
-		$size = filesize($unique_name);
-		$file->mime_type = Util::mime_type($unique_name);
-		$file->unique_name = basename($unique_name);
-		$file->size = filesize($unique_name);
+		$file->created = date('Y-m-d H:i:s', $created);
 		$file->save();
 
-		if ($file->is_picture()) {
-			$picture = new Picture();
-			$picture->file_id = $file->id;
-			$picture->save();
-			return $picture;
+		// create directory if not exist
+		$path = self::get_path($file);
+		$pathinfo = pathinfo($path);
+		if (!is_dir($pathinfo['dirname'])) {
+			mkdir($pathinfo['dirname'], 0755, true);
 		}
 
-		return $file;
+		// store file on disk
+		file_put_contents($path, $content);
+
+		// set mime type and size
+		$file->mime_type = Util::file_mime_type($path);
+		$file->size = filesize($path);
+
+		$file->save();
+
+		return File::get_by_id($file->id);
 	}
 
 	/**
@@ -69,31 +73,27 @@ class File_Store {
 	public static function upload($fileinfo) {
 		$file = new File();
 		$file->name = $fileinfo['name'];
+		$file->md5sum = hash('md5', file_get_contents($fileinfo['tmp_name']));
 		$file->save();
 
-		$created = strtotime($file->created);
-		$dir = STORE_PATH . '/file/' . date('Y', $created) . '/' . date('m', $created) . '/' . date('d', $created);
-
-		if (!file_exists($dir)) {
-			mkdir($dir, 0755, true);
+		// create directory if not exist
+		$path = self::get_path($file);
+		$pathinfo = pathinfo($path);
+		if (!is_dir($pathinfo['dirname'])) {
+			mkdir($pathinfo['dirname'], 0755, true);
 		}
 
-		$unique_name = $dir . '/' . str_replace('.', '', microtime(true)) . '-' . Util::sanitize_filename($file->name);
-
-		if (!move_uploaded_file($fileinfo['tmp_name'], $unique_name)) {
+		// store file on disk
+		if (!move_uploaded_file($fileinfo['tmp_name'], $path)) {
 			throw new Exception('upload failed');
 		}
-		$file->unique_name = basename($unique_name);
-		$file->size = filesize($unique_name);
-		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$mime_type = finfo_file($finfo, $unique_name);
-		$file->mimetype = $mime_type;
+
+		// set mime type and size
+		$file->mime_type = Util::file_mime_type($path);
+		$file->size = filesize($path);
 		$file->save();
 
-		if ($file->is_picture()) {
-			$picture = Picture::get_by_id($file->id);
-		}
-		return $file;
+		return File::get_by_id($file->id);
 	}
 
 	/**
@@ -103,8 +103,23 @@ class File_Store {
 	 * @param File $file
 	 */
 	public static function delete_file(File $file) {
-		$created = strtotime($file->created);
-		$dir = STORE_PATH . '/file/' . date('Y', $created) . '/' . date('m', $created) . '/' . date('d', $created);
-		unlink($dir . '/' . $file->unique_name);
+		if (file_exists($file->get_path())) {
+			unlink($file->get_path());
+		}
+	}
+
+	/**
+	 * Get the physical path of a file
+	 *
+	 * @param File $file
+	 * @return string $path
+	 */
+	public static function get_path(File $file) {
+		$subpath = substr(base_convert($file->md5sum, 16, 10), 0, 3);
+		$subpath = implode('/', str_split($subpath)) . '/';
+
+		$path = STORE_PATH . '/file/' . $subpath . $file->id . '-' . Util::file_sanitize_name($file->name);
+
+		return $path;
 	}
 }

@@ -4,10 +4,8 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@pixelwest.be>
  */
-
-require_once LIB_PATH . '/model/File.php';
-require_once LIB_PATH . '/model/Picture/Manipulation.php';
 
 class Picture extends File {
 
@@ -17,7 +15,7 @@ class Picture extends File {
 	 * @var array $details
 	 * @access private
 	 */
-	private $local_details = array();
+	private $local_details = [];
 
 	/**
 	 * Local fields
@@ -25,7 +23,7 @@ class Picture extends File {
 	 * @access private
 	 * @var array $fields
 	 */
-	private $local_fields = array('file_id', 'width', 'height');
+	private $local_fields = [ 'file_id', 'width', 'height' ];
 
 	/**
 	 * Get the details of this file
@@ -34,18 +32,17 @@ class Picture extends File {
 	 */
 	protected function get_details() {
 		parent::get_details();
+
 		if (!isset($this->id) OR $this->id === null) {
 			throw new Exception('Could not fetch file data: ID not set');
 		}
 
 		$db = Database::Get();
-		$details = $db->getRow('SELECT * FROM picture WHERE file_id=?', array($this->id));
+		$this->local_details = $db->getRow('SELECT * FROM picture WHERE file_id=?', [ $this->id ]);
 
-		if ($details === null) {
+		if ($this->local_details === null) {
 			$this->save();
 		}
-
-		$this->local_details = $details;
 	}
 
 	/**
@@ -53,8 +50,10 @@ class Picture extends File {
 	 *
 	 * @access public
 	 */
-	public function save($get_details = true) {
-		parent::save(false);
+	public function save($validate = true) {
+		if (!isset($this->id)) {
+			parent::save();
+		}
 
 		$db = Database::Get();
 		if (!isset($this->local_details['id']) OR $this->local_details['id'] === null) {
@@ -71,7 +70,11 @@ class Picture extends File {
 		}
 
 		$db->autoExecute('picture', $this->local_details, $mode, $where);
-		$this->get_details();
+		if ($mode !== MDB2_AUTOQUERY_UPDATE) {
+			$this->get_details();
+		} else {
+			parent::save();
+		}
 
 		if ($mode === MDB2_AUTOQUERY_INSERT) {
 			$this->get_dimensions();
@@ -154,9 +157,24 @@ class Picture extends File {
 			$resize_info = $config->picture_formats[$size];
 		}
 
+		$new_width = null;
+		if (isset($resize_info['width'])) {
+			$new_width = $resize_info['width'];
+		}
+
+		$new_height = null;
+		if (isset($resize_info['height'])) {
+			$new_height = $resize_info['height'];
+		}
+
+		$mode = 'auto';
+		if (isset($resize_info['mode'])) {
+			$mode = $resize_info['mode'];
+		}
+
 		$image = new Picture_Manipulation($this);
-		$image->resize($resize_info['width'], $resize_info['height'], $resize_info['mode']);
-		$image->output(TMP_PATH . '/picture/' . $size . '/' . $this->unique_name);
+		$image->resize($new_width, $new_height, $mode);
+		$image->output(TMP_PATH . '/picture/' . $size . '/' . $this->id . '-' . $this->name);
 	}
 
 	/**
@@ -173,14 +191,14 @@ class Picture extends File {
 			throw new Exception('Picture requested in unknown size');
 		}
 
-		if(!file_exists(TMP_PATH . '/picture/' . $size . '/' . $this->unique_name)) {
+		if(!file_exists(TMP_PATH . '/picture/' . $size . '/' . $this->id . '-' . $this->name)) {
 			$this->resize($size);
 		}
 
 		if ($size == 'original') {
 			$filename = $this->get_path();
 		} else {
-			$filename = TMP_PATH . '/picture/' . $size . '/' . $this->unique_name;
+			$filename = TMP_PATH . '/picture/' . $size . '/' . $this->id . '-' . $this->name;
 		}
 
 		$gmt_mtime = gmdate('D, d M Y H:i:s', filemtime($filename)).' GMT';
@@ -213,12 +231,13 @@ class Picture extends File {
 		$formats = $config->picture_formats;
 
 		foreach ($formats as $format =>	$properties) {
-			if (file_exists(TMP_PATH . '/picture/' . $format . '/' . $this->unique_name)) {
-				unlink(TMP_PATH . '/picture/' . $format . '/' . $this->unique_name);
+			if (file_exists(TMP_PATH . '/picture/' . $format . '/' . $this->id . '-' . $this->name)) {
+				unlink(TMP_PATH . '/picture/' . $format . '/' . $this->id . '-' . $this->name);
 			}
 		}
+
 		$db = Database::Get();
-		$db->query('DELETE FROM picture WHERE file_id=?', array($this->id));
+		$db->query('DELETE FROM picture WHERE file_id=?', [ $this->id ]);
 
 		parent::delete();
 	}

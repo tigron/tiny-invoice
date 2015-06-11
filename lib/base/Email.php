@@ -9,8 +9,6 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-require_once LIB_PATH . '/base/Email/Template.php';
-
 class Email {
 	/**
 	 * Email type
@@ -34,7 +32,7 @@ class Email {
 	 * @access private
 	 * @var array $recipients
 	 */
-	private $recipients = array();
+	private $recipients = [];
 
 	/**
 	 * Assigned variables
@@ -42,7 +40,7 @@ class Email {
 	 * @access private
 	 * @var array $assigns
 	 */
-	private $assigns = array();
+	private $assigns = [];
 
 	/**
 	 * Files
@@ -50,7 +48,7 @@ class Email {
 	 * @access private
 	 * @var array $files
 	 */
-	private $files = array();
+	private $files = [];
 
 	/**
 	 * Manual files
@@ -58,7 +56,7 @@ class Email {
 	 * @access private
 	 * @var array $manual_files
 	 */
-	private $manual_files = array();
+	private $manual_files = [];
 
 	/**
 	 * Constructor
@@ -113,11 +111,11 @@ class Email {
 			$language = Language::get_by_id(1);
 		}
 
-		$this->recipients[$type][] = array(
+		$this->recipients[$type][] = [
 			'name' => $name,
 			'email' => $email,
 			'language' => $language
-		);
+		];
 	}
 
 	/**
@@ -190,12 +188,14 @@ class Email {
 			$message->setFrom($this->sender['email']);
 		}
 
-		if (isset($config->archive_mailbox) AND $config->archive_mailbox != '') {
-			$message->addBcc($config->archive_mailbox);
+		try {
+			$archive_mailbox = Setting::get_by_name('archive_mailbox')->value;
+			$message->addBcc($archive_mailbox);
+		} catch (Exception $e) {
+			if (isset($config->archive_mailbox) AND $config->archive_mailbox != '') {
+				$message->addBcc($config->archive_mailbox);
+			}
 		}
-
-		$headers = $message->getHeaders();
-		$headers->addTextHeader('X-MailType', $config->company_info['identifier'] . '_' . $this->type);
 
 		$this->add_html_images($message);
 		$this->attach_files($message);
@@ -224,7 +224,7 @@ class Email {
 	 * @return bool $validated
 	 * @param array $errors
 	 */
-	public function validate(&$errors = array()) {
+	public function validate(&$errors = []) {
 		if (!isset($this->type)) {
 			$errors[] = 'type';
 		}
@@ -277,7 +277,7 @@ class Email {
 	 */
 	private function attach_files(&$message) {
 		foreach ($this->files as $file) {
-			$message->attach(Swift_Attachment::fromPath($file->get_path())->setFilename($file->name));
+			$message->attach(Swift_Attachment::fromPath($file->get_path()));
 		}
 
 		foreach ($this->manual_files as $file) {

@@ -2,8 +2,7 @@
 /**
  * Country class
  *
- * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
 class Country {
@@ -18,13 +17,13 @@ class Country {
 	 */
 	public static function get_by_iso2($iso2) {
 		$db = Database::Get();
-		$id = $db->getOne('SELECT id FROM country WHERE ISO2=?', array($iso2));
+		$id = $db->getOne('SELECT id FROM country WHERE ISO2 = ?', [ $iso2 ]);
 
-		if ($id == null) {
+		if ($id === null) {
 			throw new Exception('No such country');
-		} else {
-			return Country::get_by_id($id);
 		}
+
+		return self::get_by_id($id);
 	}
 
 	/**
@@ -34,23 +33,20 @@ class Country {
 	 * @return array $countries
 	 */
 	public static function get_grouped() {
-		$db = Database::Get();
-		$db_countries = $db->getAll('SELECT * FROM country WHERE european=1 ORDER BY name ASC', array());
+		$countries = [
+			'european' => [],
+			'rest' => []
+		];
 
-		$countries = array(	'european' => array(), 'rest' => array() );
-		foreach ($db_countries as $db_country) {
-			$country = new Country();
-			$country->id = $db_country['id'];
-			$country->details = $db_country;
-			$countries['european'][] = $country;
+		$db = Database::Get();
+		$ids = $db->getCol('SELECT id FROM country WHERE european = 1 ORDER BY name ASC', []);
+		foreach ($ids as $id) {
+			$countries['european'][] = self::get_by_id($id);
 		}
 
-		$db_countries = $db->getAll('SELECT * FROM country WHERE european=0 ORDER BY name ASC', array());
-		foreach ($db_countries as $db_country) {
-			$country = new Country();
-			$country->id = $db_country['id'];
-			$country->details = $db_country;
-			$countries['rest'][] = $country;
+		$ids = $db->getCol('SELECT id FROM country WHERE european = 0 ORDER BY name ASC', []);
+		foreach ($ids as $id) {
+			$countries['rest'][] = self::get_by_id($id);
 		}
 		return $countries;
 	}

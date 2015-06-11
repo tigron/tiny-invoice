@@ -1,40 +1,41 @@
-{% extends "base.layout_text.twig" %}
+{% extends "layout.base.text.twig" %}
 
 {% block content %}
 
 {% trans "New invoice" %}
 
 
-{% trans "Dear customer" %},
+{% trans "Hello" %} {{ invoice.invoice_contact.firstname }},
 
-{% trans "A new invoice has been created, please print this immediately. To open the invoice, you will need a PDF reader, such as Adobe Acrobat" %}.
-{% trans "Adobe Acrobat can be downloaded from the following URL" %}: http://get.adobe.com/reader/
+{% trans "A new invoice has been created, please print this immediately. To open the invoice, you will need a PDF reader, such as Adobe Acrobat." %}
+{% trans "Adobe Acrobat can be downloaded from the following URL:" %} http://get.adobe.com/reader/
 
 {% if invoice.paid == 0 %}
-{% trans "Please keep in mind that we did not yet receive a payment for this order. You can find all the necessary payment information below, as well as on the invoice" %}.
+{% trans "Please keep in mind that we did not yet receive a payment for this order. You can find all the necessary payment information below, as well as on the invoice." %}
 
 
 {% trans "Payment details" %}
-{% trans "Bank" %}: {{ company_info.bank }}
-{% trans "IBAN" %}: {{ company_info.iban }}
-{% trans "BIC" %}: {{ company_info.bic }}
-{% trans "Message" %}: {% trans "Invoice" %} {{ invoice.id }}
-{% trans "Total to pay" %}: € {{ "%.2f"|format(invoice.get_price_incl()) }}
+{% trans "Bank" %}: {{ settings.bank }}
+{% trans "IBAN" %}: {{ settings.iban }}
+{% trans "BIC" %}: {{ settings.bic }}
+{% trans "Message" %}: {% trans "Invoice" %} {{ invoice.number }}
+{% trans "Total to pay" %}: €{{ invoice.get_price_incl()|number_format }}
 
 
 {% endif %}
 
 {% trans "Products" %}
-{% trans "Product" %} // {% trans "VAT" %} // {% trans "Price excl" %}.
+{% trans "Product" %} // {% trans "VAT" %} // {% trans "Price excl." %}
 {% set invoice_items = invoice.get_invoice_items() %}
 {% for invoice_item in invoice_items %}
-{{ invoice_item.description|nl2br }} // {{ invoice_item.vat/0.01 }}% // € {{ "%.2f"|format(invoice_item.price) }}
-
+{{ invoice_item.description|nl2br }} // {{ invoice_item.qty }} // €{{ invoice_item.price|number_format }} // €{{ invoice_item.get_price_excl()|number_format }}
 {% if loop.last %}
-
-{% trans "Subtotal" %}: € {{ "%.2f"|format(invoice.get_price()) }}
-{% trans "VAT" %}: € {{ "%.2f"|format(invoice.get_price_incl() - invoice.get_price()) }}
-{% trans "Total to pay" %}: € {{ "%.2f"|format(invoice.get_price_incl()) }}
+{% trans "Subtotal" %}: € {{ invoice.get_price_excl()|number_format }}
+{% set vat_array = invoice.get_vat_array() %}
+{% for key, vat_subtotal in vat_array %}
+{% trans "VAT" %} ({{ key }}%): &euro;{{ vat_subtotal|number_format }}
+{% endfor %}
+{% trans "Total to pay" %}: &euro;{{ invoice.get_price_incl()|number_format }}
 
 {% endif %}
 {% endfor %}
