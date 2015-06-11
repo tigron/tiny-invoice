@@ -115,13 +115,13 @@ class Application {
 
 				$matches_fixed_parts = 0;
 				$match = true;
-			
+
 				foreach ($parts as $key => $value) {
 					if (!isset($request_parts[$key])) {
 						$match = false;
 						continue;
 					}
-					
+
 					if ($value == $request_parts[$key]) {
 						$matches_fixed_parts++;
 						continue;
@@ -143,7 +143,7 @@ class Application {
 				}
 			}
 		}
-		
+
 		if ($matched_module === null) {
 			throw new Exception('No matching route found');
 		}
@@ -216,6 +216,26 @@ class Application {
 				if (in_array($_SERVER['SERVER_NAME'], $application->config->hostnames)) {
 					Application::set($application);
 					return Application::get();
+				}
+			}
+
+			// Now let's find applications with wildcard url's
+			foreach ($applications as $application) {
+				$hostnames = $application->config->hostnames;
+				foreach ($hostnames as $key => $hostname) {
+					if (strpos('*', $hostname) === false) {
+						unset($hostnames[$key]);
+					}
+				}
+				if (count($hostnames) == 0) {
+					continue;
+				}
+
+				foreach ($hostnames as $hostname) {
+					if (fnmatch($hostname, $_SERVER['SERVER_NAME'])) {
+						Application::set($application);
+						return Application::Get();
+					}
 				}
 			}
 		} else {
