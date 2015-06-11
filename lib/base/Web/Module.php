@@ -73,6 +73,8 @@ abstract class Web_Module {
 		if (!isset($_SESSION['user']) AND $this->login_required === true) {
 			Web_Session::Redirect('/login');
 		}
+		$template = Web_Template::Get();
+		$template->assign('settings', Setting::get_as_array());
 	}
 
 	/**
