@@ -32,12 +32,10 @@ class Web_Module_Administrative_Purchase extends Web_Module {
 		$template = Web_Template::Get();
 
 		$pager = new Web_Pager('purchase');
-		$permissions = [
-			'company' => 'supplier.company',
-			'expiration_date' => 'expiration_date',
-			'paid' => 'paid'
-		];
-		$pager->set_sort_permissions($permissions);
+
+		$pager->add_sort_permission('supplier.company');
+		$pager->add_sort_permission('expiration_date');
+		$pager->add_sort_permission('paid');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);

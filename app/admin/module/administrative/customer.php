@@ -32,12 +32,10 @@ class Web_Module_Administrative_Customer extends Web_Module {
 		$template = Web_Template::Get();
 
 		$pager = new Web_Pager('customer');
-		$permissions = [
-			'company' => 'company',
-			'firstname' => 'firstname',
-			'lastname' => 'lastname'
-		];
-		$pager->set_sort_permissions($permissions);
+
+		$pager->add_sort_permission('company');
+		$pager->add_sort_permission('firstname');
+		$pager->add_sort_permission('lastname');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
@@ -109,10 +107,7 @@ class Web_Module_Administrative_Customer extends Web_Module {
 		$this->template = null;
 
 		$pager = new Web_Pager('customer');
-		$permissions = [
-			'lastname' => 'lastname'
-		];
-		$pager->set_sort_permissions($permissions);
+		$pager->add_sort_permission('lastname');
 		$pager->set_search($_GET['search']);
 		$pager->page();
 

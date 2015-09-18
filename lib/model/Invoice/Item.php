@@ -41,6 +41,17 @@ class Invoice_Item {
 	}
 
 	/**
+	 * Get price incl
+	 *
+	 * @access public
+	 * @return decimal $price_incl
+	 */
+	public function get_price_incl() {
+		$price_excl = $this->get_price_excl();
+		return $price_excl + round(($price_excl / 100 * $this->vat), 2);
+	}
+
+	/**
 	 * Get by invoice
 	 *
 	 * @access public

@@ -1,0 +1,25 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Create new tag" %}{% endblock header %}
+
+{% block body %}
+	<div class="alert alert-danger hide">
+		{% trans "Some fields were not filled in correctly" %}. {% trans "Please correct them" %}.
+	</div>
+	<form class="form-horizontal" method="post">
+		<input type="hidden" name="action" value="add" >
+		<div class="form-group">
+			<label class="control-label col-xs-4">{% trans "Name" %}</label>
+			<div class="col-xs-8">
+				<input type="text" name="tag[name]" id="name" class="form-control" />
+			</div>
+		</div>
+	</form>
+
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+{% endblock footer %}

@@ -257,8 +257,8 @@
 			<div class="panel-body">
 				<form method="post" action="/administrative/invoice/queue" class="form-horizontal">
 					<div class="form-group">
-						<label class="col-xs-3">{% trans "Search" %}</label>
-						<div class="col-xs-6">
+						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
+						<div class="col-xs-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
@@ -303,24 +303,24 @@
 				<tbody>
 			{% endif %}
 
-					<tr>
-						<td>{{ invoice_queue.id }}</td>
-						<td>{{ invoice_queue.customer.firstname }} {{ invoice_queue.customer.lastname }}{% if invoice_queue.customer.company != '' %} ({{ invoice_queue.customer.company }}){% endif %}</td>
-						<td>{{ invoice_queue.description }}</td>
-						<td>&euro;{{ invoice_queue.get_price_excl()|number_format }}</td>
-						<td>
-							<a href="/administrative/invoice/queue?action=edit&id={{ invoice_queue.id }}" title="">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
-						</td>
-						<td>
-						{% if not invoice_queue.is_processed() %}
-							<a href="/administrative/invoice?action=create_step1&customer_id={{ invoice_queue.customer.id }}&invoice_contact_id={{ invoice_queue.invoice_contact.id }}">
-								<span class="glyphicon glyphicon-play-circle"><span>
-							</a>
-						{% endif %}
-						</td>
-					</tr>
+				<tr>
+					<td>{{ invoice_queue.id }}</td>
+					<td>{{ invoice_queue.customer.firstname }} {{ invoice_queue.customer.lastname }}{% if invoice_queue.customer.company != '' %} ({{ invoice_queue.customer.company }}){% endif %}</td>
+					<td>{{ invoice_queue.description }}</td>
+					<td>&euro;{{ invoice_queue.get_price_excl()|number_format }}</td>
+					<td>
+						<a href="/administrative/invoice/queue?action=edit&id={{ invoice_queue.id }}" title="">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+					<td>
+					{% if not invoice_queue.is_processed() %}
+						<a href="/administrative/invoice?action=create_step1&customer_id={{ invoice_queue.customer.id }}&invoice_contact_id={{ invoice_queue.invoice_contact.id }}">
+							<span class="glyphicon glyphicon-play-circle"><span>
+						</a>
+					{% endif %}
+					</td>
+				</tr>
 
 			{% if loop.last %}
 				</tbody>

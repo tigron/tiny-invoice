@@ -32,13 +32,12 @@ class Web_Module_Administrative_Document extends Web_Module {
 	 */
 	public function display() {
 		$pager = new Web_Pager('document');
-		$permissions = array(
-			'id' => 'document.id',
-			'created' => 'document.created',
-			'title' => 'document.title',
-			'name' => 'file.name',
-		);
-		$pager->set_sort_permissions($permissions);
+
+		$pager->add_sort_permission('id');
+		$pager->add_sort_permission('created');
+		$pager->add_sort_permission('title');
+		$pager->add_sort_permission('file.name');
+
 		$pager->set_sort('created');
 		$pager->set_direction('DESC');
 		if (isset($_GET['search'])) {

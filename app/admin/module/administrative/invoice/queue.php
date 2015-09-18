@@ -32,12 +32,10 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 		$template = Web_Template::Get();
 
 		$pager = new Web_Pager('invoice_queue');
-		$permissions = [
-			'id' => 'invoice_queue.id',
-			'price' => 'price',
-			'customer' => 'customer.lastname',
-		];
-		$pager->set_sort_permissions($permissions);
+
+		$pager->add_sort_permission('id');
+		$pager->add_sort_permission('price');
+		$pager->add_sort_permission('customer.lastname');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
