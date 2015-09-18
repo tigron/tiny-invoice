@@ -32,12 +32,10 @@ class Web_Module_User extends Web_Module {
 		$template = Web_Template::Get();
 
 		$pager = new Web_Pager('user');
-		$permissions = array(
-			'username' => 'username',
-			'firstname' => 'firstname',
-			'lastname' => 'lastname'
-		);
-		$pager->set_sort_permissions($permissions);
+
+		$pager->add_sort_permission('username');
+		$pager->add_sort_permission('firstname');
+		$pager->add_sort_permission('lastname');
 
 		if (isset($_POST['search'])) {
 			$pager->set_condition('%search%', $_POST['search']);

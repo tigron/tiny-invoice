@@ -32,15 +32,14 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 		$template = Web_Template::Get();
 
 		$pager = new Web_Pager('invoice');
-		$permissions = array(
-			'number' => 'number',
-			'created' => 'invoice.created',
-			'customer' => 'customer.lastname',
-			'company' => 'customer.company',
-			'amount' => 'customer.price_incl',
-			'paid' => 'paid'
-		);
-		$pager->set_sort_permissions($permissions);
+
+		$pager->add_sort_permission('number');
+		$pager->add_sort_permission('created');
+		$pager->add_sort_permission('customer.lastname');
+		$pager->add_sort_permission('customer.company');
+		$pager->add_sort_permission('price_incl');
+		$pager->add_sort_permission('price_excl');
+		$pager->add_sort_permission('paid');
 		$pager->set_direction('desc');
 
 		if (isset($_POST['search'])) {
@@ -124,6 +123,9 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 			$invoice_items = [];
 			foreach ($_POST['invoice_item'] as $row => $item) {
 				$invoice_item = new Invoice_Item();
+				if (trim($item['invoice_queue_id']) == '') {
+					unset($item['invoice_queue_id']);
+				}
 				$invoice_item->load_array($item);
 				if ($invoice_item->validate($item_errors) === false) {
 					$errors[$row] = $item_errors;
@@ -137,17 +139,14 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 			} else {
 				$invoice = $_SESSION['invoice'];
 				$invoice->expiration_date = date('YmdHis', strtotime('+2 weeks'));
+				$invoice->generate_number();
 				$invoice->save();
 
 				foreach ($invoice_items as $invoice_item) {
-					$invoice_queue_id = $invoice_item->invoice_queue_id;
-					unset($invoice_item->invoice_queue_id);
+					$invoice->add_invoice_item($invoice_item);
 
-					$invoice_item->invoice_id = $invoice->id;
-					$invoice_item->save();
-
-					if ($invoice_queue_id != '') {
-						$invoice_queue = Invoice_Queue::get_by_id($invoice_queue_id);
+					if (isset($invoice_item->invoice_queue_id)) {
+						$invoice_queue = Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
 						$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
 						$invoice_queue->save();
 					}

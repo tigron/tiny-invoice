@@ -18,7 +18,7 @@
 			{{ base.display_flash_message(env.session_sticky.message, 'customer') }}
 		{% endif %}
 
-		<form class="form form-horizontal" method="post" action="/administrative/customer?action=edit&id={{ customer.id }}">
+		<form class="form form-horizontal form-condensed" method="post" action="/administrative/customer?action=edit&id={{ customer.id }}">
 
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -160,7 +160,7 @@
 		</div>
 		{% endif %}
 
-		<form class="form form-horizontal" method="post" action="/administrative/customer?action=add">
+		<form class="form form-horizontal form-condensed" method="post" action="/administrative/customer?action=add">
 
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -303,8 +303,8 @@
 			<div class="panel-body">
 				<form method="post" action="/administrative/customer" class="form-horizontal">
 					<div class="form-group">
-						<label class="col-xs-3">{% trans "Search" %}</label>
-						<div class="col-xs-6">
+						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
+						<div class="col-xs-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>

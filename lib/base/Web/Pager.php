@@ -2,11 +2,8 @@
 /**
  * Handles paginating of query results
  *
- * @package %%PACKAGE%%
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
- * @author David Vandemaele <david@tigron.be>
- * @version $Id$
  */
 
 class Web_Pager {
@@ -28,9 +25,8 @@ class Web_Pager {
 		'conditions' => [],
 		'direction' => 'asc',
 		'page' => 1,
-		'jump_to' => false,
-		'joins' => [],
-		'limit' => null
+		'jump_to' => true,
+		'joins' => []
 	];
 
 	/**
@@ -75,6 +71,7 @@ class Web_Pager {
 		if ($classname === null) {
 			throw new Exception('You must provide a classname');
 		}
+
 		$this->classname = $classname;
 		if (file_exists(LIB_PATH . '/' . ucfirst($this->classname) . '.php')) {
 			require_once LIB_PATH . '/' . ucfirst($this->classname) . '.php';
@@ -104,11 +101,25 @@ class Web_Pager {
 	/**
 	 * Set sort_permissions
 	 *
+	 * FIXME Delete this method, all calls should be replaced with
+	 * add_sort_permission();
+	 *
 	 * @access public
 	 * @param array $sort_permissions
 	 */
 	public function set_sort_permissions($sort_permissions) {
-		$this->options['sort_permissions'] = $sort_permissions;
+		throw new Exception('calls to set_sort_permissions are deprecated, use add_sort_permission');
+	}
+
+	/**
+	 * Add a sort permission
+	 *
+	 * @access public
+	 * @param $column
+	 * @param $database_field
+	 */
+	public function add_sort_permission($database_field) {
+		$this->options['sort_permissions'][] = $database_field;
 	}
 
 	/**
@@ -122,33 +133,37 @@ class Web_Pager {
 	}
 
 	/**
-	 * Set limit
-	 *
-	 * @access public
-	 * @param int $limit
-	 */
-	public function set_limit($limit) {
-		$this->options['limit'] = $limit;
-	}
-
-	/**
 	 * Set condition
+	 *
+	 * FIXME calls to set_condition should be renamed to add_condition()
 	 *
 	 * @access public
 	 * @param string $field
 	 * @param string $comparison (optional)
 	 * @param string $value
 	 */
-	public function set_condition() {
+	public function set_condition($param1, $param2, $param3 = null) {
+		throw new Exception('calls to set_condition are deprecated, use add_condition');
+	}
+
+	/**
+	 * Add condition
+	 *
+	 * @access public
+	 * @param string $field
+	 * @param string $comparison (optional)
+	 * @param string $value
+	 */
+	public function add_condition() {
 		$params = func_get_args();
 		$conditions = $this->options['conditions'];
 
 		$field = array_shift($params);
 
 		if (count($params) == 1) {
-			$conditions[$field] = array('=', array_shift($params));
+			$conditions[$field] = ['=', array_shift($params)];
 		} else {
-			$conditions[$field] = array( array_shift($params), array_shift($params));
+			$conditions[$field] = $params;
 		}
 
 		$this->options['conditions'] = $conditions;
@@ -201,13 +216,23 @@ class Web_Pager {
 	}
 
 	/**
+	 * Get sum
+	 *
+	 * @access public
+	 * @param string $field
+	 */
+	public function get_sum($field) {
+		return call_user_func_array([$this->classname, 'sum'], [$field, $this->options['conditions'], $this->options['joins']]);
+	}
+
+	/**
 	 * Clear conditions
 	 *
 	 * @access public
 	 */
 	public function clear_conditions() {
 		unset($this->options['conditions']);
-		$this->options['conditions'] = array();
+		$this->options['conditions'] = [];
 	}
 
 	/**
@@ -247,10 +272,14 @@ class Web_Pager {
 		} else {
 			$direction = 'asc';
 		}
+
 		$hash = $this->create_options_hash($this->options['conditions'], $this->options['page'], $field_name, $direction, $this->options['joins']);
 
-		$output = '<a href="' . $_SERVER['REDIRECT_URL'] . '?q=' . $hash . '">';
-		$output .= $header . ' ';
+		parse_str($_SERVER['QUERY_STRING'], $qry_str_parts);
+		$qry_str_parts['q'] = $hash;
+		$url = $_SERVER['REDIRECT_URL'] . '?' . http_build_query($qry_str_parts);
+
+		$output = $header . ' ';
 
 		if ($this->options['sort'] == $field_name) {
 			if ($direction == 'desc') {
@@ -259,7 +288,11 @@ class Web_Pager {
 				$output .= '<span class="glyphicon glyphicon-chevron-down"></span>';
 			}
 		}
-		$output .= '</a>';
+
+		// Only allow sorting on fields actually in the permission list
+		if (isset($this->options['sort_permissions']) and in_array($field_name, $this->options['sort_permissions'])) {
+			$output = '<a href="' . $url . '">' . $output . '</a>';
+		}
 
 		return $output;
 	}
@@ -284,40 +317,40 @@ class Web_Pager {
 			}
 		}
 
-		if (!isset($this->options['sort']) ) {
-			if (isset($this->options['sort_permissions']) and count($this->options['sort_permissions']) > 0) {
-				$this->options['sort'] = key($this->options['sort_permissions']);
-			} else {
-				$this->options['sort'] = 1;
-			}
-		}
-
 		if (isset($_GET['p'])) {
 			$this->set_page($_GET['p']);
 		}
 
-		/**
-		 * We now have to rewrite the sort according to the permissions
-		 */
-		if (!isset($this->options['sort_permissions'][$this->options['sort']])) {
+		if (!isset($this->options['sort']) ) {
+			if (isset($this->options['sort_permissions']) and count($this->options['sort_permissions']) > 0) {
+				reset($this->options['sort_permissions']);
+				$this->options['sort'] = current($this->options['sort_permissions']);
+			} else {
+				$this->options['sort'] = null;
+			}
+		}
+
+		// Check if we are allowed to sort at all
+		if ($this->options['sort'] != null and !is_callable($this->options['sort']) and !in_array($this->options['sort'], $this->options['sort_permissions'])) {
 			throw new Exception('Sorting not allowed for field ' . $this->options['sort']);
 		}
-		$sort = $this->options['sort_permissions'][$this->options['sort']];
+
+		$sort = $this->options['sort'];
 
 		$this->options['all'] = $all;
 
-		$params = array(
+		$params = [
 			$sort,
 			$this->options['direction'],
 			$this->options['page'],
-			$this->options['limit'],
 			$this->options['conditions'],
 			$this->options['all'],
 			$this->options['joins']
-		);
+		];
 
-		$this->items = call_user_func_array(array($this->classname, 'get_paged'), $params);
-		$this->item_count = call_user_func_array(array($this->classname, 'count'), array($this->options['conditions'], $this->options['joins']));
+		$this->items = call_user_func_array([$this->classname, 'get_paged'], $params);
+
+		$this->item_count = call_user_func_array([$this->classname, 'count'], [$this->options['conditions'], $this->options['joins']]);
 		$this->generate_links();
 
 		$hash = $this->create_options_hash($this->options['conditions'], $this->options['page'], $this->options['sort'], $this->options['direction'], $this->options['joins']);
@@ -332,7 +365,7 @@ class Web_Pager {
 	 * @return array $options
 	 */
 	private function get_options_from_hash($hash) {
-		return unserialize( base64_decode($hash) );
+		return unserialize(base64_decode(urldecode($hash)));
 	}
 
 	/**
@@ -342,7 +375,6 @@ class Web_Pager {
 	 * @param array $conditions
 	 * @param int $page
 	 * @param int $sort
-	 * @param array $joins
 	 * @param string $direction
 	 */
 	private function create_options_hash($conditions, $page, $sort, $direction, $joins) {

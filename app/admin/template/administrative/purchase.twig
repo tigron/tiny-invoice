@@ -67,8 +67,8 @@
 			<div class="panel-body">
 				<form method="post" action="/administrative/purchase" class="form-horizontal">
 					<div class="form-group">
-						<label class="col-xs-3">{% trans "Search" %}</label>
-						<div class="col-xs-6">
+						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
+						<div class="col-xs-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
@@ -108,29 +108,29 @@
 				<tbody>
 			{% endif %}
 
-					<tr>
-						<td>{{ purchase.number }}</td>
-						<td>{{ purchase.date|date }}</td>
-						<td>{{ purchase.customer.company }}</td>
-						<td class="text-right">€{{ purchase.price_incl|number_format }}</td>
-						<td>
-						{% if purchase.paid %}
-							<span class="glyphicon glyphicon-ok"></span>
-						{% else %}
-							<span class="glyphicon glyphicon-remove"></span>
-						{% endif %}
-						</td>
-						<td>
-							<a href="/administrative/purchase?action=download&id={{ purchase.id }}">
-								<span class="glyphicon glyphicon-download"></span>
-							</a>
-						</td>
-						<td class="text-right">
-							<a href="/administrative/purchase?action=edit&id={{ purchase.id }}" title="">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
-						</td>
-					</tr>
+				<tr>
+					<td>{{ purchase.number }}</td>
+					<td>{{ purchase.date|date }}</td>
+					<td>{{ purchase.customer.company }}</td>
+					<td class="text-right">€{{ purchase.price_incl|number_format }}</td>
+					<td>
+					{% if purchase.paid %}
+						<span class="glyphicon glyphicon-ok"></span>
+					{% else %}
+						<span class="glyphicon glyphicon-remove"></span>
+					{% endif %}
+					</td>
+					<td>
+						<a href="/administrative/purchase?action=download&id={{ purchase.id }}">
+							<span class="glyphicon glyphicon-download"></span>
+						</a>
+					</td>
+					<td class="text-right">
+						<a href="/administrative/purchase?action=edit&id={{ purchase.id }}" title="">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+				</tr>
 
 			{% if loop.last %}
 				</tbody>

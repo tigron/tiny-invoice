@@ -34,7 +34,7 @@ class Tag {
 	 * @return bool $validated
 	 */
 	public function validate(&$errors = []) {
-		$required_fields = [ 'name', 'identifier' ];
+		$required_fields = [ 'name' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
@@ -42,9 +42,9 @@ class Tag {
 		}
 
 		try {
-			$tag = Tag::get_by_identifier($this->details['identifier']);
+			$tag = Tag::get_by_name($this->details['name']);
 			if (isset($this->id) AND $tag->id != $this->id) {
-				$errors['identifier'] = 'already_exists';
+				$errors['name'] = 'already_exists';
 			}
 		} catch (Exception $e) {}
 
@@ -56,16 +56,16 @@ class Tag {
 	}
 
 	/**
-	 * Get by identifier
+	 * Get by name
 	 *
 	 * @access public
-	 * @param string $identifier
+	 * @param string $name
 	 * @return Tag $tag
 	 */
-	public static function get_by_identifier($identifier) {
+	public static function get_by_name($name) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
-		$id = $db->getOne('SELECT id FROM ' . $table . ' WHERE identifier = ?', [ $identifier ]);
+		$id = $db->getOne('SELECT id FROM tag WHERE name = ?', [ $name ]);
 
 		if ($id === null) {
 			throw new Exception('Tag not found');

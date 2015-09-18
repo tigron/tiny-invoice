@@ -32,11 +32,9 @@ class Web_Module_Administrative_Supplier extends Web_Module {
 		$template = Web_Template::Get();
 
 		$pager = new Web_Pager('supplier');
-		$permissions = [
-			'company' => 'company',
-			'vat' => 'vat'
-		];
-		$pager->set_sort_permissions($permissions);
+
+		$pager->add_sort_permission('company');
+		$pager->add_sort_permission('vat');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);

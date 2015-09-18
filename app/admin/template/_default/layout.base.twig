@@ -3,17 +3,16 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Backoffice</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Backoffice</title>
 
-	<link rel="shortcut icon" href="http://www.pixelwest.be/favicon.ico">
 	<link rel="stylesheet" href="/bootstrap.min.css" type="text/css" media="handheld, all">
 	<link rel="stylesheet" href="/style.css" type="text/css" media="handheld, all">
 
 	<script type="text/javascript" src="/jquery-1.11.2.min.js"></script>
 	{% spaceless %}
-	{% block head %}{% endblock head %}
+		{% block head %}{% endblock head %}
 	{% endspaceless %}
 </head>
 <body>
@@ -22,22 +21,25 @@
 
 	<script type="text/javascript" src="/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/handlebars.js"></script>
-{% spaceless %}
-	{% block javascript %}{% endblock %}
-{% endspaceless %}
+	{% spaceless %}
+		{% block javascript %}{% endblock %}
+	{% endspaceless %}
 	<script type="text/javascript" src="/base.js"></script>
 	<script type="text/x-handlebars-template" id="data-confirm-tmpl">
 		<div id="dataConfirmModal" class="modal fade" role="dialog" aria-labelledby="dataConfirmLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						((#if title))
 							<h4 class="modal-title">((title))</h4>
 						((/if))
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 					</div>
 					<div class="modal-body">
+
 						<p>((message))</p>
+					</div>
+					<div class="modal-footer">
 						<a class="btn btn-primary" ((#if btn_href))href="((btn_href))"((/if))>
 							((#if btn_ok)) ((btn_ok)) ((else)){% trans "Ok" %}((/if))
 						</a>

@@ -6,55 +6,44 @@
  */
 
 class Invoice {
-	use Get, Delete, Model, Page;
-
-	/**
-	 * Save the object
-	 *
-	 * @access public
-	 */
-	public function save() {
-		$table = self::trait_get_database_table();
-		$db = self::trait_get_database();
-
-		if (!isset($this->id) OR $this->id === null) {
-			$mode = MDB2_AUTOQUERY_INSERT;
-			if (!isset($this->details['created'])) {
-				$this->details['created'] = date('Y-m-d H:i:s');
-			}
-			$where = false;
-			$this->generate_number();
-		} else {
-			$mode = MDB2_AUTOQUERY_UPDATE;
-			$this->details['updated'] = date('Y-m-d H:i:s');
-			$where = 'id=' . $db->quote($this->id);
-		}
-
-		$db->autoExecute($table, $this->details, $mode, $where);
-
-		if ($mode === MDB2_AUTOQUERY_INSERT) {
-			$this->id = $db->getOne('SELECT LAST_INSERT_ID();');
-			//Object_Log::create('add', $this);
-		}
-
-		$this->get_details();
-	}
+	use Get, Delete, Model, Save, Page;
 
 	/**
 	 * Generate number
 	 *
 	 * @access private
 	 */
-	private function generate_number() {
-		$table = self::trait_get_database_table();
-		$db = self::trait_get_database();
-		$number = $db->getOne('SELECT number FROM ' . $table . ' ORDER BY number DESC LIMIT 1', []);
+	public function generate_number() {
+		$db = Database::Get();
+		$number = $db->getOne('SELECT number FROM invoice ORDER BY number DESC LIMIT 1', []);
 		if ($number === null) {
 			$number = 1;
 		} else {
 			$number++;
 		}
 		$this->number = $number;
+	}
+
+	/**
+	 * Add invoice_item
+	 *
+	 * @access public
+	 * @param Invoice_Item $invoice_item
+	 */
+	public function add_invoice_item(Invoice_Item $invoice_item) {
+		$invoice_item->invoice_id = $this->id;
+		$invoice_item->save();
+
+		$price_incl = 0;
+		$price_excl = 0;
+
+		foreach ($this->get_invoice_items() as $invoice_item) {
+			$price_incl += $invoice_item->get_price_incl();
+			$price_excl += $invoice_item->get_price_excl();
+		}
+		$this->price_excl = $price_excl;
+		$this->price_incl = $price_incl;
+		$this->save();
 	}
 
 	/**

@@ -223,7 +223,7 @@ trait Model {
 			return true;
 		}
 
-		if (array_key_exists($key, $this->details)) {
+		if (isset($this->details[$key])) {
 			return true;
 		}
 
