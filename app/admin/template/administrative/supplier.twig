@@ -141,7 +141,7 @@
 						{% trans "Add supplier" %}
 					</a>
 				</div>
-				{% trans "Suppliers" %}
+				{{ base.pager_count(pager) }}
 			</div>
 			<div class="panel-body">
 			{% for supplier in pager.items %}

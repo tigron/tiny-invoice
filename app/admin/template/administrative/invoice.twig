@@ -555,7 +555,7 @@
 						{% trans "Add invoice" %}
 					</a>
 				</div>
-				{% trans "Invoices" %}
+				{{ base.pager_count(pager) }}
 			</div>
 			<div class="panel-body">
 			{% for invoice in pager.items %}

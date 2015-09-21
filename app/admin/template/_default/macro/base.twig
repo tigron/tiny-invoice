@@ -22,3 +22,12 @@
 	{% endif %}
 
 {% endmacro display_flash_message %}
+
+
+{% macro pager_count(pager) %}
+	{% if pager.item_count == 1 %}
+		1 {% trans "result" %}
+	{% else %}
+		{{ pager.item_count }} {% trans "results" %}
+	{% endif %}
+{% endmacro %}

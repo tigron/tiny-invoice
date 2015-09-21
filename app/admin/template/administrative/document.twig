@@ -230,7 +230,7 @@
 						{% trans "Add document" %}
 					</a>
 				</div>
-				{% trans "Documents" %}
+				{{ base.pager_count(pager) }}
 			</div>
 			<div class="panel-body">
 			{% for document in pager.items %}
