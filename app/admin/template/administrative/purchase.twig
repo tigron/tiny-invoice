@@ -89,7 +89,7 @@
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				{% trans "Purchases" %}
+				{{ base.pager_count(pager) }}
 			</div>
 			<div class="panel-body">
 			{% for purchase in pager.items %}
