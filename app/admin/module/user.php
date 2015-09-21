@@ -5,7 +5,12 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_User extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Pager\Web\Pager;
+
+class Web_Module_User extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -29,9 +34,9 @@ class Web_Module_User extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
-		$pager = new Web_Pager('user');
+		$pager = new Pager('user');
 
 		$pager->add_sort_permission('username');
 		$pager->add_sort_permission('firstname');
@@ -42,7 +47,7 @@ class Web_Module_User extends Web_Module {
 		}
 		$pager->page();
 
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
 
@@ -52,7 +57,7 @@ class Web_Module_User extends Web_Module {
 	 * @access public
 	 */
 	public function display_add() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (isset($_POST['user'])) {
 			$user = new User();
@@ -62,7 +67,7 @@ class Web_Module_User extends Web_Module {
 			} else {
 				$user->save();
 
-				$session = Web_Session_Sticky::Get();
+				$session = Session_Sticky::Get();
 				$session->message = 'created';
 				Web_Session::Redirect('/user');
 			}
@@ -77,7 +82,7 @@ class Web_Module_User extends Web_Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$user = User::get_by_id($_GET['id']);
 
 		if (isset($_POST['user'])) {
@@ -102,7 +107,7 @@ class Web_Module_User extends Web_Module {
 			Web_Session::Redirect('/user');
 		}
 
-		$session = Web_Session_Sticky::Get();
+		$session = Session_Sticky::Get();
 
 		try {
 			$user = User::get_by_id($_GET['id']);
@@ -117,6 +122,6 @@ class Web_Module_User extends Web_Module {
 		}
 
 		$session->message = $message;
-		Web_Session::Redirect('/user');
+		Session::Redirect('/user');
 	}
 }

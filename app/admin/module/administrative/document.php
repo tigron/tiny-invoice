@@ -7,7 +7,12 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_Administrative_Document extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Pager\Web\Pager; 
+
+class Web_Module_Administrative_Document extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -31,7 +36,7 @@ class Web_Module_Administrative_Document extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$pager = new Web_Pager('document');
+		$pager = new Pager('document');
 
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('created');
@@ -50,7 +55,7 @@ class Web_Module_Administrative_Document extends Web_Module {
 		$pager->set_direction('DESC');
 		$pager->page();
 
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
 	}
@@ -61,7 +66,7 @@ class Web_Module_Administrative_Document extends Web_Module {
 	 * @access public
 	 */
 	public function display_add() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (isset($_POST['document'])) {
 			$document = new Document();
@@ -72,9 +77,9 @@ class Web_Module_Administrative_Document extends Web_Module {
 			} else {
 				$document->save();
 
-				$session = Web_Session_Sticky::Get();
+				$session = Session_Sticky::Get();
 				$session->message = 'created';
-				Web_Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
+				Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
 			}
 		}
 	}
@@ -106,7 +111,7 @@ class Web_Module_Administrative_Document extends Web_Module {
 	public function display_delete() {
 		$document = Document::get_by_id($_GET['id']);
 		$document->delete();
-		Web_Session::Redirect('/administrative/document');
+		Session::Redirect('/administrative/document');
 	}
 
 	/**
@@ -115,9 +120,9 @@ class Web_Module_Administrative_Document extends Web_Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
-		$session = Web_Session_Sticky::Get();
+		$session = Session_Sticky::Get();
 		if (isset($session->message)) {
 			$template->assign('message', $session->message);
 			unset($session->message);
@@ -138,7 +143,7 @@ class Web_Module_Administrative_Document extends Web_Module {
 			$document->load_array($_POST['document']);
 			$document->save();
 			$session->message = 'document_updated';
-			Web_Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
+			Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
 		}
 
 		$tag_ids = array();
@@ -167,7 +172,7 @@ class Web_Module_Administrative_Document extends Web_Module {
 			$document->file_id = $file->id;
 			$document->save();
 		}
-		Web_Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
+		Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
 	}
 
 	/**
@@ -189,10 +194,10 @@ class Web_Module_Administrative_Document extends Web_Module {
 			$document_tag->save();
 		}
 
-		$session = Web_Session_Sticky::Get();
+		$session = Session_Sticky::Get();
 		$session->message = 'tags_updated';
 
-		Web_Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
+		Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
 	}
 
 	/**

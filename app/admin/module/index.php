@@ -7,7 +7,10 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_Index extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+
+class Web_Module_Index extends Module {
 
 	/**
 	 * Login required
@@ -30,7 +33,6 @@ class Web_Module_Index extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-
 	}
 
 }

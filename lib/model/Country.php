@@ -5,8 +5,13 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Country {
-	use Get, Delete, Model, Save;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
 
 	/**
 	 * Get by ISO2
@@ -17,7 +22,7 @@ class Country {
 	 */
 	public static function get_by_iso2($iso2) {
 		$db = Database::Get();
-		$id = $db->getOne('SELECT id FROM country WHERE ISO2 = ?', [ $iso2 ]);
+		$id = $db->get_one('SELECT id FROM country WHERE ISO2 = ?', [ $iso2 ]);
 
 		if ($id === null) {
 			throw new Exception('No such country');
@@ -39,12 +44,12 @@ class Country {
 		];
 
 		$db = Database::Get();
-		$ids = $db->getCol('SELECT id FROM country WHERE european = 1 ORDER BY name ASC', []);
+		$ids = $db->get_column('SELECT id FROM country WHERE european = 1 ORDER BY name ASC', []);
 		foreach ($ids as $id) {
 			$countries['european'][] = self::get_by_id($id);
 		}
 
-		$ids = $db->getCol('SELECT id FROM country WHERE european = 0 ORDER BY name ASC', []);
+		$ids = $db->get_column('SELECT id FROM country WHERE european = 0 ORDER BY name ASC', []);
 		foreach ($ids as $id) {
 			$countries['rest'][] = self::get_by_id($id);
 		}

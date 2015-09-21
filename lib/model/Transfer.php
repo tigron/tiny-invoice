@@ -10,8 +10,12 @@
 define('TRANSFER_TYPE_PAYMENT_MANUAL',       1);
 define('TRANSFER_TYPE_PAYMENT_WIRETRANSFER', 10);
 
+use \Skeleton\Database\Database;
+
 class Transfer {
-	use Model, Get, Save;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
 
 	/**
 	 * Get transfers by invoice

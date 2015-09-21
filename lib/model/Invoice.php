@@ -5,8 +5,14 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database; 
+
 class Invoice {
-	use Get, Delete, Model, Save, Page;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
+	use \Skeleton\Pager\Page;
 
 	/**
 	 * Generate number

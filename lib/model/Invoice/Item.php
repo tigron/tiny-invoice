@@ -6,7 +6,9 @@
  */
 
 class Invoice_Item {
-	use Get, Model, Save;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
 
 	/**
 	 * Validate data

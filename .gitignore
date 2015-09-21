@@ -4,6 +4,5 @@ tmp/log/*
 tmp/languages/*
 store/file/*
 store/documentation/*
-lib/external/packages/vendor/*
-lib/external/packages/composer.phar
-lib/external/packages/composer.lock
+lib/external/*
+composer.lock

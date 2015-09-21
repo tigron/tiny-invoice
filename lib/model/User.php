@@ -7,8 +7,14 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class User {
-	use Model, Get, Save, Delete, Page;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
+	use \Skeleton\Pager\Page;
 
 	/**
 	 * @var User $user
@@ -78,7 +84,7 @@ class User {
 	 */
 	public static function get_by_username($username) {
 		$db = Database::Get();
-		$id = $db->getOne('SELECT id FROM user WHERE username = ?', array($username));
+		$id = $db->get_one('SELECT id FROM user WHERE username = ?', array($username));
 
 		if ($id === null) {
 			throw new Exception('User not found');
@@ -96,7 +102,7 @@ class User {
 	 */
 	public static function get_by_email($email) {
 		$db = Database::Get();
-		$id = $db->getOne('SELECT id FROM user WHERE email = ?', array($email));
+		$id = $db->get_one('SELECT id FROM user WHERE email = ?', array($email));
 
 		if ($id === null) {
 			throw new Exception('User not found');

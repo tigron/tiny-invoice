@@ -5,7 +5,12 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_Administrative_Purchase extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Pager\Web\Pager; 
+
+class Web_Module_Administrative_Purchase extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -29,9 +34,9 @@ class Web_Module_Administrative_Purchase extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
-		$pager = new Web_Pager('purchase');
+		$pager = new Pager('purchase');
 
 		$pager->add_sort_permission('supplier.company');
 		$pager->add_sort_permission('expiration_date');
@@ -42,7 +47,7 @@ class Web_Module_Administrative_Purchase extends Web_Module {
 		}
 		$pager->page();
 
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
 
@@ -52,7 +57,7 @@ class Web_Module_Administrative_Purchase extends Web_Module {
 	 * @access public
 	 */
 	public function display_add() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (isset($_POST['purchase'])) {
 			$purchase = new Purchase();
@@ -62,9 +67,9 @@ class Web_Module_Administrative_Purchase extends Web_Module {
 			} else {
 				$purchase->save();
 
-				$session = Web_Session_Sticky::Get();
+				$session = Session_Sticky::Get();
 				$session->message = 'created';
-				Web_Session::Redirect('/administrative/purchase');
+				Session::Redirect('/administrative/purchase');
 			}
 		}
 	}
@@ -75,16 +80,16 @@ class Web_Module_Administrative_Purchase extends Web_Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$purchase = Purchase::get_by_id($_GET['id']);
 
 		if (isset($_POST['purchase'])) {
 			$purchase->load_array($_POST['purchase']);
 			$purchase->save();
 
-			$session = Web_Session_Sticky::Get();
+			$session = Session_Sticky::Get();
 			$session->message = 'updated';
-			Web_Session::Redirect('/administrative/purchase?action=edit&id=' . $purchase->id);
+			Session::Redirect('/administrative/purchase?action=edit&id=' . $purchase->id);
 		}
 		$template->assign('purchase', $purchase);
 	}

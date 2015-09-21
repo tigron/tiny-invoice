@@ -7,16 +7,23 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Log {
-	use Model, Get, Delete, Save;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
 
 	/**
 	 * Get content
+	 *
+	 * @access public
 	 */
 	public function get_content() {
 		try {
 			$by = ' (by ' . $this->user->username . ')';
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$by = '';
 		}
 
@@ -27,16 +34,16 @@ class Log {
 	 * Get by Object
 	 *
 	 * @access public
-	 * @param object $object
+	 * @param mixed $object
 	 */
 	public static function get_by_object($object) {
-		$db = Database::Get();
+		$db = Database::get();
 		$classname = get_class($object);
-		$ids = $db->getCol('SELECT id FROM log WHERE classname=? AND object_id=? ORDER BY id DESC LIMIT 50', array($classname, $object->id));
+		$ids = $db->get_col('SELECT id FROM log WHERE classname=? AND object_id=? ORDER BY id DESC LIMIT 50', [$classname, $object->id]);
 
-		$logs = array();
+		$logs = [];
 		foreach ($ids as $id) {
-			$logs[] = Log::get_by_id($id);
+			$logs[] = self::get_by_id($id);
 		}
 
 		return $logs;
@@ -56,12 +63,12 @@ class Log {
 			$classname = strtolower(get_class($object));
 		}
 
-		$log = new Log();
+		$log = new self();
 
 		try {
-			$user = User::Get();
+			$user = User::get();
 			$log->user_id = $user->id;
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$log->user_id = 0;
 		}
 
@@ -81,3 +88,4 @@ class Log {
 		return $log;
 	}
 }
+

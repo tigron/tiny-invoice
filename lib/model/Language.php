@@ -6,8 +6,13 @@
  * @author Gerry Demaret <gerry@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Language {
-	use Model, Save, Delete, Get;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
 
 	/**
 	 * Language

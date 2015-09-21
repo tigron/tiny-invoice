@@ -7,8 +7,14 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Setting {
-	use Model, Get, Save, Delete;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
+	use \Skeleton\Pager\Page;
 
 	/**
 	 * Get by name
@@ -20,7 +26,7 @@ class Setting {
 	public static function get_by_name($name) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
-		$id = $db->getOne('SELECT id FROM ' . $table . ' WHERE name = ?', [ $name ]);
+		$id = $db->get_one('SELECT id FROM ' . $table . ' WHERE name = ?', [ $name ]);
 		if ($id === null) {
 			throw new Exception('Not found');
 		}
