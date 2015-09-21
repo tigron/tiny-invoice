@@ -1,9 +1,0 @@
-{
-    "require": {
-	"twig/twig": "1.*",
-	"twig/extensions": "1.*",
-	"swiftmailer/swiftmailer": "5.*",
-	"dompdf/dompdf": "dev-master"
-    }
-}
-

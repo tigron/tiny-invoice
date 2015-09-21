@@ -5,7 +5,11 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_Login extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+
+class Web_Module_Login extends Module {
 
 	/**
 	 * Login required ?
@@ -30,14 +34,14 @@ class Web_Module_Login extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (isset($_POST['username']) AND isset($_POST['password'])) {
 			try {
 				$user = User::authenticate($_POST['username'], $_POST['password']);
 				Object_Log::create('User logged in', $user);
 				$_SESSION['user'] = $user;
-				Web_Session::Redirect('/');
+				Session::Redirect('/');
 			} catch (Exception $e) {
 				$template->assign('error', true);
 			}
@@ -50,7 +54,7 @@ class Web_Module_Login extends Web_Module {
 	 * @access public
 	 */
 	public function display_logout() {
-		Web_Session::Destroy();
-		Web_Session::Redirect('/');
+		Session::Destroy();
+		Session::Redirect('/');
 	}
 }

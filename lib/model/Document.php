@@ -7,8 +7,11 @@
  */
 
 class Document {
-	use Model, Get, Save, Page;
-	use Delete {
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Pager\Page;
+	use \Skeleton\Object\Delete {
 		delete as trait_delete;
 	}
 

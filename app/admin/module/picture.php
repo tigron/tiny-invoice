@@ -6,9 +6,11 @@
  * @author Gerry Demaret <gerry@tigron.be>
  */
 
-require_once LIB_PATH . '/model/Picture.php';
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
 
-class Web_Module_Picture extends Web_Module {
+class Web_Module_Picture extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes

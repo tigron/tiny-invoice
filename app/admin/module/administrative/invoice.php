@@ -4,8 +4,13 @@
  *
  * @author David Vandemaele <david@tigron.be>
  */
+ 
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Pager\Web\Pager; 
 
-class Web_Module_Administrative_Invoice extends Web_Module {
+class Web_Module_Administrative_Invoice extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -29,9 +34,9 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
-		$pager = new Web_Pager('invoice');
+		$pager = new Pager('invoice');
 
 		$pager->add_sort_permission('number');
 		$pager->add_sort_permission('created');
@@ -47,7 +52,7 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 		}
 		$pager->page();
 
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
 
@@ -57,7 +62,7 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 	 * @access public
 	 */
 	public function display_create_step1() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (!isset($_SESSION['invoice'])) {
 			$_SESSION['invoice'] = new Invoice();
@@ -67,7 +72,7 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 		if (isset($_GET['customer_id']) AND isset($_GET['invoice_contact_id'])) {
 			$_SESSION['invoice']->customer_id = $_GET['customer_id'];
 			$_SESSION['invoice']->invoice_contact_id = $_GET['invoice_contact_id'];
-			Web_Session::Redirect('/administrative/invoice?action=create_step3');
+			Session::Redirect('/administrative/invoice?action=create_step3');
 		}
 
 		if (isset($_POST['customer_id'])) {
@@ -76,7 +81,7 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 			} else {
 				$_SESSION['invoice']->customer_id = $_POST['customer_id'];
 				$_SESSION['invoice']->type = $_POST['type'];
-				Web_Session::Redirect('/administrative/invoice?action=create_step2');
+				Session::Redirect('/administrative/invoice?action=create_step2');
 			}
 		}
 
@@ -90,13 +95,13 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 	 * @access public
 	 */
 	public function display_create_step2() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		if (isset($_POST['invoice_contact_id'])) {
 			if ($_POST['invoice_contact_id'] == '') {
 				$template->assign('errors', 'select_invoice_contact');
 			} else {
 				$_SESSION['invoice']->invoice_contact_id = $_POST['invoice_contact_id'];
-				Web_Session::Redirect('/administrative/invoice?action=create_step3');
+				Session::Redirect('/administrative/invoice?action=create_step3');
 			}
 		}
 
@@ -115,7 +120,7 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 	 * @access public
 	 */
 	public function display_create_step3() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (isset($_POST['invoice_item'])) {
 
@@ -154,7 +159,7 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 
 				unset($_SESSION['invoice']);
 
-				Web_Session::Redirect('/administrative/invoice');
+				Session::Redirect('/administrative/invoice');
 
 			}
 
@@ -172,16 +177,16 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$invoice = Invoice::get_by_id($_GET['id']);
 
 		if (isset($_POST['invoice'])) {
 			$invoice->send_reminder_mail = $_POST['invoice']['send_reminder_mail'];
 			$invoice->save();
 
-			$session = Web_Session_Sticky::Get();
+			$session = Session_Sticky::Get();
 			$session->message = 'updated';
-			Web_Session::Redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
+			Session::Redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
 		}
 
 		if (isset($_POST['transfer'])) {
@@ -198,7 +203,7 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 	 */
 	public function display_add_transfer() {
 		if (!isset($_GET['id']) || $_POST['transfer']['amount'] == '') {
-			Web_Session::Redirect('/administrative/invoice');
+			Session::Redirect('/administrative/invoice');
 		}
 
 		$invoice = Invoice::get_by_id($_GET['id']);
@@ -211,7 +216,7 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 
 		$invoice->add_transfer($transfer);
 
-		Web_Session::Redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
+		Session::Redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
 	}
 
 	/**
@@ -234,10 +239,10 @@ class Web_Module_Administrative_Invoice extends Web_Module {
 		$invoice = Invoice::get_by_id($_GET['id']);
 		$invoice->send_invoice_email();
 
-		$session = Web_Session_Sticky::Get();
+		$session = Session_Sticky::Get();
 		$session->message = 'invoice_sent';
 
-		Web_Session::Redirect('/administrative/invoice');
+		Session::Redirect('/administrative/invoice');
 	}
 
 }

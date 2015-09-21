@@ -5,7 +5,12 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_Administrative_Supplier extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Pager\Web\Pager;   
+
+class Web_Module_Administrative_Supplier extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -29,9 +34,9 @@ class Web_Module_Administrative_Supplier extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
-		$pager = new Web_Pager('supplier');
+		$pager = new Pager('supplier');
 
 		$pager->add_sort_permission('company');
 		$pager->add_sort_permission('vat');
@@ -41,7 +46,7 @@ class Web_Module_Administrative_Supplier extends Web_Module {
 		}
 		$pager->page();
 
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
 
@@ -51,7 +56,7 @@ class Web_Module_Administrative_Supplier extends Web_Module {
 	 * @access public
 	 */
 	public function display_add() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (isset($_POST['supplier'])) {
 			$supplier = new Supplier();
@@ -61,9 +66,9 @@ class Web_Module_Administrative_Supplier extends Web_Module {
 			} else {
 				$supplier->save();
 
-				$session = Web_Session_Sticky::Get();
+				$session = Session_Sticky::Get();
 				$session->message = 'created';
-				Web_Session::Redirect('/administrative/supplier');
+				Session::Redirect('/administrative/supplier');
 			}
 		}
 	}
@@ -74,16 +79,16 @@ class Web_Module_Administrative_Supplier extends Web_Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$supplier = Supplier::get_by_id($_GET['id']);
 
 		if (isset($_POST['supplier'])) {
 			$supplier->load_array($_POST['supplier']);
 			$supplier->save();
 
-			$session = Web_Session_Sticky::Get();
+			$session = Session_Sticky::Get();
 			$session->message = 'updated';
-			Web_Session::Redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
+			Session::Redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
 		}
 		$template->assign('supplier', $supplier);
 	}

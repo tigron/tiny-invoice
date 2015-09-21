@@ -7,8 +7,13 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Object_Log {
-	use Model, Get, Delete, Save;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
 
 	protected static $class_configuration = [
 		'database_table' => 'log'

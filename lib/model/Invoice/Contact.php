@@ -6,7 +6,11 @@
  */
 
 class Invoice_Contact {
-	use Get, Delete, Model, Save, Page;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
+	use \Skeleton\Pager\Page;
 
 	/**
 	 * Get VAT formatted

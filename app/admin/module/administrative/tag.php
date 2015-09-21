@@ -9,7 +9,12 @@
  * @version $Id: user.php 529 2010-03-16 17:09:26Z knx-onlineshop $
  */
 
-class Web_Module_Administrative_Tag extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Pager\Web\Pager; 
+
+class Web_Module_Administrative_Tag extends Module {
 
 	/**
 	 * Login required
@@ -33,7 +38,7 @@ class Web_Module_Administrative_Tag extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$pager = new Web_Pager('Tag');
+		$pager = new Pager('Tag');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
@@ -43,7 +48,7 @@ class Web_Module_Administrative_Tag extends Web_Module {
 
 		$pager->page();
 
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
 
@@ -57,7 +62,7 @@ class Web_Module_Administrative_Tag extends Web_Module {
 		$tag = Tag::get_by_id($_GET['id']);
 		$tag->delete();
 
-		Web_Session::Redirect('/administrative/tag');
+		Session::Redirect('/administrative/tag');
 	}
 
 	/**
@@ -71,7 +76,7 @@ class Web_Module_Administrative_Tag extends Web_Module {
 		$tag->load_array($_POST['tag']);
 		$tag->save();
 
-		Web_Session::Redirect('/administrative/tag');
+		Session::Redirect('/administrative/tag');
 	}
 
 	/**
@@ -81,8 +86,8 @@ class Web_Module_Administrative_Tag extends Web_Module {
 	 * @access private
 	 */
 	public function display_edit() {
-		$session = Web_Session_Sticky::Get();
-		$template = Web_Template::Get();
+		$session = Session_Sticky::Get();
+		$template = Template::Get();
 		$tag = Tag::get_by_id($_GET['id']);
 
 		if (isset($_POST['tag'])) {
@@ -91,7 +96,7 @@ class Web_Module_Administrative_Tag extends Web_Module {
 
 			$session->message = 'tag_updated';
 
-			Web_Session::Redirect('/administrative/tag?action=edit&id=' . $tag->id);
+			Session::Redirect('/administrative/tag?action=edit&id=' . $tag->id);
 		}
 
 		if (isset($session->message)) {

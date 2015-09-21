@@ -6,7 +6,10 @@
  */
 
 class Document_Tag {
-	use Get, Delete, Model, Save;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
 
 	/**
 	 * Get by document

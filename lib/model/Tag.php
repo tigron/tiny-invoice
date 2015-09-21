@@ -6,12 +6,17 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Tag {
-	use Model, Get, Save, Page;
-	use Delete {
-		delete as trait_delete;
-	}
+use \Skeleton\Database\Database;
 
+class Tag {
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete {
+		delete as trait_delete;	
+	}
+	use \Skeleton\Pager\Page;
+	
 	/**
 	 * Delete
 	 *

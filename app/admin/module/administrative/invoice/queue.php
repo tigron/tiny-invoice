@@ -5,7 +5,12 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_Administrative_Invoice_Queue extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Pager\Web\Pager;  
+
+class Web_Module_Administrative_Invoice_Queue extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -29,9 +34,9 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
-		$pager = new Web_Pager('invoice_queue');
+		$pager = new Pager('invoice_queue');
 
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('price');
@@ -43,7 +48,7 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 		$pager->set_direction('desc');
 		$pager->page();
 
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
 
@@ -53,7 +58,7 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 	 * @access public
 	 */
 	public function display_create_step1() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (!isset($_SESSION['invoice_queue'])) {
 			$_SESSION['invoice_queue'] = ['items' => [], 'customer_id' => 0, 'invoice_contact_id' => 0];
@@ -64,7 +69,7 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 				$template->assign('errors', 'select_customer');
 			} else {
 				$_SESSION['invoice_queue']['customer_id'] = $_POST['customer_id'];
-				Web_Session::Redirect('/administrative/invoice/queue?action=create_step2');
+				Session::Redirect('/administrative/invoice/queue?action=create_step2');
 			}
 		}
 
@@ -82,13 +87,13 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 	 * @access public
 	 */
 	public function display_create_step2() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		if (isset($_POST['invoice_contact_id'])) {
 			if ($_POST['invoice_contact_id'] == '') {
 				$template->assign('errors', 'select_invoice_contact');
 			} else {
 				$_SESSION['invoice_queue']['invoice_contact_id'] = $_POST['invoice_contact_id'];
-				Web_Session::Redirect('/administrative/invoice/queue?action=create_step3');
+				Session::Redirect('/administrative/invoice/queue?action=create_step3');
 			}
 		}
 
@@ -108,7 +113,7 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 	 * @access public
 	 */
 	public function display_create_step3() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (isset($_POST['invoice_queue_item'])) {
 
@@ -135,7 +140,7 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 
 				unset($_SESSION['invoice_queue']);
 
-				Web_Session::Redirect('/administrative/invoice/queue');
+				Session::Redirect('/administrative/invoice/queue');
 
 			}
 
@@ -152,16 +157,16 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$invoice_queue = Invoice_Queue::get_by_id($_GET['id']);
 
 		if (isset($_POST['invoice_queue'])) {
 			$invoice_queue->load_array($_POST['invoice_queue']);
 			$invoice_queue->save();
 
-			$session = Web_Session_Sticky::Get();
+			$session = Session_Sticky::Get();
 			$session->message = 'updated';
-			Web_Session::Redirect('/administrative/invoice/queue?action=edit&id=' . $invoice_queue->id);
+			Session::Redirect('/administrative/invoice/queue?action=edit&id=' . $invoice_queue->id);
 		}
 	}
 
@@ -173,7 +178,7 @@ class Web_Module_Administrative_Invoice_Queue extends Web_Module {
 	public function display_ajax_search() {
 		$this->template = null;
 
-		$pager = new Web_Pager('customer');
+		$pager = new Pager('customer');
 		$permissions = [
 			'lastname' => 'lastname'
 		];

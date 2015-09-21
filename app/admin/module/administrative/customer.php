@@ -5,7 +5,12 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_Administrative_Customer extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Pager\Web\Pager;
+
+class Web_Module_Administrative_Customer extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -29,9 +34,9 @@ class Web_Module_Administrative_Customer extends Web_Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
-		$pager = new Web_Pager('customer');
+		$pager = new Pager('customer');
 
 		$pager->add_sort_permission('company');
 		$pager->add_sort_permission('firstname');
@@ -42,7 +47,7 @@ class Web_Module_Administrative_Customer extends Web_Module {
 		}
 		$pager->page();
 
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
 
@@ -52,7 +57,7 @@ class Web_Module_Administrative_Customer extends Web_Module {
 	 * @access public
 	 */
 	public function display_add() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 
 		if (isset($_POST['customer'])) {
 			$customer = new Customer();
@@ -62,9 +67,9 @@ class Web_Module_Administrative_Customer extends Web_Module {
 			} else {
 				$customer->save();
 
-				$session = Web_Session_Sticky::Get();
+				$session = Session_Sticky::Get();
 				$session->message = 'created';
-				Web_Session::Redirect('/administrative/customer');
+				Session::Redirect('/administrative/customer');
 			}
 		}
 
@@ -78,7 +83,7 @@ class Web_Module_Administrative_Customer extends Web_Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Web_Template::Get();
+		$template = Template::Get();
 		$customer = Customer::get_by_id($_GET['id']);
 
 		if (isset($_POST['customer'])) {
@@ -88,9 +93,9 @@ class Web_Module_Administrative_Customer extends Web_Module {
 			} else {
 				$customer->save();
 
-				$session = Web_Session_Sticky::Get();
+				$session = Session_Sticky::Get();
 				$session->message = 'updated';
-				Web_Session::Redirect('/administrative/customer?action=edit&id=' . $customer->id);
+				Session::Redirect('/administrative/customer?action=edit&id=' . $customer->id);
 			}
 		}
 		$template->assign('customer', $customer);
@@ -106,7 +111,7 @@ class Web_Module_Administrative_Customer extends Web_Module {
 	public function display_ajax_search() {
 		$this->template = null;
 
-		$pager = new Web_Pager('customer');
+		$pager = new Pager('customer');
 		$pager->add_sort_permission('lastname');
 		$pager->set_search($_GET['search']);
 		$pager->page();
