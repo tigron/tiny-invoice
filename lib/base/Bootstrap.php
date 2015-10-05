@@ -25,7 +25,7 @@ class Bootstrap {
 		/**
 		 * Register the autoloader from Composer
 		 */
-		require_once $root_path . '/lib/external/packages/autoload.php';		
+		require_once $root_path . '/lib/external/packages/autoload.php';
 
 		/**
 		 * Get the config
@@ -89,5 +89,10 @@ class Bootstrap {
 		 * Set the email path
 		 */
 		\Skeleton\Email\Config::$email_directory = $root_path . '/store/email/';
+
+		/**
+		 * Set the database migration path
+		 */
+		\Skeleton\Database\Migration\Config::$migration_directory = $root_path . '/migrations/';
 	}
 }

@@ -77,8 +77,7 @@ class Web_Module_Administrative_Document extends Module {
 			} else {
 				$document->save();
 
-				$session = Session_Sticky::Get();
-				$session->message = 'created';
+				$this->sticky_session->message = 'created';
 				Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
 			}
 		}
@@ -122,10 +121,9 @@ class Web_Module_Administrative_Document extends Module {
 	public function display_edit() {
 		$template = Template::Get();
 
-		$session = Session_Sticky::Get();
-		if (isset($session->message)) {
-			$template->assign('message', $session->message);
-			unset($session->message);
+		if (isset($this->sticky_session->message)) {
+			$template->assign('message', $this->sticky_session->message);
+			unset($this->sticky_session->message);
 		}
 
 		$document = Document::get_by_id($_GET['id']);

@@ -5,13 +5,24 @@
     "name": "tigron/skeleton",
     "description": "Tigron Skeleton",
     "type": "project",
+	"repositories": [
+  	{
+		"type": "vcs",
+		"url":  "https://github.com/tigron/skeleton-migrate.git"
+	},
+  	{
+		"type": "vcs",
+		"url":  "https://github.com/tigron/skeleton-console.git"
+	}
+	],
     "require": {
         "sami/sami": "3.0.*@dev",
         "fxp/composer-asset-plugin": "~1.0",
         "bower-asset/bootstrap": "dev-master",
-	"bower-asset/font-awesome": "*",
-	"swiftmailer/swiftmailer": "5.*",
-	"dompdf/dompdf": "dev-master"
+		"bower-asset/font-awesome": "*",
+		"swiftmailer/swiftmailer": "5.*",
+		"dompdf/dompdf": "dev-master",
+        "eloquent/composer-config-reader": "~2.0"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",
@@ -24,7 +35,9 @@
         "tigron/skeleton-core": "dev-master",
         "tigron/skeleton-error": "dev-master",
         "tigron/skeleton-template": "dev-master",
-        "tigron/skeleton-email": "dev-master"
+        "tigron/skeleton-email": "dev-master",
+        "tigron/skeleton-migrate": "dev-master",
+        "tigron/skeleton-console": "dev-master"
     },
     "extra": {
         "asset-installer-paths": {
