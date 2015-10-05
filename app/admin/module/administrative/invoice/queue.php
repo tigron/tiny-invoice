@@ -8,7 +8,7 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager;  
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Invoice_Queue extends Module {
 	/**
@@ -164,8 +164,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 			$invoice_queue->load_array($_POST['invoice_queue']);
 			$invoice_queue->save();
 
-			$session = Session_Sticky::Get();
-			$session->message = 'updated';
+			Session::set_sticky('message', 'updated');
 			Session::Redirect('/administrative/invoice/queue?action=edit&id=' . $invoice_queue->id);
 		}
 	}

@@ -8,7 +8,7 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager;   
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Supplier extends Module {
 	/**
@@ -66,8 +66,7 @@ class Web_Module_Administrative_Supplier extends Module {
 			} else {
 				$supplier->save();
 
-				$session = Session_Sticky::Get();
-				$session->message = 'created';
+				Session::set_sticky('message', 'created');
 				Session::Redirect('/administrative/supplier');
 			}
 		}
@@ -86,8 +85,7 @@ class Web_Module_Administrative_Supplier extends Module {
 			$supplier->load_array($_POST['supplier']);
 			$supplier->save();
 
-			$session = Session_Sticky::Get();
-			$session->message = 'updated';
+			Session::set_sticky('message', 'updated');
 			Session::Redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
 		}
 		$template->assign('supplier', $supplier);

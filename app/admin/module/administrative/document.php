@@ -10,7 +10,8 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager; 
+use \Skeleton\Pager\Web\Pager;
+use \Skeleton\File\Store;
 
 class Web_Module_Administrative_Document extends Module {
 	/**
@@ -76,8 +77,7 @@ class Web_Module_Administrative_Document extends Module {
 				$template->assign('document', $document);
 			} else {
 				$document->save();
-
-				$this->sticky_session->message = 'created';
+				Session::set_sticky('message', 'created');
 				Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
 			}
 		}
@@ -96,7 +96,7 @@ class Web_Module_Administrative_Document extends Module {
 			return;
 		}
 
-		$file = File_Store::upload($_FILES['file']);
+		$file = Store::upload($_FILES['file']);
 		$file->expire();
 
 		echo json_encode(['file' => $file->get_info()]);
@@ -120,11 +120,6 @@ class Web_Module_Administrative_Document extends Module {
 	 */
 	public function display_edit() {
 		$template = Template::Get();
-
-		if (isset($this->sticky_session->message)) {
-			$template->assign('message', $this->sticky_session->message);
-			unset($this->sticky_session->message);
-		}
 
 		$document = Document::get_by_id($_GET['id']);
 		$template->assign('document', $document);
@@ -192,9 +187,7 @@ class Web_Module_Administrative_Document extends Module {
 			$document_tag->save();
 		}
 
-		$session = Session_Sticky::Get();
-		$session->message = 'tags_updated';
-
+		Session::set_sticky('message', 'tags_updated');
 		Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
 	}
 

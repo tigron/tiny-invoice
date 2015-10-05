@@ -68,6 +68,7 @@
 		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=add">
 
 			<div class="panel panel-default">
+				<div class="panel-heading">{% trans "Add new supplier" %}</div>
 				<div class="panel-body">
 
 					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">

@@ -299,6 +299,7 @@ CREATE TABLE `document` (
   `paid` tinyint(4) DEFAULT NULL,
   `expiration_date` date DEFAULT NULL,
   `created` datetime NOT NULL,
+  `deleted` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -468,7 +469,7 @@ DROP TABLE IF EXISTS `supplier`;
 CREATE TABLE `supplier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `company` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `vat` int(11) NOT NULL,
+  `vat` varchar(20) NOT NULL,
   `created` datetime NOT NULL,
   `updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)

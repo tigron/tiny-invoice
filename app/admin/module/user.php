@@ -67,8 +67,7 @@ class Web_Module_User extends Module {
 			} else {
 				$user->save();
 
-				$session = Session_Sticky::Get();
-				$session->message = 'created';
+				Session::set_sticky('message', 'created');
 				Web_Session::Redirect('/user');
 			}
 		}
@@ -89,8 +88,7 @@ class Web_Module_User extends Module {
 			$user->load_array($_POST['user']);
 			$user->save();
 
-			$session = Web_Session_Sticky::Get();
-			$session->message = 'updated';
+			Session::set_sticky('message', 'updated');
 			Web_Session::Redirect('/user?action=edit&id=' . $user->id);
 		}
 		$template->assign('user', $user);
@@ -107,8 +105,6 @@ class Web_Module_User extends Module {
 			Web_Session::Redirect('/user');
 		}
 
-		$session = Session_Sticky::Get();
-
 		try {
 			$user = User::get_by_id($_GET['id']);
 			if ($user->id == $_SESSION['user']->id) {
@@ -116,9 +112,9 @@ class Web_Module_User extends Module {
 			}
 
 			$user->delete();
-			$message = 'deleted';
+			Session::set_sticky('message', 'deleted');
 		} catch (Exception $e) {
-			$message = 'error_delete';
+			Session::set_sticky('message', 'error_delete');
 		}
 
 		$session->message = $message;

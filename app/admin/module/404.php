@@ -5,9 +5,9 @@
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
  */
- 
+
 use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Web\Module; 
+use \Skeleton\Core\Web\Module;
 
 class Web_Module_404 extends Module {
 	/**
@@ -34,5 +34,8 @@ class Web_Module_404 extends Module {
 	 */
 	public function display() {
 		echo '404';
+		$file = File::get_by_id(3);
+		print_R($file);
+		die();
 	}
 }

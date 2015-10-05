@@ -8,7 +8,7 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager; 
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Purchase extends Module {
 	/**
@@ -66,9 +66,7 @@ class Web_Module_Administrative_Purchase extends Module {
 				$template->assign('errors', $errors);
 			} else {
 				$purchase->save();
-
-				$session = Session_Sticky::Get();
-				$session->message = 'created';
+				Session::set_sticky('message', 'created');
 				Session::Redirect('/administrative/purchase');
 			}
 		}
@@ -87,8 +85,7 @@ class Web_Module_Administrative_Purchase extends Module {
 			$purchase->load_array($_POST['purchase']);
 			$purchase->save();
 
-			$session = Session_Sticky::Get();
-			$session->message = 'updated';
+			Session::set_sticky('message', 'updated');
 			Session::Redirect('/administrative/purchase?action=edit&id=' . $purchase->id);
 		}
 		$template->assign('purchase', $purchase);
