@@ -4,11 +4,11 @@
  *
  * @author David Vandemaele <david@tigron.be>
  */
- 
+
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager; 
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Invoice extends Module {
 	/**
@@ -184,8 +184,7 @@ class Web_Module_Administrative_Invoice extends Module {
 			$invoice->send_reminder_mail = $_POST['invoice']['send_reminder_mail'];
 			$invoice->save();
 
-			$session = Session_Sticky::Get();
-			$session->message = 'updated';
+			Session::set_sticky('message', 'created');
 			Session::Redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
 		}
 
@@ -239,9 +238,7 @@ class Web_Module_Administrative_Invoice extends Module {
 		$invoice = Invoice::get_by_id($_GET['id']);
 		$invoice->send_invoice_email();
 
-		$session = Session_Sticky::Get();
-		$session->message = 'invoice_sent';
-
+		Session::set_sticky('message', 'invoice_sent');
 		Session::Redirect('/administrative/invoice');
 	}
 

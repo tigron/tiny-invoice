@@ -10,7 +10,6 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Core\Web\Session\Sticky;
 
 class Web_Module_Setting_Configuration extends Module {
 	/**
@@ -50,7 +49,7 @@ class Web_Module_Setting_Configuration extends Module {
 				$setting->save();
 			}
 
-			$this->sticky_session->message = 'updated';
+			Session::set_sticky('message', 'updated');
 			Session::Redirect('/setting/configuration');
 		}
 

@@ -6,6 +6,9 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use Skeleton\Database\Database;
+use Skeleton\File\Store;
+
 class Document {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
@@ -49,25 +52,29 @@ class Document {
 			$generate_preview = false;
 		}
 
-		$table = self::trait_get_database_table();
-		$db = self::trait_get_database();
+		// If we have a validate() method, execute it
+		if (method_exists($this, 'validate') AND is_callable([$this, 'validate']) and $validate) {
+			if ($this->validate($errors) === false) {
+				throw new Exception_Validation($errors);
+			}
+		}
+
+		$db = Database::get();
 
 		if (!isset($this->id) OR $this->id === null) {
-			$mode = MDB2_AUTOQUERY_INSERT;
 			if (!isset($this->details['created'])) {
 				$this->details['created'] = date('Y-m-d H:i:s');
 			}
-			$where = false;
 		} else {
-			$mode = MDB2_AUTOQUERY_UPDATE;
 			$this->details['updated'] = date('Y-m-d H:i:s');
-			$where = 'id=' . $db->quote($this->id);
 		}
 
-		$db->autoExecute($table, $this->details, $mode, $where);
-
-		if ($mode === MDB2_AUTOQUERY_INSERT) {
-			$this->id = $db->getOne('SELECT LAST_INSERT_ID();');
+		if (!isset($this->id) OR $this->id === null) {
+			$db->insert('document', $this->details);
+			$this->id = $db->get_one('SELECT LAST_INSERT_ID();');
+		} else {
+			$where = 'id=' . $db->quote($this->id);
+			$db->update('document', $this->details, $where);
 		}
 
 		$this->get_details();
@@ -125,11 +132,13 @@ class Document {
 			return;
 		}
 
-		system('/usr/bin/convert ' . $this->file->get_path() . '[0] ' . TMP_PATH . '/preview.jpg');
-		$file = File_Store::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(TMP_PATH . '/preview.jpg'));
+		$tmp_path = dirname(__FILE__) . '/../../tmp';
+
+		echo system('/usr/bin/convert ' . $this->file->get_path() . '[0] ' . $tmp_path . '/preview.jpg');
+		$file = Store::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents($tmp_path . '/preview.jpg'));
 		$this->preview_file_id = $file->id;
 		$this->save();
-		unlink(TMP_PATH . '/preview.jpg');
+		unlink($tmp_path . '/preview.jpg');
 	}
 
 }

@@ -48,7 +48,7 @@ class Web_Module_Setting_Company extends Module {
 				$setting->value = $value;
 				$setting->save();
 			}
-			$this->sticky_session->message = 'updated';
+			Session::set_sticky('message', 'updated');
 			Session::Redirect('/setting/company');
 		}
 

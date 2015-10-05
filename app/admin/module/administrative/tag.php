@@ -12,7 +12,7 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager; 
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Tag extends Module {
 
@@ -86,7 +86,6 @@ class Web_Module_Administrative_Tag extends Module {
 	 * @access private
 	 */
 	public function display_edit() {
-		$session = Session_Sticky::Get();
 		$template = Template::Get();
 		$tag = Tag::get_by_id($_GET['id']);
 
@@ -94,13 +93,8 @@ class Web_Module_Administrative_Tag extends Module {
 			$tag->load_array($_POST['tag']);
 			$tag->save();
 
-			$session->message = 'tag_updated';
-
+			Session::set_sticky('message', 'tag_updated');
 			Session::Redirect('/administrative/tag?action=edit&id=' . $tag->id);
-		}
-
-		if (isset($session->message)) {
-			$template->assign('session_message', $session->message);
 		}
 		$template->assign('tag', $tag);
 	}
