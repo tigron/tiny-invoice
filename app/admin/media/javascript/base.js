@@ -1,6 +1,4 @@
 $(document).ready(function(){
-	
-	$('form input[type="text"]:first').focus();
 
 	/**
 	 * Auto hide dismissable alerts
@@ -15,37 +13,10 @@ $(document).ready(function(){
 	/**
 	 * Confirm
 	 */
-	init_confirm();
+	$('a[data-confirm-message]').confirmModal();
 
 });
 
-function init_confirm() {
-
-	var source = $("#data-confirm-tmpl").html();
-	Handlebars.setDelimiter('(',')');
-	var template = Handlebars.compile(source);
-
-	$('a[data-confirm-message]').on('click', function(ev) {
-        ev.preventDefault();
-
-		var data = {'title': '', 'message': '', 'btn_ok': '', 'btn_href': '', 'btn_cancel': ''};
-
-		data.title = $(this).data('confirm-title');
-		data.message = $(this).data('confirm-message');
-		data.btn_ok = $(this).data('confirm-btn-ok');
-		data.btn_cancel = $(this).data('confirm-btn-cancel');
-		data.btn_href = $(this).prop('href');
-
-		if (!$('#dataConfirmModal').length) {
-			$('body').append(template(data));
-		} else {
-			$('#dataConfirmModal').replaceWith(template(data));
-		}
-
-		$('#dataConfirmModal').modal('show');
-		return false;
-    });
-}
 
 // function to change delimiters (to prevent twig collision)
 Handlebars.setDelimiter = function(start,end){
@@ -68,10 +39,3 @@ Handlebars.setDelimiter = function(start,end){
 		return Handlebars.original_compile(replacedSource);
 	};
 };
-
-Array.prototype.max = function() {
-	var max = this[0];
-	var len = this.length;
-	for (var i = 1; i < len; i++) if (this[i] > max) max = this[i];
-	return max;
-}

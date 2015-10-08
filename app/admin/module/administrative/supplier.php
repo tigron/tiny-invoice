@@ -40,6 +40,8 @@ class Web_Module_Administrative_Supplier extends Module {
 
 		$pager->add_sort_permission('company');
 		$pager->add_sort_permission('vat');
+		$pager->add_sort_permission('country.name');
+		$pager->add_sort_permission('city');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
@@ -70,6 +72,7 @@ class Web_Module_Administrative_Supplier extends Module {
 				Session::Redirect('/administrative/supplier');
 			}
 		}
+		$template->assign('countries', Country::get_grouped());
 	}
 
 	/**
@@ -89,6 +92,7 @@ class Web_Module_Administrative_Supplier extends Module {
 			Session::Redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
 		}
 		$template->assign('supplier', $supplier);
+		$template->assign('countries', Country::get_grouped());
 	}
 
 }

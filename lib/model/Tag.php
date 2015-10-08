@@ -13,10 +13,10 @@ class Tag {
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
 	use \Skeleton\Object\Delete {
-		delete as trait_delete;	
+		delete as trait_delete;
 	}
 	use \Skeleton\Pager\Page;
-	
+
 	/**
 	 * Delete
 	 *
@@ -70,7 +70,7 @@ class Tag {
 	public static function get_by_name($name) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
-		$id = $db->getOne('SELECT id FROM tag WHERE name = ?', [ $name ]);
+		$id = $db->get_one('SELECT id FROM tag WHERE name = ?', [ $name ]);
 
 		if ($id === null) {
 			throw new Exception('Tag not found');
