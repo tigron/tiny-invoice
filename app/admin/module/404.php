@@ -34,8 +34,5 @@ class Web_Module_404 extends Module {
 	 */
 	public function display() {
 		echo '404';
-		$file = File::get_by_id(3);
-		print_R($file);
-		die();
 	}
 }

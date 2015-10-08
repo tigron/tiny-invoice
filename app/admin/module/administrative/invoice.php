@@ -150,7 +150,7 @@ class Web_Module_Administrative_Invoice extends Module {
 				foreach ($invoice_items as $invoice_item) {
 					$invoice->add_invoice_item($invoice_item);
 
-					if (isset($invoice_item->invoice_queue_id)) {
+					if (!empty($invoice_item->invoice_queue_id)) {
 						$invoice_queue = Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
 						$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
 						$invoice_queue->save();

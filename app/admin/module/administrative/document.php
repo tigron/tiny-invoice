@@ -135,7 +135,8 @@ class Web_Module_Administrative_Document extends Module {
 			}
 			$document->load_array($_POST['document']);
 			$document->save();
-			$session->message = 'document_updated';
+
+			Session::set_sticky('message', 'document_updated');
 			Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
 		}
 

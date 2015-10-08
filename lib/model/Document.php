@@ -100,17 +100,21 @@ class Document {
 	 * @access public
 	 */
 	public function delete() {
-		$this->file->delete();
-
 		$document_tags = Document_Tag::get_by_document($this);
 		foreach ($document_tags as $document_tag) {
 			$document_tag->delete();
 		}
 
 		if (!is_null($this->preview_file_id)) {
-			$file = File::get_by_id($this->preview_file_id);
-			$file->delete();
+			try {
+				$file = File::get_by_id($this->preview_file_id);
+				$file->delete();
+			} catch (Exception $e) { }
 		}
+
+		try {
+			$this->file->delete();
+		} catch (Exception $e) { }
 
 		$this->trait_delete();
 	}

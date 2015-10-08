@@ -18,11 +18,19 @@
     "require": {
         "sami/sami": "3.0.*@dev",
         "fxp/composer-asset-plugin": "~1.0",
-        "bower-asset/bootstrap": "dev-master",
-		"bower-asset/font-awesome": "*",
 		"swiftmailer/swiftmailer": "5.*",
 		"dompdf/dompdf": "dev-master",
-        "eloquent/composer-config-reader": "~2.0"
+        "eloquent/composer-config-reader": "~2.0",
+
+        "bower-asset/bootstrap": "dev-master",
+		"bower-asset/font-awesome": "*",
+		"bower-asset/tigron-datetimepicker": "*",
+		"bower-asset/jquery-zoom": "dev-master",
+		"bower-asset/tigron-confirm-modal": "dev-master",
+		"bower-asset/bootstrap-tagsinput": "*",
+		"bower-asset/bootstrap3-typeahead": "*",
+		"bower-asset/handlebars": "*",
+		"bower-asset/dropzone": "*"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",

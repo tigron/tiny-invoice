@@ -63,7 +63,7 @@ class Invoice_Item {
 	public static function get_by_invoice(Invoice $invoice) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
-		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {

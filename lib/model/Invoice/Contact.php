@@ -5,6 +5,8 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use Skeleton\Database\Database;
+
 class Invoice_Contact {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
@@ -151,7 +153,7 @@ class Invoice_Contact {
 	public static function get_active_by_customer(Customer $customer) {
 		$table = self::trait_get_database_table();
 		$db = Database::Get();
-		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE customer_id = ? AND active = 1 ORDER BY created DESC', [ $customer->id ]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE customer_id = ? AND active = 1 ORDER BY created DESC', [ $customer->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {

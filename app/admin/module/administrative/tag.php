@@ -99,4 +99,30 @@ class Web_Module_Administrative_Tag extends Module {
 		$template->assign('tag', $tag);
 	}
 
+	/**
+	 * Get all
+	 *
+	 * AJAX call
+	 * @access public
+	 */
+	public function display_ajax_search_tag() {
+		$pager = new Pager('tag');
+		$pager->set_search($_GET['query']);
+		$pager->add_sort_permission('tag.name');
+		$pager->set_sort('tag.name');
+		$pager->page(true);
+		$tags = $pager->items;
+
+		$data = array();
+		foreach ($tags as $tag) {
+			$data[] = array(
+				'id' => $tag->id,
+				'name' => $tag->name,
+			);
+		}
+		echo json_encode($data);
+		exit;
+	}
+
+
 }

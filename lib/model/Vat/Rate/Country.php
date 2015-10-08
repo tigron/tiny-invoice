@@ -8,8 +8,14 @@
  * @version $Id$
  */
 
+use Skeleton\Database\Database;
+
 class Vat_Rate_Country {
-	use Model, Get, Save, Delete;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
+	use \Skeleton\Pager\Page;
 
 	/**
 	 * Get by Country
@@ -21,7 +27,7 @@ class Vat_Rate_Country {
 	public static function get_by_country(Country $country) {
 		$table = self::trait_get_database_table();
 		$db = Database::Get();
-		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE country_id=?', [ $country->id ]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE country_id=?', [ $country->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {
@@ -40,7 +46,7 @@ class Vat_Rate_Country {
 	 */
 	public static function get_by_vat_rate_country(Vat_Rate $vat_rate, Country $country) {
 		$db = Database::Get();
-		$id = $db->getOne('SELECT id FROM vat_rate_country WHERE vat_rate_id=? AND country_id=?', [ $vat_rate->id, $country->id ]);
+		$id = $db->get_one('SELECT id FROM vat_rate_country WHERE vat_rate_id=? AND country_id=?', [ $vat_rate->id, $country->id ]);
 
 		if ($id === null) {
 			throw new Exception('No Vat_Rate_Country found');

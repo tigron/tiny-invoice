@@ -5,7 +5,7 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-use \Skeleton\Database\Database; 
+use \Skeleton\Database\Database;
 
 class Invoice {
 	use \Skeleton\Object\Model;
@@ -21,7 +21,7 @@ class Invoice {
 	 */
 	public function generate_number() {
 		$db = Database::Get();
-		$number = $db->getOne('SELECT number FROM invoice ORDER BY number DESC LIMIT 1', []);
+		$number = $db->get_one('SELECT number FROM invoice ORDER BY number DESC LIMIT 1', []);
 		if ($number === null) {
 			$number = 1;
 		} else {

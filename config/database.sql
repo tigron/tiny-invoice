@@ -606,3 +606,12 @@ INSERT INTO `vat_rate_country` (`id`, `vat_rate_id`, `country_id`, `vat`) VALUES
 (57,	1,	69,	8.50),
 (58,	1,	72,	8.50),
 (59,	1,	12,	8.50);
+
+
+
+ALTER TABLE `supplier`
+ADD `street` varchar(255) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `company`,
+ADD `housenumber` varchar(32) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `street`,
+ADD `zipcode` varchar(10) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `housenumber`,
+ADD `city` varchar(255) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `zipcode`,
+ADD `country_id` int NOT NULL AFTER `city`;
