@@ -24,9 +24,9 @@
 			<div class="panel-body">
 				<form method="post" action="/administrative/invoice/queue?action=create_step1" class="form-horizontal" id="invoice-queue-create-step1">
 					<div class="form-group">
-						<label class="col-xs-3">{% trans "Customer" %}</label>
+						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
 						<div class="col-xs-6">
-							<input type="text" id="autocomplete_customer" name="customer" class="form-control typeahead" value="{% if customer is defined %}{{ customer.firstname }} {{ customer.lastname }}{% endif %}">
+							<input type="text" id="autocomplete_customer" name="customer" class="form-control typeahead" value="{% if customer is defined %}{{ customer.firstname }} {{ customer.lastname }}{% endif %}" placeholder="{% trans "Search customer..." %}">
 							<input type="hidden" id="customer_id" name="customer_id" value="{% if customer is defined %}{{ customer.id }}{% endif %}">
 						</div>
 					</div>
@@ -386,6 +386,8 @@
 				$('#customer_id').val(data.id);
 			});
 		</script>
+	{% elseif action == 'create_step3' %}
+		<script type="text/javascript" src="/handlebars/handlebars.js"></script>
 	{% endif %}
 
 {% endblock javascript %}

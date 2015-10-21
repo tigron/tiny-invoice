@@ -23,7 +23,6 @@
 
 {% endmacro display_flash_message %}
 
-<<<<<<< HEAD:app/admin/template/_default/macro.base.twig
 {% macro pager_count(item_count) %}
 
 	{{ item_count }}
@@ -31,13 +30,3 @@
 	{% else %}{% trans "results" %}{% endif %}
 
 {% endmacro %}
-=======
-
-{% macro pager_count(pager) %}
-	{% if pager.item_count == 1 %}
-		1 {% trans "result" %}
-	{% else %}
-		{{ pager.item_count }} {% trans "results" %}
-	{% endif %}
-{% endmacro %}
->>>>>>> origin/master:app/admin/template/_default/macro/base.twig

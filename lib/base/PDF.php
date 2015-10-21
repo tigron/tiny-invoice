@@ -8,16 +8,9 @@
  * @author Gerry Demaret <gerry@tigron.be>
  */
 
-<<<<<<< HEAD
 require_once realpath(dirname(__FILE__) . '/../..') . '/lib/external/dompdf.config.php';
-=======
-require_once dirname(__FILE__) . '/../external/dompdf_config.inc.php';
->>>>>>> origin/master
 
-use Skeleton\File\Store;
-
-
-class Pdf {
+class PDF {
 	/**
 	 * PDF type
 	 *
@@ -62,12 +55,7 @@ class Pdf {
 		}
 
 		if ($language == null) {
-<<<<<<< HEAD
 			$language = Language::get_by_name_short(Config::get()->default_language);
-=======
-			$config = Config::get();
-			$language = Language::get_by_name_short($config->base_language);
->>>>>>> origin/master
 		}
 
 		$this->language = $language;
@@ -113,19 +101,11 @@ class Pdf {
 			case 'dompdf':
 				$dompdf = new DOMPDF();
 				$dompdf->set_base_path(dirname(__FILE__) . '/../../../store/pdf/media/');
-<<<<<<< HEAD
                 $dompdf->set_paper($this->settings['size'], $this->settings['orientation']);
                 $dompdf->load_html($html);
                 $dompdf->render();
                 $file = File::store($filename, $dompdf->output());
                 return $file;
-=======
-				$dompdf->set_paper($this->settings['size'], $this->settings['orientation']);
-				$dompdf->load_html($html);
-				$dompdf->render();
-				$file = Store::store($filename, $dompdf->output());
-				return $file;
->>>>>>> origin/master
 		}
 	}
 }

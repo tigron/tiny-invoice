@@ -68,7 +68,7 @@ class Web_Module_Administrative_Customer extends Module {
 				$customer->save();
 
 				Session::set_sticky('message', 'created');
-				Session::Redirect('/administrative/customer');
+				Session::redirect('/administrative/customer');
 			}
 		}
 
@@ -93,11 +93,7 @@ class Web_Module_Administrative_Customer extends Module {
 				$customer->save();
 
 				Session::set_sticky('message', 'updated');
-<<<<<<< HEAD
 				Session::redirect('/administrative/customer?action=edit&id=' . $customer->id);
-=======
-				Session::Redirect('/administrative/customer?action=edit&id=' . $customer->id);
->>>>>>> origin/master
 			}
 		}
 		$template->assign('customer', $customer);

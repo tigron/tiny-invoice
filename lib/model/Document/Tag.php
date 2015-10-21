@@ -22,11 +22,7 @@ class Document_Tag {
 	 */
 	public static function get_by_document(Document $document) {
 		$table = self::trait_get_database_table();
-<<<<<<< HEAD
 		$db = Database::get();
-=======
-		$db = self::trait_get_database();
->>>>>>> origin/master
 		$ids = $db->get_column('SELECT id FROM  ' . $table . ' WHERE document_id = ?', [ $document->id ]);
 
 		$items = [];
@@ -45,11 +41,7 @@ class Document_Tag {
 	 */
 	public static function get_by_tag(Tag $tag) {
 		$table = self::trait_get_database_table();
-<<<<<<< HEAD
 		$db = Database::get();
-=======
-		$db = self::trait_get_database();
->>>>>>> origin/master
 		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE tag_id = ?', [ $tag->id ]);
 
 		$items = [];

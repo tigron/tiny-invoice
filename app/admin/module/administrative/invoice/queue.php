@@ -175,13 +175,8 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 			$invoice_queue->load_array($_POST['invoice_queue']);
 			$invoice_queue->save();
 
-<<<<<<< HEAD
-			$session = Session_Sticky::get();
-			$session->message = 'updated';
-=======
 			Session::set_sticky('message', 'updated');
->>>>>>> origin/master
-			Session::Redirect('/administrative/invoice/queue?action=edit&id=' . $invoice_queue->id);
+			Session::redirect('/administrative/invoice/queue?action=edit&id=' . $invoice_queue->id);
 		}
 	}
 

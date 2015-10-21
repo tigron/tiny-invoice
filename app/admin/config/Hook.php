@@ -23,14 +23,12 @@ class Hook_Admin {
 
 			User::set($_SESSION['user']);
 		}
+
+		// Assign the sticky session object to our template
 		$template = \Skeleton\Core\Web\Template::get();
+		$sticky_session = new \Skeleton\Core\Web\Session\Sticky();
+		$template->add_environment('sticky_session', $sticky_session);
 
-<<<<<<< HEAD
-		// Clear the new session so we can start using it again
-		//\Skeleton\Core\Web\Session::clear_sticky();
-
-=======
->>>>>>> origin/master
 		// Assign settings to template. Used for company information in header
 		$template->assign('settings', Setting::get_as_array());
 
