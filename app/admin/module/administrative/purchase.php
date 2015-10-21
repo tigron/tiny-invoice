@@ -72,14 +72,9 @@ class Web_Module_Administrative_Purchase extends Module {
 				$template->assign('errors', $errors);
 			} else {
 				$purchase->save();
-<<<<<<< HEAD
 
 				Session::set_sticky('message', 'created');
 				Session::redirect('/administrative/purchase');
-=======
-				Session::set_sticky('message', 'created');
-				Session::Redirect('/administrative/purchase');
->>>>>>> origin/master
 			}
 		}
 
@@ -102,14 +97,9 @@ class Web_Module_Administrative_Purchase extends Module {
 			} else {
 				$purchase->save();
 
-<<<<<<< HEAD
 				Session::set_sticky('message', 'updated');
 				Session::redirect('/administrative/purchase?action=edit&id=' . $purchase->id);
 			}
-=======
-			Session::set_sticky('message', 'updated');
-			Session::Redirect('/administrative/purchase?action=edit&id=' . $purchase->id);
->>>>>>> origin/master
 		}
 
 		$template->assign('purchase', $purchase);
@@ -126,6 +116,16 @@ class Web_Module_Administrative_Purchase extends Module {
 
 		Session::set_sticky('message', 'deleted');
 		Session::redirect('/administrative/purchase');
+	}
+
+	/**
+	 * Download document
+	 *
+	 * @access public
+	 */
+	public function display_download() {
+		$purchase = Purchase::get_by_id($_GET['id']);
+		$purchase->document->file->client_download();
 	}
 
 }

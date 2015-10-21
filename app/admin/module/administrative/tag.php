@@ -1,12 +1,8 @@
 <?php
 /**
- * Tag management Actions module
+ * Tag module
  *
- * @package KNX-Web-Admin
- * @subpackage modules
- * @author Gerry Demaret <gerry@tigron.be>
- * @author Christophe Gosiau <christophe@tigron.be>
- * @version $Id: user.php 529 2010-03-16 17:09:26Z knx-onlineshop $
+ * @author David Vandemaele <david@tigron.be>
  */
 
 use \Skeleton\Core\Web\Template;
@@ -45,7 +41,6 @@ class Web_Module_Administrative_Tag extends Module {
 		}
 
 		$pager->add_sort_permission('name');
-
 		$pager->page();
 
 		$template = Template::Get();
@@ -62,7 +57,7 @@ class Web_Module_Administrative_Tag extends Module {
 		$tag = Tag::get_by_id($_GET['id']);
 		$tag->delete();
 
-		Session::Redirect('/administrative/tag');
+		Session::redirect('/administrative/tag');
 	}
 
 	/**
@@ -76,7 +71,7 @@ class Web_Module_Administrative_Tag extends Module {
 		$tag->load_array($_POST['tag']);
 		$tag->save();
 
-		Session::Redirect('/administrative/tag');
+		Session::redirect('/administrative/tag');
 	}
 
 	/**
@@ -86,45 +81,20 @@ class Web_Module_Administrative_Tag extends Module {
 	 * @access private
 	 */
 	public function display_edit() {
-		$template = Template::Get();
+		$template = Template::get();
 		$tag = Tag::get_by_id($_GET['id']);
 
 		if (isset($_POST['tag'])) {
 			$tag->load_array($_POST['tag']);
 			$tag->save();
 
-			Session::set_sticky('message', 'tag_updated');
-			Session::Redirect('/administrative/tag?action=edit&id=' . $tag->id);
+			Session::set_sticky('message', 'updated');
+			Session::redirect('/administrative/tag?action=edit&id=' . $tag->id);
 		}
+
 		$template->assign('tag', $tag);
 	}
 
-	/**
-	 * Get all
-	 *
-	 * AJAX call
-	 * @access public
-	 */
-	public function display_ajax_search_tag() {
-		$pager = new Pager('tag');
-		$pager->set_search($_GET['query']);
-		$pager->add_sort_permission('tag.name');
-		$pager->set_sort('tag.name');
-		$pager->page(true);
-		$tags = $pager->items;
-
-		$data = array();
-		foreach ($tags as $tag) {
-			$data[] = array(
-				'id' => $tag->id,
-				'name' => $tag->name,
-			);
-		}
-		echo json_encode($data);
-		exit;
-	}
-
-<<<<<<< HEAD
 	/**
 	 * Search tag (ajax)
 	 *
@@ -147,7 +117,5 @@ class Web_Module_Administrative_Tag extends Module {
 		}
 		echo json_encode($data);
 	}
-=======
->>>>>>> origin/master
 
 }

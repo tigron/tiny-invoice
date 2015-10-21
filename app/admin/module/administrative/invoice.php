@@ -148,15 +148,13 @@ class Web_Module_Administrative_Invoice extends Module {
 
 				foreach ($invoice_items as $invoice_item) {
 					$invoice->add_invoice_item($invoice_item);
-<<<<<<< HEAD
-=======
 
 					if (!empty($invoice_item->invoice_queue_id)) {
 						$invoice_queue = Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
 						$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
 						$invoice_queue->save();
 					}
->>>>>>> origin/master
+
 				}
 
 				unset($_SESSION['invoice']);
@@ -186,13 +184,8 @@ class Web_Module_Administrative_Invoice extends Module {
 			$invoice->send_reminder_mail = $_POST['invoice']['send_reminder_mail'];
 			$invoice->save();
 
-<<<<<<< HEAD
 			Session::set_sticky('message', 'updated');
 			Session::redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
-=======
-			Session::set_sticky('message', 'created');
-			Session::Redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
->>>>>>> origin/master
 		}
 
 		if (isset($_POST['transfer'])) {
@@ -246,11 +239,7 @@ class Web_Module_Administrative_Invoice extends Module {
 		$invoice->send_invoice_email();
 
 		Session::set_sticky('message', 'invoice_sent');
-<<<<<<< HEAD
 		Session::redirect('/administrative/invoice');
-=======
-		Session::Redirect('/administrative/invoice');
->>>>>>> origin/master
 	}
 
 }

@@ -2,6 +2,7 @@ config/Config.php
 tmp/twig/*
 tmp/log/*
 tmp/languages/*
+tmp/picture/*
 store/file/*
 store/documentation/*
 lib/external/*

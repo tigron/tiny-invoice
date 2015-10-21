@@ -20,7 +20,7 @@
 
 		<form class="form" method="post" action="/administrative/purchase?action=edit&id={{ purchase.id }}">
 
-
+			TODO
 
 			<div class="form-group">
 				<button class="btn btn-primary">
@@ -166,7 +166,6 @@
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
-<<<<<<< HEAD
 				<div class="pull-right">
 					<a href="/administrative/purchase?action=add" title="">
 						<span class="glyphicon glyphicon-plus-sign"></span>
@@ -174,9 +173,6 @@
 					</a>
 				</div>
 				{{ base.pager_count(pager.item_count) }}
-=======
-				{{ base.pager_count(pager) }}
->>>>>>> origin/master
 			</div>
 			<div class="panel-body">
 			{% for purchase in pager.items %}
@@ -271,85 +267,10 @@
 		});
 	</script>
 
-	{#
-
-		<script type="text/javascript" src="/bootstrap-tokenfield.min.js"></script>
-		<script type="text/javascript" src="/bloodhound.min.js"></script>
-		<script type="text/javascript" src="/typeahead.min.js"></script>
-		<script type="text/javascript">
-
-			var tags = new Bloodhound({
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				remote: '/administrative/tag?action=ajax_search&search=%QUERY'
-			});
-
-			tags.initialize();
-
-			$('#autocomplete-tag').tokenfield({
-				typeahead: [null, { source: tags.ttAdapter(), displayKey: 'label', beautify: false }]
-			});
-
-			/*var tags = new Bloodhound({
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				remote: '/administrative/tag?action=ajax_search&search=%QUERY'
-			});
-
-			tags.initialize();
-
-			$('#autocomplete_tag').typeahead({
-				hint: true,
-				highlight: true,
-				minLength: 2
-			},{
-				name:	'tag',
-				displayKey: 'value',
-				source:	tags.ttAdapter()
-			});
-			$('#autocomplete_tag').on('typeahead:selected typeahead:autocompleted', function(e,data) {
-				var source = $("#tag-template").html();
-				Handlebars.setDelimiter('(',')');
-				var template = Handlebars.compile(source);
-				var response = {
-					id: data.id,
-					name: data.value
-				};
-				$('#tags ul').append( template(response) );
-				$('#tag-filter-form input').val('');
-			});
-
-			$('#autocomplete-tag').on('blur', function() {
-				$(this).typeahead('val', '');
-			});
-
-			function toggle_input_tag() {
-				$('#autocomplete-tag').val('');
-				if($('#tag-filter-form').hasClass('hide')) {
-					$('#tag-filter-form').removeClass('hide');
-				} else {
-					$('#tag-filter-form').addClass('hide');
-				}
-				$('#autocomplete-tag').focus();
-			}*/
-
-		</script>
-		<script type="text/javascript" src="/handlebars/handlebars.min.js"></script>
-		<script id="tag-template" type="text/x-handlebars-template">
-			<li data-tag-id="((id))">
-				((name))
-				<input type="hidden" name="tags[]" value="((id))">
-				<a href="javascript:void(0);" title="{% trans "Delete tag" %}"><span class="glyphicon glyphicon-remove"></span></a>
-			</li>
-		</script>
-
-	#}
-
 {% endblock javascript %}
 
 {% block head %}
 
-	<link rel="stylesheet" type="text/css" href="/typeahead.css">
 	<link rel="stylesheet" type="text/css" href="/typeahead.css">
 	<link rel="stylesheet" type="text/css" href="/bootstrap-tokenfield.min.css">
 

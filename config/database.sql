@@ -297,7 +297,6 @@ CREATE TABLE `document` (
   `title` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
-  `deleted` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -331,7 +330,6 @@ CREATE TABLE `invoice` (
   `customer_id` int(11) NOT NULL,
   `invoice_contact_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL,
-  `type` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
   `number` int(11) NOT NULL,
   `reference` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `paid` tinyint(4) NOT NULL,
@@ -473,16 +471,12 @@ DROP TABLE IF EXISTS `supplier`;
 CREATE TABLE `supplier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `company` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-<<<<<<< HEAD
   `street` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `housenumber` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `zipcode` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `city` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `country_id` int(11) NOT NULL,
   `vat` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-=======
-  `vat` varchar(20) NOT NULL,
->>>>>>> origin/master
   `created` datetime NOT NULL,
   `updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -526,7 +520,7 @@ CREATE TABLE `user` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `user` (`id`, `language_id`, `firstname`, `lastname`, `username`, `email`, `password`, `admin`, `created`, `updated`) VALUES
-(1,	1,	'',	'',	'user',	'',	'12dea96fec20593566ab75692c9949596833adc9',	0,	'0000-00-00 00:00:00',	NULL);
+(2,	1,	'David',	'Vandemaele',	'david.vandemaele',	'david@pixelwest.be',	'$2y$10$X9uHD5H8sxdhWBWkPmDtMOE9IOKoyM1KPDgWbtOv3dQPzUH5Xs.Tq',	1,	'2015-10-17 14:20:29',	'2015-10-21 22:43:58');
 
 DROP TABLE IF EXISTS `vat_check_cache`;
 CREATE TABLE `vat_check_cache` (
@@ -620,15 +614,4 @@ INSERT INTO `vat_rate_country` (`id`, `vat_rate_id`, `country_id`, `vat`) VALUES
 (58,	1,	72,	8.50),
 (59,	1,	12,	8.50);
 
-<<<<<<< HEAD
--- 2015-10-21 23:32:57
-=======
-
-
-ALTER TABLE `supplier`
-ADD `street` varchar(255) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `company`,
-ADD `housenumber` varchar(32) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `street`,
-ADD `zipcode` varchar(10) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `housenumber`,
-ADD `city` varchar(255) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `zipcode`,
-ADD `country_id` int NOT NULL AFTER `city`;
->>>>>>> origin/master
+-- 2015-10-22 00:19:29

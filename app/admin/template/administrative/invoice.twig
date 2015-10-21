@@ -544,7 +544,13 @@
 		</div>
 
 		{% if env.sticky_session.message is defined %}
-			{{ base.display_flash_message(env.sticky_session.message, 'invoice') }}
+			{% if env.sticky_session.message == 'invoice_sent' %}
+				<div class="alert alert-success alert-dismissable">
+					{% trans "The invoices has been sent successfully." %}
+				</div>
+			{% else %}
+				{{ base.display_flash_message(env.sticky_session.message, 'invoice') }}
+			{% endif %}
 		{% endif %}
 
 		<div class="panel panel-default">
@@ -555,11 +561,7 @@
 						{% trans "Add invoice" %}
 					</a>
 				</div>
-<<<<<<< HEAD
 				{{ base.pager_count(pager.item_count) }}
-=======
-				{{ base.pager_count(pager) }}
->>>>>>> origin/master
 			</div>
 			<div class="panel-body">
 			{% for invoice in pager.items %}
@@ -640,7 +642,6 @@
 	{% if action == 'create_step1' %}
 		<script type="text/javascript" src="/bloodhound.min.js"></script>
 		<script type="text/javascript" src="/typeahead.min.js"></script>
-		<script type="text/javascript" src="/handlebars/handlebars.js"></script>
 		<script type="text/javascript">
 
 			var customers = new Bloodhound({

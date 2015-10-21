@@ -11,10 +11,6 @@ use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 use \Skeleton\Pager\Web\Pager;
-<<<<<<< HEAD
-=======
-use \Skeleton\File\Store;
->>>>>>> origin/master
 
 class Web_Module_Administrative_Document extends Module {
 	/**
@@ -80,14 +76,9 @@ class Web_Module_Administrative_Document extends Module {
 				$template->assign('document', $document);
 			} else {
 				$document->save();
-<<<<<<< HEAD
 
 				Session::set_sticky('message', 'created');
 				Session::redirect('/administrative/document?action=edit&id=' . $document->id);
-=======
-				Session::set_sticky('message', 'created');
-				Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
->>>>>>> origin/master
 			}
 		}
 	}
@@ -105,11 +96,7 @@ class Web_Module_Administrative_Document extends Module {
 			return;
 		}
 
-<<<<<<< HEAD
-		$file = File::upload($_FILES['file']);
-=======
-		$file = Store::upload($_FILES['file']);
->>>>>>> origin/master
+		$file = \Skeleton\File\File::upload($_FILES['file']);
 		$file->expire();
 
 		echo json_encode(['file' => $file->get_info(true)]);
@@ -134,11 +121,7 @@ class Web_Module_Administrative_Document extends Module {
 	 * @access public
 	 */
 	public function display_edit() {
-<<<<<<< HEAD
 		$template = Template::get();
-=======
-		$template = Template::Get();
->>>>>>> origin/master
 
 		$document = Document::get_by_id($_GET['id']);
 		$template->assign('document', $document);
@@ -146,14 +129,9 @@ class Web_Module_Administrative_Document extends Module {
 		if (isset($_POST['document'])) {
 			$document->load_array($_POST['document']);
 			$document->save();
-<<<<<<< HEAD
-			Session::set_sticky('message', 'document_updated');
-			Session::redirect('/administrative/document?action=edit&id=' . $document->id);
-=======
 
 			Session::set_sticky('message', 'document_updated');
-			Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
->>>>>>> origin/master
+			Session::redirect('/administrative/document?action=edit&id=' . $document->id);
 		}
 
 		$tags = Tag::get_all();
@@ -169,7 +147,7 @@ class Web_Module_Administrative_Document extends Module {
 		$document = Document::get_by_id($_POST['id']);
 
 		if (isset($_FILES['document']) AND $_FILES['document']['error'] == 0) {
-			$file = File::upload($_FILES['document']);
+			$file = \Skeleton\File\File::upload($_FILES['document']);
 
 			$document->file->delete();
 
@@ -199,13 +177,8 @@ class Web_Module_Administrative_Document extends Module {
 			}
 		}
 
-<<<<<<< HEAD
 		Session::set_sticky('message', 'tag_updated');
 		Session::redirect('/administrative/document?action=edit&id=' . $document->id);
-=======
-		Session::set_sticky('message', 'tags_updated');
-		Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
->>>>>>> origin/master
 	}
 
 	/**

@@ -69,11 +69,7 @@ class Web_Module_User extends Module {
 				$user->save();
 
 				Session::set_sticky('message', 'created');
-<<<<<<< HEAD
 				Session::redirect('/user');
-=======
-				Web_Session::Redirect('/user');
->>>>>>> origin/master
 			}
 		}
 
@@ -101,14 +97,9 @@ class Web_Module_User extends Module {
 			} else {
 				$user->save();
 
-<<<<<<< HEAD
 				Session::set_sticky('message', 'updated');
 				Session::redirect('/user?action=edit&id=' . $user->id);
 			}
-=======
-			Session::set_sticky('message', 'updated');
-			Web_Session::Redirect('/user?action=edit&id=' . $user->id);
->>>>>>> origin/master
 		}
 
 		$template->assign('user', $user);
