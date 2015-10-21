@@ -1,9 +1,12 @@
 $(document).ready(function(){
+<<<<<<< HEAD
 	
 	/**
 	 * Focus first input element of each form
 	 */
 	$('form input[type="text"]:first').focus();
+=======
+>>>>>>> origin/master
 
 	/**
 	 * Auto hide dismissable alerts
@@ -18,6 +21,7 @@ $(document).ready(function(){
 	/**
 	 * Initialize confirm modal
 	 */
+<<<<<<< HEAD
 	$('a[data-confirm-message],button[data-confirm-message],input[data-confirm-message]').confirmModal();
 
 	/**
@@ -30,6 +34,12 @@ $(document).ready(function(){
 	});
 
 });
+=======
+	$('a[data-confirm-message]').confirmModal();
+
+});
+
+>>>>>>> origin/master
 
 // function to change delimiters (to prevent twig collision)
 Handlebars.setDelimiter = function(start,end){
@@ -52,10 +62,3 @@ Handlebars.setDelimiter = function(start,end){
 		return Handlebars.original_compile(replacedSource);
 	};
 };
-
-Array.prototype.max = function() {
-	var max = this[0];
-	var len = this.length;
-	for (var i = 1; i < len; i++) if (this[i] > max) max = this[i];
-	return max;
-}

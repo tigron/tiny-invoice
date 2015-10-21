@@ -6,7 +6,12 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+<<<<<<< HEAD
 use \Skeleton\Database\Database;
+=======
+use Skeleton\Database\Database;
+use Skeleton\File\Store;
+>>>>>>> origin/master
 
 class Document {
 	use \Skeleton\Object\Model;
@@ -134,21 +139,30 @@ class Document {
 	 * @access public
 	 */
 	public function delete() {
+<<<<<<< HEAD
 		if ($this->is_purchase()) {
 			throw new Exception('This document is linked to a purchese');
 		}
 
 		$this->file->delete();
 
+=======
+>>>>>>> origin/master
 		$document_tags = Document_Tag::get_by_document($this);
 		foreach ($document_tags as $document_tag) {
 			$document_tag->delete();
 		}
 
 		if (!is_null($this->preview_file_id)) {
-			$file = File::get_by_id($this->preview_file_id);
-			$file->delete();
+			try {
+				$file = File::get_by_id($this->preview_file_id);
+				$file->delete();
+			} catch (Exception $e) { }
 		}
+
+		try {
+			$this->file->delete();
+		} catch (Exception $e) { }
 
 		$this->trait_delete();
 	}
@@ -170,6 +184,7 @@ class Document {
 			return;
 		}
 
+<<<<<<< HEAD
 		system('/usr/bin/convert ' . $this->file->get_path() . '[0] ' . \Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg');
 		$file = File::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(\Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg'));
 		$this->preview_file_id = $file->id;
@@ -190,6 +205,15 @@ class Document {
 		} catch (Exception $e) {
 			return false;
 		}
+=======
+		$tmp_path = dirname(__FILE__) . '/../../tmp';
+
+		echo system('/usr/bin/convert ' . $this->file->get_path() . '[0] ' . $tmp_path . '/preview.jpg');
+		$file = Store::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents($tmp_path . '/preview.jpg'));
+		$this->preview_file_id = $file->id;
+		$this->save();
+		unlink($tmp_path . '/preview.jpg');
+>>>>>>> origin/master
 	}
 
 }

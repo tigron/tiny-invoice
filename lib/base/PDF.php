@@ -6,13 +6,18 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
- * @author David Vandemaele <david@tigron.be>
- * @version $Id$
  */
 
+<<<<<<< HEAD
 require_once realpath(dirname(__FILE__) . '/../..') . '/lib/external/dompdf.config.php';
+=======
+require_once dirname(__FILE__) . '/../external/dompdf_config.inc.php';
+>>>>>>> origin/master
 
-class PDF {
+use Skeleton\File\Store;
+
+
+class Pdf {
 	/**
 	 * PDF type
 	 *
@@ -27,7 +32,7 @@ class PDF {
 	 * @access private
 	 * @var array $settings
 	 */
-	private $settings = [];
+	private $settings = array();
 
 	/**
 	 * Language
@@ -43,7 +48,7 @@ class PDF {
 	 * @access private
 	 * @var array $assigns
 	 */
-	private $assigns = [];
+	private $assigns = array();
 
 	/**
 	 * Constructor
@@ -51,13 +56,18 @@ class PDF {
 	 * @access public
 	 * @param string $type
 	 */
-	public function __construct($type, Language $language = null, $settings = [ 'size' => 'A4', 'orientation' => 'portrait' ]) {
+	public function __construct($type, Language $language = null, $settings = array('size' => 'A4', 'orientation' => 'portrait')) {
 		if ($type === null) {
 			throw new Exception('No PDF type specified');
 		}
 
 		if ($language == null) {
+<<<<<<< HEAD
 			$language = Language::get_by_name_short(Config::get()->default_language);
+=======
+			$config = Config::get();
+			$language = Language::get_by_name_short($config->base_language);
+>>>>>>> origin/master
 		}
 
 		$this->language = $language;
@@ -81,7 +91,7 @@ class PDF {
 	 *
 	 * @access public
 	 */
-	public function render($output = 'file', $filename = null) {
+	public function render($output = 'string', $filename = null) {
 		if ($filename == null) {
 			$filename = $this->type . '_' . microtime(true) . '.pdf';
 		}
@@ -103,11 +113,19 @@ class PDF {
 			case 'dompdf':
 				$dompdf = new DOMPDF();
 				$dompdf->set_base_path(dirname(__FILE__) . '/../../../store/pdf/media/');
+<<<<<<< HEAD
                 $dompdf->set_paper($this->settings['size'], $this->settings['orientation']);
                 $dompdf->load_html($html);
                 $dompdf->render();
                 $file = File::store($filename, $dompdf->output());
                 return $file;
+=======
+				$dompdf->set_paper($this->settings['size'], $this->settings['orientation']);
+				$dompdf->load_html($html);
+				$dompdf->render();
+				$file = Store::store($filename, $dompdf->output());
+				return $file;
+>>>>>>> origin/master
 		}
 	}
 }

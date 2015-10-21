@@ -297,6 +297,7 @@ CREATE TABLE `document` (
   `title` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
+  `deleted` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -472,12 +473,16 @@ DROP TABLE IF EXISTS `supplier`;
 CREATE TABLE `supplier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `company` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+<<<<<<< HEAD
   `street` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `housenumber` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `zipcode` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `city` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `country_id` int(11) NOT NULL,
   `vat` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+=======
+  `vat` varchar(20) NOT NULL,
+>>>>>>> origin/master
   `created` datetime NOT NULL,
   `updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -615,4 +620,15 @@ INSERT INTO `vat_rate_country` (`id`, `vat_rate_id`, `country_id`, `vat`) VALUES
 (58,	1,	72,	8.50),
 (59,	1,	12,	8.50);
 
+<<<<<<< HEAD
 -- 2015-10-21 23:32:57
+=======
+
+
+ALTER TABLE `supplier`
+ADD `street` varchar(255) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `company`,
+ADD `housenumber` varchar(32) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `street`,
+ADD `zipcode` varchar(10) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `housenumber`,
+ADD `city` varchar(255) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `zipcode`,
+ADD `country_id` int NOT NULL AFTER `city`;
+>>>>>>> origin/master
