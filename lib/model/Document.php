@@ -6,6 +6,8 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Document {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
@@ -22,8 +24,8 @@ class Document {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = array()) {
-		$required_fields = array('title', 'file_id');
+	public function validate(&$errors = []) {
+		$required_fields = [ 'title', 'file_id' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
@@ -49,25 +51,29 @@ class Document {
 			$generate_preview = false;
 		}
 
-		$table = self::trait_get_database_table();
-		$db = self::trait_get_database();
+		// If we have a validate() method, execute it
+		if (method_exists($this, 'validate') AND is_callable([$this, 'validate']) and $validate) {
+			if ($this->validate($errors) === false) {
+				throw new Exception_Validation($errors);
+			}
+		}
+
+		$db = Database::get();
 
 		if (!isset($this->id) OR $this->id === null) {
-			$mode = MDB2_AUTOQUERY_INSERT;
 			if (!isset($this->details['created'])) {
 				$this->details['created'] = date('Y-m-d H:i:s');
 			}
-			$where = false;
 		} else {
-			$mode = MDB2_AUTOQUERY_UPDATE;
 			$this->details['updated'] = date('Y-m-d H:i:s');
-			$where = 'id=' . $db->quote($this->id);
 		}
 
-		$db->autoExecute($table, $this->details, $mode, $where);
-
-		if ($mode === MDB2_AUTOQUERY_INSERT) {
-			$this->id = $db->getOne('SELECT LAST_INSERT_ID();');
+		if (!isset($this->id) OR $this->id === null) {
+			$db->insert('document', $this->details);
+			$this->id = $db->get_one('SELECT LAST_INSERT_ID();');
+		} else {
+			$where = 'id=' . $db->quote($this->id);
+			$db->update('document', $this->details, $where);
 		}
 
 		$this->get_details();
@@ -88,11 +94,50 @@ class Document {
 	}
 
 	/**
+	 * Check if document is linked with tag
+	 *
+	 * @access public
+	 * @param Tag $tag
+	 * @return bool $has_tag
+	 */
+	public function has_tag(Tag $tag) {
+		$document_tags = $this->get_document_tags();
+		foreach ($document_tags as $document_tag) {
+			if ($document_tag->tag_id == $tag->id) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Link document with tag
+	 *
+	 * @access public
+	 * @param Tag $tag
+	 */
+	public function add_tag(Tag $tag) {
+		if ($this->has_tag($tag)) {
+			return;
+		}
+
+		$document_tag = new Document_Tag();
+		$document_tag->document_id = $this->id;
+		$document_tag->tag_id = $tag->id;
+		$document_tag->save();
+	}
+
+	/**
 	 * Delete
 	 *
 	 * @access public
 	 */
 	public function delete() {
+		if ($this->is_purchase()) {
+			throw new Exception('This document is linked to a purchese');
+		}
+
 		$this->file->delete();
 
 		$document_tags = Document_Tag::get_by_document($this);
@@ -125,11 +170,26 @@ class Document {
 			return;
 		}
 
-		system('/usr/bin/convert ' . $this->file->get_path() . '[0] ' . TMP_PATH . '/preview.jpg');
-		$file = File_Store::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(TMP_PATH . '/preview.jpg'));
+		system('/usr/bin/convert ' . $this->file->get_path() . '[0] ' . \Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg');
+		$file = File::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(\Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg'));
 		$this->preview_file_id = $file->id;
 		$this->save();
-		unlink(TMP_PATH . '/preview.jpg');
+		unlink(\Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg');
+	}
+
+	/**
+	 * Is linked with purchase
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function is_purchase() {
+		try {
+			$purchase = Purchase::get_by_document($this);
+			return true;
+		} catch (Exception $e) {
+			return false;
+		}
 	}
 
 }

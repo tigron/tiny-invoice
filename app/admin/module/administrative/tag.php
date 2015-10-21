@@ -12,7 +12,7 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager; 
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Tag extends Module {
 
@@ -103,6 +103,29 @@ class Web_Module_Administrative_Tag extends Module {
 			$template->assign('session_message', $session->message);
 		}
 		$template->assign('tag', $tag);
+	}
+
+	/**
+	 * Search tag (ajax)
+	 *
+	 * @access public
+	 */
+	public function display_ajax_search() {
+		$this->template = null;
+
+		$pager = new Pager('tag');
+		$pager->add_sort_permission('name');
+		$pager->set_search($_GET['search']);
+		$pager->page();
+
+		$data = [];
+		foreach ($pager->items as $tag) {
+			$data[] = [
+				'value' => $tag->id,
+				'label' => $tag->name
+			];
+		}
+		echo json_encode($data);
 	}
 
 }

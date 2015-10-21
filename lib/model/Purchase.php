@@ -5,6 +5,8 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Purchase {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
@@ -19,8 +21,8 @@ class Purchase {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = array()) {
-		$required_fields = array('supplier_id', 'date', 'document_id');
+	public function validate(&$errors = []) {
+		$required_fields = [ 'supplier_id', 'expiration_date', 'document_id', 'price_incl', 'price_excl' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
@@ -32,6 +34,25 @@ class Purchase {
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * Get purchase by document
+	 *
+	 * @access public
+	 * @param Document $document
+	 * @return Purchase
+	 */
+	public static function get_by_document(Document $document) {
+		$db = Database::get();
+		$table = self::trait_get_database_table();
+		$id = $db->get_one('SELECT id FROM ' . $table . ' WHERE document_id = ?', [ $document->id ]);
+		if ($id === null) {
+			throw new Exception('Unknown Purchase');
+		}
+
+		return self::get_by_id($id);
+
 	}
 
 }

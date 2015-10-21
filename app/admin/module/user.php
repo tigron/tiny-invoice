@@ -12,21 +12,20 @@ use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_User extends Module {
 	/**
-	 * Login required ?
-	 * Default = yes
+	 * Login required
 	 *
-	 * @access public
+	 * @access protected
 	 * @var bool $login_required
 	 */
-	public $login_required = true;
+	protected $login_required = true;
 
 	/**
-	 * Template to use
+	 * Template
 	 *
-	 * @access public
+	 * @access protected
 	 * @var string $template
 	 */
-	public $template = 'user.twig';
+	protected $template = 'user.twig';
 
 	/**
 	 * Display method
@@ -61,15 +60,16 @@ class Web_Module_User extends Module {
 
 		if (isset($_POST['user'])) {
 			$user = new User();
+			$user->set_password($_POST['user']['password']);
+			unset($_POST['user']['password']);
 			$user->load_array($_POST['user']);
 			if ($user->validate($errors) === false) {
 				$template->assign('errors', $errors);
 			} else {
 				$user->save();
 
-				$session = Session_Sticky::Get();
-				$session->message = 'created';
-				Web_Session::Redirect('/user');
+				Session::set_sticky('message', 'created');
+				Session::redirect('/user');
 			}
 		}
 
@@ -86,13 +86,22 @@ class Web_Module_User extends Module {
 		$user = User::get_by_id($_GET['id']);
 
 		if (isset($_POST['user'])) {
+			if ($_POST['user']['password'] == 'DONOTUPDATEME') {
+				unset($_POST['user']['password']);
+			} else {
+				$user->set_password($_POST['user']['password']);
+			}
 			$user->load_array($_POST['user']);
-			$user->save();
+			if ($user->validate($errors) === false) {
+				$template->assign('errors', $errors);
+			} else {
+				$user->save();
 
-			$session = Web_Session_Sticky::Get();
-			$session->message = 'updated';
-			Web_Session::Redirect('/user?action=edit&id=' . $user->id);
+				Session::set_sticky('message', 'updated');
+				Session::redirect('/user?action=edit&id=' . $user->id);
+			}
 		}
+
 		$template->assign('user', $user);
 		$template->assign('languages', Language::get_all());
 	}
@@ -104,10 +113,8 @@ class Web_Module_User extends Module {
 	 */
 	public function display_delete() {
 		if ($_SESSION['user']->admin != 1) {
-			Web_Session::Redirect('/user');
+			Session::redirect('/user');
 		}
-
-		$session = Session_Sticky::Get();
 
 		try {
 			$user = User::get_by_id($_GET['id']);
@@ -116,12 +123,11 @@ class Web_Module_User extends Module {
 			}
 
 			$user->delete();
-			$message = 'deleted';
+			Session::set_sticky('message', 'deleted');
 		} catch (Exception $e) {
-			$message = 'error_delete';
+			Session::set_sticky('message', 'error_delete');
 		}
 
-		$session->message = $message;
-		Session::Redirect('/user');
+		Session::redirect('/user');
 	}
 }

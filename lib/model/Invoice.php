@@ -5,7 +5,7 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-use \Skeleton\Database\Database; 
+use \Skeleton\Database\Database;
 
 class Invoice {
 	use \Skeleton\Object\Model;
@@ -20,8 +20,9 @@ class Invoice {
 	 * @access private
 	 */
 	public function generate_number() {
-		$db = Database::Get();
-		$number = $db->getOne('SELECT number FROM invoice ORDER BY number DESC LIMIT 1', []);
+		$db = Database::get();
+		$table = self::trait_get_database_table();
+		$number = $db->get_one('SELECT number FROM ' . $table . ' ORDER BY number DESC LIMIT 1', []);
 		if ($number === null) {
 			$number = 1;
 		} else {
@@ -50,6 +51,12 @@ class Invoice {
 		$this->price_excl = $price_excl;
 		$this->price_incl = $price_incl;
 		$this->save();
+
+		if (!is_null($invoice_item->invoice_queue_id)) {
+			$invoice_queue = Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
+			$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
+			$invoice_queue->save();
+		}
 	}
 
 	/**
@@ -228,18 +235,25 @@ class Invoice {
 	 * @access public
 	 */
 	public function send_invoice_email() {
-		$config = Config::Get();
+		$config = Config::get();
 
-		$mail = new Email('invoice');
+		$mail = new \Skeleton\Email\Email('invoice');
+
 		if ($this->invoice_contact->email == '') {
-			$mail->add_recipient($this->customer);
+			$mail->add_to($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
+			$language = $this->customer->language;
 		} else {
-			$mail->add_recipient($this->invoice_contact);
+			$mail->add_to($this->invoice_contact->email, $this->invoice_contact->firstname . ' ' . $this->invoice_contact->lastname);
+			$language = $this->invoice_contact->language;
 			if ($this->invoice_contact->email != $this->customer->email) {
-				$mail->add_recipient($this->customer, 'cc');
+				$mail->add_cc($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
 
 			}
 		}
+
+		$translation = Skeleton\I18n\Translation::get($language, 'email');
+		$mail->set_translation($translation);
+
 		try {
 			$email_from = Setting::get_by_name('email')->value;
 			$company = Setting::get_by_name('company')->value;
@@ -247,7 +261,7 @@ class Invoice {
 		} catch (Exception $e) {
 		}
 
-		$mail->add_file($this->get_pdf());
+		$mail->add_attachment($this->get_pdf());
 		$mail->assign('invoice', $this);
 
 		$settings = Setting::get_as_array();

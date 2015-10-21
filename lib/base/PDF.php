@@ -10,8 +10,7 @@
  * @version $Id$
  */
 
-require_once EXT_PATH . '/dompdf.config.php';
-require_once EXT_PATH . '/packages/vendor/dompdf/dompdf/dompdf_config.inc.php';
+require_once realpath(dirname(__FILE__) . '/../..') . '/lib/external/dompdf.config.php';
 
 class PDF {
 	/**
@@ -58,8 +57,7 @@ class PDF {
 		}
 
 		if ($language == null) {
-			$config = Config::get();
-			$language = Language::get_by_name_short($config->default_language);
+			$language = Language::get_by_name_short(Config::get()->default_language);
 		}
 
 		$this->language = $language;
@@ -88,13 +86,14 @@ class PDF {
 			$filename = $this->type . '_' . microtime(true) . '.pdf';
 		}
 
-		$template = new PDF_Template($this->type, $this->language);
+		$template = new \Skeleton\Template\Template();
+		$template->set_template_directory(dirname(__FILE__) . '/../../store/pdf/template');
 
 		foreach ($this->assigns as $key => $value) {
 			$template->assign($key, $value);
 		}
 
-		$html = $template->render('html');
+		$html = $template->render($this->type . '/html.twig');
 
 		switch ($output) {
 			case 'html':
@@ -103,14 +102,12 @@ class PDF {
 			case 'file':
 			case 'dompdf':
 				$dompdf = new DOMPDF();
-				$dompdf->set_base_path(STORE_PATH . '/pdf/media/');
-				$dompdf->set_paper($this->settings['size'], $this->settings['orientation']);
-				$dompdf->load_html($html);
-				$dompdf->render();
-				$content = $dompdf->output();
-				$file = File_Store::store($filename, $content);
-				return $file;
-				break;
+				$dompdf->set_base_path(dirname(__FILE__) . '/../../../store/pdf/media/');
+                $dompdf->set_paper($this->settings['size'], $this->settings['orientation']);
+                $dompdf->load_html($html);
+                $dompdf->render();
+                $file = File::store($filename, $dompdf->output());
+                return $file;
 		}
 	}
 }

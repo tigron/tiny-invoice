@@ -296,8 +296,6 @@ CREATE TABLE `document` (
   `preview_file_id` int(11) DEFAULT NULL,
   `title` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `paid` tinyint(4) DEFAULT NULL,
-  `expiration_date` date DEFAULT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -321,6 +319,7 @@ CREATE TABLE `file` (
   `size` int(11) NOT NULL,
   `expiration_date` datetime DEFAULT NULL,
   `created` datetime NOT NULL,
+  `deleted` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -337,6 +336,8 @@ CREATE TABLE `invoice` (
   `paid` tinyint(4) NOT NULL,
   `expiration_date` datetime NOT NULL,
   `send_reminder_mail` tinyint(1) NOT NULL DEFAULT '1',
+  `price_excl` decimal(10,2) NOT NULL,
+  `price_incl` decimal(10,2) NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -374,12 +375,14 @@ DROP TABLE IF EXISTS `invoice_item`;
 CREATE TABLE `invoice_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `invoice_id` int(11) NOT NULL,
+  `invoice_queue_id` int(11) DEFAULT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `qty` decimal(10,2) NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `vat` decimal(10,2) NOT NULL,
   `created` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `invoice_queue_id` (`invoice_queue_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -451,6 +454,7 @@ CREATE TABLE `purchase` (
   `price_incl` decimal(10,2) NOT NULL,
   `paid` datetime DEFAULT NULL,
   `expiration_date` datetime NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -468,7 +472,12 @@ DROP TABLE IF EXISTS `supplier`;
 CREATE TABLE `supplier` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `company` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-  `vat` int(11) NOT NULL,
+  `street` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `housenumber` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `zipcode` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `city` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `country_id` int(11) NOT NULL,
+  `vat` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   `created` datetime NOT NULL,
   `updated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -500,11 +509,11 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL,
-  `firstname` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `lastname` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `username` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `firstname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `lastname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `admin` tinyint(1) NOT NULL,
   `created` datetime NOT NULL,
   `updated` datetime DEFAULT NULL,
@@ -605,3 +614,5 @@ INSERT INTO `vat_rate_country` (`id`, `vat_rate_id`, `country_id`, `vat`) VALUES
 (57,	1,	69,	8.50),
 (58,	1,	72,	8.50),
 (59,	1,	12,	8.50);
+
+-- 2015-10-21 23:32:57

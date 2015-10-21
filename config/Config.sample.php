@@ -169,18 +169,6 @@ class Config {
 			'items_per_page' => 20,
 
 			/**
-			 * Picture formats
-			 *
-			 * Array containing all possible picture formats
-			 */
-			'picture_formats' => [
-				'document_preview'	=> [
-					'height' => 600,
-					'width' => 328
-				],
-			],
-
-			/**
 			 * Archive mailbox
 			 */
 			'archive_mailbox' => '',

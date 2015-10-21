@@ -14,6 +14,6 @@
 {% endblock body %}
 
 {% block footer %}
-	<button type="submit" class="btn btn-primary" onclick="$(this).parent('.modal-content').find('form').submit();">{% trans "Save" %} </button>
+	<button type="submit" class="btn btn-primary" onclick="$(this).closest('.modal-content').find('form').submit();">{% trans "Save" %} </button>
 	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}
 {% endblock footer %}

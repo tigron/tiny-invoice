@@ -21,11 +21,17 @@ class Supplier {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = array()) {
-		$required_fields = array('company', 'vat');
+	public function validate(&$errors = []) {
+		$required_fields = [ 'company', 'vat' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
+			}
+		}
+
+		if (isset($this->details['vat']) AND $this->details['vat'] != '') {
+			if (!Validation::validate_vat($this->details['vat'], $this->country)) {
+				$errors['vat'] = 'incorrect';
 			}
 		}
 

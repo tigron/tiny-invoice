@@ -5,7 +5,11 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-class Web_Module_Administrative_Invoice_Contact extends Web_Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
+
+class Web_Module_Administrative_Invoice_Contact extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes

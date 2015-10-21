@@ -11,14 +11,17 @@
 		</ol>
 
 		{% if errors is defined %}
-		<div class="alert alert-danger">
-			{% trans "The form contains mistakes. Please correct them." %}
-		</div>
-		{% elseif env.session_sticky.message is defined %}
-			{{ base.display_flash_message(env.session_sticky.message, 'user') }}
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
+		{% elseif env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'user') }}
 		{% endif %}
 
 		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Details" %}
+			</div>
 			<div class="panel-body">
 				<form class="form form-horizontal" method="post" action="/user?action=edit&id={{ user.id }}">
 					<div class="form-group{% if 'username' in errors|keys %} has-error{% endif %}">
@@ -56,7 +59,7 @@
 					<div class="form-group{% if 'password' in errors|keys %} has-error{% endif %}">
 						<label for="password" class="col-xs-3 control-label">{% trans "Password" %}</label>
 						<div class="col-xs-9">
-							<input type="password" name="user[password]" id="password" class="form-control" value="{{ user.password }}">
+							<input type="password" name="user[password]" id="password" class="form-control" value="DONOTUPDATEME">
 							{{ form.invalid_input('password', errors) }}
 						</div>
 					</div>
@@ -93,12 +96,15 @@
 		</ol>
 
 		{% if errors is defined %}
-		<div class="alert alert-danger">
-			{% trans "The form contains mistakes. Please correct them." %}
-		</div>
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
 		{% endif %}
 
 		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Details" %}
+			</div>
 			<div class="panel-body">
 				<form class="form form-horizontal" method="post" action="/user?action=add">
 					<div class="form-group{% if 'username' in errors|keys %} has-error{% endif %}">
@@ -171,8 +177,8 @@
 			<li class="active">{% trans "Users" %}</li>
 		</ol>
 
-		{% if env.session_sticky.message is defined %}
-			{{ base.display_flash_message(env.session_sticky.message, 'user') }}
+		{% if env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'user') }}
 		{% endif %}
 
 		<div class="panel panel-default">
@@ -183,7 +189,7 @@
 						{% trans "Add user" %}
 					</a>
 				</div>
-				{% trans "Users" %}
+				{{ base.pager_count(pager.item_count) }}
 			</div>
 			<div class="panel-body">
 			{% for user in pager.items %}
@@ -213,7 +219,7 @@
 						</td>
 						<td>
 						{% if env.session.user.id != user.id %}
-							<a href="/user?id={{ user.id }}&action=delete" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
+							<a href="/user?id={{ user.id }}&action=delete" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to remove this user?" %}">
 								<span class="glyphicon glyphicon-trash" />
 							</a>
 						{% endif %}

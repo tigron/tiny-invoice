@@ -17,6 +17,9 @@ class Bootstrap {
 	 * @access public
 	 */
 	public static function boot() {
+
+		date_default_timezone_set('Europe/Brussels');
+
 		/**
 		 * Set the root path
 		 */
@@ -25,7 +28,7 @@ class Bootstrap {
 		/**
 		 * Register the autoloader from Composer
 		 */
-		require_once $root_path . '/lib/external/packages/autoload.php';		
+		require_once $root_path . '/lib/external/packages/autoload.php';
 
 		/**
 		 * Get the config
@@ -57,9 +60,10 @@ class Bootstrap {
 		\Skeleton\File\Config::$store_dir = $root_path . '/store/file/';
 
 		/**
-		 * Initialize the thumbnail cache
+		 * Initialize the thumbnail cache, define thumbnail formats
 		 */
 		\Skeleton\File\Picture\Config::$tmp_dir = $root_path . '/tmp/';
+		\Skeleton\File\Picture\Config::add_resize_configuration('document_preview', 600, 328);
 
 		/**
 		 * Initialize the application directory
@@ -71,8 +75,7 @@ class Bootstrap {
 		 * Initialize the error handler
 		 */
 		\Skeleton\Error\Config::$debug = true;
-		set_error_handler(['\Skeleton\Error\Handler', 'error']);
-		set_exception_handler(['\Skeleton\Error\Handler', 'exception']);
+		\Skeleton\Error\Handler::enable();
 
 		/**
 		 * Initialize the translations
@@ -89,5 +92,6 @@ class Bootstrap {
 		 * Set the email path
 		 */
 		\Skeleton\Email\Config::$email_directory = $root_path . '/store/email/';
+		\Skeleton\Email\Config::$archive_mailbox = 'archive@pixelwest.be';
 	}
 }

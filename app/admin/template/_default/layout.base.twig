@@ -8,11 +8,16 @@
 	<title>Backoffice</title>
 
 	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="handheld, all">
+	<link rel="stylesheet" href="/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 	<link rel="stylesheet" href="/style.css" type="text/css" media="handheld, all">
 
 	<script type="text/javascript" src="/jquery/jquery.min.js"></script>
 	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
-		
+	<script src="/moment/min/moment.min.js"></script>
+	<script src="/tigron-confirm-modal/js/bootstrap.confirm-modal.js"></script>
+	<script src="/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="/tigron-datetimepicker/js/tigron-datetimepicker.js"></script>
+
 	{% spaceless %}
 		{% block head %}{% endblock head %}
 	{% endspaceless %}
@@ -21,37 +26,9 @@
 	{% include '_default/nav_bar.twig' %}
 	<div class="container">{% block content %}{% endblock content %}</div>
 
-
-	<script type="text/javascript" src="/handlebars.js"></script>
 	{% spaceless %}
 		{% block javascript %}{% endblock %}
 	{% endspaceless %}
 	<script type="text/javascript" src="/base.js"></script>
-	<script type="text/x-handlebars-template" id="data-confirm-tmpl">
-		<div id="dataConfirmModal" class="modal fade" role="dialog" aria-labelledby="dataConfirmLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						((#if title))
-							<h4 class="modal-title">((title))</h4>
-						((/if))
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-					</div>
-					<div class="modal-body">
-
-						<p>((message))</p>
-					</div>
-					<div class="modal-footer">
-						<a class="btn btn-primary" ((#if btn_href))href="((btn_href))"((/if))>
-							((#if btn_ok)) ((btn_ok)) ((else)){% trans "Ok" %}((/if))
-						</a>
-
-						<a class="btn btn-default" data-dismiss="modal" aria-hidden="true">((#if btn_cancel)) ((btn_cancel)) ((else)){% trans "Cancel" %}((/if))</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</script>
-
 </body>
 </html>

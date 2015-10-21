@@ -1,0 +1,108 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Select document" %}{% endblock header %}
+
+{% block body %}
+
+	<div class="panel panel-default">
+
+		<div class="panel-body">
+
+			<form class="form-horizontal" onsubmit="return filter();" id="search-document-form">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Search" %}</label>
+					<div class="col-xs-9">
+						<input type="text" name="search" class="form-control" value="">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Date" %}</label>
+					<div class="col-xs-9">
+						<div class="form-inline">
+							<div class="form-group">
+								{% trans "From" %}
+							</div>
+							<div class="form-group" style="position: relative">
+								<input type="text" class="form-control datepicker" value="" />
+							</div>
+							<div class="form-group">
+								{% trans "To" %}
+							</div>
+							<div class="form-group" style="position: relative">
+								<input type="text" class="form-control datepicker" value="" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label">
+						{% trans "Tags" %}
+					</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="tags" id="autocomplete-tag" value="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-3 col-xs-offset-3">
+						<button class="btn btn-primary">
+							{% trans "Search" %}
+						</button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+
+	</div>
+
+	<div id="documents">
+
+
+
+	</div>
+
+	<script type="text/javascript" src="/bootstrap-tokenfield.min.js"></script>
+	<script type="text/javascript" src="/bloodhound.min.js"></script>
+	<script type="text/javascript" src="/typeahead.min.js"></script>
+	<script type="text/javascript">
+
+		var tags = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			remote: '/administrative/tag?action=ajax_search&search=%QUERY'
+		});
+
+		tags.initialize();
+
+		$('#autocomplete-tag').tokenfield({
+			typeahead: [null, { source: tags.ttAdapter(), displayKey: 'label' }]
+		});
+
+
+		function filter() {
+			data = $('#search-document-form').serialize();
+
+			$('.form-group').removeClass('has-error');
+
+			$.get('/administrative/document?action=ajax_search', data, function(html) {
+				$('#documents').html(html);
+				$('#documents').on('click', 'a[data-id]', function() {
+					$.get('/administrative/document?action=load', {id: $(this).data('id')}, function(result) {
+						$('input[name="purchase[document_id]"]').val(result.id);
+						$('#document_title').html(result.title);
+					}, 'json');
+
+					$('#{{ id }}').modal('hide');
+				});
+			}, 'html');
+
+			return false;
+		}
+
+	</script>
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+{% endblock footer %}

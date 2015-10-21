@@ -35,11 +35,11 @@ body {
 	top: 10px
 }
 
-#invoice-list .glyphicon-ok {
+.glyphicon-ok {
 	color: #8bc512
 }
 
-#invoice-list .glyphicon-remove {
+.glyphicon-remove {
 	color: #db2e1b
 }
 

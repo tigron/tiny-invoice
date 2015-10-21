@@ -6,3 +6,4 @@ store/file/*
 store/documentation/*
 lib/external/*
 composer.lock
+util/tmp/*

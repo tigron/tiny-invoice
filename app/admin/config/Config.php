@@ -29,31 +29,7 @@ class Config_Admin extends Config {
 		/**
 		 * Routes
 		 */
-		'routes' => [
-
-			'web_module_index' => [
-
-				'$language/default/route/to/index',
-				'$language/default/route/to/index/$action',
-				'$language/default/route/to/index/$action/$id',
-
-				'$language[en]/test/routing/engine',
-				'$language[en]/test/routing/engine/$action',
-				'$language[en]/test/routing/engine/$action/$id'
-
-			],
-
-			'web_module_demo' => [
-
-				'$language/default/route/to/demo',
-				'$language/default/route/to/demo/$action',
-
-				'$language[nl]/standaard/route/naar/demo',
-				'$language[nl]/standaard/route/naar/demo/$action'
-
-			]
-
-		]
+		'routes' => []
 
 	];
 

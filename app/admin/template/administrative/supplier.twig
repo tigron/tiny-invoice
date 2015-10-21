@@ -14,13 +14,16 @@
 		<div class="alert alert-danger">
 			{% trans "The form contains mistakes. Please correct them." %}
 		</div>
-		{% elseif env.session_sticky.message is defined %}
-			{{ base.display_flash_message(env.session_sticky.message, 'supplier') }}
+		{% elseif env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'supplier') }}
 		{% endif %}
 
 		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=edit&id={{ supplier.id }}">
 
 			<div class="panel panel-default">
+				<div class="panel-heading">
+					{% trans "Details" %}
+				</div>
 				<div class="panel-body">
 
 					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
@@ -30,6 +33,34 @@
 							{{ form.invalid_input('company', errors) }}
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Street" %}</label>
+						<div class="col-xs-9"><input type="text" name="supplier[street]" class="form-control" value="{{ supplier.street }}" /></div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Housenumber" %}</label>
+						<div class="col-xs-9"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ supplier.housenumber }}"/></div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Zipcode" %}</label>
+						<div class="col-xs-9"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ supplier.zipcode }}" /></div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "City" %}</label>
+						<div class="col-xs-9"><input type="text" name="supplier[city]" class="form-control" value="{{ supplier.city }}" /></div>
+					</div>
+
+					<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
+						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
+						<div class="col-xs-9">
+							{{ form.select_country(countries, 'supplier[country_id]', 'country_id', supplier.country_id|default(203)) }}
+						</div>
+					</div>
+
 
 					<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
 						<label for="vat" class="control-label col-xs-3">{% trans "Vat" %}</label>
@@ -66,8 +97,10 @@
 		{% endif %}
 
 		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=add">
-
 			<div class="panel panel-default">
+				<div class="panel-heading">
+					{% trans "Details" %}
+				</div>
 				<div class="panel-body">
 
 					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
@@ -75,6 +108,33 @@
 						<div class="col-xs-9">
 							<input type="text" name="supplier[company]" id="company" class="form-control" value="{{ env.post.supplier.company }}">
 							{{ form.invalid_input('company', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Street" %}</label>
+						<div class="col-xs-9"><input type="text" name="supplier[street]" class="form-control" /></div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Housenumber" %}</label>
+						<div class="col-xs-9"><input type="text" name="supplier[housenumber]" class="form-control" /></div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Zipcode" %}</label>
+						<div class="col-xs-9"><input type="text" name="supplier[zipcode]" class="form-control" /></div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "City" %}</label>
+						<div class="col-xs-9"><input type="text" name="supplier[city]" class="form-control" /></div>
+					</div>
+
+					<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
+						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
+						<div class="col-xs-9">
+							{{ form.select_country(countries, 'supplier[country_id]', 'country_id', supplier.country_id|default(203)) }}
 						</div>
 					</div>
 
@@ -129,8 +189,8 @@
 			</div>
 		</div>
 
-		{% if env.session_sticky.message is defined %}
-			{{ base.display_flash_message(env.session_sticky.message, 'supplier') }}
+		{% if env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'supplier') }}
 		{% endif %}
 
 		<div class="panel panel-default">
@@ -141,7 +201,7 @@
 						{% trans "Add supplier" %}
 					</a>
 				</div>
-				{% trans "Suppliers" %}
+				{{ base.pager_count(pager.item_count) }}
 			</div>
 			<div class="panel-body">
 			{% for supplier in pager.items %}
@@ -151,6 +211,8 @@
 					<tr>
 						<th>#</th>
 						<th>{{ pager.create_header('Company'|trans, 'company')|raw }}</th>
+						<th>{{ pager.create_header('City'|trans, 'city')|raw }}</th>
+						<th>{{ pager.create_header('Country'|trans, 'country.name')|raw }}</th>
 						<th>{{ pager.create_header('Vat'|trans, 'vat')|raw }}</th>
 						<th>&nbsp;</th>
 					</tr>
@@ -161,6 +223,8 @@
 					<tr>
 						<td>{{ supplier.id }}</td>
 						<td>{{ supplier.company }}</td>
+						<td>{{ supplier.city }}</td>
+						<td>{{ supplier.country.name }}</td>
 						<td>{{ supplier.vat }}</td>
 						<td>
 							<a href="/administrative/supplier?action=edit&id={{ supplier.id }}" title="">
@@ -175,6 +239,11 @@
 
 				{{ pager.links|raw }}
 			{% endif %}
+
+			{% else %}
+
+				<p><em>{% trans "No suppliers found." %}</em></p>
+
 			{% endfor %}
 			</div>
 		</div>

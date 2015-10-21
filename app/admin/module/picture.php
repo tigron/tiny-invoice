@@ -9,6 +9,7 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
+use \Skeleton\File\Picture\Picture;
 
 class Web_Module_Picture extends Module {
 	/**

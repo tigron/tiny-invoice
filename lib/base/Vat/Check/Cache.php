@@ -5,11 +5,15 @@
  * @author Gerry Demaret <gerry@tigron.be>
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author David Vandemaele <david@tigron.be>
- * @version $Id$
  */
 
+use \Skeleton\Database\Database;
+
 class Vat_Check_Cache {
-	use Model, Get, Delete, Save;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Delete;
+	use \Skeleton\Object\Save;
 
 	/**
 	 * Returns a Vat_Check_Cache by supplying a VAT number
@@ -20,8 +24,8 @@ class Vat_Check_Cache {
 	 */
 	public static function get_by_number_country($number, Country $country) {
 		$table = self::trait_get_database_table();
-		$db = Database::Get();
-		$id = $db->getOne('SELECT id FROM ' . $table . ' WHERE number = ? AND country_id = ?', [ $number, $country->id] );
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM ' . $table . ' WHERE number = ? AND country_id = ?', [ $number, $country->id] );
 		if ($id === NULL) {
 			throw new Exception('Unknown VAT');
 		}
@@ -37,8 +41,8 @@ class Vat_Check_Cache {
 	 */
 	public static function get_overdue() {
 		$table = self::trait_get_database_table();
-		$db = Database::Get();
-		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE created < DATE_SUB(NOW(), INTERVAL 2 DAY)');
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE created < DATE_SUB(NOW(), INTERVAL 2 DAY)');
 		$items = [];
 		foreach ($ids as $id) {
 			$items[] = self::get_by_id($id);

@@ -10,7 +10,7 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager; 
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Document extends Module {
 	/**
@@ -55,7 +55,7 @@ class Web_Module_Administrative_Document extends Module {
 		$pager->set_direction('DESC');
 		$pager->page();
 
-		$template = Template::Get();
+		$template = Template::get();
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
 	}
@@ -66,7 +66,7 @@ class Web_Module_Administrative_Document extends Module {
 	 * @access public
 	 */
 	public function display_add() {
-		$template = Template::Get();
+		$template = Template::get();
 
 		if (isset($_POST['document'])) {
 			$document = new Document();
@@ -77,9 +77,8 @@ class Web_Module_Administrative_Document extends Module {
 			} else {
 				$document->save();
 
-				$session = Session_Sticky::Get();
-				$session->message = 'created';
-				Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
+				Session::set_sticky('message', 'created');
+				Session::redirect('/administrative/document?action=edit&id=' . $document->id);
 			}
 		}
 	}
@@ -97,10 +96,10 @@ class Web_Module_Administrative_Document extends Module {
 			return;
 		}
 
-		$file = File_Store::upload($_FILES['file']);
+		$file = File::upload($_FILES['file']);
 		$file->expire();
 
-		echo json_encode(['file' => $file->get_info()]);
+		echo json_encode(['file' => $file->get_info(true)]);
 	}
 
 	/**
@@ -111,7 +110,9 @@ class Web_Module_Administrative_Document extends Module {
 	public function display_delete() {
 		$document = Document::get_by_id($_GET['id']);
 		$document->delete();
-		Session::Redirect('/administrative/document');
+
+		Session::set_sticky('message', 'deleted');
+		Session::redirect('/administrative/document');
 	}
 
 	/**
@@ -120,37 +121,17 @@ class Web_Module_Administrative_Document extends Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Template::Get();
-
-		$session = Session_Sticky::Get();
-		if (isset($session->message)) {
-			$template->assign('message', $session->message);
-			unset($session->message);
-		}
+		$template = Template::get();
 
 		$document = Document::get_by_id($_GET['id']);
 		$template->assign('document', $document);
 
 		if (isset($_POST['document'])) {
-			if (isset($_POST['document']['created'])) {
-				if (strpos($_POST['document']['created'], '/') !== false) {
-					list($day, $month, $year) = explode('/', $_POST['document']['created']);
-				} else {
-					list($year, $month, $day) = explode('-', $_POST['document']['created']);
-				}
-				$_POST['document']['created'] = $year . '-' . $month . '-' . $day;
-			}
 			$document->load_array($_POST['document']);
 			$document->save();
-			$session->message = 'document_updated';
-			Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
+			Session::set_sticky('message', 'document_updated');
+			Session::redirect('/administrative/document?action=edit&id=' . $document->id);
 		}
-
-		$tag_ids = array();
-		foreach ($document->get_document_tags() as $document_tag) {
-			$tag_ids[] = $document_tag->tag_id;
-		}
-		$template->assign('tag_ids', $tag_ids);
 
 		$tags = Tag::get_all();
 		$template->assign('tags', $tags);
@@ -165,14 +146,15 @@ class Web_Module_Administrative_Document extends Module {
 		$document = Document::get_by_id($_POST['id']);
 
 		if (isset($_FILES['document']) AND $_FILES['document']['error'] == 0) {
-			$file = File_Store::upload($_FILES['document']);
+			$file = File::upload($_FILES['document']);
 
 			$document->file->delete();
 
 			$document->file_id = $file->id;
 			$document->save();
 		}
-		Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
+
+		Session::redirect('/administrative/document?action=edit&id=' . $document->id);
 	}
 
 	/**
@@ -187,17 +169,15 @@ class Web_Module_Administrative_Document extends Module {
 			$document_tag->delete();
 		}
 
-		foreach ($_POST['tag'] as $tag_id => $selected) {
-			$document_tag = new Document_Tag();
-			$document_tag->document_id = $document->id;
-			$document_tag->tag_id = $tag_id;
-			$document_tag->save();
+		if (isset($_POST['tag'])) {
+			foreach ($_POST['tag'] as $tag_id) {
+				$tag = Tag::get_by_id($tag_id);
+				$document->add_tag($tag);
+			}
 		}
 
-		$session = Session_Sticky::Get();
-		$session->message = 'tags_updated';
-
-		Session::Redirect('/administrative/document?action=edit&id=' . $document->id);
+		Session::set_sticky('message', 'tag_updated');
+		Session::redirect('/administrative/document?action=edit&id=' . $document->id);
 	}
 
 	/**
@@ -209,4 +189,43 @@ class Web_Module_Administrative_Document extends Module {
 		$document = Document::get_by_id($_GET['id']);
 		$document->file->client_download();
 	}
+
+	/**
+	 * Search documents (ajax)
+	 *
+	 * @access public
+	 */
+	public function display_ajax_search() {
+		$this->template = '/administrative/document/list.twig';
+
+		$pager = new Pager('document');
+		$pager->add_sort_permission('title');
+		$pager->add_sort_permission('created');
+
+		if (isset($_GET['search'])) {
+			$pager->set_search($_GET['search']);
+		}
+
+		if (isset($_GET['tags']) AND $_GET['tags'] != '') {
+			$pager->add_join('document_tag', 'document_id', 'document.id');
+			$pager->add_condition('document_tag.tag_id', explode(',', $_GET['tags']));
+		}
+
+		$pager->page(false);
+
+		$template = Template::get();
+		$template->assign('pager', $pager);
+	}
+
+	/**
+	 * Load document (ajax)
+	 *
+	 * @access public
+	 */
+	public function display_load() {
+		$this->template = null;
+		$document = Document::get_by_id($_GET['id']);
+		echo json_encode($document->get_info());
+	}
+
 }

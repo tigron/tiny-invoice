@@ -34,16 +34,14 @@ class Web_Module_Login extends Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Template::Get();
-
 		if (isset($_POST['username']) AND isset($_POST['password'])) {
 			try {
 				$user = User::authenticate($_POST['username'], $_POST['password']);
 				Object_Log::create('User logged in', $user);
 				$_SESSION['user'] = $user;
-				Session::Redirect('/');
-			} catch (Exception $e) {
-				$template->assign('error', true);
+				Session::redirect('/');
+			} catch (\Exception $e) {
+				Template::get()->assign('error', true);
 			}
 		}
 	}
@@ -54,7 +52,7 @@ class Web_Module_Login extends Module {
 	 * @access public
 	 */
 	public function display_logout() {
-		Session::Destroy();
-		Session::Redirect('/');
+		Session::destroy();
+		Session::redirect('/');
 	}
 }
