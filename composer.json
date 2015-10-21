@@ -5,9 +5,20 @@
     "name": "tigron/skeleton",
     "description": "Tigron Skeleton",
     "type": "project",
+	"repositories": [
+  	{
+		"type": "vcs",
+		"url":  "https://github.com/tigron/skeleton-migrate.git"
+	},
+  	{
+		"type": "vcs",
+		"url":  "https://github.com/tigron/skeleton-console.git"
+	}
+	],
     "require": {
         "sami/sami": "3.0.*@dev",
         "fxp/composer-asset-plugin": "~1.0",
+<<<<<<< HEAD
 	"bower-asset/bootstrap": "dev-master",
         "bower-asset/font-awesome": "*",
 	"swiftmailer/swiftmailer": "5.*",
@@ -19,6 +30,21 @@
 	"bower-asset/textarea-autosize": "0.*",
 	"bower-asset/handlebars": "4.0.2",
 	"filp/whoops": "1.*"
+=======
+		"swiftmailer/swiftmailer": "5.*",
+		"dompdf/dompdf": "dev-master",
+        "eloquent/composer-config-reader": "~2.0",
+
+        "bower-asset/bootstrap": "dev-master",
+		"bower-asset/font-awesome": "*",
+		"bower-asset/tigron-datetimepicker": "*",
+		"bower-asset/jquery-zoom": "dev-master",
+		"bower-asset/tigron-confirm-modal": "dev-master",
+		"bower-asset/bootstrap-tagsinput": "*",
+		"bower-asset/bootstrap3-typeahead": "*",
+		"bower-asset/handlebars": "*",
+		"bower-asset/dropzone": "*"
+>>>>>>> origin/master
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",
@@ -32,7 +58,12 @@
         "tigron/skeleton-error": "dev-master",
         "tigron/skeleton-template": "dev-master",
         "tigron/skeleton-email": "dev-master",
+<<<<<<< HEAD
 	"tigron/skeleton-console": "dev-master"
+=======
+        "tigron/skeleton-migrate": "dev-master",
+        "tigron/skeleton-console": "dev-master"
+>>>>>>> origin/master
     },
     "extra": {
         "asset-installer-paths": {

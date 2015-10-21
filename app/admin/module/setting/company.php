@@ -49,7 +49,11 @@ class Web_Module_Setting_Company extends Module {
 				$setting->save();
 			}
 			Session::set_sticky('message', 'updated');
+<<<<<<< HEAD
 			Session::redirect('/setting/company');
+=======
+			Session::Redirect('/setting/company');
+>>>>>>> origin/master
 		}
 
 		$template->assign('settings', Setting::get_as_array());

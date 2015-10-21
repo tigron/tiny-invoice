@@ -86,7 +86,6 @@ class Web_Module_Administrative_Tag extends Module {
 	 * @access private
 	 */
 	public function display_edit() {
-		$session = Session_Sticky::Get();
 		$template = Template::Get();
 		$tag = Tag::get_by_id($_GET['id']);
 
@@ -94,17 +93,38 @@ class Web_Module_Administrative_Tag extends Module {
 			$tag->load_array($_POST['tag']);
 			$tag->save();
 
-			$session->message = 'tag_updated';
-
+			Session::set_sticky('message', 'tag_updated');
 			Session::Redirect('/administrative/tag?action=edit&id=' . $tag->id);
-		}
-
-		if (isset($session->message)) {
-			$template->assign('session_message', $session->message);
 		}
 		$template->assign('tag', $tag);
 	}
 
+	/**
+	 * Get all
+	 *
+	 * AJAX call
+	 * @access public
+	 */
+	public function display_ajax_search_tag() {
+		$pager = new Pager('tag');
+		$pager->set_search($_GET['query']);
+		$pager->add_sort_permission('tag.name');
+		$pager->set_sort('tag.name');
+		$pager->page(true);
+		$tags = $pager->items;
+
+		$data = array();
+		foreach ($tags as $tag) {
+			$data[] = array(
+				'id' => $tag->id,
+				'name' => $tag->name,
+			);
+		}
+		echo json_encode($data);
+		exit;
+	}
+
+<<<<<<< HEAD
 	/**
 	 * Search tag (ajax)
 	 *
@@ -127,5 +147,7 @@ class Web_Module_Administrative_Tag extends Module {
 		}
 		echo json_encode($data);
 	}
+=======
+>>>>>>> origin/master
 
 }

@@ -79,3 +79,11 @@ body {
 .dz-preview {
 	display: none
 }
+
+
+/**
+ * Document/edit
+ */
+#added_tags .label {
+	font-size: 1em;
+}

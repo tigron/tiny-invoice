@@ -8,6 +8,10 @@
 
 use \Skeleton\Database\Database;
 
+<<<<<<< HEAD
 class Language extends \Skeleton\I18n\Language {
 
 }
+=======
+class Language extends Skeleton\I18n\Language { }
+>>>>>>> origin/master

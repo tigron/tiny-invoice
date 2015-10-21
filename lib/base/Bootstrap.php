@@ -63,7 +63,11 @@ class Bootstrap {
 		 * Initialize the thumbnail cache, define thumbnail formats
 		 */
 		\Skeleton\File\Picture\Config::$tmp_dir = $root_path . '/tmp/';
+<<<<<<< HEAD
 		\Skeleton\File\Picture\Config::add_resize_configuration('document_preview', 600, 328);
+=======
+		\Skeleton\File\Picture\Config::add_resize_configuration('document_preview', 1000, 300, 'auto');
+>>>>>>> origin/master
 
 		/**
 		 * Initialize the application directory
@@ -92,6 +96,14 @@ class Bootstrap {
 		 * Set the email path
 		 */
 		\Skeleton\Email\Config::$email_directory = $root_path . '/store/email/';
+<<<<<<< HEAD
 		\Skeleton\Email\Config::$archive_mailbox = 'archive@pixelwest.be';
+=======
+
+		/**
+		 * Set the database migration path
+		 */
+		\Skeleton\Database\Migration\Config::$migration_directory = $root_path . '/migrations/';
+>>>>>>> origin/master
 	}
 }

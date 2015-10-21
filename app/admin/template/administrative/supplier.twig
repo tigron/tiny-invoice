@@ -14,8 +14,17 @@
 		<div class="alert alert-danger">
 			{% trans "The form contains mistakes. Please correct them." %}
 		</div>
+<<<<<<< HEAD
 		{% elseif env.sticky_session.message is defined %}
 			{{ base.display_flash_message(env.sticky_session.message, 'supplier') }}
+=======
+
+
+		{% elseif env.sticky_session.message == 'updated' %}
+			<div class="alert alert-success">
+				{% trans "The supplier details were updated." %}
+			</div>
+>>>>>>> origin/master
 		{% endif %}
 
 		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=edit&id={{ supplier.id }}">
@@ -98,9 +107,13 @@
 
 		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=add">
 			<div class="panel panel-default">
+<<<<<<< HEAD
 				<div class="panel-heading">
 					{% trans "Details" %}
 				</div>
+=======
+				<div class="panel-heading">{% trans "Add new supplier" %}</div>
+>>>>>>> origin/master
 				<div class="panel-body">
 
 					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
@@ -201,7 +214,11 @@
 						{% trans "Add supplier" %}
 					</a>
 				</div>
+<<<<<<< HEAD
 				{{ base.pager_count(pager.item_count) }}
+=======
+				{{ base.pager_count(pager) }}
+>>>>>>> origin/master
 			</div>
 			<div class="panel-body">
 			{% for supplier in pager.items %}

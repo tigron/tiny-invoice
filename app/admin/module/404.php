@@ -5,9 +5,9 @@
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
  */
- 
+
 use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Web\Module; 
+use \Skeleton\Core\Web\Module;
 
 class Web_Module_404 extends Module {
 	/**

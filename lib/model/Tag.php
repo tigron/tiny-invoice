@@ -69,8 +69,13 @@ class Tag {
 	 */
 	public static function get_by_name($name) {
 		$table = self::trait_get_database_table();
+<<<<<<< HEAD
 		$db = Database::get();
 		$id = $db->get_one('SELECT id FROM ' . $table . ' WHERE name = ?', [ $name ]);
+=======
+		$db = self::trait_get_database();
+		$id = $db->get_one('SELECT id FROM tag WHERE name = ?', [ $name ]);
+>>>>>>> origin/master
 
 		if ($id === null) {
 			throw new Exception('Tag not found');

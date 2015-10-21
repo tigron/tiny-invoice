@@ -68,10 +68,16 @@ class Web_Module_Administrative_Supplier extends Module {
 				$supplier->save();
 
 				Session::set_sticky('message', 'created');
+<<<<<<< HEAD
 				Session::redirect('/administrative/supplier');
 			}
 		}
 
+=======
+				Session::Redirect('/administrative/supplier');
+			}
+		}
+>>>>>>> origin/master
 		$template->assign('countries', Country::get_grouped());
 	}
 
@@ -91,13 +97,19 @@ class Web_Module_Administrative_Supplier extends Module {
 			} else {
 				$supplier->save();
 
+<<<<<<< HEAD
 				Session::set_sticky('message', 'updated');
 				Session::redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
 			}
+=======
+			Session::set_sticky('message', 'updated');
+			Session::Redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
+>>>>>>> origin/master
 		}
 
 		$template->assign('supplier', $supplier);
 		$template->assign('countries', Country::get_grouped());
+<<<<<<< HEAD
 	}
 
 	/**
@@ -122,6 +134,8 @@ class Web_Module_Administrative_Supplier extends Module {
 			];
 		}
 		echo json_encode($data);
+=======
+>>>>>>> origin/master
 	}
 
 }

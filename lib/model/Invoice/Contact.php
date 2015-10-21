@@ -5,7 +5,11 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+<<<<<<< HEAD
 use \Skeleton\Database\Database;
+=======
+use Skeleton\Database\Database;
+>>>>>>> origin/master
 
 class Invoice_Contact {
 	use \Skeleton\Object\Model;
@@ -152,7 +156,11 @@ class Invoice_Contact {
 	 */
 	public static function get_active_by_customer(Customer $customer) {
 		$table = self::trait_get_database_table();
+<<<<<<< HEAD
 		$db = Database::get();
+=======
+		$db = Database::Get();
+>>>>>>> origin/master
 		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE customer_id = ? AND active = 1 ORDER BY created DESC', [ $customer->id ]);
 
 		$items = [];

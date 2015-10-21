@@ -2,19 +2,38 @@
 
 {% block content %}
 
-	{% if action == 'edit' %}
+{% if action == 'edit' %}
 
-		<ul class="breadcrumb">
-			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-			<li class="active">{% trans "Edit Document" %}</li>
-		</ul>
+	<ul class="breadcrumb">
+		<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
+		<li class="active">{% trans "Edit Document" %}</li>
+	</ul>
 
-		{% if message == 'document_updated' %}
-		<div class="alert alert-success">
-			{% trans "Document details saved" %}
+	{% if env.sticky_session.message == 'document_updated' %}
+	<div class="alert alert-success">
+		{% trans "Document details saved" %}
+	</div>
+	{% endif %}
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			{% trans "Tags" %}
+			<div class="pull-right">
+				<a href="javascript:void(0);" onclick="$('#add_tag').toggle();">
+					<span class="glyphicon glyphicon-plus"></span> {% trans "Add tag" %}
+				</a>
+			</div>
 		</div>
-		{% endif %}
+		<div class="panel-body">
+			<div class="form-group" id="add_tag" style="display: none;">
+				<label class="col-xs-3 control-label">{% trans "Add tag" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" id="tags" autocomplete="off" />
+				</div>
+			</div>
 
+<<<<<<< HEAD
 		<form class="form-horizontal" action="/administrative/document?action=edit&id={{ document.id }}" method="post">
 
 			<div class="row">
@@ -76,20 +95,102 @@
 							</a>
 						</div>
 					</div>
+=======
+			<p class="form-control-static" id="added_tags">
+				{% for tag in tags %}
+					<span class="label label-default">{{ tag.name }}
+						<a href="javascript:void(0);">
+							<span class="glyphicon glyphicon-remove"></span>
+						</a>
+					</span>
+				{% endfor %}
+
+
+
+			</p>
+		</div>
+	</div>
+
+
+
+	<form class="form-horizontal" action="/administrative/document?action=edit&id={{ document.id }}" method="post">
+
+	<div class="row">
+		<div class="{% if document.preview_file_id > 0 %}col-xs-8{% else %}col-xs-12{% endif %}">
+			<div class="panel panel-default">
+				<div class="panel-heading">{% trans "Document details" %}</div>
+				<div class="panel-body">
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "File" %}</label>
+						<div class="col-xs-9">
+							<p class="form-control-static">
+								<a href="/administrative/document?action=download&id={{ document.id }}">{{ document.file.name }}</a>
+								<a href="#replace_document" data-toggle="modal">
+									<span class="glyphicon glyphicon-refresh"></span>
+								</a>
+							</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Date" %}</label>
+						<div class="col-xs-9">
+							<input type="text" class="form-control" name="document[created]" value="{{ document.created }}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Title" %}</label>
+						<div class="col-xs-9">
+							<input type="text" class="form-control" name="document[title]" value="{{ document.title }}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Description" %}</label>
+						<div class="col-xs-9">
+							<textarea class="form-control autogrow" name="document[description]">{{ document.description }}</textarea>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-9 col-xs-offset-3">
+							<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+							<a href="/administrative/document?action=delete&id={{ document.id }}" class="btn btn-danger" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?" >{% trans "Delete" %}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{% if document.preview_file_id > 0 %}
+		<div class="col-xs-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">{% trans "Preview" %}</div>
+				<div class="panel-body text-center zoom">
+					<a href="/picture?id={{ document.preview_file_id }}">
+						<img src="/picture?id={{ document.preview_file_id }}&size=document_preview" />
+					</a>
+>>>>>>> origin/master
 				</div>
 				{% endif %}
 
 			</div>
+<<<<<<< HEAD
 
 		</form>
-
-
-		{% if message == 'tags_updated' %}
-			<div class="alert alert-success">
-				{% trans "Tags updated" %}.
-			</div>
+=======
+		</div>
 		{% endif %}
+>>>>>>> origin/master
 
+	</div>
+	</form>
+
+{% elseif action == 'add' %}
+
+<<<<<<< HEAD
 		<form class="form-horizontal" action="/administrative/document?action=edit_tags&id={{ document.id }}" method="post">
 		<div class="panel panel-default">
 			<div class="panel-heading">{% trans "Tags" %}</div>
@@ -99,121 +200,112 @@
 						<label><input type="checkbox" name="tag[]" value="{{ tag.id }}" {% if document.has_tag(tag) %}checked{% endif %}> {{ tag.name }}</label>
 					</div>
 				{% endfor %}
+=======
+	<ol class="breadcrumb">
+		<li><a href="/">{% trans "Home" %}</a></li>
+		<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
+		<li class="active">{% trans "Add document" %}</li>
+	</ol>
+>>>>>>> origin/master
 
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3 text-right">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-			</div>
+	{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "The form contains mistakes. Please correct them." %}
 		</div>
-		</form>
+	{% endif %}
 
-	{% elseif action == 'add' %}
-
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-			<li class="active">{% trans "Add document" %}</li>
-		</ol>
-
-		{% if errors is defined %}
-			<div class="alert alert-danger">
-				{% trans "The form contains mistakes. Please correct them." %}
-			</div>
-		{% endif %}
-
-		<form class="form form-horizontal" method="post" action="/administrative/document?action=add">
-
-			<div class="panel panel-default">
-				<div class="panel-body">
-
-					<div class="form-group{% if 'title' in errors|keys %} has-error{% endif %}">
-						<label for="title" class="col-xs-3 control-label">{% trans "Title" %}</label>
-						<div class="col-xs-9">
-							<input type="text" name="document[title]" id="title" class="form-control" value="{{ document.title }}">
-							{{ form.invalid_input('title', errors) }}
-						</div>
-					</div>
-
-					<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
-						<label for="file_id" class="col-xs-3 control-label">{% trans "File" %}</label>
-						<div class="col-xs-9">
-							<div id="document-file" class="form-control-static">
-								{% if document.file_id > 0 %}
-									<div class="file">
-										<input type="hidden" name="document[file_id]" value="{{ document.file_id }}" />
-										<span>
-											<strong>{{ document.file.name }}</strong>
-										</span>
-										[ {{ document.file.get_human_size() }} ]
-										<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
-											<span class="glyphicon glyphicon-trash"></span>
-										</a>
-									</div>
-								{% endif %}
-
-								{{ form.invalid_input('file_id', errors) }}
-							</div>
-
-							<div class="dropzone" id="document-dropzone">
-								<div class="dz-default dz-message">
-									<span>{% trans "Drag and Drop file" %}</span>
-									<span>({% trans "or click here" %})</span>
-								</div>
-								<div class="progress">
-									<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-										<span class="sr-only">0% Complete</span>
-									</div>
-								</div>
-								<div class="fallback"></div>
-							</div>
-
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
-							<button class="btn btn-primary">
-								{% trans "Save" %}
-							</button>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</form>
-
-	{% else %}
-
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li class="active">{% trans "Documents" %}</li>
-		</ol>
+	<form class="form form-horizontal" method="post" action="/administrative/document?action=add">
 
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				{% trans "Filter" %}
-			</div>
 			<div class="panel-body">
-				<form method="post" action="/administrative/document" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-9">
-							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
-						</div>
+
+				<div class="form-group{% if 'title' in errors|keys %} has-error{% endif %}">
+					<label for="title" class="col-xs-3 control-label">{% trans "Title" %}</label>
+					<div class="col-xs-9">
+						<input type="text" name="document[title]" id="title" class="form-control" value="{{ document.title }}">
+						{{ form.invalid_input('title', errors) }}
 					</div>
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
-							<button class="btn btn-primary">
-								{% trans "Search" %}
-							</button>
+				</div>
+
+				<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
+					<label for="file_id" class="col-xs-3 control-label">{% trans "File" %}</label>
+					<div class="col-xs-9">
+						<div id="document-file" class="form-control-static">
+							{% if document.file_id > 0 %}
+								<div class="file">
+									<input type="hidden" name="document[file_id]" value="{{ document.file_id }}" />
+									<span>
+										<strong>{{ document.file.name }}</strong>
+									</span>
+									[ {{ document.file.get_human_size() }} ]
+									<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
+										<span class="glyphicon glyphicon-trash"></span>
+									</a>
+								</div>
+							{% endif %}
+
+							{{ form.invalid_input('file_id', errors) }}
 						</div>
+
+						<div class="dropzone" id="document-dropzone">
+							<div class="dz-default dz-message">
+								<span>{% trans "Drag and Drop file" %}</span>
+								<span>({% trans "or click here" %})</span>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+									<span class="sr-only">0% Complete</span>
+								</div>
+							</div>
+							<div class="fallback"></div>
+						</div>
+
 					</div>
-				</form>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-3 col-xs-offset-3">
+						<button class="btn btn-primary">
+							{% trans "Save" %}
+						</button>
+					</div>
+				</div>
+
 			</div>
 		</div>
+	</form>
 
+{% else %}
+
+	<ol class="breadcrumb">
+		<li><a href="/">{% trans "Home" %}</a></li>
+		<li class="active">{% trans "Documents" %}</li>
+	</ol>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			{% trans "Filter" %}
+		</div>
+		<div class="panel-body">
+			<form method="post" action="/administrative/document" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Search" %}</label>
+					<div class="col-xs-9">
+						<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-3 col-xs-offset-3">
+						<button class="btn btn-primary">
+							{% trans "Search" %}
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+<<<<<<< HEAD
 		{% if env.sticky_session.message is defined %}
 			{{ base.display_flash_message(env.sticky_session.message, 'document') }}
 		{% endif %}
@@ -275,15 +367,72 @@
 				{{ pager.links|raw }}
 			{% endif %}
 			{% endfor %}
-			</div>
-		</div>
-
+=======
+	{% if env.session_sticky.message is defined %}
+		{{ base.display_flash_message(env.session_sticky.message, 'document') }}
 	{% endif %}
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="pull-right">
+				<a href="/administrative/document?action=add" title="">
+					<span class="glyphicon glyphicon-plus-sign"></span>
+					{% trans "Add document" %}
+				</a>
+>>>>>>> origin/master
+			</div>
+			{{ base.pager_count(pager) }}
+		</div>
+		<div class="panel-body">
+		{% for document in pager.items %}
+		{% if loop.first %}
+			<table class="table table-hover table-striped table-condensed table-responsive">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
+					<th>{% trans "Tags" %}</th>
+					<th colspan="2">&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+		{% endif %}
+
+				<tr>
+					<td>{{ document.id }}</td>
+					<td>{{ document.created|date }}</td>
+					<td>{{ document.title }}</td>
+					<td></td>
+					<td>
+						<a href="/administrative/document?action=edit&id={{ document.id }}" title="">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+					<td>
+						<a href="/administrative/document?action=delete&id={{ document.id }}" title="" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this document?" %}">
+							<span class="glyphicon glyphicon-trash"></span>
+						</a>
+					</td>
+				</tr>
+
+		{% if loop.last %}
+			</tbody>
+			</table>
+
+			{{ pager.links|raw }}
+		{% endif %}
+		{% endfor %}
+		</div>
+	</div>
+
+{% endif %}
 
 {% endblock content %}
 
 {% block javascript %}
 
+<<<<<<< HEAD
 	{% if action == 'add' %}
 		<script type="text/javascript" src="/dropzone/dist/dropzone.js"></script>
 		<script type="text/javascript" src="/handlebars/handlebars.min.js"></script>
@@ -346,14 +495,111 @@
 
 			if($('#document-file').find('.file').length == 1) {
 				$('#document-dropzone').hide();
-			}
+=======
+{% if action == 'add' %}
+	<script type="text/x-handlebars-template" id="document-file-template">
+		<div class="file">
+			<input type="hidden" name="document[file_id]" value="((file.id))" />
+			<span>
+				<strong>((file.name))</strong>
+			</span>
+			[ ((file.human_size)) ]
+			<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
+				<span class="glyphicon glyphicon-trash"></span>
+			</a>
+		</div>
+	</script>
+	<script type="text/javascript">
 
-			function remove_file(object) {
-				object.remove();
-				$('#document-dropzone').show();
-			}
+		Dropzone.autoDiscover = false;
 
-		</script>
-	{% endif %}
+		$('#document-dropzone').dropzone({
+			url: '/administrative/document?action=add_file',
+			paramName: 'file',
+			parallelUploads: 1,
+			createImageThumbnails: false,
+			init: function() {
+				this.on('success', function(file, responseText) {
+					var source = $("#document-file-template").html();
+					Handlebars.setDelimiter('(',')');
+					var template = Handlebars.compile(source);
+					if($('#document-file').find('.file').length == 1) {
+						$("#document-file").html('');
+					}
+
+					try {
+						response = jQuery.parseJSON(responseText);
+						$("#document-file").append(template(response));
+						$('#document-dropzone').hide();
+						$('#document-file').find('.help-block').remove();
+						$('#document-file').closest('.form-group').removeClass('has-error');
+					}
+					catch (e) {
+						$('#document-file').html(e);
+					}
+				});
+
+				this.on('uploadprogress', function(file, progress) {
+					$(this.element).find('.progress-bar').css('width', progress + '%');
+				});
+
+				this.on('complete', function() {
+					$(this.element).find('.progress-bar').css('width', '100%');
+					$(this.element).find('.progress').fadeOut();
+				});
+
+				this.on('addedfile', function() {
+					$(this.element).find('.progress').show();
+				});
+>>>>>>> origin/master
+			}
+		});
+
+		if($('#document-file').find('.file').length == 1) {
+			$('#document-dropzone').hide();
+		}
+
+		function remove_file(object) {
+			object.remove();
+			$('#document-dropzone').show();
+		}
+
+	</script>
+{% elseif action == 'edit' %}
+	<script type="text/javascript">
+		$('input[name="document[created]"]').tigronDatetimepicker({
+			'format': 'DD/MM/YYYY',
+			'extraFormats': [ 'YYYY-MM-DD' ],
+			'postFormat': 'YYYY-MM-DD'
+		});
+
+		$(document).ready(function(){
+			$('.zoom').zoom({
+				url: '/picture?id={{ document.preview_file_id }}'
+			});
+		});
+
+		$('#tags').typeahead({
+			name:	'customer',
+			source: function (query, process) {
+
+				$.ajax({
+					dataType: "json",
+					url: '/administrative/tag?action=ajax_search_tag&query=' + query,
+					success: function(data) {
+						process(data)
+					}
+
+				});
+			},
+			items: 8,
+			afterSelect: function(item) {
+				$('#tags').val('');
+				$('#added_tags').append( '<span class="label label-default">' + item.name + '</span> ' );
+			}
+		});
+
+	</script>
+{% endif %}
 
 {% endblock javascript %}

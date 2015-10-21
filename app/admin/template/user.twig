@@ -189,23 +189,27 @@
 						{% trans "Add user" %}
 					</a>
 				</div>
+<<<<<<< HEAD
 				{{ base.pager_count(pager.item_count) }}
+=======
+				{{ base.pager_count(pager) }}
+>>>>>>> origin/master
 			</div>
 			<div class="panel-body">
 			{% for user in pager.items %}
-			{% if loop.first %}
-				<table class="table table-hover table-striped table-condensed table-responsive">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>{{ pager.create_header('First name'|trans, 'firstname')|raw }}</th>
-						<th>{{ pager.create_header('Last name'|trans, 'lastname')|raw }}</th>
-						<th>{{ pager.create_header('Username'|trans, 'username')|raw }}</th>
-						<th colspan="2">&nbsp;</th>
-					</tr>
-				</thead>
-				<tbody>
-			{% endif %}
+				{% if loop.first %}
+					<table class="table table-hover table-striped table-condensed table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>{{ pager.create_header('First name'|trans, 'firstname')|raw }}</th>
+							<th>{{ pager.create_header('Last name'|trans, 'lastname')|raw }}</th>
+							<th>{{ pager.create_header('Username'|trans, 'username')|raw }}</th>
+							<th colspan="2">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+				{% endif %}
 
 					<tr>
 						<td>{{ user.id }}</td>
@@ -226,10 +230,10 @@
 						</td>
 					</tr>
 
-			{% if loop.last %}
-				</tbody>
-				</table>
-			{% endif %}
+				{% if loop.last %}
+					</tbody>
+					</table>
+				{% endif %}
 			{% endfor %}
 			</div>
 		</div>

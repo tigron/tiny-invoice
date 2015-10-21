@@ -20,9 +20,14 @@ class Invoice {
 	 * @access private
 	 */
 	public function generate_number() {
+<<<<<<< HEAD
 		$db = Database::get();
 		$table = self::trait_get_database_table();
 		$number = $db->get_one('SELECT number FROM ' . $table . ' ORDER BY number DESC LIMIT 1', []);
+=======
+		$db = Database::Get();
+		$number = $db->get_one('SELECT number FROM invoice ORDER BY number DESC LIMIT 1', []);
+>>>>>>> origin/master
 		if ($number === null) {
 			$number = 1;
 		} else {
