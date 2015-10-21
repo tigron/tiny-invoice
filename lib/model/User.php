@@ -23,37 +23,47 @@ class User {
 	private static $user = null;
 
 	/**
+	 * Class configuration
+	 *
+	 * @var array
+	 * @access private
+	 */
+	private static $class_configuration = [
+		'disallow_set' => ['password'],
+	];
+
+	/**
 	 * Validate user data
 	 *
 	 * @access public
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = array()) {
-		$required_fields = array('username', 'password', 'firstname', 'lastname', 'email');
+	public function validate(&$errors = []) {
+		$required_fields = [ 'username', 'password', 'firstname', 'lastname', 'email' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
 			}
 		}
 
-		if (!Util::validate_email($this->details['email'])) {
+		if (!Validation::validate_email($this->details['email'])) {
 			$errors['email'] = 'syntax error';
 		}
 
-		if ($this->id === null) {
-			try {
-				$user = self::get_by_username($this->details['username']);
+		try {
+			$user = self::get_by_username($this->details['username']);
+			if ($this->id === null OR ($this->id !== null AND $this->id != $user->id)) {
 				$errors['username'] = 'already exists';
-			} catch (Exception $e) { }
-		}
+			}
+		} catch (Exception $e) { }
 
-		if ($this->id === null) {
-			try {
-				$user = self::get_by_email($this->details['email']);
+		try {
+			$user = self::get_by_email($this->details['email']);
+			if ($this->id === null OR ($this->id !== null AND $this->id != $user->id)) {
 				$errors['email'] = 'already exists';
-			} catch (Exception $e) { }
-		}
+			}
+		} catch (Exception $e) { }
 
 		if (count($errors) > 0) {
 			return false;
@@ -63,16 +73,13 @@ class User {
 	}
 
 	/**
-	 * Set password
+	 * Set the user password
 	 *
 	 * @access public
 	 * @param string $password
 	 */
 	public function set_password($password) {
-		if ($password == '') {
-			return;
-		}
-		$this->details['password'] = sha1($password);
+		$this->details['password'] = password_hash($password, PASSWORD_DEFAULT);
 	}
 
 	/**
@@ -83,14 +90,15 @@ class User {
 	 * @return User $user
 	 */
 	public static function get_by_username($username) {
-		$db = Database::Get();
-		$id = $db->get_one('SELECT id FROM user WHERE username = ?', array($username));
+		$db = Database::get();
+		$table = self::trait_get_database_table();
+		$id = $db->get_one('SELECT id FROM ' . $table . ' WHERE username = ?', [ $username ]);
 
 		if ($id === null) {
 			throw new Exception('User not found');
 		}
 
-		return User::get_by_id($id);
+		return self::get_by_id($id);
 	}
 
 	/**
@@ -101,14 +109,15 @@ class User {
 	 * @return User $user
 	 */
 	public static function get_by_email($email) {
-		$db = Database::Get();
-		$id = $db->get_one('SELECT id FROM user WHERE email = ?', array($email));
+		$db = Database::get();
+		$table = self::trait_get_database_table();
+		$id = $db->get_one('SELECT id FROM ' . $table . ' WHERE email = ?', [ $email ]);
 
 		if ($id === null) {
 			throw new Exception('User not found');
 		}
 
-		return User::get_by_id($id);
+		return self::get_by_id($id);
 	}
 
 	/**
@@ -121,10 +130,17 @@ class User {
 	 * @return User $user
 	 */
 	public static function authenticate($username, $password) {
-		$user = User::get_by_username($username);
+		$user = self::get_by_username($username);
 
-		if ($user->password != sha1($password)) {
-			throw new Exception('Authentication failed');
+		if (password_verify($password, $user->password) === false) {
+			throw new Exception('Unauthorized');
+		}
+
+		// If we got here, we can assume the password is correct. If the password
+		// is still using a weak hash, we can rehash it.
+		if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
+			$user->set_password($password);
+			$user->save();
 		}
 
 		return $user;

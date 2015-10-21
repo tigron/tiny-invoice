@@ -1,6 +1,6 @@
 <?php
 /**
- * Module Setting Company
+ * Module Setting Mailscanner
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
@@ -11,23 +11,22 @@ use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 
-class Web_Module_Setting_Company extends Module {
+class Web_Module_Setting_Mailscanner extends Module {
 	/**
-	 * Login required ?
-	 * Default = yes
+	 * Login required
 	 *
-	 * @access public
+	 * @access protected
 	 * @var bool $login_required
 	 */
-	public $login_required = true;
+	protected $login_required = true;
 
 	/**
-	 * Template to use
+	 * Template
 	 *
-	 * @access public
+	 * @access protected
 	 * @var string $template
 	 */
-	public $template = 'setting/company.twig';
+	protected $template = 'setting/mailscanner.twig';
 
 	/**
 	 * Display method
@@ -35,7 +34,10 @@ class Web_Module_Setting_Company extends Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Template::Get();
+		$template = Template::get();
+
+		$tags = Tag::get_all();
+		$template->assign('tags', $tags);
 
 		if (isset($_POST['setting'])) {
 			foreach ($_POST['setting'] as $key => $value) {
@@ -49,10 +51,10 @@ class Web_Module_Setting_Company extends Module {
 				$setting->save();
 			}
 			Session::set_sticky('message', 'updated');
-			Session::redirect('/setting/company');
+			Session::redirect('/setting/mailscanner');
 		}
 
 		$template->assign('settings', Setting::get_as_array());
-		$template->assign('countries', Country::get_grouped());
+
 	}
 }

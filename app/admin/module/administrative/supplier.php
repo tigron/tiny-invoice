@@ -8,25 +8,24 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager;   
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Supplier extends Module {
 	/**
-	 * Login required ?
-	 * Default = yes
+	 * Login required
 	 *
-	 * @access public
+	 * @access protected
 	 * @var bool $login_required
 	 */
-	public $login_required = true;
+	protected $login_required = true;
 
 	/**
-	 * Template to use
+	 * Template
 	 *
-	 * @access public
+	 * @access protected
 	 * @var string $template
 	 */
-	public $template = 'administrative/supplier.twig';
+	protected $template = 'administrative/supplier.twig';
 
 	/**
 	 * Display method
@@ -34,19 +33,21 @@ class Web_Module_Administrative_Supplier extends Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Template::Get();
+		$template = Template::get();
 
 		$pager = new Pager('supplier');
 
 		$pager->add_sort_permission('company');
 		$pager->add_sort_permission('vat');
+		$pager->add_sort_permission('country.name');
+		$pager->add_sort_permission('city');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
 		}
 		$pager->page();
 
-		$template = Template::Get();
+		$template = Template::get();
 		$template->assign('pager', $pager);
 	}
 
@@ -66,11 +67,12 @@ class Web_Module_Administrative_Supplier extends Module {
 			} else {
 				$supplier->save();
 
-				$session = Session_Sticky::Get();
-				$session->message = 'created';
-				Session::Redirect('/administrative/supplier');
+				Session::set_sticky('message', 'created');
+				Session::redirect('/administrative/supplier');
 			}
 		}
+
+		$template->assign('countries', Country::get_grouped());
 	}
 
 	/**
@@ -84,13 +86,42 @@ class Web_Module_Administrative_Supplier extends Module {
 
 		if (isset($_POST['supplier'])) {
 			$supplier->load_array($_POST['supplier']);
-			$supplier->save();
+			if ($supplier->validate($errors) === false) {
+				$template->assign('errors', $errors);
+			} else {
+				$supplier->save();
 
-			$session = Session_Sticky::Get();
-			$session->message = 'updated';
-			Session::Redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
+				Session::set_sticky('message', 'updated');
+				Session::redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
+			}
 		}
+
 		$template->assign('supplier', $supplier);
+		$template->assign('countries', Country::get_grouped());
+	}
+
+	/**
+	 * Search supplier (ajax)
+	 *
+	 * @access public
+	 */
+	public function display_ajax_search() {
+		$this->template = null;
+
+		$pager = new Pager('supplier');
+		$pager->add_sort_permission('company');
+		$pager->set_search($_GET['search']);
+		$pager->page();
+
+		$data = [];
+		foreach ($pager->items as $supplier) {
+			$name = $supplier->company;
+			$data[] = [
+				'id' => $supplier->id,
+				'value' => $name
+			];
+		}
+		echo json_encode($data);
 	}
 
 }

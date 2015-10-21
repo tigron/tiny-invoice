@@ -255,11 +255,22 @@
 				{% trans "Filter" %}
 			</div>
 			<div class="panel-body">
+				{% set conditions = pager.get_conditions() %}
 				<form method="post" action="/administrative/invoice/queue" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
 						<div class="col-xs-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Status" %}</label>
+						<div class="col-xs-9">
+							<select name="status" class="form-control">
+								<option value=""> - - - </option>
+								<option value="unprocessed"{% if conditions.processed_to_invoice_item_id is defined and conditions.processed_to_invoice_item_id[0][0] == 'IS' %} selected{% endif %}>{% trans "Unprocessed" %}</option>
+								<option value="processed"{% if conditions.processed_to_invoice_item_id is defined and conditions.processed_to_invoice_item_id[0][0] == 'IS NOT' %} selected{% endif %}>{% trans "Processed" %}</option>
+							</select>
 						</div>
 					</div>
 					<div class="form-group">
@@ -285,7 +296,7 @@
 						{% trans "Add item" %}
 					</a>
 				</div>
-				{% trans "Invoice queue items" %}
+				{{ base.pager_count(pager.item_count) }}
 			</div>
 			<div class="panel-body">
 			{% for invoice_queue in pager.items %}
@@ -294,10 +305,11 @@
 				<thead>
 					<tr>
 						<th>{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
+						<th>{{ pager.create_header('Processed'|trans, 'processed_to_invoice_item_id')|raw }}</th>
 						<th>{{ pager.create_header('Customer'|trans, 'customer')|raw }}</th>
 						<th>{% trans "Description" %}</th>
 						<th>{{ pager.create_header('Price'|trans, 'price')|raw }}</th>
-						<th>&nbsp;</th>
+						<th colspan="2">&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -305,6 +317,13 @@
 
 				<tr>
 					<td>{{ invoice_queue.id }}</td>
+					<td>
+						{% if not invoice_queue.is_processed() %}
+							<span class="glyphicon glyphicon-remove"></span>
+						{% else %}
+							<span class="glyphicon glyphicon-ok"></span>
+						{% endif %}
+					</td>
 					<td>{{ invoice_queue.customer.firstname }} {{ invoice_queue.customer.lastname }}{% if invoice_queue.customer.company != '' %} ({{ invoice_queue.customer.company }}){% endif %}</td>
 					<td>{{ invoice_queue.description }}</td>
 					<td>&euro;{{ invoice_queue.get_price_excl()|number_format }}</td>
@@ -326,6 +345,11 @@
 				</tbody>
 				</table>
 			{% endif %}
+
+			{% else %}
+
+				<p><em>{% trans "No invoice queue items found." %}</em></p>
+
 			{% endfor %}
 			</div>
 		</div>

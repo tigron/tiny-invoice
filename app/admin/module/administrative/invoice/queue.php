@@ -8,25 +8,24 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager;  
+use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Invoice_Queue extends Module {
 	/**
-	 * Login required ?
-	 * Default = yes
+	 * Login required
 	 *
-	 * @access public
+	 * @access protected
 	 * @var bool $login_required
 	 */
-	public $login_required = true;
+	protected $login_required = true;
 
 	/**
-	 * Template to use
+	 * Template
 	 *
-	 * @access public
+	 * @access protected
 	 * @var string $template
 	 */
-	public $template = 'administrative/invoice/queue.twig';
+	protected $template = 'administrative/invoice/queue.twig';
 
 	/**
 	 * Display method
@@ -34,21 +33,33 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Template::Get();
+		$template = Template::get();
 
 		$pager = new Pager('invoice_queue');
+
+		if (isset($_POST['status'])) {
+			if ($_POST['status'] == 'processed') {
+				$pager->add_condition('processed_to_invoice_item_id', 'IS NOT', NULL);
+			} elseif ($_POST['status'] == 'unprocessed') {
+				$pager->add_condition('processed_to_invoice_item_id', 'IS', NULL);
+			}
+		} else {
+			$pager->add_condition('processed_to_invoice_item_id', 'IS', NULL);
+		}
 
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('price');
 		$pager->add_sort_permission('customer.lastname');
+		$pager->add_sort_permission('processed_to_invoice_item_id');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
 		}
+
 		$pager->set_direction('desc');
 		$pager->page();
 
-		$template = Template::Get();
+		$template = Template::get();
 		$template->assign('pager', $pager);
 	}
 
@@ -58,7 +69,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 	 * @access public
 	 */
 	public function display_create_step1() {
-		$template = Template::Get();
+		$template = Template::get();
 
 		if (!isset($_SESSION['invoice_queue'])) {
 			$_SESSION['invoice_queue'] = ['items' => [], 'customer_id' => 0, 'invoice_contact_id' => 0];
@@ -69,7 +80,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 				$template->assign('errors', 'select_customer');
 			} else {
 				$_SESSION['invoice_queue']['customer_id'] = $_POST['customer_id'];
-				Session::Redirect('/administrative/invoice/queue?action=create_step2');
+				Session::redirect('/administrative/invoice/queue?action=create_step2');
 			}
 		}
 
@@ -87,13 +98,13 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 	 * @access public
 	 */
 	public function display_create_step2() {
-		$template = Template::Get();
+		$template = Template::get();
 		if (isset($_POST['invoice_contact_id'])) {
 			if ($_POST['invoice_contact_id'] == '') {
 				$template->assign('errors', 'select_invoice_contact');
 			} else {
 				$_SESSION['invoice_queue']['invoice_contact_id'] = $_POST['invoice_contact_id'];
-				Session::Redirect('/administrative/invoice/queue?action=create_step3');
+				Session::redirect('/administrative/invoice/queue?action=create_step3');
 			}
 		}
 
@@ -113,7 +124,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 	 * @access public
 	 */
 	public function display_create_step3() {
-		$template = Template::Get();
+		$template = Template::get();
 
 		if (isset($_POST['invoice_queue_item'])) {
 
@@ -140,7 +151,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 
 				unset($_SESSION['invoice_queue']);
 
-				Session::Redirect('/administrative/invoice/queue');
+				Session::redirect('/administrative/invoice/queue');
 
 			}
 
@@ -157,21 +168,21 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 	 * @access public
 	 */
 	public function display_edit() {
-		$template = Template::Get();
+		$template = Template::get();
 		$invoice_queue = Invoice_Queue::get_by_id($_GET['id']);
 
 		if (isset($_POST['invoice_queue'])) {
 			$invoice_queue->load_array($_POST['invoice_queue']);
 			$invoice_queue->save();
 
-			$session = Session_Sticky::Get();
+			$session = Session_Sticky::get();
 			$session->message = 'updated';
 			Session::Redirect('/administrative/invoice/queue?action=edit&id=' . $invoice_queue->id);
 		}
 	}
 
 	/**
-	 * Search customer (Ajax)
+	 * Search customer (ajax)
 	 *
 	 * @access public
 	 */
@@ -201,7 +212,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 	}
 
 	/**
-	 * Load customer (Ajax)
+	 * Load customer (ajax)
 	 *
 	 * @access public
 	 */

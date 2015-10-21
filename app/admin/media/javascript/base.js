@@ -1,5 +1,8 @@
 $(document).ready(function(){
 	
+	/**
+	 * Focus first input element of each form
+	 */
 	$('form input[type="text"]:first').focus();
 
 	/**
@@ -13,39 +16,20 @@ $(document).ready(function(){
 	);
 
 	/**
-	 * Confirm
+	 * Initialize confirm modal
 	 */
-	init_confirm();
+	$('a[data-confirm-message],button[data-confirm-message],input[data-confirm-message]').confirmModal();
+
+	/**
+	 * Initialize datetimepicker
+	 */
+	$('.datepicker').tigronDatetimepicker({
+	    'format': 'DD/MM/YYYY',
+		'extraFormats': [ 'YYYY-MM-DD' ],
+	    'postFormat': 'YYYY-MM-DD'
+	});
 
 });
-
-function init_confirm() {
-
-	var source = $("#data-confirm-tmpl").html();
-	Handlebars.setDelimiter('(',')');
-	var template = Handlebars.compile(source);
-
-	$('a[data-confirm-message]').on('click', function(ev) {
-        ev.preventDefault();
-
-		var data = {'title': '', 'message': '', 'btn_ok': '', 'btn_href': '', 'btn_cancel': ''};
-
-		data.title = $(this).data('confirm-title');
-		data.message = $(this).data('confirm-message');
-		data.btn_ok = $(this).data('confirm-btn-ok');
-		data.btn_cancel = $(this).data('confirm-btn-cancel');
-		data.btn_href = $(this).prop('href');
-
-		if (!$('#dataConfirmModal').length) {
-			$('body').append(template(data));
-		} else {
-			$('#dataConfirmModal').replaceWith(template(data));
-		}
-
-		$('#dataConfirmModal').modal('show');
-		return false;
-    });
-}
 
 // function to change delimiters (to prevent twig collision)
 Handlebars.setDelimiter = function(start,end){

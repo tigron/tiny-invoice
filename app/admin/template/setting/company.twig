@@ -2,126 +2,130 @@
 
 {% block content %}
 
-{% if message == 'saved' %}
-	<div class="alert alert-success">
-		{% trans "Settings saved" %}
-	</div>
-{% endif %}
+	<ol class="breadcrumb">
+		<li><a href="/">{% trans "Home" %}</a></li>
+		<li>{% trans "Settings" %}</li>
+		<li class="active">{% trans "Company settings" %}</li>
+	</ol>
 
-<form action="/setting/company" method="post" class="form-horizontal form-condensed">
-<div class="panel panel-default">
-	<div class="panel-heading">{% trans "Company Settings" %}</div>
-	<div class="panel-body">
-		<div class="alert alert-info">
-			{% trans "Your company information is added to invoice documents." %} {% trans "Please fill them in correctly." %}
-		</div>
+	{% if env.sticky_session.message is defined %}
+		{{ base.display_flash_message(env.sticky_session.message, 'settings') }}
+	{% endif %}
 
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Name" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[company]" value="{{ settings.company }}" />
+	<form action="/setting/company" method="post" class="form-horizontal form-condensed">
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Company settings" %}</div>
+			<div class="panel-body">
+				<div class="alert alert-info">
+					{% trans "Your company information is added to invoice documents." %} {% trans "Please fill them in correctly." %}
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Name" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[company]" value="{{ settings.company }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Street" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[street]" value="{{ settings.street }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Housenumber" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[housenumber]" value="{{ settings.housenumber }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Zipcode" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[zipcode]" value="{{ settings.zipcode }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "City" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[city]" value="{{ settings.city }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-md-3">{% trans "Country" %}</label>
+					<div class="col-md-9">
+						<select name="setting[country_id]" class="form-control" >
+							{% for key, country_group in countries %}
+								<optgroup label="{{ key }}">
+								{% for country in country_group %}
+									<option value="{{ country.id }}" {% if settings.country_id == country.id %}selected{% endif %} >{{ country.name }}</option>
+								{% endfor %}
+								</optgroup>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Phone" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[phone]" value="{{ settings.phone }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Email" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[email]" value="{{ settings.email }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Website" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[website]" value="{{ settings.website }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "VAT" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[vat]" value="{{ settings.vat }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Bank" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[bank]" value="{{ settings.bank }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "Bank IBAN" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[iban]" value="{{ settings.iban }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "BIC" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[bic]" value="{{ settings.bic }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-9 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
 			</div>
 		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Street" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[street]" value="{{ settings.street }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Housenumber" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[housenumber]" value="{{ settings.housenumber }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Zipcode" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[zipcode]" value="{{ settings.zipcode }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "City" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[city]" value="{{ settings.city }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-md-3">{% trans "Country" %}</label>
-			<div class="col-md-9">
-				<select name="setting[country_id]" class="form-control" >
-					{% for key, country_group in countries %}
-						<optgroup label="{{ key }}">
-						{% for country in country_group %}
-							<option value="{{ country.id }}" {% if settings.country_id == country.id %}selected{% endif %} >{{ country.name }}</option>
-						{% endfor %}
-						</optgroup>
-					{% endfor %}
-				</select>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Phone" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[phone]" value="{{ settings.phone }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Email" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[email]" value="{{ settings.email }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Website" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[website]" value="{{ settings.website }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "VAT" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[vat]" value="{{ settings.vat }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Bank" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[bank]" value="{{ settings.bank }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "Bank IBAN" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[iban]" value="{{ settings.iban }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label class="control-label col-xs-3">{% trans "BIC" %}</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" name="setting[bic]" value="{{ settings.bic }}" />
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="col-xs-9 col-xs-offset-3">
-				<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-			</div>
-		</div>
-	</div>
-</div>
-</form>
+	</form>
 
 {% endblock content %}

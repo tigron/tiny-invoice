@@ -67,8 +67,7 @@ class Web_Module_Administrative_Customer extends Module {
 			} else {
 				$customer->save();
 
-				$session = Session_Sticky::Get();
-				$session->message = 'created';
+				Session::set_sticky('message', 'created');
 				Session::Redirect('/administrative/customer');
 			}
 		}
@@ -93,9 +92,8 @@ class Web_Module_Administrative_Customer extends Module {
 			} else {
 				$customer->save();
 
-				$session = Session_Sticky::Get();
-				$session->message = 'updated';
-				Session::Redirect('/administrative/customer?action=edit&id=' . $customer->id);
+				Session::set_sticky('message', 'updated');
+				Session::redirect('/administrative/customer?action=edit&id=' . $customer->id);
 			}
 		}
 		$template->assign('customer', $customer);
@@ -104,7 +102,7 @@ class Web_Module_Administrative_Customer extends Module {
 	}
 
 	/**
-	 * Search customer (Ajax)
+	 * Search customer (ajax)
 	 *
 	 * @access public
 	 */
@@ -131,7 +129,7 @@ class Web_Module_Administrative_Customer extends Module {
 	}
 
 	/**
-	 * Load customer (Ajax)
+	 * Load customer (ajax)
 	 *
 	 * @access public
 	 */

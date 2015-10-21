@@ -68,7 +68,7 @@ class Invoice_Queue {
 	public static function get_by_invoice_contact(Invoice_Contact $invoice_contact) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
-		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE invoice_contact_id = ?', [ $invoice_contact->id ]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE invoice_contact_id = ?', [ $invoice_contact->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {
@@ -88,7 +88,7 @@ class Invoice_Queue {
 	public static function get_unprocessed_by_invoice_contact(Invoice_Contact $invoice_contact) {
 		$table = self::trait_get_database_table();
 		$db = self::trait_get_database();
-		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE invoice_contact_id = ? AND processed_to_invoice_item_id IS NULL', [ $invoice_contact->id ]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE invoice_contact_id = ? AND processed_to_invoice_item_id IS NULL', [ $invoice_contact->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {

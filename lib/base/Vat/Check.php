@@ -138,80 +138,8 @@ class Vat_Check {
 		if ($result->valid == 1) {
 			return true;
 		} else {
-			// If VIES gave a negative result, check also against the Kruispuntbank
-			// for BE-only VAT numbers such as for not for profit organizations
-			if ($country->iso2 == 'BE') {
-				return self::check_online_be_call($number);
-			} else {
-				return false;
-			}
-		}
-	}
-
-	/**
-	 * Try to check a Belgian VAT number online against the "Kruispuntbank"
-	 * This method should only be used as a last resort, since the interface
-	 * with the "Kruispuntbank" is a bit dodgy.
-	 *
-	 * For more information on the "Kruispuntbank", please see http://kbo-bce-ps.economie.fgov.be/
-	 *
-	 * @param string The VAT number
-	 * @throws Exception Throws an exception when the service can't be reached
-	 * @return bool
-	 */
-	public static function check_online_be_call($number) {
-		$cookie = TMP_PATH . '/kruispuntbank_cookie.txt';
-
-		$postdata = 'ondernemingsnummer='.$number.'&';
-		$postdata .= 'actionEntnr=Zoek+onderneming&';
-		$postdata .= 'natuurlijkPersoon=true&';
-		$postdata .= '_natuurlijkPersoon=on&';
-		$postdata .= 'rechtsPersoon=true&';
-		$postdata .= '_rechtsPersoon=on&';
-		$postdata .= 'searchWord=&';
-		$postdata .= 'pstcdeNPRP=&';
-		$postdata .= 'postgemeente1=&';
-		$postdata .= 'familynameFonetic=&';
-		$postdata .= 'pstcdeNPFonetic=&';
-		$postdata .= 'postgemeente2=&';
-		$postdata .= 'searchwordRP=&';
-		$postdata .= 'pstcdeRPFonetic=&';
-		$postdata .= 'postgemeente3=&';
-		$postdata .= 'rechtsvormFonetic=ALL&';
-		$postdata .= 'familynameExact=&';
-		$postdata .= 'firstName=&';
-		$postdata .= 'pstcdeNPExact=&';
-		$postdata .= 'postgemeente4=&';
-		$postdata .= 'firmName=&';
-		$postdata .= 'pstcdeRPExact=&';
-		$postdata .= 'postgemeente5=&';
-		$postdata .= 'rechtsvormExact=ALL';
-
-		// Get to the front page to get the cookie
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, 'http://kbopub.economie.fgov.be/kbopub/zoekwoordenform.html?' . $postdata);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
-		curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
-		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
-		//curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
-
-		ob_start();
-			$result = curl_exec($ch);
-		ob_end_clean();
-
-		if ($result === false) {
-			throw new Exception('Kruispuntbank not available');
-		}
-
-		if (strpos($result, 'Ondernemingsgegevens')) {
-			return true;
-		} else {
 			return false;
 		}
 	}
+
 }
-?>

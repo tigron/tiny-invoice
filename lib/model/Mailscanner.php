@@ -6,6 +6,7 @@
  *
  * @author Christophe Gosiau <christophe.gosiau@tigron.be>
  * @author Gerry Demaret <gerry.demaret@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
 class Mailscanner {
@@ -69,7 +70,7 @@ class Mailscanner {
 				continue;
 			}
 
-			$file = File_Store::store($attachment['filename'], $attachment['attachment']);
+			$file = \Skeleton\File\File::store($attachment['filename'], $attachment['attachment']);
 
 			$document = new Document();
 			$document->file_id = $file->id;
@@ -94,7 +95,7 @@ class Mailscanner {
 	 * @return array $mails
 	 */
 	private function get_mails() {
-		$mails = array();
+		$mails = [];
 		while (($mail = $this->imap->fetchmail()) !== false) {
 			$mails[] = $mail;
 		}

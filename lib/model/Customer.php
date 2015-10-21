@@ -21,16 +21,22 @@ class Customer {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = array()) {
-		$required_fields = array('firstname', 'lastname', 'email', 'street', 'housenumber', 'city', 'zipcode');
+	public function validate(&$errors = []) {
+		$required_fields = [ 'firstname', 'lastname', 'email', 'street', 'housenumber', 'city', 'zipcode', 'country_id' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
 			}
 		}
 
-		if (isset($this->details['email']) AND !Util::validate_email($this->details['email'])) {
+		if (isset($this->details['email']) AND !Validation::validate_email($this->details['email'])) {
 			$errors['email'] = 'syntax error';
+		}
+
+		if (isset($this->details['vat']) AND $this->details['vat'] != '') {
+			if (!Validation::validate_vat($this->details['vat'], $this->country)) {
+				$errors['vat'] = 'incorrect';
+			}
 		}
 
 		if (count($errors) > 0) {

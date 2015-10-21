@@ -8,10 +8,17 @@
     "require": {
         "sami/sami": "3.0.*@dev",
         "fxp/composer-asset-plugin": "~1.0",
-        "bower-asset/bootstrap": "dev-master",
-	"bower-asset/font-awesome": "*",
+	"bower-asset/bootstrap": "dev-master",
+        "bower-asset/font-awesome": "*",
 	"swiftmailer/swiftmailer": "5.*",
-	"dompdf/dompdf": "dev-master"
+	"dompdf/dompdf": "dev-master",
+	"bower-asset/moment": "2.10.*",
+	"bower-asset/tigron-datetimepicker": "*",
+	"bower-asset/tigron-confirm-modal": "0.*",
+        "npm-asset/dropzone": "~4.0",
+	"bower-asset/textarea-autosize": "0.*",
+	"bower-asset/handlebars": "4.0.2",
+	"filp/whoops": "1.*"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",
@@ -24,12 +31,13 @@
         "tigron/skeleton-core": "dev-master",
         "tigron/skeleton-error": "dev-master",
         "tigron/skeleton-template": "dev-master",
-        "tigron/skeleton-email": "dev-master"
+        "tigron/skeleton-email": "dev-master",
+	"tigron/skeleton-console": "dev-master"
     },
     "extra": {
         "asset-installer-paths": {
-            "npm-asset-library": "lib/external/assets",
-            "bower-asset-library": "lib/external/assets"
+		"npm-asset-library": "lib/external/assets",
+		"bower-asset-library": "lib/external/assets"
         }
     },
     "license": "MIT",

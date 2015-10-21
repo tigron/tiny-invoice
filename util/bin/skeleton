@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+include __DIR__ . '/../../config/global.php';
+
+/**
+ * This is the Skeleton Console Application
+ *
+ * @author Gerry Demaret <gerry@tigron.be>
+ * @author Christophe Gosiau <christophe@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
+ */
+
+use \Skeleton\Console\Application;
+
+$application = new Application();
+$application->add_commands();
+$application->run(); 

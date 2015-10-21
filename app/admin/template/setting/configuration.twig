@@ -8,21 +8,25 @@
 		<li class="active">{% trans "Configuration" %}</li>
 	</ol>
 
-	{% if env.session_sticky.message is defined %}
-		{{ base.display_flash_message(env.session_sticky.message, 'configuration') }}
+	{% if env.sticky_session.message is defined %}
+		{{ base.display_flash_message(env.sticky_session.message, 'configuration') }}
 	{% endif %}
 
 	<div class="panel panel-default">
 		<div class="panel-heading">{% trans "Configuration" %}</div>
 		<div class="panel-body">
-			<form action="/setting/configuration" method="post" class="form-condensed">
+			<form action="/setting/configuration" method="post" class="form-condensed form-horizontal">
 				<div class="form-group">
-					<label>{% trans "Archive mailbox" %}</label>
-					<input type="text" class="form-control" name="setting[archive_mailbox]" value="{{ settings.archive_mailbox }}">
+					<label class="col-xs-3 control-label">{% trans "Archive mailbox" %}</label>
+					<div class="col-xs-9">
+						<input type="text" name="setting[archive_mailbox]" class="form-control" value="{{ settings.archive_mailbox }}">
+					</div>
 				</div>
 
 				<div class="form-group">
-					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					<div class="col-xs-9 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
 				</div>
 			</form>
 		</div>

@@ -26,8 +26,8 @@ class Transfer {
 	 */
 	public static function get_by_invoice(Invoice $invoice) {
 		$table = self::trait_get_database_table();
-		$db = self::trait_get_database();
-		$ids = $db->getCol('SELECT id FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {
@@ -46,8 +46,8 @@ class Transfer {
 	 */
 	public static function get_amount_by_invoice(Invoice $invoice) {
 		$table = self::trait_get_database_table();
-		$db = self::trait_get_database();
-		$amount = $db->getOne('SELECT SUM(amount) FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
+		$db = Database::get();
+		$amount = $db->get_one('SELECT SUM(amount) FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
 		return $amount;
 	}
 }

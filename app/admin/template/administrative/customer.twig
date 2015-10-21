@@ -14,13 +14,16 @@
 		<div class="alert alert-danger">
 			{% trans "The form contains mistakes. Please correct them." %}
 		</div>
-		{% elseif env.session_sticky.message is defined %}
-			{{ base.display_flash_message(env.session_sticky.message, 'customer') }}
+		{% elseif env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'customer') }}
 		{% endif %}
 
 		<form class="form form-horizontal form-condensed" method="post" action="/administrative/customer?action=edit&id={{ customer.id }}">
 
 			<div class="panel panel-default">
+				<div class="panel-heading">
+					{% trans "Details" %}
+				</div>
 				<div class="panel-body">
 
 					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
@@ -319,8 +322,8 @@
 			</div>
 		</div>
 
-		{% if env.session_sticky.message is defined %}
-			{{ base.display_flash_message(env.session_sticky.message, 'customer') }}
+		{% if env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'customer') }}
 		{% endif %}
 
 		<div class="panel panel-default">
@@ -331,7 +334,7 @@
 						{% trans "Add customer" %}
 					</a>
 				</div>
-				{% trans "Customers" %}
+				{{ base.pager_count(pager.item_count) }}
 			</div>
 			<div class="panel-body">
 			{% for customer in pager.items %}
@@ -369,6 +372,11 @@
 
 				{{ pager.links|raw }}
 			{% endif %}
+
+			{% else %}
+
+				<p><em>{% trans "No customers found." %}</em></p>
+
 			{% endfor %}
 			</div>
 		</div>

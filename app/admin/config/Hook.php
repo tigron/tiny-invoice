@@ -36,8 +36,8 @@ class Hook_Admin {
 		$module->sticky_session = $sticky_session;
 
 		// Clear the new session so we can start using it again
-		\Skeleton\Core\Web\Session::clear_sticky();
-		
+		//\Skeleton\Core\Web\Session::clear_sticky();
+
 		// Assign settings to template. Used for company information in header
 		$template->assign('settings', Setting::get_as_array());
 
