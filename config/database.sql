@@ -519,9 +519,6 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `user` (`id`, `language_id`, `firstname`, `lastname`, `username`, `email`, `password`, `admin`, `created`, `updated`) VALUES
-(2,	1,	'David',	'Vandemaele',	'david.vandemaele',	'david@pixelwest.be',	'$2y$10$X9uHD5H8sxdhWBWkPmDtMOE9IOKoyM1KPDgWbtOv3dQPzUH5Xs.Tq',	1,	'2015-10-17 14:20:29',	'2015-10-21 22:43:58');
-
 DROP TABLE IF EXISTS `vat_check_cache`;
 CREATE TABLE `vat_check_cache` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
