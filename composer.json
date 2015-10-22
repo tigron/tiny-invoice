@@ -16,9 +16,12 @@
 		"bower-asset/moment": "2.10.*",
 		"bower-asset/tigron-datetimepicker": "*",
 		"bower-asset/tigron-confirm-modal": "0.*",
-		"npm-asset/dropzone": "~4.0",
+		"bower-asset/dropzone": "~4.0",
 		"bower-asset/textarea-autosize": "0.*",
-		"bower-asset/handlebars": "4.0.2"
+		"bower-asset/jquery-zoom": "dev-master",
+		"bower-asset/handlebars": "4.0.2",
+		"bower-asset/bootstrap-multiselect": "dev-master",
+		"npm-asset/jquery.autogrow-textarea": "dev-master"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",

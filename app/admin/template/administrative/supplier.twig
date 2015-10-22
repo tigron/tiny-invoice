@@ -113,28 +113,28 @@
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Street" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[street]" class="form-control" /></div>
+						<div class="col-xs-9"><input type="text" name="supplier[street]" class="form-control" value="{{ env.post.supplier.street }}"/></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Housenumber" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[housenumber]" class="form-control" /></div>
+						<div class="col-xs-9"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ env.post.supplier.housenumber }}"/></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Zipcode" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[zipcode]" class="form-control" /></div>
+						<div class="col-xs-9"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ env.post.supplier.zipcode }}"/></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "City" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[city]" class="form-control" /></div>
+						<div class="col-xs-9"><input type="text" name="supplier[city]" class="form-control" value="{{ env.post.supplier.city }}"/></div>
 					</div>
 
 					<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
 						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
 						<div class="col-xs-9">
-							{{ form.select_country(countries, 'supplier[country_id]', 'country_id', supplier.country_id|default(203)) }}
+							{{ form.select_country(countries, 'supplier[country_id]', 'country_id', env.post.supplier.country_id|default(203)) }}
 						</div>
 					</div>
 

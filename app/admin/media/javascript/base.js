@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	
+
 	/**
 	 * Focus first input element of each form
 	 */
@@ -27,6 +27,18 @@ $(document).ready(function(){
 	    'format': 'DD/MM/YYYY',
 		'extraFormats': [ 'YYYY-MM-DD' ],
 	    'postFormat': 'YYYY-MM-DD'
+	});
+
+	/**
+	 * Initialize multiselect
+	 */
+	$('.multiselect').multiselect();
+
+	/**
+	 * Initialize autogrow
+	 */
+	$('.autogrow').autogrow({
+            buttonWidth: '400px'
 	});
 
 });

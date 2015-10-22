@@ -61,6 +61,7 @@ class Web_Module_Administrative_Supplier extends Module {
 
 		if (isset($_POST['supplier'])) {
 			$supplier = new Supplier();
+
 			$supplier->load_array($_POST['supplier']);
 			if ($supplier->validate($errors) === false) {
 				$template->assign('errors', $errors);

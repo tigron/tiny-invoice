@@ -51,6 +51,17 @@
 							</div>
 
 							<div class="form-group">
+								<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
+								<div class="col-xs-9">
+									<select name="tags[]" multiple class="multiselect">
+										{% for tag in tags %}
+											<option value="{{ tag.id }}" {% if document.has_tag(tag) %}selected{% endif %}>{{ tag.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
 								<label class="col-xs-3 control-label">{% trans "Description" %}</label>
 								<div class="col-xs-9">
 									<textarea class="form-control autogrow" name="document[description]">{{ document.description }}</textarea>
@@ -82,32 +93,6 @@
 
 			</div>
 
-		</form>
-
-
-		{% if message == 'tags_updated' %}
-			<div class="alert alert-success">
-				{% trans "Tags updated" %}.
-			</div>
-		{% endif %}
-
-		<form class="form-horizontal" action="/administrative/document?action=edit_tags&id={{ document.id }}" method="post">
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Tags" %}</div>
-			<div class="panel-body">
-				{% for tag in tags %}
-					<div class="col-md-4">
-						<label><input type="checkbox" name="tag[]" value="{{ tag.id }}" {% if document.has_tag(tag) %}checked{% endif %}> {{ tag.name }}</label>
-					</div>
-				{% endfor %}
-
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3 text-right">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-			</div>
-		</div>
 		</form>
 
 	{% elseif action == 'add' %}
@@ -249,22 +234,32 @@
 						<td>{{ document.id }}</td>
 						<td>{{ document.created|date }}</td>
 						<td>{{ document.title }}</td>
-						<td></td>
 						<td>
-							<a href="/administrative/document?action=edit&id={{ document.id }}" title="">
+							{% set document_tags = [] %}
+							{% for tag in tags if document.has_tag(tag)%}
+								{% set document_tags = document_tags|merge([tag]) %}
+							{% endfor %}
+
+							{% for document_tag in document_tags %}
+								{{ document_tag.name }}{% if not loop.last %}, {% endif %}
+							{% endfor %}
+
+						</td>
+						<td width="20">
+							<a href="/administrative/document?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</a>
 						</td>
-						<td>
+						<td width="20">
 							{% if not document.is_purchase() %}
-								<a href="/administrative/document?action=delete&id={{ document.id }}" title="">
+								<a href="/administrative/document?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}">
 									<span class="glyphicon glyphicon-trash"></span>
 								</a>
 							{% endif %}
 						</td>
-						<td>
+						<td width="20">
 							{% if not document.is_purchase() %}
-								<a href="/administrative/purchase?action=add&document_id={{ document.id }}" title="">
+								<a href="/administrative/purchase?action=add&document_id={{ document.id }}" title="{% trans "Create purchase" %}">
 									<span class="glyphicon glyphicon-pushpin"></span>
 								</a>
 							{% endif %}
@@ -357,6 +352,16 @@
 			}
 
 		</script>
+	{% elseif action == 'edit' %}
+		<script type="text/javascript">
+		$(document).ready(function(){
+			$('.zoom').zoom({
+				url: '/picture?id={{ document.preview_file_id }}'
+			});
+		});
+		</script>
+
+
 	{% endif %}
 
 {% endblock javascript %}
