@@ -8,3 +8,4 @@ store/documentation/*
 lib/external/*
 composer.lock
 util/tmp/*
+migrations/db_version
