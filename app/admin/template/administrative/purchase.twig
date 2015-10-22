@@ -14,19 +14,64 @@
 		<div class="alert alert-danger">
 			{% trans "The form contains mistakes. Please correct them." %}
 		</div>
-		{% elseif env.session_sticky.message is defined %}
-			{{ base.display_flash_message(env.session_sticky.message, 'purchase') }}
+		{% elseif env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'purchase') }}
 		{% endif %}
 
-		<form class="form" method="post" action="/administrative/purchase?action=edit&id={{ purchase.id }}">
+		<form method="post" class="form-horizontal" action="/administrative/purchase?action=edit&id={{ purchase.id }}">
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Purchase settings" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
+					<div class="col-xs-9">
+						<p class="form-control-static">{{ purchase.supplier.company }}</p>
+					</div>
+				</div>
 
-			TODO
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Price excl VAT" %}</label>
+					<div class="col-xs-9">
+						<div class="input-group">
+							<span class="input-group-addon">&euro;</span>
+							<input type="text" name="purchase[price_excl]" class="form-control" value="{{ purchase.price_excl }}" >
+						</div>
+					</div>
+				</div>
 
-			<div class="form-group">
-				<button class="btn btn-primary">
-					{% trans "Save" %}
-				</button>
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Price incl VAT" %}</label>
+					<div class="col-xs-9">
+						<div class="input-group">
+							<span class="input-group-addon">&euro;</span>
+							<input type="text" name="purchase[price_incl]" class="form-control" value="{{ purchase.price_incl }}" >
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Date" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control datepicker" name="purchase[date]" value="{{ purchase.date }}"/>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Paid" %}</label>
+					<div class="col-xs-9">
+						<input type="checkbox" name="paid" id="paid" />
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<div class="col-xs-9 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+
 			</div>
+		</div>
 		</form>
 
 	{% elseif action == 'add' %}
