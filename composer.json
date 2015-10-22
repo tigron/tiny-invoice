@@ -5,30 +5,20 @@
     "name": "tigron/skeleton",
     "description": "Tigron Skeleton",
     "type": "project",
-	"repositories": [
-  	{
-		"type": "vcs",
-		"url":  "https://github.com/tigron/skeleton-migrate.git"
-	},
-  	{
-		"type": "vcs",
-		"url":  "https://github.com/tigron/skeleton-console.git"
-	}
-	],
     "require": {
-        "sami/sami": "3.0.*@dev",
-	"swiftmailer/swiftmailer": "5.*",
-	"dompdf/dompdf": "dev-master",
-	"filp/whoops": "1.*",
-        "fxp/composer-asset-plugin": "~1.0",
-	"bower-asset/bootstrap": "dev-master",
-        "bower-asset/font-awesome": "*",
-	"bower-asset/moment": "2.10.*",
-	"bower-asset/tigron-datetimepicker": "*",
-	"bower-asset/tigron-confirm-modal": "0.*",
-        "npm-asset/dropzone": "~4.0",
-	"bower-asset/textarea-autosize": "0.*",
-	"bower-asset/handlebars": "4.0.2"
+		"sami/sami": "3.0.*@dev",
+		"swiftmailer/swiftmailer": "5.*",
+		"dompdf/dompdf": "dev-master",
+		"filp/whoops": "1.*",
+		"fxp/composer-asset-plugin": "~1.0",
+		"bower-asset/bootstrap": "dev-master",
+		"bower-asset/font-awesome": "*",
+		"bower-asset/moment": "2.10.*",
+		"bower-asset/tigron-datetimepicker": "*",
+		"bower-asset/tigron-confirm-modal": "0.*",
+		"npm-asset/dropzone": "~4.0",
+		"bower-asset/textarea-autosize": "0.*",
+		"bower-asset/handlebars": "4.0.2"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",
@@ -42,7 +32,7 @@
         "tigron/skeleton-error": "dev-master",
         "tigron/skeleton-template": "dev-master",
         "tigron/skeleton-email": "dev-master",
-	"tigron/skeleton-console": "dev-master",
+		"tigron/skeleton-console": "dev-master",
         "tigron/skeleton-migrate": "dev-master"
     },
     "extra": {
