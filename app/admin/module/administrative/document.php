@@ -130,6 +130,14 @@ class Web_Module_Administrative_Document extends Module {
 			$document->load_array($_POST['document']);
 			$document->save();
 
+			$document->remove_tags();
+			if (isset($_POST['tags'])) {
+				foreach ($_POST['tags'] as $tag_id) {
+					$tag = Tag::get_by_id($tag_id);
+					$document->add_tag($tag);
+				}
+			}
+
 			Session::set_sticky('message', 'document_updated');
 			Session::redirect('/administrative/document?action=edit&id=' . $document->id);
 		}

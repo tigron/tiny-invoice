@@ -129,6 +129,18 @@ class Document {
 	}
 
 	/**
+	 * remove tags
+	 *
+	 * @access public
+	 */
+	public function remove_tags() {
+		$document_tags = $this->get_document_tags();
+		foreach ($document_tags as $document_tag) {
+			$document_tag->delete();
+		}
+	}
+
+	/**
 	 * Delete
 	 *
 	 * @access public
