@@ -18,9 +18,11 @@
 			{{ base.display_flash_message(env.sticky_session.message, 'purchase') }}
 		{% endif %}
 
-		<form method="post" class="form-horizontal" action="/administrative/purchase?action=edit&id={{ purchase.id }}">
+		{% include 'administrative/purchase/modal.document.twig' with {id: 'select-document', modal_size: "lg"} %}
+
+		<form method="post" class="form-horizontal form-condensed" action="/administrative/purchase?action=edit&id={{ purchase.id }}">
 		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Purchase settings" %}</div>
+			<div class="panel-heading">{% trans "Purchase details" %}</div>
 			<div class="panel-body">
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
@@ -29,9 +31,33 @@
 					</div>
 				</div>
 
+				<div class="form-group{% if 'document_id' in errors|keys %} has-error{% endif %}">
+					<label class="col-xs-3 control-label">
+						{% trans "Document" %}
+						<a href="#select-document" data-toggle="modal">
+							<span class="glyphicon glyphicon-pushpin"></span>
+						</a>
+					</label>
+					<div class="col-xs-9">
+						<p class="form-control-static">
+							<span id="document_title">
+								{% if purchase.document_id > 0 %}
+									<a href="/administrative/document?id={{ purchase.document.id }}&action=edit">
+										{{ purchase.document.title }}
+									</a> [ID: {{ purchase.document.id}}]
+								{% else %}
+									<em>&lt; {% trans "none selected" %} &gt;</em>
+								{% endif %}
+							</span>
+						</p>
+						<input type="hidden" name="purchase[document_id]" value="{{ purchase.document_id }}">
+						{{ form.invalid_input('document_id', errors) }}
+					</div>
+				</div>
+
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Price excl VAT" %}</label>
-					<div class="col-xs-9">
+					<div class="col-xs-5">
 						<div class="input-group">
 							<span class="input-group-addon">&euro;</span>
 							<input type="text" name="purchase[price_excl]" class="form-control" value="{{ purchase.price_excl }}" >
@@ -41,7 +67,7 @@
 
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Price incl VAT" %}</label>
-					<div class="col-xs-9">
+					<div class="col-xs-5">
 						<div class="input-group">
 							<span class="input-group-addon">&euro;</span>
 							<input type="text" name="purchase[price_incl]" class="form-control" value="{{ purchase.price_incl }}" >
@@ -49,20 +75,28 @@
 					</div>
 				</div>
 
-				<div class="form-group">
+				<div class="form-group{% if 'date' in errors|keys %} has-error{% endif %}">
 					<label class="col-xs-3 control-label">{% trans "Date" %}</label>
-					<div class="col-xs-9">
-						<input type="text" class="form-control datepicker" name="purchase[date]" value="{{ purchase.date }}"/>
+					<div class="col-xs-5">
+						<input type="text" class="form-control datepicker" name="purchase[date]" value="{{ purchase.date }}">
+						{{ form.invalid_input('date', errors) }}
+					</div>
+				</div>
+
+				<div class="form-group{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
+					<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control datepicker" name="purchase[expiration_date]" value="{{ purchase.expiration_date }}">
+						{{ form.invalid_input('expiration_date', errors) }}
 					</div>
 				</div>
 
 				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Paid" %}</label>
-					<div class="col-xs-9">
-						<input type="checkbox" name="paid" id="paid" />
+					<label class="col-xs-3 control-label">{% trans "Paid date" %}</label>
+					<div class="col-xs-5">
+						<input type="text" class="form-control datepicker" name="purchase[paid]" value="{{ purchase.paid }}">
 					</div>
 				</div>
-
 
 				<div class="form-group">
 					<div class="col-xs-9 col-xs-offset-3">
@@ -95,7 +129,7 @@
 				{% trans "Details" %}
 			</div>
 			<div class="panel-body">
-				<form method="post" action="/administrative/purchase?action=add" class="form-horizontal">
+				<form method="post" action="/administrative/purchase?action=add" class="form-horizontal form-condensed">
 					<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %}">
 						<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
 						<div class="col-xs-9">
@@ -146,6 +180,14 @@
 								<input type="text" class="form-control" name="purchase[price_incl]" value="{{ purchase.price_incl }}">
 							</div>
 							{{ form.invalid_input('price_incl', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'date' in errors|keys %} has-error{% endif %}">
+						<label class="col-xs-3 control-label">{% trans "Date" %}</label>
+						<div class="col-xs-5">
+							<input type="text" class="form-control datepicker" name="purchase[date]" value="{{ purchase.date }}">
+							{{ form.invalid_input('date', errors) }}
 						</div>
 					</div>
 

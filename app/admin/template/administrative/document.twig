@@ -16,7 +16,7 @@
 		</div>
 		{% endif %}
 
-		<form class="form-horizontal" action="/administrative/document?action=edit&id={{ document.id }}" method="post">
+		<form class="form-horizontal form-condensed" action="/administrative/document?action=edit&id={{ document.id }}" method="post">
 
 			<div class="row">
 				<div class="{% if document.preview_file_id > 0 %}col-xs-8{% else %}col-xs-12{% endif %}">
@@ -109,7 +109,7 @@
 			</div>
 		{% endif %}
 
-		<form class="form form-horizontal" method="post" action="/administrative/document?action=add">
+		<form class="form form-horizontal form-condensed" method="post" action="/administrative/document?action=add">
 
 			<div class="panel panel-default">
 				<div class="panel-body">

@@ -22,7 +22,7 @@ class Supplier {
 	 * @return bool $validated
 	 */
 	public function validate(&$errors = []) {
-		$required_fields = [ 'company', 'vat' ];
+		$required_fields = [ 'company' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';

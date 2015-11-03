@@ -19,17 +19,11 @@
 					<label class="control-label col-xs-3">{% trans "Date" %}</label>
 					<div class="col-xs-9">
 						<div class="form-inline">
-							<div class="form-group">
-								{% trans "From" %}
+							<div class="form-group" style="position: relative">
+								<input type="text" class="form-control datepicker" value="" placeholder="{% trans "From" %}" />
 							</div>
 							<div class="form-group" style="position: relative">
-								<input type="text" class="form-control datepicker" value="" />
-							</div>
-							<div class="form-group">
-								{% trans "To" %}
-							</div>
-							<div class="form-group" style="position: relative">
-								<input type="text" class="form-control datepicker" value="" />
+								<input type="text" class="form-control datepicker" value="" placeholder="{% trans "To" %}" />
 							</div>
 						</div>
 					</div>
@@ -55,11 +49,7 @@
 
 	</div>
 
-	<div id="documents">
-
-
-
-	</div>
+	<div id="documents"></div>
 
 	<script type="text/javascript" src="/bootstrap-tokenfield.min.js"></script>
 	<script type="text/javascript" src="/bloodhound.min.js"></script>
