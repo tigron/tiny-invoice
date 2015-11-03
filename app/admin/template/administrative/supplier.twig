@@ -18,7 +18,7 @@
 			{{ base.display_flash_message(env.sticky_session.message, 'supplier') }}
 		{% endif %}
 
-		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=edit&id={{ supplier.id }}">
+		<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier?action=edit&id={{ supplier.id }}">
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -54,7 +54,7 @@
 						<div class="col-xs-9"><input type="text" name="supplier[city]" class="form-control" value="{{ supplier.city }}" /></div>
 					</div>
 
-					<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
+					<div class="form-group{% if 'country_id' in errors|keys %} has-error{% endif %}">
 						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
 						<div class="col-xs-9">
 							{{ form.select_country(countries, 'supplier[country_id]', 'country_id', supplier.country_id|default(203)) }}
@@ -96,7 +96,7 @@
 		</div>
 		{% endif %}
 
-		<form class="form form-horizontal" method="post" action="/administrative/supplier?action=add">
+		<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier?action=add">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					{% trans "Details" %}
@@ -131,7 +131,7 @@
 						<div class="col-xs-9"><input type="text" name="supplier[city]" class="form-control" value="{{ env.post.supplier.city }}"/></div>
 					</div>
 
-					<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
+					<div class="form-group {% if 'country_id' in errors|keys %} has-error{% endif %}">
 						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
 						<div class="col-xs-9">
 							{{ form.select_country(countries, 'supplier[country_id]', 'country_id', env.post.supplier.country_id|default(203)) }}

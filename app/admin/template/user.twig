@@ -23,7 +23,7 @@
 				{% trans "Details" %}
 			</div>
 			<div class="panel-body">
-				<form class="form form-horizontal" method="post" action="/user?action=edit&id={{ user.id }}">
+				<form class="form form-horizontal form-condensed" method="post" action="/user?action=edit&id={{ user.id }}">
 					<div class="form-group{% if 'username' in errors|keys %} has-error{% endif %}">
 						<label for="username" class="col-xs-3 control-label">{% trans "Username" %}</label>
 						<div class="col-xs-9">
@@ -106,7 +106,7 @@
 				{% trans "Details" %}
 			</div>
 			<div class="panel-body">
-				<form class="form form-horizontal" method="post" action="/user?action=add">
+				<form class="form form-horizontal form-condensed" method="post" action="/user?action=add">
 					<div class="form-group{% if 'username' in errors|keys %} has-error{% endif %}">
 						<label for="username" class="col-xs-3 control-label">{% trans "Username" %}</label>
 						<div class="col-xs-9">

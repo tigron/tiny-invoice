@@ -57,7 +57,7 @@ class Bootstrap {
 		/**
 		 * Initialize the file store
 		 */
-		\Skeleton\File\Config::$store_dir = $root_path . '/store/file/';
+		\Skeleton\File\Config::$file_dir = $root_path . '/store/file/';
 
 		/**
 		 * Initialize the thumbnail cache, define thumbnail formats

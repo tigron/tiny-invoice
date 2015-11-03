@@ -14,7 +14,7 @@
 		"bower-asset/bootstrap": "dev-master",
 		"bower-asset/font-awesome": "*",
 		"bower-asset/moment": "2.10.*",
-		"bower-asset/tigron-datetimepicker": "*",
+		"bower-asset/tigron-datetimepicker": "0.*",
 		"bower-asset/tigron-confirm-modal": "0.*",
 		"bower-asset/dropzone": "~4.0",
 		"bower-asset/textarea-autosize": "0.*",
@@ -36,12 +36,13 @@
         "tigron/skeleton-template": "dev-master",
         "tigron/skeleton-email": "dev-master",
 		"tigron/skeleton-console": "dev-master",
-        "tigron/skeleton-migrate": "dev-master"
+        "tigron/skeleton-migrate": "dev-master",
+        "tigron/skeleton-transaction": "dev-master"
     },
     "extra": {
         "asset-installer-paths": {
-		"npm-asset-library": "lib/external/assets",
-		"bower-asset-library": "lib/external/assets"
+    		"npm-asset-library": "lib/external/assets",
+    		"bower-asset-library": "lib/external/assets"
         }
     },
     "license": "MIT",

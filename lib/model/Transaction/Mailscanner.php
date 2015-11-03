@@ -10,17 +10,6 @@
 class Transaction_Mailscanner extends Transaction {
 
 	/**
-	 * Constructor
-	 *
-	 * @access public
-	 * @param int $id
-	 */
-	public function __construct($id = null) {
-		parent::__construct($id);
-		$this->type = 'Mailscanner';
-	}
-
-	/**
 	 * Run
 	 *
 	 * @access private

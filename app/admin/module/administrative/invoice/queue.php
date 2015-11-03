@@ -178,6 +178,9 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 			Session::set_sticky('message', 'updated');
 			Session::redirect('/administrative/invoice/queue?action=edit&id=' . $invoice_queue->id);
 		}
+
+		$template->assign('invoice_queue', $invoice_queue);
+		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($invoice_queue->invoice_contact->country));
 	}
 
 	/**

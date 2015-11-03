@@ -80,6 +80,13 @@ body {
 	display: none
 }
 
+/**
+ * Forms
+ */
+ .form-inline .form-group {
+ 	margin-left: 0;
+ 	margin-right: 0
+ }
 
 /**
  * Document/edit

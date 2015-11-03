@@ -2,12 +2,80 @@
 
 {% block content %}
 
-	{% if action == 'create_step1' %}
+	{% if action == 'edit' %}
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="/administrative/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
-			<li>{% trans "Create invoice item" %}</li>
+			<li class="active">{% trans "Edit invoice queue item" %}</li>
+		</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Invoice queue item details" %}
+			</div>
+			<div class="panel-body">
+				<form method="post" action="/administrative/invoice/queue?action=edit&id={{ invoice_queue.id }}" class="form-horizontal form-condensed">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+						<div class="col-xs-6">
+							<p class="form-control-static">{{ invoice_queue.customer.firstname }} {{ invoice_queue.customer.lastname }} [ID: {{ invoice_queue.customer_id }}]</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Invoice contact" %}</label>
+						<div class="col-xs-6">
+							<p class="form-control-static">{{ invoice_queue.invoice_contact.firstname }} {{ invoice_queue.invoice_contact.lastname }} [ID: {{ invoice_queue.invoice_contact_id }}]</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Description" %}</label>
+						<div class="col-xs-6">
+							<textarea class="form-control autogrow" name="invoice_queue[description]">{{ invoice_queue.description }}</textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Qty" %}</label>
+						<div class="col-xs-4">
+							<input class="form-control" name="invoice_queue[qty]" value="{{ invoice_queue.qty }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Price excl VAT" %}</label>
+						<div class="col-xs-4">
+							<div class="input-group">
+								<span class="input-group-addon">&euro;</span>
+								<input type="text" name="invoice_queue[price]" class="form-control" value="{{ invoice_queue.price }}" >
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "VAT" %}</label>
+						<div class="col-xs-4">
+							<select name="invoice_queue[vat]" class="form-control">
+							{% for vat_rate in vat_rates %}
+								<option value="{{ vat_rate.vat }}"{% if vat_rate.vat == invoice_queue.vat %} selected{% endif %}>{{ vat_rate.vat }}%</option>
+							{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Save" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	{% elseif action == 'create_step1' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+			<li>{% trans "Create invoice queue item" %}</li>
 			<li class="active">{% trans "Select customer" %}</li>
 		</ol>
 
@@ -46,7 +114,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="/administrative/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
-			<li>{% trans "Create invoice item" %}</li>
+			<li>{% trans "Create invoice queue item" %}</li>
 			<li class="active">{% trans "Select invoice contact" %}</li>
 		</ol>
 
@@ -144,7 +212,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="/administrative/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
-			<li>{% trans "Create invoice item" %}</li>
+			<li>{% trans "Create invoice queue item" %}</li>
 			<li class="active">{% trans "Add items" %}</li>
 		</ol>
 

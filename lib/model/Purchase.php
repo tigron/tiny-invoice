@@ -22,7 +22,7 @@ class Purchase {
 	 * @return bool $validated
 	 */
 	public function validate(&$errors = []) {
-		$required_fields = [ 'supplier_id', 'expiration_date', 'document_id', 'price_incl', 'price_excl' ];
+		$required_fields = [ 'supplier_id', 'date', 'expiration_date', 'price_incl', 'price_excl' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
