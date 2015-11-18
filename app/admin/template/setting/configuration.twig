@@ -12,10 +12,10 @@
 		{{ base.display_flash_message(env.sticky_session.message, 'configuration') }}
 	{% endif %}
 
-	<div class="panel panel-default">
-		<div class="panel-heading">{% trans "Configuration" %}</div>
-		<div class="panel-body">
-			<form action="/setting/configuration" method="post" class="form-condensed form-horizontal">
+	<form action="/setting/configuration" method="post" class="form-condensed form-horizontal">
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Configuration" %}</div>
+			<div class="panel-body">
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Archive mailbox" %}</label>
 					<div class="col-xs-9">
@@ -28,8 +28,62 @@
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>
 				</div>
-			</form>
+			</div>
 		</div>
-	</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Email templates" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+				    <label class="col-xs-3 control-label">{% trans "New invoice" %}</label>
+				    <div class="col-xs-9">
+				        <input type="text" name="setting[invoice_email_template]" class="form-control" value="{{ settings.invoice_email_template }}">
+						<span class="help-block">{% trans "If empty, the default 'invoice' is used." %}</span>
+				    </div>
+				</div>
+
+				<div class="form-group">
+				    <label class="col-xs-3 control-label">{% trans "Invoice reminder" %}</label>
+				    <div class="col-xs-9">
+				        <input type="text" name="setting[reminder_invoice_email_template]" class="form-control" value="{{ settings.reminder_invoice_email_template }}">
+						<span class="help-block">{% trans "If empty, the default 'invoice_reminder' is used." %}</span>
+				    </div>
+				</div>
+
+				<div class="form-group">
+				    <label class="col-xs-3 control-label">{% trans "Purchase expiring reminder" %}</label>
+				    <div class="col-xs-9">
+				        <input type="text" name="setting[reminder_purchase_email_template]" class="form-control" value="{{ settings.reminder_purchase_email_template }}">
+						<span class="help-block">{% trans "If empty, the default 'purchase_reminder' is used." %}</span>
+				    </div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-9 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "PDF templates" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+				    <label class="col-xs-3 control-label">{% trans "New invoice" %}</label>
+				    <div class="col-xs-9">
+				        <input type="text" name="setting[invoice_pdf_template]" class="form-control" value="{{ settings.invoice_pdf_template }}">
+						<span class="help-block">{% trans "If empty, the default 'invoice' is used." %}</span>
+				    </div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-9 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
 
 {% endblock content %}

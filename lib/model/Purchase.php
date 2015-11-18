@@ -52,7 +52,26 @@ class Purchase {
 		}
 
 		return self::get_by_id($id);
+	}
 
+	/**
+	 * Get expiring purchases
+	 *
+	 * @access public
+	 * @param  string $days_to_expire
+	 * @return array Purchases
+	 */
+	public static function get_expiring($days_to_expire = '-7 days') {
+		$db = Database::get();
+		$table = self::trait_get_database_table();
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE paid IS NULL AND DATE(expiration_date) <= ?', [ strtotime($days_to_expire) ]);
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
+		}
+
+		return $items;
 	}
 
 }

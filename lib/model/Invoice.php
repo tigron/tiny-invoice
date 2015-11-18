@@ -210,10 +210,17 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-			return $this->file;
+			return $this->file;			
 		}
 
-		$pdf = new PDF('invoice', $this->customer->language);
+		$setting = Setting::get('invoice_pdf_template');
+		if (!is_null($setting) AND $setting != '') {
+			$pdf_template = $setting;
+		} else {
+			$pdf_template = '_default/invoice';
+		}
+
+		$pdf = new PDF($pdf_template, $this->customer->language);
 		$pdf->assign('invoice', $this);
 		$settings = Setting::get_as_array();
 		if (isset($settings['country_id'])) {
@@ -235,24 +242,18 @@ class Invoice {
 	 * @access public
 	 */
 	public function send_invoice_email() {
-		$config = Config::get();
-
-		$mail = new \Skeleton\Email\Email('invoice');
-
-		if ($this->invoice_contact->email == '') {
-			$mail->add_to($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
-			$language = $this->customer->language;
+		$setting = Setting::get('invoice_email_template');
+		if (!is_null($setting) AND $setting != '') {
+			$email_template = $setting;
 		} else {
-			$mail->add_to($this->invoice_contact->email, $this->invoice_contact->firstname . ' ' . $this->invoice_contact->lastname);
-			$language = $this->invoice_contact->language;
-			if ($this->invoice_contact->email != $this->customer->email) {
-				$mail->add_cc($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
-
-			}
+			$email_template = '_default/invoice';
 		}
 
-		$translation = Skeleton\I18n\Translation::get($language, 'email');
-		$mail->set_translation($translation);
+		$mail = new Email($email_template, $this->invoice_contact->language);
+		$mail->add_to($this->invoice_contact->email, $this->invoice_contact->firstname . ' ' . $this->invoice_contact->lastname);
+		if ($this->invoice_contact->email != $this->customer->email) {
+			$mail->add_cc($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
+		}
 
 		try {
 			$email_from = Setting::get_by_name('email')->value;
@@ -264,11 +265,6 @@ class Invoice {
 		$mail->add_attachment($this->get_pdf());
 		$mail->assign('invoice', $this);
 
-		$settings = Setting::get_as_array();
-		if (isset($settings['country_id'])) {
-			$settings['country'] = Country::get_by_id($settings['country_id']);
-		}
-		$mail->assign('settings', $settings);
 		$mail->send();
 	}
 

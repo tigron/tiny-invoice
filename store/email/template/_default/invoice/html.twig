@@ -1,0 +1,104 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block head %}
+
+	<style type="text/css">
+
+		td.label {
+			background-color: #eee
+		}
+
+	</style>
+
+{% endblock head %}
+
+{% block content %}
+
+	{% block intro %}
+		<h1 style="font-size: 12pt; color: #333333; margin-bottom: 15px">{% trans "New invoice" %}</h1>
+		<p>{% trans "Hello" %} {{ invoice.invoice_contact.firstname }}</p>
+		<p>{% trans "A new invoice has been created, please print this immediately. To open the invoice, you will need a PDF reader, such as Adobe Acrobat." %}
+		{% trans "Adobe Acrobat can be downloaded from the following URL:" %} <a href="http://get.adobe.com/reader/" target="_blank" style="color: #333">http://get.adobe.com/reader/</a></p>
+	{% endblock intro %}
+
+	{% block payment_info %}
+		{% if invoice.paid == 0 %}
+			<p>{% trans "Please keep in mind that we did not yet receive a payment for this order. You can find all the necessary payment information below, as well as on the invoice." %}</p>
+
+			<br />
+
+			<h2 style="font-size: 10pt; color: #444444; padding: 2px">{% trans "Payment details" %}</h2>
+			<table cellpadding="0" cellspacing="1" border="0" style="border: solid 1px #cccccc">
+			<tbody>
+				<tr>
+					<td class="label" width="30%">{% trans "Bank" %}</td>
+					<td>{{ settings.bank }}</td>
+				</tr>
+				<tr>
+					<td class="label">{% trans "IBAN" %}</td>
+					<td>{{ settings.iban }}<td>
+				</tr>
+				<tr>
+					<td class="label">{% trans "BIC" %}</td>
+					<td>{{ settings.bic }}</td>
+				</tr>
+				<tr>
+					<td class="label">{% trans "Structured message" %}</td>
+					<td>{{ invoice.get_ogm() }}</td>
+				</tr>
+				<tr>
+					<td class="label">{% trans "Total to pay" %}</td>
+					<td>€ {{ "%.2f"|format(invoice.get_price_incl()) }}</td>
+				</tr>
+			</tbody>
+			</table>
+			<br />
+		{% endif %}
+	{% endblock payment_info %}
+
+	{% block item_list %}
+		<h2 style="font-size: 10pt; color: #444444; padding: 2px">{% trans "Products" %}/{% trans "Services" %}</h2>
+		<table cellpadding="0" cellspacing="0" border="0" style="border: solid 1px #cccccc">
+		<thead>
+			<tr>
+				<th>{% trans "Description" %}</th>
+				<th>{% trans "Qty" %}</th>
+				<th>{% trans "Unit price" %}</th>
+				<th>{% trans "Subtotal" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% set invoice_items = invoice.get_invoice_items() %}
+		{% for invoice_item in invoice_items %}
+			<tr>
+				<td width="70%">{{ invoice_item.description|nl2br }}</td>
+				<td width="10%">{{ invoice_item.qty|number_format }}</td>
+				<td width="20%">&euro;{{ invoice_item.price|number_format }}</td>
+				<td width="20%">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
+			</tr>
+		{% if loop.last %}
+			<tr>
+				<td colspan="4">&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="right" colspan="3" style="border-top: solid 1px #cccccc; font-weight: bold">{% trans "Subtotal" %}:</td>
+				<td style="border-top: solid 1px #cccccc">&euro;{{ invoice.get_price_excl()|number_format }}</td>
+			</tr>
+			{% set vat_array = invoice.get_vat_array() %}
+			{% for key, vat_subtotal in vat_array %}
+			<tr>
+				<td align="right" colspan="3" style="font-weight: bold">{% trans "VAT" %} ({{ key }}%):</td>
+				<td>&euro;{{ vat_subtotal|number_format }}</td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td align="right" colspan="3" style="font-weight: bold">{% trans "Total to pay" %}:</td>
+				<td style="font-weight: bold">&euro; {{ invoice.get_price_incl()|number_format }}</td>
+			</tr>
+		{% endif %}
+		{% endfor %}
+		</tbody>
+		</table>
+	{% endblock item_list %}
+
+{% endblock content %}

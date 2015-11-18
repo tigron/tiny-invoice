@@ -17,6 +17,22 @@ class Setting {
 	use \Skeleton\Pager\Page;
 
 	/**
+	 * Get
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return string $value
+	 */
+	public static function get($key) {
+		$value = null;
+		try {
+			$value = self::get_by_name($key)->value;
+		} catch (Exception $e) {}
+
+		return $value;
+	}
+
+	/**
 	 * Get by name
 	 *
 	 * @access public

@@ -69,13 +69,26 @@ class Web_Module_Administrative_Document extends Module {
 		$template = Template::get();
 
 		if (isset($_POST['document'])) {
+			$selected_tags = [];
+			if (isset($_POST['tag_ids'])) {
+				$tag_ids = explode(',', $_POST['tag_ids']);
+				foreach ($tag_ids as $tag_id) {
+					$selected_tags[] = Tag::get_by_id($tag_id);
+				}
+			}
+
 			$document = new Document();
 			$document->load_array($_POST['document']);
 			if ($document->validate($errors) === false) {
 				$template->assign('errors', $errors);
 				$template->assign('document', $document);
+				$template->assign('selected_tags', $selected_tags);
 			} else {
 				$document->save();
+
+				foreach ($selected_tags as $tag) {
+					$document->add_tag($tag);
+				}
 
 				Session::set_sticky('message', 'created');
 				Session::redirect('/administrative/document?action=edit&id=' . $document->id);
@@ -103,6 +116,53 @@ class Web_Module_Administrative_Document extends Module {
 	}
 
 	/**
+	 * Edit
+	 *
+	 * @access public
+	 */
+	public function display_edit() {
+		$template = Template::get();
+		$document = Document::get_by_id($_GET['id']);
+		$selected_tags = $document->get_tags();
+
+		if (isset($_POST['document'])) {
+
+			if (!isset($_POST['document']['file_id']) OR $document->file_id != $_POST['document']['file_id']) {
+				$document->file->expire();
+				$document->file_id = NULL;
+			}
+
+			$selected_tags = [];
+			if (isset($_POST['tag_ids'])) {
+				$tag_ids = array_filter(explode(',', $_POST['tag_ids']));
+				foreach ($tag_ids as $tag_id) {
+					$selected_tags[] = Tag::get_by_id($tag_id);
+				}
+			}
+
+			$document->load_array($_POST['document']);
+			if ($document->validate($errors) === false) {
+				$template->assign('errors', $errors);
+			} else {
+				$document->save();
+				$document->file->cancel_expiration();
+
+				$document->remove_tags();
+				foreach ($selected_tags as $tag) {
+					$document->add_tag($tag);
+				}
+
+				Session::set_sticky('message', 'updated');
+				Session::redirect('/administrative/document?action=edit&id=' . $document->id);
+			}
+		}
+
+		$template->assign('document', $document);
+		$template->assign('selected_tags', $selected_tags);
+		$template->assign('tags', Tag::get_all());
+	}
+
+	/**
 	 * Delete
 	 *
 	 * @access public
@@ -113,80 +173,6 @@ class Web_Module_Administrative_Document extends Module {
 
 		Session::set_sticky('message', 'deleted');
 		Session::redirect('/administrative/document');
-	}
-
-	/**
-	 * Edit
-	 *
-	 * @access public
-	 */
-	public function display_edit() {
-		$template = Template::get();
-
-		$document = Document::get_by_id($_GET['id']);
-		$template->assign('document', $document);
-
-		if (isset($_POST['document'])) {
-			$document->load_array($_POST['document']);
-			$document->save();
-
-			$document->remove_tags();
-			if (isset($_POST['tags'])) {
-				foreach ($_POST['tags'] as $tag_id) {
-					$tag = Tag::get_by_id($tag_id);
-					$document->add_tag($tag);
-				}
-			}
-
-			Session::set_sticky('message', 'document_updated');
-			Session::redirect('/administrative/document?action=edit&id=' . $document->id);
-		}
-
-		$tags = Tag::get_all();
-		$template->assign('tags', $tags);
-	}
-
-	/**
-	 * Replace a document
-	 *
-	 * @access public
-	 */
-	public function display_replace_document() {
-		$document = Document::get_by_id($_POST['id']);
-
-		if (isset($_FILES['document']) AND $_FILES['document']['error'] == 0) {
-			$file = \Skeleton\File\File::upload($_FILES['document']);
-
-			$document->file->delete();
-
-			$document->file_id = $file->id;
-			$document->save();
-		}
-
-		Session::redirect('/administrative/document?action=edit&id=' . $document->id);
-	}
-
-	/**
-	 * Edit tags
-	 *
-	 * @access public
-	 */
-	public function display_edit_tags() {
-		$document = Document::get_by_id($_GET['id']);
-		$document_tags = $document->get_document_tags();
-		foreach ($document_tags as $document_tag) {
-			$document_tag->delete();
-		}
-
-		if (isset($_POST['tag'])) {
-			foreach ($_POST['tag'] as $tag_id) {
-				$tag = Tag::get_by_id($tag_id);
-				$document->add_tag($tag);
-			}
-		}
-
-		Session::set_sticky('message', 'tag_updated');
-		Session::redirect('/administrative/document?action=edit&id=' . $document->id);
 	}
 
 	/**

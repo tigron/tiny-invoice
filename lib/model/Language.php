@@ -8,4 +8,16 @@
 
 use \Skeleton\Database\Database;
 
-class Language extends \Skeleton\I18n\Language { }
+class Language extends \Skeleton\I18n\Language {
+
+    /**
+     * Get default Language
+     *
+     * @access public
+     * @return Language
+     */
+    public static function get_default() {
+        return self::get_by_name_short(\Config::get()->default_language);
+    }
+
+}
