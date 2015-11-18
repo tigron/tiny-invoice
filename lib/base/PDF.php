@@ -20,20 +20,20 @@ class PDF {
 	private $type = '';
 
 	/**
-	 * PDF settings
+	 * PDF configuration
 	 *
 	 * @access private
-	 * @var array $settings
+	 * @var array $configuration
 	 */
-	private $settings = array();
+	private $configuration = [];
 
 	/**
-	 * Language
+	 * Template
 	 *
 	 * @access private
-	 * @var Language $language
+	 * @var Template $template
 	 */
-	private $language = null;
+	private $template = null;
 
 	/**
 	 * Assigned variables
@@ -41,7 +41,7 @@ class PDF {
 	 * @access private
 	 * @var array $assigns
 	 */
-	private $assigns = array();
+	private $assigns = [];
 
 	/**
 	 * Constructor
@@ -49,18 +49,28 @@ class PDF {
 	 * @access public
 	 * @param string $type
 	 */
-	public function __construct($type, Language $language = null, $settings = array('size' => 'A4', 'orientation' => 'portrait')) {
+	public function __construct($type, Language $language = null, $configuration = [ 'size' => 'A4', 'orientation' => 'portrait' ]) {
 		if ($type === null) {
 			throw new Exception('No PDF type specified');
 		}
 
 		if ($language == null) {
-			$language = Language::get_by_name_short(Config::get()->default_language);
+			$language = Language::get_default();
 		}
 
-		$this->language = $language;
 		$this->type = $type;
-		$this->settings = $settings;
+		$this->configuration = $configuration;
+
+		$this->template = new \Skeleton\Template\Template();
+		$this->template->set_template_directory(dirname(__FILE__) . '/../../store/pdf/template');
+		$this->template->set_translation(Skeleton\I18n\Translation::get($language, 'pdf'));
+
+		// Assign company info to pdf template
+		$settings = Setting::get_as_array();
+		if (isset($settings['country_id'])) {
+			$settings['country'] = Country::get_by_id($settings['country_id']);
+		}
+		$this->template->assign('settings', $settings);
 	}
 
 	/**
@@ -84,14 +94,11 @@ class PDF {
 			$filename = $this->type . '_' . microtime(true) . '.pdf';
 		}
 
-		$template = new \Skeleton\Template\Template();
-		$template->set_template_directory(dirname(__FILE__) . '/../../store/pdf/template');
-
 		foreach ($this->assigns as $key => $value) {
-			$template->assign($key, $value);
+			$this->template->assign($key, $value);
 		}
 
-		$html = $template->render($this->type . '/html.twig');
+		$html = $this->template->render($this->type . '/html.twig');
 
 		switch ($output) {
 			case 'html':
@@ -101,9 +108,10 @@ class PDF {
 			case 'dompdf':
 				$dompdf = new DOMPDF();
 				$dompdf->set_base_path(dirname(__FILE__) . '/../../../store/pdf/media/');
-                $dompdf->set_paper($this->settings['size'], $this->settings['orientation']);
+                $dompdf->set_paper($this->configuration['size'], $this->configuration['orientation']);
                 $dompdf->load_html($html);
                 $dompdf->render();
+
                 $file = File::store($filename, $dompdf->output());
                 return $file;
 		}

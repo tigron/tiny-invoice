@@ -22,17 +22,17 @@ class Vat_Check {
 	 * @return bool Valid or not
 	 */
 	public static function check($number, Country $country) {
-		//1. Check if the vat is a european vat-number
-		if ($country->european != 1) {
-			return true;
-		}
-
-		//2. Check syntax
+		//1. Check syntax
 		if (!self::check_syntax($number, $country)) {
 			return false;
 		}
 
-		//4. Check if vat-number is in cache
+		//2. Check if the vat is a european vat-number
+		if ($country->european != 1) {
+			return true;
+		}
+
+		//3. Check if vat-number is in cache
 		try {
 			$vat_cache = Vat_Check_Cache::get_by_number_country($number, $country);
 			if ($vat_cache->valid == 1) {
@@ -42,7 +42,7 @@ class Vat_Check {
 			}
 		} catch (Exception $e) { }
 
-		//5. Check online (VIES-server)
+		//4. Check online (VIES-server)
 		$result = Vat_Check::check_online($number, $country);
 		if ($result['save'] === true) {
 			$vat_cache = new Vat_Check_Cache();

@@ -1,10 +1,10 @@
 <?php
 /**
- * Transaction_Order
+ * Transaction_Mailscanner
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
- * @version $Id$
+ * @author David Vandemaele <david@tigron.be>
  */
 
 class Transaction_Mailscanner extends Transaction {
@@ -12,7 +12,7 @@ class Transaction_Mailscanner extends Transaction {
 	/**
 	 * Run
 	 *
-	 * @access private
+	 * @access public
 	 */
 	public function run() {
 		try {
@@ -37,7 +37,7 @@ class Transaction_Mailscanner extends Transaction {
 			$setting->save();
 		} catch (Exception $e) {
 		}
-		$this->sleep('1 minute');
 
+		$this->schedule('1 minute');
 	}
 }

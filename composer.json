@@ -39,6 +39,9 @@
         "tigron/skeleton-migrate": "dev-master",
         "tigron/skeleton-transaction": "dev-master"
     },
+    "suggest": {
+        "ext-imap": "*"
+    },
     "extra": {
         "asset-installer-paths": {
     		"npm-asset-library": "lib/external/assets",

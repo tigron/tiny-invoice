@@ -9,12 +9,29 @@
 use \Skeleton\Database\Database;
 
 class Document {
-	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Model {
+		__get as trait_get;
+	}
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
 	use \Skeleton\Pager\Page;
 	use \Skeleton\Object\Delete {
 		delete as trait_delete;
+	}
+
+	/**
+	 * Get key
+	 *
+	 * @access public
+	 * @param  string $key
+	 * @return mixed
+	 */
+	public function __get($key) {
+		if ($key == 'preview_file') {
+			return File::get_by_id($this->preview_file_id);
+		}
+
+		return $this->trait_get($key);
 	}
 
 	/**
@@ -25,7 +42,7 @@ class Document {
 	 * @return bool $validated
 	 */
 	public function validate(&$errors = []) {
-		$required_fields = [ 'title', 'file_id' ];
+		$required_fields = [ 'file_id' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
@@ -91,6 +108,22 @@ class Document {
 	 */
 	public function get_document_tags() {
 		return Document_Tag::get_by_document($this);
+	}
+
+	/**
+	 * Get tags
+	 *
+	 * @access public
+	 * @return array Tag $items
+	 */
+	public function get_tags() {
+		$tags = [];
+		$document_tags = $this->get_document_tags();
+		foreach ($document_tags as $document_tag) {
+			$tags[] = $document_tag->tag;
+		}
+
+		return $tags;
 	}
 
 	/**
@@ -188,7 +221,7 @@ class Document {
 			return;
 		}
 
-		system('/usr/bin/convert ' . $this->file->get_path() . '[0] ' . \Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg');
+		system('/usr/bin/convert -density 150 -resize 600 ' . $this->file->get_path() . '[0] ' . \Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg');
 		$file = File::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(\Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg'));
 		$this->preview_file_id = $file->id;
 		$this->save();

@@ -9,3 +9,6 @@ lib/external/*
 composer.lock
 util/tmp/*
 migrations/db_version
+/store/email/template/*
+!/store/email/template/_default
+!/store/email/template/_default/*
