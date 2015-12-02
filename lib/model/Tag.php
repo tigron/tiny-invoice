@@ -79,4 +79,23 @@ class Tag {
 		return self::get_by_id($id);
 	}
 
+	/**
+	 * Get by identifier
+	 *
+	 * @access public
+	 * @param string $identifier
+	 * @return Tag $tag
+	 */
+	public static function get_by_identifier($identifier) {
+		$table = self::trait_get_database_table();
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM ' . $table . ' WHERE identifier = ?', [ $identifier ]);
+
+		if ($id === null) {
+			throw new Exception('Tag not found');
+		}
+
+		return self::get_by_id($id);
+	}
+
 }
