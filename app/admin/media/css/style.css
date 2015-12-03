@@ -44,6 +44,19 @@ body {
 }
 
 /**
+ * Pagination
+ */
+
+.pagination .jump-to-page {
+    padding: 4px;
+}
+
+	.pagination .jump-to-page input {
+	    border: solid 1px #eee;
+	    text-align: center;
+	}
+
+/**
  * Dropzone
  */
 .dropzone, .dropzone-wrapper {
