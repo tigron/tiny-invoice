@@ -10,6 +10,10 @@
 			<li class="active">{% trans "Edit invoice queue item" %}</li>
 		</ol>
 
+		{% if env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'invoice queue') }}
+		{% endif %}
+
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				{% trans "Invoice queue item details" %}
@@ -352,7 +356,7 @@
 			</div>
 		</div>
 
-		{% if env.session_sticky.message is defined %}
+		{% if env.sticky_session.message is defined %}
 			{{ base.display_flash_message(env.session_sticky.message, 'invoice queue') }}
 		{% endif %}
 

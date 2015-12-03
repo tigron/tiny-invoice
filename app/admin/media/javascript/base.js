@@ -41,6 +41,15 @@ $(document).ready(function(){
             buttonWidth: '400px'
 	});
 
+	/**
+	 * Pager jump to
+	 */
+	$('.jump-to-page input').on('keydown', function(e) {
+		if(e.which == 13) {
+			jump_to_page($(this));
+		}
+	});
+
 });
 
 // function to change delimiters (to prevent twig collision)
@@ -71,3 +80,40 @@ Array.prototype.max = function() {
 	for (var i = 1; i < len; i++) if (this[i] > max) max = this[i];
 	return max;
 }
+
+function jump_to_page(el) {
+	id = $(el).prop('id').replace('jump-to-page', 'pager');
+
+	val = $(el).val();
+	lnk = document.createElement('a');
+	lnk.href = $('#' + id + ' a').first().prop('href');
+
+	params = parseQueryString(lnk.search);
+	params['p'] = val;
+	str = '';
+
+	$.each(params, function(key, value) {
+		str += '&' + key + '=' + value;
+	});
+	lnk.search = str.substring(1);
+	window.location.href = lnk.href;
+}
+
+var parseQueryString = function( queryString ) {
+    var params = {}, queries, temp, i, l;
+
+	if (queryString.indexOf('?') == 0) {
+		queryString = queryString.substring(1);
+	}
+
+    // Split into key/value pairs
+    queries = queryString.split("&");
+
+    // Convert the array of strings into an object
+    for ( i = 0, l = queries.length; i < l; i++ ) {
+        temp = queries[i].split('=');
+        params[temp[0]] = temp[1];
+    }
+
+    return params;
+};
