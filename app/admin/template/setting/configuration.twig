@@ -32,30 +32,17 @@
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Email templates" %}</div>
+			<div class="panel-heading">{% trans "Skins" %}</div>
 			<div class="panel-body">
 				<div class="form-group">
-				    <label class="col-xs-3 control-label">{% trans "New invoice" %}</label>
-				    <div class="col-xs-9">
-				        <input type="text" name="setting[invoice_email_template]" class="form-control" value="{{ settings.invoice_email_template }}">
-						<span class="help-block">{% trans "If empty, the default 'invoice' is used." %}</span>
-				    </div>
-				</div>
-
-				<div class="form-group">
-				    <label class="col-xs-3 control-label">{% trans "Invoice reminder" %}</label>
-				    <div class="col-xs-9">
-				        <input type="text" name="setting[reminder_invoice_email_template]" class="form-control" value="{{ settings.reminder_invoice_email_template }}">
-						<span class="help-block">{% trans "If empty, the default 'invoice_reminder' is used." %}</span>
-				    </div>
-				</div>
-
-				<div class="form-group">
-				    <label class="col-xs-3 control-label">{% trans "Purchase expiring reminder" %}</label>
-				    <div class="col-xs-9">
-				        <input type="text" name="setting[reminder_purchase_email_template]" class="form-control" value="{{ settings.reminder_purchase_email_template }}">
-						<span class="help-block">{% trans "If empty, the default 'purchase_reminder' is used." %}</span>
-				    </div>
+					<label class="col-xs-3 control-label">{% trans "Email skin" %}</label>
+					<div class="col-xs-9">
+						<select name="setting[skin_email_id]" class="form-control">
+							{% for skin_email in skin_emails %}
+								<option value="{{ skin_email.id }}" {% if skin_email.id == setting.skin_email_id %}selected{% endif %}>{{ skin_email.description }}</option>
+							{% endfor %}
+						</select>
+					</div>
 				</div>
 
 				<div class="form-group">
@@ -63,6 +50,7 @@
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>
 				</div>
+
 			</div>
 		</div>
 
