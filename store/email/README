@@ -1,4 +1,4 @@
-This directory contains email templates.
+This directory contains email skins.
 Make sure at least the following templates are defined:
 - invoice
 - invoice_reminder

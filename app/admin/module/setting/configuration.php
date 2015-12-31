@@ -59,5 +59,10 @@ class Web_Module_Setting_Configuration extends Module {
 		$skin_emails = Skin_Email::get_all();
 		$template->assign('skin_emails', $skin_emails);
 
+		Skin_Pdf::synchronize();
+		$skin_pdfs = Skin_Pdf::get_all();
+		$template->assign('skin_pdfs', $skin_pdfs);
+
+
 	}
 }

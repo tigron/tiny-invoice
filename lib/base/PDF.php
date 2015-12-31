@@ -60,7 +60,24 @@ class PDF {
 		$this->configuration = $configuration;
 
 		$this->template = new \Skeleton\Template\Template();
-		$this->template->set_template_directory(dirname(__FILE__) . '/../../store/pdf/template');
+
+		/**
+		 * Get the email skin
+		 */
+		try {
+			$setting = Setting::get_by_name('skin_pdf_id');
+		} catch (Exception $e) {
+			Skin_Pdf::synchronize();
+			$skin_emails = Skin_Pdf::get_all();
+			$setting = new Setting();
+			$setting->name = 'skin_pdf_id';
+			$setting->value = array_shift($skin_pdfs)->id;
+			$setting->save();
+		}
+
+		$skin_pdf = Skin_Pdf::get_by_id($setting->value);
+
+		$this->template->set_template_directory(dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/template');
 		$this->template->set_translation(Skeleton\I18n\Translation::get($language, 'pdf'));
 
 		// Assign company info to pdf template
@@ -101,7 +118,6 @@ class PDF {
 		define('DOMPDF_ENABLE_AUTOLOAD', false);
 		define("DOMPDF_DPI", 300);
 		define("DOMPDF_ENABLE_PHP", true);
-		define("DOMPDF_FONT_DIR", realpath(dirname(__FILE__) . '/../..') . "store/pdf/media/font/fonts/");
 		define('DOMPDF_ENABLE_FONTSUBSETTING', false);
 		define('DOMPDF_LOG_OUTPUT_FILE', false);
 		define('DOMPDF_ENABLE_REMOTE', true);
@@ -110,6 +126,12 @@ class PDF {
 		require_once realpath(dirname(__FILE__) . '/../..') . '/lib/external/packages/dompdf/dompdf/dompdf_config.inc.php';
 
 
+		/**
+		 * Get the email skin
+		 */
+		$setting = Setting::get_by_name('skin_pdf_id');
+		$skin_pdf = Skin_Pdf::get_by_id($setting->value);
+
 		switch ($output) {
 			case 'html':
 				return $html;
@@ -117,7 +139,7 @@ class PDF {
 			case 'file':
 			case 'dompdf':
 				$dompdf = new DOMPDF();
-				$dompdf->set_base_path(dirname(__FILE__) . '/../../../store/pdf/media/');
+				$dompdf->set_base_path(dirname(__FILE__) . '/../../../store/pdf/' . $skin_pdf->path . '/media/');
                 $dompdf->set_paper($this->configuration['size'], $this->configuration['orientation']);
                 $dompdf->load_html($html);
                 $dompdf->render();

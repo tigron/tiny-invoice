@@ -1,0 +1,13 @@
+This directory contains pdf skins.
+Make sure at least the following templates are defined:
+- invoice
+
+The structure of a skin directory must be the following:
+
+MY_SKIN
+├─ media
+├─ template
+│  ├─ _default (optional) -> Can contain general style elements to be included in templates
+│  ├─ invoice
+│  │  └─ html.twig
+└─ meta -> A TXT file that contains meta information about the skin
