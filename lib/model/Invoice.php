@@ -213,14 +213,7 @@ class Invoice {
 			return $this->file;
 		}
 
-		$setting = Setting::get('invoice_pdf_template');
-		if (!is_null($setting) AND $setting != '') {
-			$pdf_template = $setting;
-		} else {
-			$pdf_template = '_default/invoice';
-		}
-
-		$pdf = new PDF($pdf_template, $this->customer->language);
+		$pdf = new PDF('invoice', $this->customer->language);
 		$pdf->assign('invoice', $this);
 		$settings = Setting::get_as_array();
 		if (isset($settings['country_id'])) {

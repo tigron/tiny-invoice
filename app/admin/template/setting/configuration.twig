@@ -46,6 +46,17 @@
 				</div>
 
 				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Pdf skin" %}</label>
+					<div class="col-xs-9">
+						<select name="setting[skin_pdf_id]" class="form-control">
+							{% for skin_pdf in skin_pdfs %}
+								<option value="{{ skin_pdf.id }}" {% if skin_pdf.id == setting.skin_pdf_id %}selected{% endif %}>{{ skin_pdf.description }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
 					<div class="col-xs-9 col-xs-offset-3">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>
@@ -54,24 +65,6 @@
 			</div>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "PDF templates" %}</div>
-			<div class="panel-body">
-				<div class="form-group">
-				    <label class="col-xs-3 control-label">{% trans "New invoice" %}</label>
-				    <div class="col-xs-9">
-				        <input type="text" name="setting[invoice_pdf_template]" class="form-control" value="{{ settings.invoice_pdf_template }}">
-						<span class="help-block">{% trans "If empty, the default 'invoice' is used." %}</span>
-				    </div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-			</div>
-		</div>
 	</form>
 
 {% endblock content %}

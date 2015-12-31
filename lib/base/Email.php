@@ -21,7 +21,6 @@ class Email extends \Skeleton\Email\Email {
 		try {
 			$setting = Setting::get_by_name('skin_email_id');
 		} catch (Exception $e) {
-			debug_print_backtrace();
 			Skin_Email::synchronize();
 			$skin_emails = Skin_Email::get_all();
 			$setting = new Setting();

@@ -40,7 +40,7 @@ class Invoice_Contact {
 	 * @return bool $validated
 	 */
 	public function validate(&$errors = array()) {
-		$required_fields = array('firstname', 'lastname', 'email', 'street', 'housenumber', 'city', 'zipcode', 'vat');
+		$required_fields = array('firstname', 'lastname', 'email', 'street', 'housenumber', 'city', 'zipcode');
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
