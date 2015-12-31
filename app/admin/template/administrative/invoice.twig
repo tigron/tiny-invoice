@@ -627,8 +627,11 @@
 
 				{{ pager.links|raw }}
 			{% endif %}
+
 			{% else %}
-				<div class="alert alert-info">{% trans "No invoices created" %}</div>
+
+				<p><em>{% trans "No invoices created." %}</em></p>
+
 			{% endfor %}
 			</div>
 		</div>
