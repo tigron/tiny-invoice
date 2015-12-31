@@ -210,7 +210,7 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-			return $this->file;			
+			return $this->file;
 		}
 
 		$setting = Setting::get('invoice_pdf_template');
@@ -242,14 +242,7 @@ class Invoice {
 	 * @access public
 	 */
 	public function send_invoice_email() {
-		$setting = Setting::get('invoice_email_template');
-		if (!is_null($setting) AND $setting != '') {
-			$email_template = $setting;
-		} else {
-			$email_template = '_default/invoice';
-		}
-
-		$mail = new Email($email_template, $this->invoice_contact->language);
+		$mail = new Email('invoice', $this->invoice_contact->language);
 		$mail->add_to($this->invoice_contact->email, $this->invoice_contact->firstname . ' ' . $this->invoice_contact->lastname);
 		if ($this->invoice_contact->email != $this->customer->email) {
 			$mail->add_cc($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);

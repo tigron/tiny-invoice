@@ -25,13 +25,7 @@ class Transaction_Reminder_Purchase extends Transaction {
 			return;
 		}
 
-		$email_template = '_default/purchase_reminder';
-		$setting = Setting::get('reminder_purchase_email_template');
-		if (!is_null($setting) AND $setting != '') {
-			$email_template = $setting;
-		}
-
-		$email = new Email($email_template, Language::get_default());
+		$email = new Email('purchase_reminder', Language::get_default());
 		$email->add_to($company_info['email']);
 		$email->set_sender($company_info['email'], $company_info['company']);
 		$email->assign('purchases', $purchases);

@@ -53,13 +53,7 @@ class Transaction_Reminder_Invoice extends Transaction {
 										AND i.invoice_contact_id = ?', [ $invoice_contact_id ]);
 		$invoice_contact = Invoice_Contact::get_by_id($invoice_contact_id);
 
-		$email_template = '_default/invoice_reminder';
-		$setting = Setting::get('reminder_invoice_email_template');
-		if (!is_null($setting) AND $setting != '') {
-			$email_template = $setting;
-		}
-
-		$email = new Email($email_template);
+		$email = new Email('invoice_reminder');
 		$email->add_to($invoice_contact->email, $invoice_contact->firstname . ' ' . $invoice_contact->lastname);
 		$email->set_sender($company_info['email'], $company_info['company']);
 

@@ -54,5 +54,10 @@ class Web_Module_Setting_Configuration extends Module {
 		}
 
 		$template->assign('settings', Setting::get_as_array());
+
+		Skin_Email::synchronize();
+		$skin_emails = Skin_Email::get_all();
+		$template->assign('skin_emails', $skin_emails);
+
 	}
 }
