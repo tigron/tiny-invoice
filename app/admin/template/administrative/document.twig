@@ -241,7 +241,8 @@
 						{% trans "Add document" %}
 					</a>
 				</div>
-				{% trans "Documents" %}
+
+				{{ base.pager_count(pager.item_count) }}
 			</div>
 			<div class="panel-body">
 			{% for document in pager.items %}
@@ -301,6 +302,11 @@
 
 				{{ pager.links|raw }}
 			{% endif %}
+
+			{% else %}
+
+				<p><em>{% trans "No documents found." %}</em></p>
+
 			{% endfor %}
 			</div>
 		</div>

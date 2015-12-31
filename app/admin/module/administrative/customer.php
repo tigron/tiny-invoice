@@ -42,6 +42,7 @@ class Web_Module_Administrative_Customer extends Module {
 		$pager->add_sort_permission('firstname');
 		$pager->add_sort_permission('lastname');
 
+		$pager->add_condition('language.id', 1);
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
 		}
