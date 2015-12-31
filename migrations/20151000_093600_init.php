@@ -7,8 +7,6 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-use \AD7six\Dsn\Dsn;
-
 class Migration_20151000_093600_Init extends \Skeleton\Database\Migration {
 
 	/**
@@ -19,7 +17,7 @@ class Migration_20151000_093600_Init extends \Skeleton\Database\Migration {
 	public function up() {
 			$dsn = $this->parse_dsn();
 			$sql_file = realpath(dirname(__FILE__) . '/../config/database.sql');
-			passthru('mysql -u ' . $dsn['username'] . ' -p' . $dsn['password'] . ' ' . $dsn['database'] . ' < ' . $sql_file);
+			passthru('mysql -u ' . $dsn['username'] . ' -p' . $dsn['password'] . ' -h ' . $dsn['hostname'] . ' ' . $dsn['database'] . ' < ' . $sql_file);
 	}
 
 	/**
