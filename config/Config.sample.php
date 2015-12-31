@@ -59,13 +59,13 @@ class Config {
 	public static function Get() {
 		if (!isset(self::$config)) {
 			try {
-				self::$config = Application::Get()->config;
+				self::$config = \Skeleton\Core\Application::Get()->config;
 			} catch (Exception $e) {
 				return new Config();
 			}
 		}
 		return self::$config;
-	}
+	}	
 
 	/**
 	 * Check if config var exists
