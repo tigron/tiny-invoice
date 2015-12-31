@@ -8,8 +8,6 @@
  * @author Gerry Demaret <gerry@tigron.be>
  */
 
-require_once realpath(dirname(__FILE__) . '/../..') . '/lib/external/dompdf.config.php';
-
 class PDF {
 	/**
 	 * PDF type
@@ -99,6 +97,18 @@ class PDF {
 		}
 
 		$html = $this->template->render($this->type . '/html.twig');
+
+		define('DOMPDF_ENABLE_AUTOLOAD', false);
+		define("DOMPDF_DPI", 300);
+		define("DOMPDF_ENABLE_PHP", true);
+		define("DOMPDF_FONT_DIR", realpath(dirname(__FILE__) . '/../..') . "store/pdf/media/font/fonts/");
+		define('DOMPDF_ENABLE_FONTSUBSETTING', false);
+		define('DOMPDF_LOG_OUTPUT_FILE', false);
+		define('DOMPDF_ENABLE_REMOTE', true);
+		define('DOMPDF_TEMP_DIR', realpath(dirname(__FILE__) . '/../../tmp/dompdf'));
+
+		require_once realpath(dirname(__FILE__) . '/../..') . '/lib/external/packages/dompdf/dompdf/dompdf_config.inc.php';
+
 
 		switch ($output) {
 			case 'html':
