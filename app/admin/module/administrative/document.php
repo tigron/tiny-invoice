@@ -70,7 +70,7 @@ class Web_Module_Administrative_Document extends Module {
 
 		if (isset($_POST['document'])) {
 			$selected_tags = [];
-			if (isset($_POST['tag_ids'])) {
+			if (!empty($_POST['tag_ids'])) {
 				$tag_ids = explode(',', $_POST['tag_ids']);
 				foreach ($tag_ids as $tag_id) {
 					$selected_tags[] = Tag::get_by_id($tag_id);
