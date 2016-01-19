@@ -39,7 +39,7 @@
 					<div class="col-xs-9">
 						<select name="setting[skin_email_id]" class="form-control">
 							{% for skin_email in skin_emails %}
-								<option value="{{ skin_email.id }}" {% if skin_email.id == setting.skin_email_id %}selected{% endif %}>{{ skin_email.description }}</option>
+								<option value="{{ skin_email.id }}" {% if skin_email.id == settings.skin_email_id %}selected{% endif %}>{{ skin_email.description }}</option>
 							{% endfor %}
 						</select>
 					</div>
@@ -50,7 +50,7 @@
 					<div class="col-xs-9">
 						<select name="setting[skin_pdf_id]" class="form-control">
 							{% for skin_pdf in skin_pdfs %}
-								<option value="{{ skin_pdf.id }}" {% if skin_pdf.id == setting.skin_pdf_id %}selected{% endif %}>{{ skin_pdf.description }}</option>
+								<option value="{{ skin_pdf.id }}" {% if skin_pdf.id == settings.skin_pdf_id %}selected{% endif %}>{{ skin_pdf.description }}</option>
 							{% endfor %}
 						</select>
 					</div>

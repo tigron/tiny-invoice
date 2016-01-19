@@ -45,6 +45,13 @@ class Skin_Pdf {
 			}
 			$skin->save();
 		}
+
+		$skins = Skin_Pdf::get_all();
+		foreach ($skins as $skin) {
+			if (!file_exists($pdf_path . '/' . $skin->path)) {
+				$skin->delete();
+			}
+		}
 	}
 
 	/**

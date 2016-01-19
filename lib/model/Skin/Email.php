@@ -45,6 +45,13 @@ class Skin_Email {
 			}
 			$skin->save();
 		}
+
+		$skins = Skin_Email::get_all();
+		foreach ($skins as $skin) {
+			if (!file_exists($email_path . '/' . $skin->path)) {
+				$skin->delete();
+			}
+		}
 	}
 
 	/**
