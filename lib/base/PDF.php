@@ -68,7 +68,7 @@ class PDF {
 			$setting = Setting::get_by_name('skin_pdf_id');
 		} catch (Exception $e) {
 			Skin_Pdf::synchronize();
-			$skin_emails = Skin_Pdf::get_all();
+			$skin_pdfs = Skin_Pdf::get_all();
 			$setting = new Setting();
 			$setting->name = 'skin_pdf_id';
 			$setting->value = array_shift($skin_pdfs)->id;
