@@ -115,6 +115,9 @@ class PDF {
 
 		$html = $this->template->render($this->type . '/html.twig');
 
+		$setting = Setting::get_by_name('skin_pdf_id');
+		$skin_pdf = Skin_Pdf::get_by_id($setting->value);
+
 		define('DOMPDF_ENABLE_AUTOLOAD', false);
 		define("DOMPDF_DPI", 300);
 		define("DOMPDF_ENABLE_PHP", true);
@@ -122,15 +125,9 @@ class PDF {
 		define('DOMPDF_LOG_OUTPUT_FILE', false);
 		define('DOMPDF_ENABLE_REMOTE', true);
 		define('DOMPDF_TEMP_DIR', realpath(dirname(__FILE__) . '/../../tmp/dompdf'));
+		define("DOMPDF_FONT_DIR", dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/font/fonts/');
 
 		require_once realpath(dirname(__FILE__) . '/../..') . '/lib/external/packages/dompdf/dompdf/dompdf_config.inc.php';
-
-
-		/**
-		 * Get the email skin
-		 */
-		$setting = Setting::get_by_name('skin_pdf_id');
-		$skin_pdf = Skin_Pdf::get_by_id($setting->value);
 
 		switch ($output) {
 			case 'html':
@@ -139,7 +136,7 @@ class PDF {
 			case 'file':
 			case 'dompdf':
 				$dompdf = new DOMPDF();
-				$dompdf->set_base_path(dirname(__FILE__) . '/../../../store/pdf/' . $skin_pdf->path . '/media/');
+				$dompdf->set_base_path(dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/');
                 $dompdf->set_paper($this->configuration['size'], $this->configuration['orientation']);
                 $dompdf->load_html($html);
                 $dompdf->render();
