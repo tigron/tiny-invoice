@@ -96,10 +96,19 @@ body {
 /**
  * Forms
  */
- .form-inline .form-group {
- 	margin-left: 0;
+.form-inline .form-group {
+	margin-left: 0;
  	margin-right: 0
- }
+}
+
+ /**
+  * Tabs
+  */
+.tab-content {
+	padding: 30px;
+    border: solid 1px #ddd;
+    border-top: 0;
+}
 
 /**
  * Document/edit

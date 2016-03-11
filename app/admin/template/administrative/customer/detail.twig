@@ -1,0 +1,141 @@
+{% extends "administrative/customer.twig" %}
+
+{% block tab %}
+
+	{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "The form contains mistakes. Please correct them." %}
+		</div>
+	{% elseif env.sticky_session.message is defined %}
+		{{ base.display_flash_message(env.sticky_session.message, 'customer') }}
+	{% endif %}
+
+	<form class="form form-horizontal form-condensed" method="post" action="/administrative/customer/detail?action=edit&id={{ customer.id }}">
+		<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
+			<label for="company" class="col-xs-3 control-label">{% trans "Company" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[company]" id="company" class="form-control" value="{{ customer.company }}">
+				{{ form.invalid_input('company', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'firstname' in errors|keys %} has-error{% endif %}">
+			<label for="firstname" class="col-xs-3 control-label">{% trans "Firstname" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[firstname]" id="firstname" class="form-control" value="{{ customer.firstname }}">
+				{{ form.invalid_input('firstname', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'lastname' in errors|keys %} has-error{% endif %}">
+			<label for="lastname" class="col-xs-3 control-label">{% trans "Lastname" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[lastname]" id="lastname" class="form-control" value="{{ customer.lastname }}">
+				{{ form.invalid_input('lastname', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'street' in errors|keys %} has-error{% endif %}">
+			<label for="street" class="col-xs-3 control-label">{% trans "Street" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[street]" id="street" class="form-control" value="{{ customer.street }}">
+				{{ form.invalid_input('street', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'housenumber' in errors|keys %} has-error{% endif %}">
+			<label for="housenumber" class="col-xs-3 control-label">{% trans "Housenumber" %}</label>
+			<div class="col-xs-2">
+				<input type="text" name="customer[housenumber]" id="housenumber" class="form-control" value="{{ customer.housenumber }}">
+				{{ form.invalid_input('housenumber', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'city' in errors|keys %} has-error{% endif %}">
+			<label for="city" class="col-xs-3 control-label">{% trans "City" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[city]" id="city" class="form-control" value="{{ customer.city }}">
+				{{ form.invalid_input('city', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'zipcode' in errors|keys %} has-error{% endif %}">
+			<label for="zipcode" class="col-xs-3 control-label">{% trans "Zip code" %}</label>
+			<div class="col-xs-2">
+				<input type="text" name="customer[zipcode]" id="zipcode" class="form-control" value="{{ customer.zipcode }}">
+				{{ form.invalid_input('zipcode', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'country_id' in errors|keys %} has-error{% endif %}">
+			<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
+			<div class="col-xs-9">
+				{{ form.select_country(countries, 'customer[country_id]', 'country_id', customer.country_id|default(203)) }}
+				{{ form.invalid_input('country_id', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'email' in errors|keys %} has-error{% endif %}">
+			<label for="email" class="col-xs-3 control-label">{% trans "Email" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[email]" id="email" class="form-control" value="{{ customer.email }}">
+				{{ form.invalid_input('email', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'phone' in errors|keys %} has-error{% endif %}">
+			<label for="phone" class="col-xs-3 control-label">{% trans "Phone" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[phone]" id="phone" class="form-control" value="{{ customer.phone }}">
+				{{ form.invalid_input('phone', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'mobile' in errors|keys %} has-error{% endif %}">
+			<label for="mobile" class="col-xs-3 control-label">{% trans "Mobile" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[mobile]" id="mobile" class="form-control" value="{{ customer.mobile }}">
+				{{ form.invalid_input('mobile', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'fax' in errors|keys %} has-error{% endif %}">
+			<label for="fax" class="col-xs-3 control-label">{% trans "Fax" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer[fax]" id="fax" class="form-control" value="{{ customer.fax }}">
+				{{ form.invalid_input('fax', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
+			<label for="vat" class="col-xs-3 control-label">{% trans "Vat" %}</label>
+			<div class="col-xs-4">
+				<input type="text" name="customer[vat]" id="vat" class="form-control" value="{{ customer.vat }}">
+				{{ form.invalid_input('vat', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="language_id" class="col-xs-3 control-label">{% trans "Language" %}</label>
+			<div class="col-xs-4">
+				{{ form.select_language(languages, 'customer[language_id]', 'language_id', customer.language_id) }}
+			</div>
+		</div>
+
+		<div class="form-group">
+		    <label class="col-xs-3 control-label">{% trans "Comments" %}</label>
+		    <div class="col-xs-9">
+		        <textarea name="customer[comment]" class="form-control">{{ customer.comment }}</textarea>
+		    </div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-9 col-xs-offset-3">
+				<button class="btn btn-primary">
+					{% trans "Save" %}
+				</button>
+			</div>
+		</div>
+	</form>
+
+{% endblock tab %}

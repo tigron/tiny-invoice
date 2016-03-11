@@ -62,7 +62,7 @@ class Document {
 	 * @access public
 	 */
 	public function save($validate = true) {
-		if (isset($this->dirty_fields['file_id'])) {
+		if (isset($this->dirty_fields['file_id']) OR $this->id === null) {
 			$generate_preview = true;
 		} else {
 			$generate_preview = false;

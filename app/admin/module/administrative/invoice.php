@@ -33,8 +33,6 @@ class Web_Module_Administrative_Invoice extends Module {
 	 * @access public
 	 */
 	public function display() {
-		$template = Template::get();
-
 		$pager = new Pager('invoice');
 
 		$pager->add_sort_permission('number');
@@ -49,10 +47,28 @@ class Web_Module_Administrative_Invoice extends Module {
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
 		}
+
+		if (isset($_POST['date_start']) AND $_POST['date_start'] != '' AND $_POST['date_end'] == '') {
+			$pager->add_condition('created', '>=', date('Y-m-d H:i:s', strtotime($_POST['date_start'] . ' 00:00:00')));
+		} elseif (isset($_POST['date_end']) AND $_POST['date_end'] != '' AND $_POST['date_start'] == '') {
+			$pager->add_condition('created', '<=', date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59')));
+		} elseif (isset($_POST['date_start']) AND $_POST['date_start'] != '' AND isset($_POST['date_end']) AND $_POST['date_end'] != '') {
+			$pager->add_condition('created', 'BETWEEN', date('Y-m-d H:i:s', strtotime($_POST['date_start'] . ' 00:00:00')), date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59')));
+		}
+
+		if (isset($_POST['customer_id']) AND $_POST['customer_id'] != '') {
+			$pager->add_condition('customer_id', $_POST['customer_id']);
+		}
+
+		if (isset($_POST['paid']) AND $_POST['paid'] != '') {
+			$pager->add_condition('paid', $_POST['paid']);
+		}
+
 		$pager->page();
 
 		$template = Template::get();
 		$template->assign('pager', $pager);
+		$template->assign('customers', Customer::get_all('lastname'));
 	}
 
 	/**
@@ -65,12 +81,12 @@ class Web_Module_Administrative_Invoice extends Module {
 
 		if (!isset($_SESSION['invoice'])) {
 			$_SESSION['invoice'] = new Invoice();
-			$_SESSION['invoice']->load_array([ 'customer_id' => 0, 'invoice_contact_id' => 0 ]);
+			$_SESSION['invoice']->load_array([ 'customer_id' => 0, 'customer_contact_id' => 0 ]);
 		}
 
-		if (isset($_GET['customer_id']) AND isset($_GET['invoice_contact_id'])) {
+		if (isset($_GET['customer_id']) AND isset($_GET['customer_contact_id'])) {
 			$_SESSION['invoice']->customer_id = $_GET['customer_id'];
-			$_SESSION['invoice']->invoice_contact_id = $_GET['invoice_contact_id'];
+			$_SESSION['invoice']->customer_contact_id = $_GET['customer_contact_id'];
 			Session::redirect('/administrative/invoice?action=create_step3');
 		}
 
@@ -94,18 +110,18 @@ class Web_Module_Administrative_Invoice extends Module {
 	 */
 	public function display_create_step2() {
 		$template = Template::get();
-		if (isset($_POST['invoice_contact_id'])) {
-			if ($_POST['invoice_contact_id'] == '') {
-				$template->assign('errors', 'select_invoice_contact');
+		if (isset($_POST['customer_contact_id'])) {
+			if ($_POST['customer_contact_id'] == '') {
+				$template->assign('errors', 'select_customer_contact');
 			} else {
-				$_SESSION['invoice']->invoice_contact_id = $_POST['invoice_contact_id'];
+				$_SESSION['invoice']->customer_contact_id = $_POST['customer_contact_id'];
 				Session::redirect('/administrative/invoice?action=create_step3');
 			}
 		}
 
-		$invoice_contacts = $_SESSION['invoice']->customer->get_active_invoice_contacts();
+		$customer_contacts = $_SESSION['invoice']->customer->get_active_customer_contacts();
 
-		$template->assign('invoice_contacts', $invoice_contacts);
+		$template->assign('customer_contacts', $customer_contacts);
 		$template->assign('customer', $_SESSION['invoice']->customer);
 		$template->assign('languages', Language::get_all());
 		$template->assign('countries', Country::get_grouped());
@@ -165,9 +181,9 @@ class Web_Module_Administrative_Invoice extends Module {
 
 		}
 
-		$invoice_queue_items = Invoice_Queue::get_unprocessed_by_invoice_contact($_SESSION['invoice']->invoice_contact);
+		$invoice_queue_items = Invoice_Queue::get_unprocessed_by_customer_contact($_SESSION['invoice']->customer_contact);
 		$template->assign('invoice_queue_items', $invoice_queue_items);
-		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->invoice_contact->country));
+		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->customer_contact->country));
 		$template->assign('action', 'create_step3');
 	}
 
@@ -226,7 +242,7 @@ class Web_Module_Administrative_Invoice extends Module {
 	public function display_download() {
 		$invoice = Invoice::get_by_id($_GET['id']);
 		$file = $invoice->get_pdf();
-		$file->client_inline();
+		$file->client_download();
 	}
 
 	/**

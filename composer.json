@@ -10,7 +10,7 @@
 		"swiftmailer/swiftmailer": "5.*",
 		"dompdf/dompdf": "dev-master",
 		"filp/whoops": "1.*",
-		"fxp/composer-asset-plugin": "1.0",
+		"fxp/composer-asset-plugin": "~1.0",
 		"bower-asset/bootstrap": "dev-master",
 		"bower-asset/font-awesome": "*",
 		"bower-asset/moment": "2.10.*",
@@ -21,7 +21,7 @@
 		"bower-asset/jquery-zoom": "dev-master",
 		"bower-asset/handlebars": "4.0.2",
 		"bower-asset/bootstrap-multiselect": "dev-master",
-		"npm-asset/jquery.autogrow-textarea": "dev-master"
+		"bower-asset/autogrow-textarea": "dev-master"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",

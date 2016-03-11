@@ -5,6 +5,8 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Invoice_Queue {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
@@ -59,16 +61,16 @@ class Invoice_Queue {
 	}
 
 	/**
-	 * Get by Invoice_Contact
+	 * Get by Customer_Contact
 	 *
 	 * @access public
-	 * @param Invoice_Contact $invoice_contact
+	 * @param Customer_Contact $customer_contact
 	 * @return array Invoice_Queue $items
 	 */
-	public static function get_by_invoice_contact(Invoice_Contact $invoice_contact) {
+	public static function get_by_customer_contact(Customer_Contact $customer_contact) {
+		$db = Database::get();
 		$table = self::trait_get_database_table();
-		$db = self::trait_get_database();
-		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE invoice_contact_id = ?', [ $invoice_contact->id ]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE customer_contact_id = ?', [ $customer_contact->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {
@@ -79,16 +81,16 @@ class Invoice_Queue {
 	}
 
 	/**
-	 * Get unprocessed by Invoice_Contact
+	 * Get unprocessed by Customer_Contact
 	 *
 	 * @access public
-	 * @param Invoice_Contact $invoice_contact
+	 * @param Customer_Contact $customer_contact
 	 * @return array Invoice_Queue $items
 	 */
-	public static function get_unprocessed_by_invoice_contact(Invoice_Contact $invoice_contact) {
+	public static function get_unprocessed_by_customer_contact(Customer_Contact $customer_contact) {
+		$db = Database::get();
 		$table = self::trait_get_database_table();
-		$db = self::trait_get_database();
-		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE invoice_contact_id = ? AND processed_to_invoice_item_id IS NULL', [ $invoice_contact->id ]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE customer_contact_id = ? AND processed_to_invoice_item_id IS NULL', [ $customer_contact->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {

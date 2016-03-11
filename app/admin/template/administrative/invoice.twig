@@ -79,22 +79,22 @@
 					<div class="panel-body">
 						<dl class="dl-horizontal">
 							<dt>{% trans "Name" %}</dt>
-							<dd>{{ invoice.invoice_contact.firstname }} {{ invoice.invoice_contact.lastname }}</dd>
+							<dd>{{ invoice.customer_contact.firstname }} {{ invoice.customer_contact.lastname }}</dd>
 
 							<dt>{% trans "Company" %}</dt>
-							<dd>{{ invoice.invoice_contact.company }}</dd>
+							<dd>{{ invoice.customer_contact.company }}</dd>
 
 							<dt>{% trans "Address" %}</dt>
-							<dd>{{ invoice.invoice_contact.street }} {{ invoice.invoice_contact.housenumber }}</dd>
+							<dd>{{ invoice.customer_contact.street }} {{ invoice.customer_contact.housenumber }}</dd>
 
 							<dt>&nbsp;</dt>
-							<dd>{{ invoice.invoice_contact.zipcode }} {{ invoice.invoice_contact.city }}</dd>
+							<dd>{{ invoice.customer_contact.zipcode }} {{ invoice.customer_contact.city }}</dd>
 
 							<dt>&nbsp;</dt>
-							<dd>{{ invoice.invoice_contact.country.name }}</dd>
+							<dd>{{ invoice.customer_contact.country.name }}</dd>
 
 							<dt>{% trans "VAT" %}</dt>
-							<dd>{{ invoice.invoice_contact.get_vat_formatted() }}</dd>
+							<dd>{{ invoice.customer_contact.get_vat_formatted() }}</dd>
 						</dl>
 					</div>
 				</div>
@@ -300,7 +300,7 @@
 			<li class="active">{% trans "Select invoice contact" %}</li>
 		</ol>
 
-		{% include 'administrative/invoice/modal.manage_invoice_contact.twig' with {'id': 'manage-invoice-contact'} %}
+		{% include 'administrative/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact'} %}
 
 		{% if errors is defined %}
 		<div class="alert alert-danger">
@@ -314,26 +314,26 @@
 			</div>
 			<div class="panel-body">
 				<div class="row">
-				{% for invoice_contact in invoice_contacts %}
-					<div class="col-xs-3 invoice_contact" id="invoice-contact-{{ invoice_contact.id }}">
+				{% for customer_contact in customer_contacts %}
+					<div class="col-xs-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
 						<div class="panel panel-default">
-							<div class="panel-body{% if invoice_contacts|length == 1 %} bg-info{% endif %}">
+							<div class="panel-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
 								<div class="actions hide">
-									<a href="#manage-invoice-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-invoice-contact-id="{{ invoice_contact.id }}">
+									<a href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a>
-									<a href="javascript:void(0);" onclick="delete_contact({{ invoice_contact.id }})">
+									<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
 										<span class="glyphicon glyphicon-trash"></span>
 									</a>
 
 								</div>
 
-								{% if invoice_contact.company != '' %}{{ invoice_contact.company }}<br>{% endif %}
-								{{ invoice_contact.firstname }} {{ invoice_contact.lastname }}<br>
-								{{ invoice_contact.street }} {{ invoice_contact.housenumber }}<br>
-								{{ invoice_contact.zipcode }} {{ invoice_contact.city }}<br>
-								{{ invoice_contact.country.name }}
-								{% if invoice_contact.vat != '' %}<br>{{ invoice_contact.get_vat_formatted() }}{% endif %}
+								{% if customer_contact.company != '' %}{{ customer_contact.company }}<br>{% endif %}
+								{{ customer_contact.firstname }} {{ customer_contact.lastname }}<br>
+								{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
+								{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
+								{{ customer_contact.country.name }}
+								{% if customer_contact.vat != '' %}<br>{{ customer_contact.get_vat_formatted() }}{% endif %}
 							</div>
 						</div>
 					</div>
@@ -341,7 +341,7 @@
 					<div class="col-xs-3">
 						<div class="panel panel-default">
 							<div class="panel-body text-center">
-								<a class="btn btn-default" href="#manage-invoice-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ invoice_contacts|length }}">
+								<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
 									{% trans "Create new" %}
 								</a>
 							</div>
@@ -350,7 +350,7 @@
 				</div>
 
 				<form method="post" action="/administrative/invoice?action=create_step2" id="invoice-create-step2">
-					<input type="hidden" name="invoice_contact_id" value="{% if invoice_contacts|length == 1 %}{{ invoice_contacts.0.id }}{% endif %}">
+					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
 					<button class="btn btn-primary">
 						{% trans "Next" %}
 					</button>
@@ -360,7 +360,7 @@
 
 		<script type="text/javascript">
 
-			$('.invoice_contact').on({
+			$('.customer_contact').on({
 				mouseenter: function() {
 					$(this).find('.actions').toggleClass('hide');
 				},
@@ -368,16 +368,16 @@
 					$(this).find('.actions').toggleClass('hide');
 				},
 				click: function() {
-					$('.invoice_contact').find('.panel-body').removeClass('bg-info');
+					$('.customer_contact').find('.panel-body').removeClass('bg-info');
 					$(this).find('.panel-body').first().addClass('bg-info');
-					$('#invoice-create-step2 input').val($(this).prop('id').replace('invoice-contact-', ''));
+					$('#invoice-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
 				}
 			});
 
 			function delete_contact(id) {
 				$.get('/administrative/invoice/contact?action=delete&id=' + id, function(data) {
 					if(data['status'] == 1) {
-						$('#invoice-contact-' + id).remove();
+						$('#customer-contact-' + id).remove();
 						$('#invoice-create-step2 input').val('');
 					} else {
 						alert('Error deleting contact');
@@ -533,6 +533,45 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+						<div class="col-xs-9">
+							<select class="form-control" name="customer_id">
+								<option value=""> - - - </option>
+								{% for customer in customers %}
+								    <option value="{{ customer.id }}"{% if pager.has_condition('customer_id', customer.id) %} selected{% endif %}>
+										{{ customer.firstname }} {{ customer.lastname }}
+										{% if customer.company != '' %}
+											({{ customer.company }})
+										{% endif %}
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+					    <label class="col-xs-3 control-label">{% trans "Paid" %}</label>
+					    <div class="col-xs-9">
+					        <select name="paid" class="form-control">
+								<option value=""> - - </option>
+								<option value="0"{% if pager.has_condition('paid', 0) %} selected{% endif %}>{% trans "Unpaid" %}</option>
+								<option value="1"{% if pager.has_condition('paid', 01) %} selected{% endif %}>{% trans "Paid" %}</option>
+							</select>
+					    </div>
+					</div>
+					{% set conditions = pager.get_conditions() %}
+					<div class="form-group">
+						<label class="control-label col-xs-3">{% trans "Date" %}</label>
+						<div class="col-xs-9">
+							<div class="form-inline">
+								<div class="form-group" style="position: relative">
+									<input type="text" class="form-control datepicker" name="date_start" id="date_start" value="" placeholder="{% trans "From" %}">
+								</div>
+								<div class="form-group" style="position: relative">
+									<input type="text" class="form-control datepicker" name="date_end" id="date_end" value="" placeholder="{% trans "To" %}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
 						<div class="col-xs-3 col-xs-offset-3">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
@@ -561,7 +600,7 @@
 						{% trans "Add invoice" %}
 					</a>
 				</div>
-				{{ base.pager_count(pager.item_count) }}
+				{{ base.pager_count(pager.item_count) }} (&euro;{{ pager.get_sum('price_incl')|number_format }})
 			</div>
 			<div class="panel-body">
 			{% for invoice in pager.items %}
