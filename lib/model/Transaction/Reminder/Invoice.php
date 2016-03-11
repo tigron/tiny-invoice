@@ -18,14 +18,14 @@ class Transaction_Reminder_Invoice extends Transaction {
 	 */
 	public function run() {
 		$db = Database::get();
-		$rows = $db->get_all('	SELECT DISTINCT i.invoice_contact_id
+		$rows = $db->get_all('	SELECT DISTINCT i.customer_contact_id
 								FROM invoice AS i
 								WHERE 1
 								AND	i.paid = 0
 								AND i.send_reminder_mail = 1
 								AND DATEDIFF(NOW(), i.expiration_date) > 7');
 		foreach ($rows as $row) {
-			$this->send_customer_reminder($row['invoice_contact_id']);
+			$this->send_customer_reminder($row['customer_contact_id']);
 		}
 
 		$this->schedule('7 days');
@@ -35,9 +35,9 @@ class Transaction_Reminder_Invoice extends Transaction {
 	 * Send customer reminder
 	 *
 	 * @access private
-	 * @param int $invoice_contact_id
+	 * @param int $customer_contact_id
 	 */
-	private function send_customer_reminder($invoice_contact_id) {
+	private function send_customer_reminder($customer_contact_id) {
 		$db = Database::get();
 		$company_info = [
 			'company' => Setting::get('company'),
@@ -50,11 +50,11 @@ class Transaction_Reminder_Invoice extends Transaction {
 										AND i.paid = 0
 										AND i.send_reminder_mail = 1
 										AND i.expiration_date < NOW()
-										AND i.invoice_contact_id = ?', [ $invoice_contact_id ]);
-		$invoice_contact = Invoice_Contact::get_by_id($invoice_contact_id);
+										AND i.customer_contact_id = ?', [ $customer_contact_id ]);
+		$customer_contact = Customer_Contact::get_by_id($customer_contact_id);
 
 		$email = new Email('invoice_reminder');
-		$email->add_to($invoice_contact->email, $invoice_contact->firstname . ' ' . $invoice_contact->lastname);
+		$email->add_to($customer_contact->email, $customer_contact->firstname . ' ' . $customer_contact->lastname);
 		$email->set_sender($company_info['email'], $company_info['company']);
 
 		$invoices = [];
@@ -66,7 +66,7 @@ class Transaction_Reminder_Invoice extends Transaction {
 		}
 		$email->assign('invoices', $invoices);
 
-		echo 'sending reminder to user: ' . $invoice_contact->firstname . ' ' . $invoice_contact->lastname . ' (' . $invoice_contact->email . ') ' . "\n";
+		echo 'sending reminder to user: ' . $customer_contact->firstname . ' ' . $customer_contact->lastname . ' (' . $customer_contact->email . ') ' . "\n";
 		$email->send();
 	}
 }

@@ -41,5 +41,24 @@ class Supplier {
 			return true;
 		}
 	}
+	
+	/**
+	 * Get VAT formatted
+	 *
+	 * @access public
+	 * @return string $vat
+	 */
+	public function get_vat_formatted() {
+		if (!isset($this->details['vat']) OR $this->details['vat'] == '') {
+			return '';
+		}
+
+		if ($this->country->iso2 == 'BE') {
+			return 'BE ' . substr($this->vat, 0, 4) . '.' . substr($this->vat, 4, 3) . '.' . substr($this->vat, 7);
+		} else {
+			return $this->country->iso2 . ' ' . $this->vat;
+		}
+	}
+
 
 }

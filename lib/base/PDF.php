@@ -6,7 +6,11 @@
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class PDF {
 	/**
@@ -62,7 +66,7 @@ class PDF {
 		$this->template = new \Skeleton\Template\Template();
 
 		/**
-		 * Get the email skin
+		 * Get the pdf skin
 		 */
 		try {
 			$setting = Setting::get_by_name('skin_pdf_id');
@@ -118,24 +122,25 @@ class PDF {
 		$setting = Setting::get_by_name('skin_pdf_id');
 		$skin_pdf = Skin_Pdf::get_by_id($setting->value);
 
-		define('DOMPDF_ENABLE_AUTOLOAD', false);
-		define("DOMPDF_DPI", 300);
-		define("DOMPDF_ENABLE_PHP", true);
-		define('DOMPDF_ENABLE_FONTSUBSETTING', false);
-		define('DOMPDF_LOG_OUTPUT_FILE', false);
-		define('DOMPDF_ENABLE_REMOTE', true);
-		define('DOMPDF_TEMP_DIR', realpath(dirname(__FILE__) . '/../../tmp/dompdf'));
-		define("DOMPDF_FONT_DIR", dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/font/fonts/');
-
-		require_once realpath(dirname(__FILE__) . '/../..') . '/lib/external/packages/dompdf/dompdf/dompdf_config.inc.php';
-
 		switch ($output) {
 			case 'html':
 				return $html;
 				break;
 			case 'file':
 			case 'dompdf':
+				$options = new Options();
+				$options->set([
+					'dpi' => 300,
+					'isPhpEnabled' => true,
+					'fontDir' => dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/font/fonts/',
+					'tempDir' => realpath(dirname(__FILE__) . '/../../tmp/dompdf'),
+					'isRemoteEnabled' => true,
+					'logOutputFile' => false,
+					'isFontSubsettingEnabled' => true
+				]);
+
 				$dompdf = new DOMPDF();
+				$dompdf->setOptions($options);
 				$dompdf->set_base_path(dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/');
                 $dompdf->set_paper($this->configuration['size'], $this->configuration['orientation']);
                 $dompdf->load_html($html);

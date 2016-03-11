@@ -1,13 +1,13 @@
 <?php
 /**
- * Invoice_Contact class
+ * Customer_Contact class
  *
  * @author David Vandemaele <david@tigron.be>
  */
 
 use \Skeleton\Database\Database;
 
-class Invoice_Contact {
+class Customer_Contact {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
@@ -71,25 +71,30 @@ class Invoice_Contact {
 	 * @access public
 	 */
 	public function vat_bound() {
-
-		/* If the customer:
-		 *  - Is a European resident
-		 *  - Not a Belgian citizen
-		 *  - Has a VAT number
-		 * he is not bound to VAT
-		 */
-		if ($this->country->european == true && $this->country->iso2 != 'BE' && $this->vat != '') {
+		if (isset($this->details['vat_bound']) AND $this->vat_bound == 0) {
 			return false;
-		}
-
-		/* If the customer is not a European resident, he is not VAT bound */
-		else if ($this->country->european == false) {
-			return false;
-		}
-
-		/* If the customer is anything else, he is VAT bound */
-		else {
+		} elseif (isset($this->details['vat_bound']) AND $this->vat_bound == 1) {
 			return true;
+		}  else {
+			/* If the customer:
+			 *  - Is a European resident
+			 *  - Not a Belgian citizen
+			 *  - Has a VAT number
+			 * he is not bound to VAT
+			 */
+			if ($this->country->european == true && $this->country->iso2 != 'BE' && $this->vat != '') {
+				return false;
+			}
+
+			/* If the customer is not a European resident, he is not VAT bound */
+			else if ($this->country->european == false) {
+				return false;
+			}
+
+			/* If the customer is anything else, he is VAT bound */
+			else {
+				return true;
+			}
 		}
 	}
 
@@ -148,11 +153,11 @@ class Invoice_Contact {
 	 *
 	 * @access public
 	 * @param Customer $customer
-	 * @return array Invoice_Contact $items
+	 * @return array Customer_Contact $items
 	 */
 	public static function get_active_by_customer(Customer $customer) {
-		$table = self::trait_get_database_table();
 		$db = Database::get();
+		$table = self::trait_get_database_table();
 		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE customer_id = ? AND active = 1 ORDER BY created DESC', [ $customer->id ]);
 
 		$items = [];

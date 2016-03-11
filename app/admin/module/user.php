@@ -86,11 +86,10 @@ class Web_Module_User extends Module {
 		$user = User::get_by_id($_GET['id']);
 
 		if (isset($_POST['user'])) {
-			if ($_POST['user']['password'] == 'DONOTUPDATEME') {
-				unset($_POST['user']['password']);
-			} else {
+			if ($_POST['user']['password'] != 'DONOTUPDATEME') {
 				$user->set_password($_POST['user']['password']);
 			}
+			unset($_POST['user']['password']);
 			$user->load_array($_POST['user']);
 			if ($user->validate($errors) === false) {
 				$template->assign('errors', $errors);
