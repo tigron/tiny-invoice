@@ -50,10 +50,10 @@ class Customer {
 	 * Get active invoice contacts
 	 *
 	 * @access public
-	 * @return array Invoice_Contact $items
+	 * @return array Customer_Contact $items
 	 */
-	public function get_active_invoice_contacts() {
-		return Invoice_Contact::get_active_by_customer($this);
+	public function get_active_customer_contacts() {
+		return Customer_Contact::get_active_by_customer($this);
 	}
 
 }

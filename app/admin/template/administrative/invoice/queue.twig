@@ -29,7 +29,7 @@
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Invoice contact" %}</label>
 						<div class="col-xs-6">
-							<p class="form-control-static">{{ invoice_queue.invoice_contact.firstname }} {{ invoice_queue.invoice_contact.lastname }} [ID: {{ invoice_queue.invoice_contact_id }}]</p>
+							<p class="form-control-static">{{ invoice_queue.customer_contact.firstname }} {{ invoice_queue.customer_contact.lastname }} [ID: {{ invoice_queue.customer_contact_id }}]</p>
 						</div>
 					</div>
 					<div class="form-group">
@@ -122,7 +122,7 @@
 			<li class="active">{% trans "Select invoice contact" %}</li>
 		</ol>
 
-		{% include 'administrative/invoice/modal.manage_invoice_contact.twig' with {'id': 'manage-invoice-contact'} %}
+		{% include 'administrative/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact'} %}
 
 		{% if errors is defined %}
 		<div class="alert alert-danger">
@@ -137,26 +137,26 @@
 			<div class="panel-body">
 
 				<div class="row">
-				{% for invoice_contact in invoice_contacts %}
-					<div class="col-xs-3 invoice_contact" id="invoice-contact-{{ invoice_contact.id }}">
+				{% for customer_contact in customer_contacts %}
+					<div class="col-xs-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
 						<div class="panel panel-default">
-							<div class="panel-body{% if invoice_contacts|length == 1 %} bg-info{% endif %}">
+							<div class="panel-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
 								<div class="actions hide">
-									<a href="#manage-invoice-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-invoice-contact-id="{{ invoice_contact.id }}">
+									<a href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a>
-									<a href="javascript:void(0);" onclick="delete_contact({{ invoice_contact.id }})">
+									<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
 										<span class="glyphicon glyphicon-trash"></span>
 									</a>
 
 								</div>
 
-								{% if invoice_contact.company != '' %}{{ invoice_contact.company }}<br>{% endif %}
-								{{ invoice_contact.firstname }} {{ invoice_contact.lastname }}<br>
-								{{ invoice_contact.street }} {{ invoice_contact.housenumber }}<br>
-								{{ invoice_contact.zipcode }} {{ invoice_contact.city }}<br>
-								{{ invoice_contact.country.name }}
-								{% if invoice_contact.vat != '' %}<br>{{ invoice_contact.get_vat_formatted() }}{% endif %}
+								{% if customer_contact.company != '' %}{{ customer_contact.company }}<br>{% endif %}
+								{{ customer_contact.firstname }} {{ customer_contact.lastname }}<br>
+								{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
+								{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
+								{{ customer_contact.country.name }}
+								{% if customer_contact.vat != '' %}<br>{{ customer_contact.get_vat_formatted() }}{% endif %}
 							</div>
 						</div>
 					</div>
@@ -164,7 +164,7 @@
 					<div class="col-xs-3">
 						<div class="panel panel-default">
 							<div class="panel-body text-center">
-								<a class="btn btn-default" href="#manage-invoice-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ invoice_contacts|length }}">
+								<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
 									{% trans "Create new" %}
 								</a>
 							</div>
@@ -173,7 +173,7 @@
 				</div>
 
 				<form method="post" action="/administrative/invoice/queue?action=create_step2" id="invoice-queue-create-step2">
-					<input type="hidden" name="invoice_contact_id" value="{% if invoice_contacts|length == 1 %}{{ invoice_contacts.0.id }}{% endif %}">
+					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
 					<button class="btn btn-primary">
 						{% trans "Next" %}
 					</button>
@@ -184,7 +184,7 @@
 
 		<script type="text/javascript">
 
-			$('.invoice_contact').on({
+			$('.customer_contact').on({
 				mouseenter: function() {
 					$(this).find('.actions').toggleClass('hide');
 				},
@@ -192,16 +192,16 @@
 					$(this).find('.actions').toggleClass('hide');
 				},
 				click: function() {
-					$('.invoice_contact').find('.panel-body').removeClass('bg-info');
+					$('.customer_contact').find('.panel-body').removeClass('bg-info');
 					$(this).find('.panel-body').first().addClass('bg-info');
-					$('#invoice-queue-create-step2 input').val($(this).prop('id').replace('invoice-contact-', ''));
+					$('#invoice-queue-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
 				}
 			});
 
 			function delete_contact(id) {
 				$.get('/administrative/invoice/contact?action=delete&id=' + id, function(data) {
 					if(data['status'] == 1) {
-						$('#invoice-contact-' + id).remove();
+						$('#customer-contact-' + id).remove();
 						$('#invoice-queue-create-step2 input').val('');
 					} else {
 						alert('Error deleting contact');
@@ -406,7 +406,7 @@
 					</td>
 					<td>
 					{% if not invoice_queue.is_processed() %}
-						<a href="/administrative/invoice?action=create_step1&customer_id={{ invoice_queue.customer.id }}&invoice_contact_id={{ invoice_queue.invoice_contact.id }}">
+						<a href="/administrative/invoice?action=create_step1&customer_id={{ invoice_queue.customer.id }}&customer_contact_id={{ invoice_queue.customer_contact.id }}">
 							<span class="glyphicon glyphicon-play-circle"><span>
 						</a>
 					{% endif %}

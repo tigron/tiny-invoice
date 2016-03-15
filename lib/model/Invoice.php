@@ -91,7 +91,7 @@ class Invoice {
 	 * @return array $vat
 	 */
 	public function get_vat_array() {
-		if (!$this->invoice_contact->vat_bound()) {
+		if (!$this->customer_contact->vat_bound()) {
 			return [];
 		}
 		$invoice_items = $this->get_invoice_items();
@@ -123,7 +123,7 @@ class Invoice {
 	 * @return double $price
 	 */
 	public function get_price_incl() {
-		if (!$this->invoice_contact->vat_bound()) {
+		if (!$this->customer_contact->vat_bound()) {
 			return $this->get_price_excl();
 		}
 		$vat_array = $this->get_vat_array();
@@ -210,6 +210,7 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
+			//$this->file->delete();
 			return $this->file;
 		}
 
@@ -235,9 +236,9 @@ class Invoice {
 	 * @access public
 	 */
 	public function send_invoice_email() {
-		$mail = new Email('invoice', $this->invoice_contact->language);
-		$mail->add_to($this->invoice_contact->email, $this->invoice_contact->firstname . ' ' . $this->invoice_contact->lastname);
-		if ($this->invoice_contact->email != $this->customer->email) {
+		$mail = new Email('invoice', $this->customer_contact->language);
+		$mail->add_to($this->customer_contact->email, $this->customer_contact->firstname . ' ' . $this->customer_contact->lastname);
+		if ($this->customer_contact->email != $this->customer->email) {
 			$mail->add_cc($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
 		}
 

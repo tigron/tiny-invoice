@@ -19,11 +19,11 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Administration" %} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li {% if env.module == 'administrative_customer' %}class="active"{% endif %}><a href="/administrative/customer">{% trans "Customers" %}</a></li>
-						<li {% if env.module == 'administrative_invoice' %}class="active"{% endif %}><a href="/administrative/invoice">{% trans "Invoices" %}</a></li>
-						<li {% if env.module == 'administrative_invoice_queue' %}class="active"{% endif %}><a href="/administrative/invoice/queue">{% trans "Invoice queue" %}</a></li>
-						<li {% if env.module == 'administrative_supplier' %}class="active"{% endif %}><a href="/administrative/supplier">{% trans "Suppliers" %}</a></li>
-						<li {% if env.module == 'administrative_purchase' %}class="active"{% endif %}><a href="/administrative/purchase">{% trans "Purchases" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_customer' %}class="active"{% endif %}><a href="/administrative/customer">{% trans "Customers" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_invoice' %}class="active"{% endif %}><a href="/administrative/invoice">{% trans "Invoices" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_invoice_queue' %}class="active"{% endif %}><a href="/administrative/invoice/queue">{% trans "Invoice queue" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_supplier' %}class="active"{% endif %}><a href="/administrative/supplier">{% trans "Suppliers" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_purchase' %}class="active"{% endif %}><a href="/administrative/purchase">{% trans "Purchases" %}</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -32,8 +32,8 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Document Management" %} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li {% if env.module == 'administrative_document' %}class="active"{% endif %}><a href="/administrative/document">{% trans "Documents" %}</a></li>
-						<li {% if env.module == 'administrative_tag' %}class="active"{% endif %}><a href="/administrative/tag">{% trans "Tags" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_document' %}class="active"{% endif %}><a href="/administrative/document">{% trans "Documents" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_tag' %}class="active"{% endif %}><a href="/administrative/tag">{% trans "Tags" %}</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -42,9 +42,9 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Settings" %} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li {% if env.module == 'setting_configuration' %}class="active"{% endif %}><a href="/setting/configuration">{% trans "Configuration" %}</a></li>
-						<li {% if env.module == 'setting_company' %}class="active"{% endif %}><a href="/setting/company">{% trans "Company" %}</a></li>
-						<li {% if env.module == 'setting_mailscanner' %}class="active"{% endif %}><a href="/setting/mailscanner">{% trans "Mailscanner" %}</a></li>
+						<li {% if env.module.get_name() == 'setting_configuration' %}class="active"{% endif %}><a href="/setting/configuration">{% trans "Configuration" %}</a></li>
+						<li {% if env.module.get_name() == 'setting_company' %}class="active"{% endif %}><a href="/setting/company">{% trans "Company" %}</a></li>
+						<li {% if env.module.get_name() == 'setting_mailscanner' %}class="active"{% endif %}><a href="/setting/mailscanner">{% trans "Mailscanner" %}</a></li>
 					</ul>
 				</li>
 			</ul>
