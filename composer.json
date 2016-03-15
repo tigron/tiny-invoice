@@ -10,7 +10,7 @@
 		"swiftmailer/swiftmailer": "5.*",
 		"dompdf/dompdf": "dev-master",
 		"filp/whoops": "1.*",
-		"fxp/composer-asset-plugin": "1.0",
+		"fxp/composer-asset-plugin": "~1.0",
 		"bower-asset/bootstrap": "dev-master",
 		"bower-asset/font-awesome": "*",
 		"bower-asset/moment": "2.10.*",
