@@ -42,7 +42,6 @@ class Web_Module_Administrative_Customer extends Module {
 		$pager->add_sort_permission('firstname');
 		$pager->add_sort_permission('lastname');
 
-		$pager->add_condition('language.id', 1);
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
 		}
@@ -73,31 +72,6 @@ class Web_Module_Administrative_Customer extends Module {
 			}
 		}
 
-		$template->assign('languages', Language::get_all());
-		$template->assign('countries', Country::get_grouped());
-	}
-
-	/**
-	 * Edit
-	 *
-	 * @access public
-	 */
-	public function display_edit() {
-		$template = Template::Get();
-		$customer = Customer::get_by_id($_GET['id']);
-
-		if (isset($_POST['customer'])) {
-			$customer->load_array($_POST['customer']);
-			if ($customer->validate($errors) === false) {
-				$template->assign('errors', $errors);
-			} else {
-				$customer->save();
-
-				Session::set_sticky('message', 'updated');
-				Session::redirect('/administrative/customer?action=edit&id=' . $customer->id);
-			}
-		}
-		$template->assign('customer', $customer);
 		$template->assign('languages', Language::get_all());
 		$template->assign('countries', Country::get_grouped());
 	}

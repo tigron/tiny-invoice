@@ -9,7 +9,7 @@ use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 
-class Web_Module_Administrative_Invoice_Contact extends Module {
+class Web_Module_Administrative_Customer_Contact extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
@@ -41,59 +41,59 @@ class Web_Module_Administrative_Invoice_Contact extends Module {
 	 */
 	public function display_manage() {
 		if (isset($_GET['id']) AND $_GET['id'] > 0) {
-			$invoice_contact = Invoice_Contact::get_by_id($_GET['id']);
+			$customer_contact = Customer_Contact::get_by_id($_GET['id']);
 		} else {
-			$invoice_contact = new Invoice_Contact();
+			$customer_contact = new Customer_Contact();
 		}
 
-		$invoice_contact->load_array($_POST['invoice_contact']);
-		if ($invoice_contact->validate($errors) === false) {
+		$customer_contact->load_array($_POST['customer_contact']);
+		if ($customer_contact->validate($errors) === false) {
 			echo json_encode($errors);
 		} else {
 
-			if ($invoice_contact->id !== null AND $invoice_contact->is_dirty()) {
-				$invoice_contact->active = false;
-				$invoice_contact->save();
+			if ($customer_contact->id !== null AND $customer_contact->is_dirty()) {
+				$customer_contact->active = false;
+				$customer_contact->save();
 
-				$new_invoice_contact = new Invoice_Contact();
-				$new_invoice_contact->load_array($_POST['invoice_contact']);
-				$new_invoice_contact->active = true;
-				$new_invoice_contact->save();
+				$new_customer_contact = new Customer_Contact();
+				$new_customer_contact->load_array($_POST['customer_contact']);
+				$new_customer_contact->active = true;
+				$new_customer_contact->save();
 
-				echo json_encode($new_invoice_contact->get_info());
+				echo json_encode($new_customer_contact->get_info());
 			} else {
-				$invoice_contact->active = true;
-				$invoice_contact->save();
+				$customer_contact->active = true;
+				$customer_contact->save();
 
-				echo json_encode($invoice_contact->get_info());
+				echo json_encode($customer_contact->get_info());
 			}
 
 		}
 	}
 
 	/**
-	 * Load invoice_contact (Ajax)
+	 * Load customer_contact (Ajax)
 	 *
 	 * @access public
 	 */
-	public function display_load_invoice_contact() {
+	public function display_load_customer_contact() {
 		$this->template = null;
 
-		$invoice_contact = Invoice_Contact::get_by_id($_GET['id']);
-		echo json_encode($invoice_contact->get_info());
+		$customer_contact = Customer_Contact::get_by_id($_GET['id']);
+		echo json_encode($customer_contact->get_info());
 	}
 
 	/**
-	 * Delete invoice_contact (Ajax)
+	 * Delete customer_contact (Ajax)
 	 *
 	 * @access public
 	 */
 	public function display_delete() {
 		$this->template = null;
 
-		$invoice_contact = Invoice_Contact::get_by_id($_GET['id']);
-		$invoice_contact->active = false;
-		$invoice_contact->save();
+		$customer_contact = Customer_Contact::get_by_id($_GET['id']);
+		$customer_contact->active = false;
+		$customer_contact->save();
 
 		echo json_encode([ 'status' => 1]);
 	}

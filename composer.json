@@ -21,7 +21,7 @@
 		"bower-asset/jquery-zoom": "dev-master",
 		"bower-asset/handlebars": "4.0.2",
 		"bower-asset/bootstrap-multiselect": "dev-master",
-		"npm-asset/jquery.autogrow-textarea": "dev-master"
+		"bower-asset/autogrow-textarea": "dev-master"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",

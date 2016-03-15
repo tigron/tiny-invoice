@@ -72,7 +72,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 		$template = Template::get();
 
 		if (!isset($_SESSION['invoice_queue'])) {
-			$_SESSION['invoice_queue'] = ['items' => [], 'customer_id' => 0, 'invoice_contact_id' => 0];
+			$_SESSION['invoice_queue'] = ['items' => [], 'customer_id' => 0, 'customer_contact_id' => 0];
 		}
 
 		if (isset($_POST['customer_id'])) {
@@ -99,19 +99,19 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 	 */
 	public function display_create_step2() {
 		$template = Template::get();
-		if (isset($_POST['invoice_contact_id'])) {
-			if ($_POST['invoice_contact_id'] == '') {
-				$template->assign('errors', 'select_invoice_contact');
+		if (isset($_POST['customer_contact_id'])) {
+			if ($_POST['customer_contact_id'] == '') {
+				$template->assign('errors', 'select_customer_contact');
 			} else {
-				$_SESSION['invoice_queue']['invoice_contact_id'] = $_POST['invoice_contact_id'];
+				$_SESSION['invoice_queue']['customer_contact_id'] = $_POST['customer_contact_id'];
 				Session::redirect('/administrative/invoice/queue?action=create_step3');
 			}
 		}
 
 		$customer = Customer::get_by_id($_SESSION['invoice_queue']['customer_id']);
-		$invoice_contacts = $customer->get_active_invoice_contacts();
+		$customer_contacts = $customer->get_active_customer_contacts();
 
-		$template->assign('invoice_contacts', $invoice_contacts);
+		$template->assign('customer_contacts', $customer_contacts);
 		$template->assign('customer', $customer);
 		$template->assign('languages', Language::get_all());
 		$template->assign('countries', Country::get_grouped());
@@ -145,7 +145,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 			} else {
 				foreach ($invoice_queue_items as $invoice_queue_item) {
 					$invoice_queue_item->customer_id = $_SESSION['invoice_queue']['customer_id'];
-					$invoice_queue_item->invoice_contact_id = $_SESSION['invoice_queue']['invoice_contact_id'];
+					$invoice_queue_item->customer_contact_id = $_SESSION['invoice_queue']['customer_contact_id'];
 					$invoice_queue_item->save();
 				}
 
@@ -157,8 +157,8 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 
 		}
 
-		$invoice_contact = Invoice_Contact::get_by_id($_SESSION['invoice_queue']['invoice_contact_id']);
-		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($invoice_contact->country));
+		$customer_contact = customer_contact::get_by_id($_SESSION['invoice_queue']['customer_contact_id']);
+		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($customer_contact->country));
 		$template->assign('action', 'create_step3');
 	}
 
@@ -180,7 +180,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 		}
 
 		$template->assign('invoice_queue', $invoice_queue);
-		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($invoice_queue->invoice_contact->country));
+		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($invoice_queue->customer_contact->country));
 	}
 
 	/**

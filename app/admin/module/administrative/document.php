@@ -51,8 +51,6 @@ class Web_Module_Administrative_Document extends Module {
 		if (isset($_GET['tags'])) {
 			$pager->set_condition('tag_id', $_GET['tags']);
 		}
-		$pager->set_sort('created');
-		$pager->set_direction('DESC');
 		$pager->page();
 
 		$template = Template::get();
