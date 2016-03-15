@@ -413,6 +413,12 @@
 
 			$('#autocomplete-tag').tokenfield('setTokens', [{% for selected_tag in selected_tags %}{ value: "{{ selected_tag.id }}", label: "{{ selected_tag.name }}" }{% if not loop.last %},{% endif %}{% endfor %}]);
 
+			$('#autocomplete-tag').on('tokenfield:createtoken', function(e) {
+				if (e.attrs['value'] == e.attrs['label']) {
+					return false;
+				}
+			});
+
 		</script>
 
 	{% endif %}
