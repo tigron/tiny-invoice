@@ -1,0 +1,386 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+	{% if action == 'merge' or action == 'add' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/incoming">{% trans "Incoming" %}</a></li>
+			<li><a href="/administrative/incoming?action=edit&id={{ incoming.id }}">{% trans "Edit incoming" %}</a></li>
+			<li class="active">{% trans "Merge pages" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
+		{% endif %}
+
+		<form class="form form-horizontal form-condensed" method="post" action="/administrative/incoming?action=add">
+
+			<div class="panel panel-default">
+				<div class="panel-body">
+
+					<div class="form-group{% if 'title' in errors|keys %} has-error{% endif %}">
+						<label for="title" class="col-xs-3 control-label">{% trans "Title" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="document[title]" id="title" class="form-control" value="{{ env.post.document.title }}">
+							{{ form.invalid_input('title', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
+						<div class="col-xs-9">
+							<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
+						</div>
+					</div>
+
+					{% for incoming_page in incoming_pages %}
+						<input type="hidden" name="incoming_page_ids[]" value="{{ incoming_page.id }}" />
+					{% endfor %}
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Create purchase" %}</label>
+						<div class="col-xs-9">
+							<input type="checkbox" name="create_purchase" id="create_purchase" data-group-cls="btn-group-sm" onchange="toggle_purchase()" {% if env.post.create_purchase %}checked{% endif %}/>
+						</div>
+					</div>
+
+					<div id="purchase_form" class="hide">
+
+						<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %}">
+							<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
+							<div class="col-xs-9">
+								<input type="text" id="autocomplete_supplier" name="supplier" class="form-control typeahead" value="{{ supplier.company }}" placeholder="{% trans "Search supplier" %}...">
+								<input type="hidden" id="supplier_id" name="purchase[supplier_id]" value="{{ supplier.id }}">
+								{{ form.invalid_input('supplier_id', errors) }}
+							</div>
+						</div>
+
+						<div class="form-group {% if 'price_excl' in errors|keys %}has-error{% endif %}">
+							<label class="col-xs-3 control-label">{% trans "Price (excl)" %}</label>
+							<div class="col-xs-9">
+								<div class="input-group">
+									<span class="input-group-addon">&euro;</span>
+									<input type="text" name="purchase[price_excl]" class="form-control" value="{{ env.post.purchase.price_excl }}"/>
+								</div>
+								{{ form.invalid_input('price_excl', errors) }}
+							</div>
+						</div>
+
+						<div class="form-group {% if 'price_incl' in errors|keys %}has-error{% endif %}">
+							<label class="col-xs-3 control-label">{% trans "Price (incl)" %}</label>
+							<div class="col-xs-9">
+								<div class="input-group">
+									<span class="input-group-addon">&euro;</span>
+									<input type="text" name="purchase[price_incl]" class="form-control" value="{{ env.post.purchase.price_incl }}"/>
+								</div>
+								{{ form.invalid_input('price_incl', errors) }}
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-3 control-label">{% trans "Date" %}</label>
+							<div class="col-xs-5">
+								<input type="text" class="form-control datepicker" name="purchase[date]" value="{{ "now"|date }}">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-3 control-label">{% trans "Expiration Data" %}</label>
+							<div class="col-xs-5">
+								<input type="text" class="form-control datepicker" name="purchase[expiration_date]" value="{{ "+1 month"|date }}">
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Save" %}
+							</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</form>
+
+		<script type="text/javascript" src="/bootstrap-tokenfield.min.js"></script>
+		<script type="text/javascript" src="/bloodhound.min.js"></script>
+		<script type="text/javascript" src="/typeahead.min.js"></script>
+		<script type="text/javascript">
+
+			/**
+			 * Tags tokenfield
+			 */
+			var tags = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				remote: '/administrative/tag?action=ajax_search&search=%QUERY'
+			});
+
+			tags.initialize();
+
+			$('#autocomplete-tag').tokenfield({
+				typeahead: [null, { source: tags.ttAdapter(), displayKey: 'label' }]
+			});
+
+			$('#autocomplete-tag').tokenfield('setTokens', [{% for selected_tag in selected_tags %}{ value: "{{ selected_tag.id }}", label: "{{ selected_tag.name }}" }{% if not loop.last %},{% endif %}{% endfor %}]);
+
+			$('#autocomplete-tag').on('tokenfield:createtoken', function(e) {
+				if (e.attrs['value'] == e.attrs['label']) {
+					return false;
+				}
+			});
+
+			/**
+			 * Supplier autocomplete
+			 */
+			var suppliers = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				remote: '/administrative/supplier?action=ajax_search&search=%QUERY'
+			});
+
+			suppliers.initialize();
+
+			$('#autocomplete_supplier').typeahead({
+				hint: true,
+				highlight: true,
+				minLength: 2
+			},{
+				name:	'supplier',
+				displayKey: 'value',
+				source:	suppliers.ttAdapter()
+			});
+			$('#autocomplete_supplier').on('typeahead:selected typeahead:autocompleted', function(e,data) {
+				$('#supplier_id').val(data.id);
+			});
+
+			toggle_purchase();
+
+			function toggle_purchase() {
+				if ( $('#create_purchase').prop('checked') ) {
+					$('#purchase_form').removeClass('hide');
+					console.log('on');
+				} else {
+					$('#purchase_form').addClass('hide');
+					console.log('off');
+				}
+
+			}
+
+		</script>
+
+	{% elseif action == 'edit' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/incoming">{% trans "Incoming" %}</a></li>
+			<li class="active">{% trans "Edit incoming" %}</li>
+		</ol>
+
+		<form action="/administrative/incoming?action=merge" method="post">
+		<input type="hidden" name="selected_pages" id="selected_pages" value="" />
+		<div class="well">
+			{% trans "Please select 1 or more pages to convert to a document." %} (<a href="javascript:void(0);" onclick="toggle_pages();">{% trans "toggle all" %}</a>)
+
+			<div class="text-right">
+				<button type="submit" id="btn_convert_pages" class="btn btn-primary" onclick="populate_form();">{% trans "Convert pages" %}</button>
+			</div>
+		</div>
+		</form>
+
+		<div id="sortable" class="row">
+		{% for incoming_page in incoming.get_incoming_pages() %}
+			<div class="col-xs-3" id="page_{{ incoming_page.id }}">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span class="drag-handle">
+							<i class="fa fa-arrows-alt"></i>
+						</span>
+						{{ incoming_page.file.name }}
+					</div>
+					<div class="panel-body zoom">
+						<img src="/picture?id={{ incoming_page.preview_file_id }}" class="hide"/>
+						<img src="/picture?id={{ incoming_page.preview_file_id }}&size=incoming_preview" />
+					</div>
+
+					<div class="panel-footer">
+						<button class="btn btn-success">{% trans "Select" %}</button>
+						<a class="btn btn-danger" href="javascript: remove_page({{ incoming_page.id }}); $('#dataConfirmModal').modal('hide')" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this page?" %}">{% trans "Remove page" %}</a>
+					</div>
+				</div>
+			</div>
+
+		{% endfor %}
+		</div>
+
+
+		<script type="text/javascript">
+			$(window).load(function(){
+				/**
+				 * Zoom thumbnails
+				 */
+				$('.zoom').zoom();
+
+				/**
+				 * Make panels the same height
+				 */
+				highest = 0;
+				$('.panel-body').each(function() {
+					height = $(this).height();
+					if (height > highest) {
+						highest = height;
+					}
+				});
+				$('.panel-body').height(highest);
+
+				/**
+				 * Make panel selectable
+				 */
+				$('.btn.btn-success').on('click', function() {
+					if ($(this).parents('.panel').hasClass('panel-success')) {
+						$(this).parents('.panel').removeClass('panel-success');
+					} else {
+						$(this).parents('.panel').addClass('panel-success');
+					}
+					activate_convert_button();
+				})
+
+				/**
+				 * Delete a page
+				 */
+//				$('.btn.btn-danger').on('click',
+
+				$('#sortable').sortable({
+					handle: ".panel-heading"
+				});
+
+				activate_convert_button();
+			});
+
+			function remove_page(id) {
+				$('#page_' + id).remove();
+
+				$.get( "/administrative/incoming?action=remove_page&id=" + id );
+			}
+
+			function activate_convert_button() {
+				count = $('.panel.panel-success').length;
+				if (count == 0) {
+					$('#btn_convert_pages').prop('disabled', true);
+				} else {
+					$('#btn_convert_pages').prop('disabled', false);
+				}
+			}
+
+			function populate_form() {
+				page_ids = $("#sortable").sortable( "toArray" );
+				selected = [];
+				$.each(page_ids, function(index, value) {
+					if ($('#' + value + ' .panel').hasClass('panel-success')) {
+						selected.push(value);
+					}
+				})
+				$('#selected_pages').val(selected);
+				return true;
+			}
+
+			function toggle_pages() {
+				$('.btn.btn-success').each(function() {
+					$(this).click();
+				});
+			}
+
+		</script>
+
+	{% else %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li class="active">{% trans "Incoming" %}</li>
+		</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Filter" %}
+			</div>
+			<div class="panel-body">
+				<form method="post" action="/administrative/incoming" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Search" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{{ base.pager_count(pager.item_count) }}
+			</div>
+			<div class="panel-body">
+			{% for incoming in pager.items %}
+				{% if loop.first %}
+					<table class="table table-hover table-striped table-condensed table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+							<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
+							<th colspan="2">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+				{% endif %}
+
+					<tr>
+						<td>{{ incoming.id }}</td>
+						<td>{{ incoming.created|date }}</td>
+						<td>{{ incoming.subject }}</td>
+						<td width="20">
+							<a href="/administrative/incoming?action=edit&id={{ incoming.id }}" title="{% trans "Edit incoming" %}">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a>
+						</td>
+						<td width="20">
+							<a href="/administrative/incoming?action=delete&id={{ incoming.id }}" title="{% trans "Delete incoming" %}">
+								<span class="glyphicon glyphicon-remove"></span>
+							</a>
+						</td>
+					</tr>
+
+				{% if loop.last %}
+					</tbody>
+					</table>
+
+					{{ pager.links|raw }}
+				{% endif %}
+
+			{% else %}
+
+				<p><em>{% trans "No incoming found." %}</em></p>
+
+			{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+
+{% endblock content %}
+
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="/typeahead.css">
+	<link rel="stylesheet" type="text/css" href="/bootstrap-tokenfield.min.css">
+{% endblock %}

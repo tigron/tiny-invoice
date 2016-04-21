@@ -106,9 +106,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Preview" %}</div>
 					<div class="panel-body text-center zoom">
-						<a href="/picture?id={{ document.preview_file_id }}">
-							<img src="/picture?id={{ document.preview_file_id }}&size=document_preview" />
-						</a>
+						<img src="/picture?id={{ document.preview_file_id }}&size=document_preview" />
 					</div>
 				</div>
 			</div>
@@ -387,7 +385,7 @@
 				$('#document-dropzone').show();
 			}
 
-			$(document).ready(function(){
+			$(document).ready(function() {
 				$('.zoom').zoom({
 					url: '/picture?id={{ document.preview_file_id }}'
 				});

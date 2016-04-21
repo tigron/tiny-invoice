@@ -37,7 +37,7 @@ $(document).ready(function(){
 	/**
 	 * Initialize autogrow
 	 */
-	$('.autogrow').autoGrow();
+	$('.autogrow').autogrow();
 
 	/**
 	 * Pager jump to
@@ -47,6 +47,8 @@ $(document).ready(function(){
 			jump_to_page($(this));
 		}
 	});
+
+	$(':checkbox').checkboxpicker();
 
 });
 

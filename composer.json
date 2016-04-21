@@ -6,7 +6,6 @@
     "description": "Tigron Skeleton",
     "type": "project",
     "require": {
-		"sami/sami": "3.0.*@dev",
 		"swiftmailer/swiftmailer": "5.*",
 		"dompdf/dompdf": "dev-master",
 		"filp/whoops": "1.*",
@@ -21,13 +20,17 @@
 		"bower-asset/jquery-zoom": "dev-master",
 		"bower-asset/handlebars": "4.0.2",
 		"bower-asset/bootstrap-multiselect": "dev-master",
-		"bower-asset/autogrow-textarea": "dev-master"
+		"bower-asset/jquery-ui": "*",
+		"bower-asset/bootstrap-checkbox": "*",
+        "phpdocumentor/reflection-docblock": "^3.0",
+		"ext-imap": "*"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",
         "tigron/skeleton-object": "dev-master",
         "tigron/skeleton-file": "dev-master",
         "tigron/skeleton-file-picture": "dev-master",
+        "tigron/skeleton-file-pdf": "dev-master",
         "tigron/skeleton-i18n": "dev-master",
         "tigron/skeleton-pager": "dev-master",
         "tigron/skeleton-template-twig": "dev-master",
@@ -37,7 +40,9 @@
         "tigron/skeleton-email": "dev-master",
 		"tigron/skeleton-console": "dev-master",
         "tigron/skeleton-migrate": "dev-master",
-        "tigron/skeleton-transaction": "dev-master"
+        "tigron/skeleton-transaction": "dev-master",
+        "tigron/skeleton-package-api": "dev-master",
+        "tigron/skeleton-package-crud": "dev-master"
     },
     "suggest": {
         "ext-imap": "*"

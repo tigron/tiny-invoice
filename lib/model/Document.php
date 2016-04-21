@@ -42,7 +42,7 @@ class Document {
 	 * @return bool $validated
 	 */
 	public function validate(&$errors = []) {
-		$required_fields = [ 'file_id' ];
+		$required_fields = [ 'file_id', 'title' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
