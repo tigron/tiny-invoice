@@ -38,18 +38,6 @@
 				</div>
 
 				<div class="form-group">
-					<label class="control-label col-xs-3">{% trans "Set tag" %}</label>
-					<div class="col-xs-9">
-						<select name="setting[mailscanner_tag_id]" class="form-control">
-							<option value="-1">{% trans "No Tag" %}</option>
-							{% for tag in tags %}
-								<option value="{{ tag.id }}" {% if settings.mailscanner_tag_id == tag.id %}selected{% endif %}>{{ tag.name }}</option>
-							{% endfor %}
-						</select>
-					</div>
-				</div>
-
-				<div class="form-group">
 					<label class="control-label col-xs-3">{% trans "Last check" %}</label>
 					<div class="col-xs-9">
 						<p class="form-control-static">{% if settings.mailscanner_last_check is defined %}{{ settings.mailscanner_last_check|datetime }}{% else %}{% trans "Never" %}{% endif %}</p>

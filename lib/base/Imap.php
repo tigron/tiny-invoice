@@ -88,7 +88,7 @@ class Imap {
 	 */
 	private function connect($host, $login, $password) {
 		$url = '{' . $host . ':993/imap/ssl/novalidate-cert}';
-		$this->connection = @imap_open($url, $login, $password);
+		$this->connection = imap_open($url, $login, $password);
 		if ($this->connection === false) {
 			$url = '{' . $this->host . ':143}';
 			$this->connection = @imap_open($url, $this->login, $this->password);

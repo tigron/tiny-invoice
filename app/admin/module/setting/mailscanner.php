@@ -36,9 +36,6 @@ class Web_Module_Setting_Mailscanner extends Module {
 	public function display() {
 		$template = Template::get();
 
-		$tags = Tag::get_all();
-		$template->assign('tags', $tags);
-
 		if (isset($_POST['setting'])) {
 			foreach ($_POST['setting'] as $key => $value) {
 				try {

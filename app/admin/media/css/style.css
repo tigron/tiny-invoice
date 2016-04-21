@@ -116,3 +116,8 @@ body {
 #added_tags .label {
 	font-size: 1em;
 }
+
+
+.drag-handle {
+	cursor: pointer;
+}

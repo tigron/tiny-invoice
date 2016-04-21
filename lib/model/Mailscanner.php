@@ -64,6 +64,8 @@ class Mailscanner {
 			$tag = null;
 		}
 
+		$incoming = null;
+
 		foreach ($mail->attachments as $attachment) {
 
 			if (!$attachment['is_attachment']) {
@@ -72,18 +74,23 @@ class Mailscanner {
 
 			$file = \Skeleton\File\File::store($attachment['filename'], $attachment['attachment']);
 
-			$document = new Document();
-			$document->file_id = $file->id;
-			$document->date = date('Y-m-d');
-			$document->description = $attachment['filename'];
-			$document->title = $mail->subject;
-			$document->save();
+			if (!$file->is_pdf()) {
+				$file->delete();
+				continue;
+			}
 
-			if ($tag !== null) {
-				$document_tag = new Document_Tag();
-				$document_tag->document_id = $document->id;
-				$document_tag->tag_id = $tag->id;
-				$document_tag->save();
+			$incoming = new Incoming();
+			$incoming->subject = $mail->subject;
+			$incoming->file_id = $file->id;
+			$incoming->save();
+
+			$pages = $file->extract_pages();
+			foreach ($pages as $page) {
+				$incoming_page = new Incoming_Page();
+				$incoming_page->incoming_id = $incoming->id;
+				$incoming_page->file_id = $page->id;
+				$incoming_page->save();
+				$incoming_page->create_preview();
 			}
 		}
 	}

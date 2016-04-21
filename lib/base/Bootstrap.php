@@ -62,8 +62,9 @@ class Bootstrap {
 		/**
 		 * Initialize the thumbnail cache, define thumbnail formats
 		 */
-		\Skeleton\File\Picture\Config::$tmp_dir = $root_path . '/tmp/';
+		\Skeleton\File\Picture\Config::$tmp_dir = $root_path . '/tmp/picture/';
 		\Skeleton\File\Picture\Config::add_resize_configuration('document_preview', 600, 328);
+		\Skeleton\File\Picture\Config::add_resize_configuration('incoming_preview', 600, 240);
 
 		/**
 		 * Initialize the application directory
