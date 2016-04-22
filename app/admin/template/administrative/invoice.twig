@@ -481,7 +481,7 @@
 
 			$(document).ready(function() {
 				{% for invoice_queue_item in invoice_queue_items %}
-					add_item({'invoice_queue_id': {{ invoice_queue_item.id }}, 'qty': {{ invoice_queue_item.qty }}, 'price': '{{ invoice_queue_item.price }}', 'description': '{{ invoice_queue_item.description }}'});
+					add_item({'invoice_queue_id': {{ invoice_queue_item.id }}, 'qty': {{ invoice_queue_item.qty }}, 'price': '{{ invoice_queue_item.price }}', 'description': '{{ invoice_queue_item.description|e('js') }}'});
 				{% else %}
 					add_item({});
 				{% endfor %}
