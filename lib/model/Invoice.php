@@ -210,7 +210,6 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-			//$this->file->delete();
 			return $this->file;
 		}
 
@@ -253,6 +252,43 @@ class Invoice {
 		$mail->assign('invoice', $this);
 
 		$mail->send();
+	}
+
+	/**
+	 * Get expired invoices for which the customer should receive a reminder
+	 *
+	 * @access public
+	 * @return array Invoice $items
+	 */
+	public static function get_remindable() {
+		$db = Database::get();
+		$data = $db->get_all('
+			SELECT id,
+				(
+					TIMESTAMPDIFF(WEEK, expiration_date, NOW()) +
+					DATEDIFF(
+						NOW(),
+						expiration_date + INTERVAL TIMESTAMPDIFF(WEEK, expiration_date, NOW()) WEEK
+					)
+					/
+					DATEDIFF(
+						expiration_date + INTERVAL TIMESTAMPDIFF(WEEK, expiration_date, NOW()) + 1 WEEK,
+						expiration_date + INTERVAL TIMESTAMPDIFF(WEEK, expiration_date, NOW()) WEEK
+					)
+				) as weeks
+				FROM
+					invoice
+				WHERE
+					paid = 0 AND send_reminder_mail = 1 AND expiration_date < NOW()
+				HAVING CEIL(weeks) = weeks
+		');
+
+		$items = [];
+		foreach ($data as $row) {
+			$items[] = self::get_by_id($row['id']);
+		}
+
+		return $items;
 	}
 
 
