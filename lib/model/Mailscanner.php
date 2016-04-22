@@ -54,18 +54,6 @@ class Mailscanner {
 	 * @param Imap_Mail $mail
 	 */
 	private function process_mail($mail) {
-		try {
-			$tag_id = Setting::get_by_name('mailscanner_tag_id')->value;
-			if ($tag_id == -1) {
-				throw new Exception('No tag set');
-			}
-			$tag = Tag::get_by_id($tag_id);
-		} catch (Exception $e) {
-			$tag = null;
-		}
-
-		$incoming = null;
-
 		foreach ($mail->attachments as $attachment) {
 
 			if (!$attachment['is_attachment']) {
@@ -84,7 +72,12 @@ class Mailscanner {
 			$incoming->file_id = $file->id;
 			$incoming->save();
 
-			$pages = $file->extract_pages();
+			try {
+				$pages = $file->extract_pages();
+			} catch (\Exception $e) {
+				$pages = [];
+			}
+			
 			foreach ($pages as $page) {
 				$incoming_page = new Incoming_Page();
 				$incoming_page->incoming_id = $incoming->id;

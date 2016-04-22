@@ -91,6 +91,11 @@ class Web_Module_Administrative_Purchase extends Module {
 		$purchase = Purchase::get_by_id($_GET['id']);
 
 		if (isset($_POST['purchase'])) {
+			if (isset($_POST['purchase']['paid'])) {
+				$_POST['purchase']['paid'] = true;
+			} else {
+				$_POST['purchase']['paid'] = false;
+			}
 			$purchase->load_array($_POST['purchase']);
 			if ($purchase->validate($errors) === false) {
 				$template->assign('errors', $errors);

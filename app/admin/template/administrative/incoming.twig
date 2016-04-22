@@ -15,7 +15,7 @@
 			</div>
 		{% endif %}
 
-		<form class="form form-horizontal form-condensed" method="post" action="/administrative/incoming?action=add">
+		<form class="form form-horizontal form-condensed" method="post" action="/administrative/incoming?action=add&id={{ incoming.id }}">
 
 			<div class="panel panel-default">
 				<div class="panel-body">
@@ -182,42 +182,56 @@
 			<li class="active">{% trans "Edit incoming" %}</li>
 		</ol>
 
-		<form action="/administrative/incoming?action=merge" method="post">
-		<input type="hidden" name="selected_pages" id="selected_pages" value="" />
-		<div class="well">
-			{% trans "Please select 1 or more pages to convert to a document." %} (<a href="javascript:void(0);" onclick="toggle_pages();">{% trans "toggle all" %}</a>)
+		{% set incoming_pages = incoming.get_incoming_pages() %}
+		<form action="/administrative/incoming?action=merge&id={{ incoming.id }}" method="post">
+			{% if incoming_pages|length > 0 %}
+				<input type="hidden" name="selected_pages" id="selected_pages" value="" />
+				<div class="well">
+					{% trans "Please select 1 or more pages to convert to a document." %} (<a href="javascript:void(0);" onclick="toggle_pages();">{% trans "toggle all" %}</a>)
 
-			<div class="text-right">
-				<button type="submit" id="btn_convert_pages" class="btn btn-primary" onclick="populate_form();">{% trans "Convert pages" %}</button>
-			</div>
-		</div>
-		</form>
-
-		<div id="sortable" class="row">
-		{% for incoming_page in incoming.get_incoming_pages() %}
-			<div class="col-xs-3" id="page_{{ incoming_page.id }}">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<span class="drag-handle">
-							<i class="fa fa-arrows-alt"></i>
-						</span>
-						{{ incoming_page.file.name }}
-					</div>
-					<div class="panel-body zoom">
-						<img src="/picture?id={{ incoming_page.preview_file_id }}" class="hide"/>
-						<img src="/picture?id={{ incoming_page.preview_file_id }}&size=incoming_preview" />
-					</div>
-
-					<div class="panel-footer">
-						<button class="btn btn-success">{% trans "Select" %}</button>
-						<a class="btn btn-danger" href="javascript: remove_page({{ incoming_page.id }}); $('#dataConfirmModal').modal('hide')" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this page?" %}">{% trans "Remove page" %}</a>
+					<div class="text-right">
+						<button type="submit" id="btn_convert_pages" class="btn btn-primary" onclick="populate_form();">{% trans "Convert pages" %}</button>
 					</div>
 				</div>
-			</div>
+			{% else %}
+				<div class="alert alert-warning">
+				    {% trans "It was impossible to extract the pages for this document. You can only convert the document as a whole." %}
+					<br>
+					<button type="submit" id="btn_convert_document" class="btn btn-primary">{% trans "Convert document" %}</button>
+				</div>
+			{% endif %}
+		</form>
+
+		{% for incoming_page in incoming_pages %}
+			{% if loop.first %}
+				<div id="sortable" class="row">
+			{% endif %}
+
+				<div class="col-xs-3" id="page_{{ incoming_page.id }}">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<span class="drag-handle">
+								<i class="fa fa-arrows-alt"></i>
+							</span>
+							{{ incoming_page.file.name }}
+						</div>
+						<div class="panel-body zoom">
+							<img src="/picture?id={{ incoming_page.preview_file_id }}" class="hide"/>
+							<img src="/picture?id={{ incoming_page.preview_file_id }}&size=incoming_preview" />
+						</div>
+
+						<div class="panel-footer">
+							<button class="btn btn-success">{% trans "Select" %}</button>
+							<a class="btn btn-danger" href="javascript: remove_page({{ incoming_page.id }}); $('#dataConfirmModal').modal('hide')" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this page?" %}">{% trans "Remove page" %}</a>
+						</div>
+					</div>
+				</div>
+
+			{% if loop.last %}
+				</div>
+			{% endif %}
 
 		{% endfor %}
-		</div>
-
 
 		<script type="text/javascript">
 			$(window).load(function(){
@@ -302,6 +316,10 @@
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li class="active">{% trans "Incoming" %}</li>
 		</ol>
+
+		{% if env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'incoming') }}
+		{% endif %}
 
 		<div class="panel panel-default">
 			<div class="panel-heading">

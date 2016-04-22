@@ -64,6 +64,7 @@ class Web_Module_Administrative_Incoming extends Module {
 	 */
 	public function display_add() {
 		$template = Template::get();
+		$incoming = Incoming::get_by_id($_GET['id']);
 
 		$incoming_pages = [];
 		if (isset($_POST['incoming_page_ids'])) {
@@ -107,35 +108,41 @@ class Web_Module_Administrative_Incoming extends Module {
 			if (count($errors) > 0) {
 				$template->assign('errors', $errors);
 			} else {
-				$pdf_pages = [];
-				foreach ($incoming_pages as $incoming_page) {
-					$pdf_pages[] = $incoming_page->file;
+				if (count($incoming_pages) == 0) {
+					$pdf = $incoming->file->copy();
+				} else {
+					$pdf_pages = [];
+					foreach ($incoming_pages as $incoming_page) {
+						$pdf_pages[] = $incoming_page->file;
+					}
+
+					$pdf = \Skeleton\File\Pdf\Pdf::merge($incoming_pages[0]->incoming->file->name, $pdf_pages);
 				}
 
-				$pdf = \Skeleton\File\Pdf\Pdf::merge($incoming_pages[0]->incoming->file->name, $pdf_pages);
 				$document->file_id = $pdf->id;
 				$document->save();
 				foreach ($selected_tags as $tag) {
 					$document->add_tag($tag);
 				}
+
 				if (isset($_POST['create_purchase'])) {
+					$purchase->document_id = $document->id;
 					$purchase->save();
 				}
 
 				foreach ($incoming_pages as $incoming_page) {
 					$incoming_page->delete();
-					$incoming = $incoming_page->incoming;
 				}
+
 				if (count($incoming->get_incoming_pages()) == 0) {
 					$incoming->delete();
 				}
+
 				Session::redirect('/administrative/document?action=edit&id=' . $document->id);
 			}
 		}
 
 		$template->assign('incoming_pages', $incoming_pages);
-
-
 	}
 
 	/**
@@ -144,28 +151,45 @@ class Web_Module_Administrative_Incoming extends Module {
 	 * @access public
 	 */
 	public function display_merge() {
-		$pages = explode(',', $_POST['selected_pages']);
-		$incoming_pages = [];
-		$incoming = null;
-		foreach ($pages as $page) {
-			$id = str_replace('page_', '', $page);
-			$incoming_page = Incoming_Page::get_by_id($id);
-			$incoming_pages[] = $incoming_page;
-			$incoming = $incoming_page->incoming;
-		}
+		$incoming = Incoming::get_by_id($_GET['id']);
+
 		$template = Template::get();
+		if (isset($_POST['selected_pages'])) {
+			$pages = explode(',', $_POST['selected_pages']);
+			$incoming_pages = [];
+			foreach ($pages as $page) {
+				$id = str_replace('page_', '', $page);
+				$incoming_page = Incoming_Page::get_by_id($id);
+				$incoming_pages[] = $incoming_page;
+			}
+			$template->assign('incoming_pages', $incoming_pages);
+		}
+
 		$template->assign('incoming', $incoming);
-		$template->assign('incoming_pages', $incoming_pages);
 	}
 
 	/**
-	 * Remove page
+	 * Remove page (ajax)
 	 *
 	 * @access public
 	 */
 	public function display_remove_page() {
+		$this->template = false;
+
 		$page = Incoming_Page::get_by_id($_GET['id']);
 		$page->delete();
-		$this->template = false;
+	}
+
+	/**
+	 * Delete incoming document
+	 *
+	 * @access public
+	 */
+	public function display_delete() {
+		$incoming = Incoming::get_by_id($_GET['id']);
+		$incoming->delete();
+
+		Session::set_sticky('message', 'deleted');
+		Session::redirect('/administrative/incoming');
 	}
 }
