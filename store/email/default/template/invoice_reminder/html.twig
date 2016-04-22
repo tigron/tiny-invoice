@@ -13,14 +13,14 @@
 	<thead>
 		<tr>
 			<th>{% trans "Nr" %}</th>
-			<th>{% trans "Price incl" %}.</th>
+			<th>{% trans "Price incl." %}</th>
 			<th>{% trans "Expiration date" %}</th>
 		</tr>
 	</thead>
 	<tbody>
 	{% for invoice in invoices %}
 		<tr>
-			<td>{% trans "Invoice" %} {{ invoice.id }}</td>
+			<td>{% trans "Invoice" %} {{ invoice.number }}</td>
 			<td>€ {{ "%.2f"|format(invoice.get_price_incl()) }}</td>
 			<td>{{ invoice.expiration_date|date('d/m/Y') }}</td>
 		</tr>
