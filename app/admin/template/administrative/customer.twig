@@ -215,44 +215,44 @@
 			</div>
 			<div class="panel-body">
 			{% for customer in pager.items %}
-			{% if loop.first %}
-				<table class="table table-hover table-striped table-condensed table-responsive">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>{{ pager.create_header('First name'|trans, 'firstname')|raw }}</th>
-						<th>{{ pager.create_header('Last name'|trans, 'lastname')|raw }}</th>
-						<th>{{ pager.create_header('Company'|trans, 'company')|raw }}</th>
-						<th>{{ pager.create_header('Email'|trans, 'email')|raw }}</th>
-						<th>&nbsp;</th>
-					</tr>
-				</thead>
-				<tbody>
-			{% endif %}
+				{% if loop.first %}
+					<table class="table table-hover table-striped table-condensed table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>{{ pager.create_header('First name'|trans, 'firstname')|raw }}</th>
+							<th>{{ pager.create_header('Last name'|trans, 'lastname')|raw }}</th>
+							<th>{{ pager.create_header('Company'|trans, 'company')|raw }}</th>
+							<th>{{ pager.create_header('Email'|trans, 'email')|raw }}</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+				{% endif %}
 
-					<tr>
-						<td>{{ customer.id }}</td>
-						<td>{{ customer.firstname }}</td>
-						<td>{{ customer.lastname }}</td>
-						<td>{{ customer.company }}</td>
-						<td>{{ customer.email }}</td>
-						<td>
-							<a href="/administrative/customer/detail?id={{ customer.id }}" title="">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
-						</td>
-					</tr>
+				<tr>
+					<td>{{ customer.id }}</td>
+					<td>{{ customer.firstname }}</td>
+					<td>{{ customer.lastname }}</td>
+					<td>{{ customer.company }}</td>
+					<td>{{ customer.email }}</td>
+					<td>
+						<a href="/administrative/customer/detail?id={{ customer.id }}" title="">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+				</tr>
 
-			{% if loop.last %}
-				</tbody>
-				</table>
+				{% if loop.last %}
+					</tbody>
+					</table>
 
-				{{ pager.links|raw }}
-			{% endif %}
+					{{ pager.links|raw }}
+				{% endif %}
 
 			{% else %}
 
-				<p><em>{% trans "No customers found." %}</em></p>
+				<p><em>{% trans "No tags found." %}</em></p>
 
 			{% endfor %}
 			</div>

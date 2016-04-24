@@ -37,7 +37,7 @@ $(document).ready(function(){
 	/**
 	 * Initialize autogrow
 	 */
-	$('.autogrow').autogrow();
+	$('.autogrow').autoGrow();
 
 	/**
 	 * Pager jump to
