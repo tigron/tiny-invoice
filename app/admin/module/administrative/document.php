@@ -38,6 +38,22 @@ class Web_Module_Administrative_Document extends Module {
 	public function display() {
 		$pager = new Pager('document');
 
+		$selected_tags = [];
+		$tag_ids = [];
+		if (!empty($_POST['tag_ids'])) {
+			$tag_ids = explode(',', $_POST['tag_ids']);
+			if (count($tag_ids) > 0) {
+				foreach ($tag_ids as $tag_id) {
+					$tag = Tag::get_by_id($tag_id);
+					$selected_tags[] = $tag;
+				}
+			}
+		}
+		if (count($tag_ids) > 0) {
+			$pager->add_join('document_tag', 'document_id', 'document.id');
+			$pager->add_condition('document_tag.tag_id', 'IN', $tag_ids);
+		}
+
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('created');
 		$pager->add_sort_permission('title');
@@ -56,6 +72,7 @@ class Web_Module_Administrative_Document extends Module {
 		$template = Template::get();
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
+		$template->assign('selected_tags', $selected_tags);
 	}
 
 	/**
@@ -76,6 +93,7 @@ class Web_Module_Administrative_Document extends Module {
 			}
 
 			$document = new Document();
+			$document->classname = 'Document';
 			$document->load_array($_POST['document']);
 			if ($document->validate($errors) === false) {
 				$template->assign('errors', $errors);
@@ -136,6 +154,14 @@ class Web_Module_Administrative_Document extends Module {
 				foreach ($tag_ids as $tag_id) {
 					$selected_tags[] = Tag::get_by_id($tag_id);
 				}
+			}
+
+			$document = $document->change_classname($_POST['document']['classname']);
+			unset($_POST['document']['classname']);
+			if (isset($_POST['document']['paid'])) {
+				$_POST['document']['paid'] = true;
+			} else {
+				$_POST['document']['paid'] = false;
 			}
 
 			$document->load_array($_POST['document']);

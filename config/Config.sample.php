@@ -65,7 +65,7 @@ class Config {
 			}
 		}
 		return self::$config;
-	}	
+	}
 
 	/**
 	 * Check if config var exists
@@ -236,6 +236,12 @@ class Config {
 					'SE' => '123456789012',
 					'SI' => '12345678',
 					'SK' => '1234567890',
+			],
+
+			/**
+			 * API keys
+			 */
+			'api_keys' => [
 			],
 
 		];

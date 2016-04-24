@@ -10,7 +10,11 @@
 			<li class="active">{% trans "Edit Document" %}</li>
 		</ul>
 
-		{% if env.sticky_session.message == 'updated' %}
+		{% if errors is defined %}
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
+		{% elseif env.sticky_session.message == 'updated' %}
 			{{ base.display_flash_message(env.sticky_session.message, 'document') }}
 		{% elseif env.sticky_session.message == 'tags_updated' %}
 			<div class="alert alert-success alert-dismissable">
@@ -18,13 +22,32 @@
 			</div>
 		{% endif %}
 
+
+
 		<div class="row">
 			<div class="{% if document.preview_file_id > 0 %}col-xs-8{% else %}col-xs-12{% endif %}">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Document details" %}</div>
 					<div class="panel-body">
-
 						<form class="form-horizontal form-condensed" action="/administrative/document?action=edit&id={{ document.id }}" method="post">
+							<div class="form-group {% if 'title' in errors|keys %}has-error{% endif %}">
+								<label class="col-xs-3 control-label">{% trans "Title" %}</label>
+								<div class="col-xs-9">
+									<input type="text" class="form-control" name="document[title]" value="{{ document.title }}" />
+									{{ form.invalid_input('title', errors) }}
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-xs-3 control-label">{% trans "Document type" %}</label>
+								<div class="col-xs-9">
+									<select name="document[classname]" class="form-control" onchange="show_classname_fields()" id="slc_classname">
+										<option value="Document" {% if document.classname == 'Document' %}selected{% endif %}>{% trans "Standard document" %}</option>
+										<option value="Document_Incoming_Invoice" {% if document.classname == 'Document_Incoming_Invoice' %}selected{% endif %}>{% trans "Incoming invoice" %}</option>
+									</select>
+								</div>
+							</div>
+
 							<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
 								<label for="file_id" class="col-xs-3 control-label">{% trans "File" %}</label>
 								<div class="col-xs-9">
@@ -69,13 +92,6 @@
 							</div>
 
 							<div class="form-group">
-								<label class="col-xs-3 control-label">{% trans "Title" %}</label>
-								<div class="col-xs-9">
-									<input type="text" class="form-control" name="document[title]" value="{{ document.title }}" />
-								</div>
-							</div>
-
-							<div class="form-group">
 								<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
 								<div class="col-xs-9">
 									<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
@@ -88,6 +104,60 @@
 									<textarea class="form-control autogrow" name="document[description]">{{ document.description }}</textarea>
 								</div>
 							</div>
+
+							<div class="classname_fields classname_document">
+
+							</div>
+
+							<div class="classname_fields classname_document_incoming_invoice">
+								<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %}">
+									<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
+									<div class="col-xs-9">
+										<input type="text" id="autocomplete_supplier" name="supplier" class="form-control typeahead" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
+										<input type="hidden" id="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
+
+									</div>
+								</div>
+
+								<div class="form-group{% if 'price_excl' in errors|keys %} has-error{% endif %}">
+									<label class="col-xs-3 control-label">{% trans "Price excl VAT" %}</label>
+									<div class="col-xs-9">
+										<div class="input-group">
+											<span class="input-group-addon">&euro;</span>
+											<input type="text" name="document[price_excl]" class="form-control" value="{{ document.price_excl }}" >
+										</div>
+										{{ form.invalid_input('price_excl', errors) }}
+									</div>
+								</div>
+
+								<div class="form-group{% if 'price_incl' in errors|keys %} has-error{% endif %}">
+									<label class="col-xs-3 control-label">{% trans "Price incl VAT" %}</label>
+									<div class="col-xs-9">
+										<div class="input-group">
+											<span class="input-group-addon">&euro;</span>
+											<input type="text" name="document[price_incl]" class="form-control" value="{{ document.price_incl }}" >
+										</div>
+										{{ form.invalid_input('price_incl', errors) }}
+									</div>
+								</div>
+
+								<div class="form-group{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
+									<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
+									<div class="col-xs-9">
+										<input type="text" class="form-control datepicker" name="document[expiration_date]" value="{{ document.expiration_date }}">
+										{{ form.invalid_input('expiration_date', errors) }}
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-xs-3 control-label">{% trans "Paid" %}</label>
+									<div class="col-xs-9">
+										<input type="checkbox" name="document[paid]" id="paid" data-group-cls="btn-group-sm" {% if document.paid %}checked{% endif %}/>
+									</div>
+								</div>
+
+							</div>
+
 
 							<div class="form-group">
 								<div class="col-xs-9 col-xs-offset-3">
@@ -113,6 +183,16 @@
 			{% endif %}
 
 		</div>
+
+		<script type="text/javascript">
+			function show_classname_fields() {
+				classname = $('#slc_classname').val();
+				$('.classname_fields').hide();
+				$('.classname_' + classname.toLowerCase()).show();
+			}
+
+			show_classname_fields();
+		</script>
 
 
 	{% elseif action == 'add' %}
@@ -216,6 +296,14 @@
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
+						<div class="col-xs-9">
+							<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
+						</div>
+					</div>
+
 					<div class="form-group">
 						<div class="col-xs-3 col-xs-offset-3">
 							<button class="btn btn-primary">
@@ -279,18 +367,9 @@
 							</a>
 						</td>
 						<td width="20">
-							{% if not document.is_purchase() %}
-								<a href="/administrative/document?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
-									<span class="glyphicon glyphicon-trash"></span>
-								</a>
-							{% endif %}
-						</td>
-						<td width="20">
-							{% if not document.is_purchase() %}
-								<a href="/administrative/purchase?action=add&document_id={{ document.id }}" title="{% trans "Create purchase" %}">
-									<span class="glyphicon glyphicon-pushpin"></span>
-								</a>
-							{% endif %}
+							<a href="/administrative/document?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
+								<span class="glyphicon glyphicon-trash"></span>
+							</a>
 						</td>
 					</tr>
 
@@ -314,6 +393,32 @@
 {% endblock content %}
 
 {% block javascript %}
+	<script type="text/javascript" src="/bootstrap-tokenfield.min.js"></script>
+	<script type="text/javascript" src="/bloodhound.min.js"></script>
+	<script type="text/javascript" src="/typeahead.min.js"></script>
+	<script type="text/javascript">
+
+		var tags = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			remote: '/administrative/tag?action=ajax_search&search=%QUERY'
+		});
+
+		tags.initialize();
+
+		$('#autocomplete-tag').tokenfield({
+			typeahead: [null, { source: tags.ttAdapter(), displayKey: 'label' }]
+		});
+
+		$('#autocomplete-tag').tokenfield('setTokens', [{% for selected_tag in selected_tags %}{ value: "{{ selected_tag.id }}", label: "{{ selected_tag.name }}" }{% if not loop.last %},{% endif %}{% endfor %}]);
+
+		$('#autocomplete-tag').on('tokenfield:createtoken', function(e) {
+			if (e.attrs['value'] == e.attrs['label']) {
+				return false;
+			}
+		});
+
+	</script>
 
 	{% if action == 'add' or action == 'edit' %}
 
@@ -392,34 +497,35 @@
 			});
 
 		</script>
-		<script type="text/javascript" src="/bootstrap-tokenfield.min.js"></script>
-		<script type="text/javascript" src="/bloodhound.min.js"></script>
-		<script type="text/javascript" src="/typeahead.min.js"></script>
+	{% endif %}
+
+	{% if action == 'edit' %}
 		<script type="text/javascript">
 
-			var tags = new Bloodhound({
+			var suppliers = new Bloodhound({
 				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				remote: '/administrative/tag?action=ajax_search&search=%QUERY'
+				remote: '/administrative/supplier?action=ajax_search&search=%QUERY'
 			});
 
-			tags.initialize();
+			suppliers.initialize();
 
-			$('#autocomplete-tag').tokenfield({
-				typeahead: [null, { source: tags.ttAdapter(), displayKey: 'label' }]
+			$('#autocomplete_supplier').typeahead({
+				hint: true,
+				highlight: true,
+				minLength: 2
+			},{
+				name:	'supplier',
+				displayKey: 'value',
+				source:	suppliers.ttAdapter()
 			});
-
-			$('#autocomplete-tag').tokenfield('setTokens', [{% for selected_tag in selected_tags %}{ value: "{{ selected_tag.id }}", label: "{{ selected_tag.name }}" }{% if not loop.last %},{% endif %}{% endfor %}]);
-
-			$('#autocomplete-tag').on('tokenfield:createtoken', function(e) {
-				if (e.attrs['value'] == e.attrs['label']) {
-					return false;
-				}
+			$('#autocomplete_supplier').on('typeahead:selected typeahead:autocompleted', function(e,data) {
+				$('#supplier_id').val(data.id);
 			});
-
 		</script>
-
 	{% endif %}
+
+
 
 {% endblock javascript %}
 

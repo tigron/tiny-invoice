@@ -41,7 +41,8 @@ class Document {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = []) {
+	public function validate(&$errors) {
+		$errors = [];
 		$required_fields = [ 'file_id', 'title' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
@@ -54,6 +55,21 @@ class Document {
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * Change classname
+	 *
+	 * @access public
+	 * @param string $classname
+	 */
+	public function change_classname($classname) {
+		if ($classname == $this->classname) {
+			return $this;
+		}
+		$db = Database::get();
+		$db->query('UPDATE document SET classname=? WHERE id=?', [ $classname, $this->id ]);
+		return self::get_by_id($this->id);
 	}
 
 	/**
@@ -98,6 +114,43 @@ class Document {
 		if ($generate_preview) {
 			$this->create_preview();
 		}
+	}
+
+	/**
+	 * Is available for API
+	 *
+	 * @access public
+	 * @return bool $available
+	 */
+	public function available_for_api() {
+		try {
+			$public = Setting::get_by_name('api_public_documents')->value;
+			if ($public) {
+				return true;
+			}
+		} catch (Exception $e) { };
+
+		try {
+			$tag_ids = Setting::get_by_name('api_document_tag_ids')->value;
+		} catch (Exception $e) {
+			$tag_ids = '';
+		}
+		$tag_ids = explode(',', $tag_ids);
+		$selected_tags = [];
+		foreach ($tag_ids as $tag_id) {
+			try {
+				$selected_tags[] = Tag::get_by_id($tag_id);
+			} catch (Exception $e) { }
+		}
+
+		foreach ($this->get_tags() as $tag) {
+			foreach ($selected_tags as $selected_tag) {
+				if ($tag->id == $selected_tag->id) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -179,10 +232,6 @@ class Document {
 	 * @access public
 	 */
 	public function delete() {
-		if ($this->is_purchase()) {
-			throw new Exception('This document is linked to a purchese');
-		}
-
 		$this->file->delete();
 
 		$document_tags = Document_Tag::get_by_document($this);
@@ -241,6 +290,22 @@ class Document {
 		} catch (Exception $e) {
 			return false;
 		}
+	}
+
+	/**
+	 * Get by id
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return Document $document
+	 */
+	public static function get_by_id($id) {
+		$db = Database::get();
+		$classname = $db->get_one('SELECT classname FROM document WHERE id=?', [ $id ]);
+		if (!class_exists($classname)) {
+			throw new Exception('This document has an incorrect classname');
+		}
+		return new $classname($id);
 	}
 
 }

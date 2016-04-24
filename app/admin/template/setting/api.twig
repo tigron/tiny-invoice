@@ -1,0 +1,94 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+
+	<ol class="breadcrumb">
+		<li><a href="/">{% trans "Home" %}</a></li>
+		<li>{% trans "Settings" %}</li>
+		<li class="active">{% trans "Api settings" %}</li>
+	</ol>
+
+	{% if env.sticky_session.message is defined %}
+		{{ base.display_flash_message(env.sticky_session.message, 'settings') }}
+	{% endif %}
+
+	<form action="/setting/api" method="post" class="form-horizontal form-condensed">
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Company settings" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="control-label col-xs-3">{% trans "API keys" %} ({% trans "1 key per line" %})</label>
+					<div class="col-xs-9">
+						<textarea class="form-control autogrow" name="setting[api_keys]">{{ settings.api_keys }}</textarea>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Make all documents available via API" %}</label>
+					<div class="col-xs-9">
+						<input type="checkbox" name="setting[api_public_documents]" {% if settings.api_public_documents %}checked{% endif %} id="chk_api_public_documents">
+					</div>
+				</div>
+
+				<div class="form-group" id="api_document_tag_ids">
+					<label class="col-xs-3 control-label">{% trans "Only expose documents with tag" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[api_document_tag_ids]" id="autocomplete-tag" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-9 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<script type="text/javascript">
+		$('#chk_api_public_documents').on('change', function() {
+			if ( $(this).prop('checked') ) {
+				$('#api_document_tag_ids').hide();
+			} else {
+				$('#api_document_tag_ids').show();
+			}
+		});
+		{% if settings.api_public_documents %}
+			$('#api_document_tag_ids').hide();
+		{% endif %}
+	</script>
+
+	<script type="text/javascript" src="/bootstrap-tokenfield.min.js"></script>
+	<script type="text/javascript" src="/bloodhound.min.js"></script>
+	<script type="text/javascript" src="/typeahead.min.js"></script>
+	<script type="text/javascript">
+
+		var tags = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			remote: '/administrative/tag?action=ajax_search&search=%QUERY'
+		});
+
+		tags.initialize();
+
+		$('#autocomplete-tag').tokenfield({
+			typeahead: [null, { source: tags.ttAdapter(), displayKey: 'label' }]
+		});
+
+		$('#autocomplete-tag').tokenfield('setTokens', [{% for selected_tag in selected_tags %}{ value: "{{ selected_tag.id }}", label: "{{ selected_tag.name }}" }{% if not loop.last %},{% endif %}{% endfor %}]);
+
+		$('#autocomplete-tag').on('tokenfield:createtoken', function(e) {
+			if (e.attrs['value'] == e.attrs['label']) {
+				return false;
+			}
+		});
+
+	</script>
+
+{% endblock content %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="/typeahead.css">
+	<link rel="stylesheet" type="text/css" href="/bootstrap-tokenfield.min.css">
+{% endblock %}

@@ -24,7 +24,7 @@ class Migration_20160422_142133_Purchase_paid extends \Skeleton\Database\Migrati
 		");
 		$db->query("
 			UPDATE purchase SET paid = 1 WHERE paid IS NOT NULL
-		")
+		");
 	}
 
 	/**
