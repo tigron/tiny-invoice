@@ -61,12 +61,19 @@
 						</div>
 					</div>
 
-
 					<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
 						<label for="vat" class="control-label col-xs-3">{% trans "Vat" %}</label>
 						<div class="col-xs-5">
 							<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ supplier.vat }}">
 							{{ form.invalid_input('vat', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
+						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "Accounting identifier" %}</label>
+						<div class="col-xs-5">
+							<input type="text" name="supplier[accounting_identifier]" id="vat" class="form-control" value="{{ supplier.accounting_identifier }}">
+							{{ form.invalid_input('accounting_identifier', errors) }}
 						</div>
 					</div>
 
@@ -150,6 +157,14 @@
 						<div class="col-xs-5">
 							<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ env.post.supplier.vat }}">
 							{{ form.invalid_input('vat', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
+						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "Accounting identifier" %}</label>
+						<div class="col-xs-5">
+							<input type="text" name="supplier[accounting_identifier]" id="vat" class="form-control" value="{{ supplier.accounting_identifier }}">
+							{{ form.invalid_input('accounting_identifier', errors) }}
 						</div>
 					</div>
 
