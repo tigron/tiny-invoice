@@ -197,10 +197,14 @@ class Document_Incoming_Invoice extends Document {
 			try {
 				$tag_ids = Setting::get_by_name('api_document_tag_ids')->value;
 			} catch (Exception $e) {
-				$tag_ids = '';
+				$tag_ids = '0';
 			}
+			if (trim($tag_ids) == '') {
+				$tag_ids = '0';
+			}
+
 			$sql .= '
-			AND document_id IN (SELECT document_id FROM document_tag WHERE tag_id IN (' . $tag_ids . '))';
+			AND document_id IN (SELECT document_id FROM document_tag WHERE tag_id IN ( ' . $tag_ids . '))';
 		}
 
 		$ids = $db->get_column($sql, []);
