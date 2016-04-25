@@ -298,6 +298,17 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Type" %}</label>
+						<div class="col-xs-9">
+							<select name="type" class="form-control">
+								<option value=""> - - - </option>
+								<option value="Document" {% if pager.has_condition('classname', 'Document') %}selected{% endif %}>{% trans "Standard document" %}</option>
+								<option value="Document_Incoming_Invoice" {% if pager.has_condition('classname', 'Document_Incoming_Invoice') %}selected{% endif %}>{% trans "Incoming invoice" %}</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
 						<div class="col-xs-9">
 							<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />

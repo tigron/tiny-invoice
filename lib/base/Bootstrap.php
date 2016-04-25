@@ -100,5 +100,10 @@ class Bootstrap {
 		 */
 		\Skeleton\Database\Migration\Config::$migration_directory = $root_path . '/migrations/';
 
+		/**
+		 * Sticky pager
+		 */
+		\Skeleton\Pager\Config::$sticky_pager = true;
+
 	}
 }
