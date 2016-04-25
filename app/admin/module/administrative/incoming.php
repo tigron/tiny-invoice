@@ -65,9 +65,9 @@ class Web_Module_Administrative_Incoming extends Module {
 	public function display_merge() {
 		$incoming = Incoming::get_by_id($_GET['id']);
 
-		if (isset($_POST['selected_pages'])) {
+		$incoming_pages = [];
+		if (isset($_POST['selected_pages']) AND !empty($_POST['selected_pages'])) {
 			$pages = explode(',', $_POST['selected_pages']);
-			$incoming_pages = [];
 			foreach ($pages as $page) {
 				$id = str_replace('page_', '', $page);
 				$incoming_page = Incoming_Page::get_by_id($id);
@@ -80,7 +80,12 @@ class Web_Module_Administrative_Incoming extends Module {
 			$pdf_pages[] = $incoming_page->file;
 		}
 
-		$pdf = \Skeleton\File\Pdf\Pdf::merge($incoming_pages[0]->incoming->file->name, $pdf_pages);
+		if (count($incoming_pages) > 0) {
+			$pdf = \Skeleton\File\Pdf\Pdf::merge($incoming_pages[0]->incoming->file->name, $pdf_pages);
+		} else {
+			$pdf = $incoming->file->copy();
+		}
+
 		$document = new Document();
 		$document->title = $incoming->subject;
 		$document->file_id = $pdf->id;
