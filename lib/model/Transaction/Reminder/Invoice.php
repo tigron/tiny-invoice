@@ -35,8 +35,7 @@ class Transaction_Reminder_Invoice extends Transaction {
 			$customer_contact = Customer_Contact::get_by_id($customer_contact_id);
 
 			$email = new Email('invoice_reminder', $customer_contact->language);
-			//$email->add_to($customer_contact->email, $customer_contact->firstname . ' ' . $customer_contact->lastname);
-			$email->add_to('david@pixelwest.be', $customer_contact->firstname . ' ' . $customer_contact->lastname);
+			$email->add_to($customer_contact->email, $customer_contact->firstname . ' ' . $customer_contact->lastname);
 			$email->set_sender($company_info['email'], $company_info['company']);
 			$email->assign('invoices', $invoices);
 			$email->assign('customer_contact', $customer_contact);
