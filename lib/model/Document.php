@@ -278,21 +278,6 @@ class Document {
 	}
 
 	/**
-	 * Is linked with purchase
-	 *
-	 * @access public
-	 * @return bool
-	 */
-	public function is_purchase() {
-		try {
-			$purchase = Purchase::get_by_document($this);
-			return true;
-		} catch (Exception $e) {
-			return false;
-		}
-	}
-
-	/**
 	 * Get by id
 	 *
 	 * @access public

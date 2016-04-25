@@ -23,15 +23,13 @@ class Transaction_Reminder_Invoice extends Transaction {
 		];
 
 		$grouped = [];
-		/*$remindable_invoices = Invoice::get_remindable();
+		$remindable_invoices = Invoice::get_remindable();
 		foreach ($remindable_invoices as $remindable_invoice) {
 			if (!isset($grouped[$remindable_invoice->customer_contact_id])) {
 				$grouped[$remindable_invoice->customer_contact_id] = [];
 			}
 			$grouped[$remindable_invoice->customer_contact_id][] = $remindable_invoice;
-		}*/
-
-		$grouped = [ 17 => [ Invoice::get_by_id(87) ] ];
+		}
 
 		foreach ($grouped as $customer_contact_id => $invoices) {
 			$customer_contact = Customer_Contact::get_by_id($customer_contact_id);
