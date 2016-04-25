@@ -249,18 +249,20 @@
 				<tbody>
 			{% endif %}
 
-					<tr>
-						<td>{{ supplier.id }}</td>
-						<td>{{ supplier.company }}</td>
-						<td>{{ supplier.city }}</td>
-						<td>{{ supplier.country.name }}</td>
-						<td>{{ supplier.get_vat_formatted() }}</td>
-						<td>
-							<a href="/administrative/supplier?action=edit&id={{ supplier.id }}" title="">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
-						</td>
-					</tr>
+			<tr>
+				<td>{{ supplier.id }}</td>
+				<td>{{ supplier.company }}</td>
+				<td>{{ supplier.city }}</td>
+				<td>
+					{% if supplier.country_id > 0 %}{{ supplier.country.name }}{% else %}<em>{% trans "Unknown country" %}</em>{% endif %}
+				</td>
+				<td>{{ supplier.get_vat_formatted() }}</td>
+				<td>
+					<a href="/administrative/supplier?action=edit&id={{ supplier.id }}" title="">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</a>
+				</td>
+			</tr>
 
 			{% if loop.last %}
 				</tbody>

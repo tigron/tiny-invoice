@@ -111,10 +111,6 @@ class Web_Module_User extends Module {
 	 * @access public
 	 */
 	public function display_delete() {
-		if ($_SESSION['user']->admin != 1) {
-			Session::redirect('/user');
-		}
-
 		try {
 			$user = User::get_by_id($_GET['id']);
 			if ($user->id == $_SESSION['user']->id) {
