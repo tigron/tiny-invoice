@@ -54,6 +54,10 @@ class Web_Module_Administrative_Document extends Module {
 			$pager->add_condition('document_tag.tag_id', 'IN', $tag_ids);
 		}
 
+		if (isset($_POST['type']) AND !empty($_POST['type'])) {
+			$pager->add_condition('classname', $_POST['type']);
+		}
+
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('created');
 		$pager->add_sort_permission('title');
