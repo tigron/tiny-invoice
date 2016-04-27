@@ -119,7 +119,7 @@ class Imap {
 		$mail = new Imap_Mail(imap_uid($this->connection, $this->current_email_index));
 		$mail->structure = imap_fetchstructure($this->connection, $this->current_email_index);
 		$mail->body = imap_fetchbody($this->connection, $this->current_email_index, 1);
-		$mail->subject = iconv_mime_decode(imap_headerinfo($this->connection, $this->current_email_index)->subject, 0, "ISO-8859-1");
+		$mail->subject = iconv_mime_decode(imap_headerinfo($this->connection, $this->current_email_index)->subject, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, "ISO-8859-1");
 		$mail->attachments = $this->fetch_attachments($mail->structure);
 
 		return $mail;

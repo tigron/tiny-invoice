@@ -53,7 +53,11 @@ class Web_Module_Administrative_Incoming extends Module {
 	 */
 	public function display_edit() {
 		$template = Template::get();
-		$incoming = Incoming::get_by_id($_GET['id']);
+		try {
+			$incoming = Incoming::get_by_id($_GET['id']);
+		} catch (Exception $e) {
+			Session::redirect('/administrative/incoming');
+		}
 		$template->assign('incoming', $incoming);
 	}
 
