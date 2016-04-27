@@ -77,7 +77,7 @@ class Mailscanner {
 			} catch (\Exception $e) {
 				$pages = [];
 			}
-			
+
 			foreach ($pages as $page) {
 				$incoming_page = new Incoming_Page();
 				$incoming_page->incoming_id = $incoming->id;
