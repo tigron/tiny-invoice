@@ -4,11 +4,13 @@
 
 	{% if action == 'edit' %}
 
+		{% block breadcrumb %}
 		<ul class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</li></a>
 			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
 			<li class="active">{% trans "Edit Document" %}</li>
 		</ul>
+		{% endblock breadcrumb %}
 
 		{% if errors is defined %}
 			<div class="alert alert-danger">
@@ -29,7 +31,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Document details" %}</div>
 					<div class="panel-body">
-						<form class="form-horizontal form-condensed" action="/administrative/document?action=edit&id={{ document.id }}" method="post">
+						<form class="form-horizontal form-condensed" action="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" method="post">
 							<div class="form-group {% if 'title' in errors|keys %}has-error{% endif %}">
 								<label class="col-xs-3 control-label">{% trans "Title" %}</label>
 								<div class="col-xs-9">
@@ -278,7 +280,7 @@
 		</form>
 
 	{% else %}
-
+		{% block pager %}
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li class="active">{% trans "Documents" %}</li>
@@ -398,6 +400,7 @@
 			{% endfor %}
 			</div>
 		</div>
+		{% endblock pager %}
 
 	{% endif %}
 

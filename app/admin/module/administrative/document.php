@@ -111,7 +111,7 @@ class Web_Module_Administrative_Document extends Module {
 				}
 
 				Session::set_sticky('message', 'created');
-				Session::redirect('/administrative/document?action=edit&id=' . $document->id);
+				Session::redirect($this->get_module_path() . '?action=edit&id=' . $document->id);
 			}
 		}
 	}
@@ -181,7 +181,7 @@ class Web_Module_Administrative_Document extends Module {
 				}
 
 				Session::set_sticky('message', 'updated');
-				Session::redirect('/administrative/document?action=edit&id=' . $document->id);
+				Session::redirect($this->get_module_path() . '?action=edit&id=' . $document->id);
 			}
 		}
 
