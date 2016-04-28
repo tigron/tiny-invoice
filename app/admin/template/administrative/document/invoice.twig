@@ -82,7 +82,7 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+					<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
 					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
 					<th>{% trans "Tags" %}</th>
 					<th>{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
@@ -96,7 +96,7 @@
 
 		<tr>
 			<td>{{ document.id }}</td>
-			<td>{{ document.created|date }}</td>
+			<td>{{ document.date|date }}</td>
 			<td>{{ document.title }}</td>
 			<td>
 				{% set document_tags = [] %}

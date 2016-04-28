@@ -95,6 +95,8 @@ class Web_Module_Administrative_Incoming extends Module {
 		$document->file_id = $pdf->id;
 		$document->classname = 'Document';
 		$document->save();
+		$document->date = $document->created;
+		$document->save();
 
 		foreach ($incoming_pages as $incoming_page) {
 			$incoming_page->delete();

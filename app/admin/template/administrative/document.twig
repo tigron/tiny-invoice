@@ -89,7 +89,7 @@
 							<div class="form-group">
 								<label class="col-xs-3 control-label">{% trans "Date" %}</label>
 								<div class="col-xs-9">
-									<input type="text" class="form-control datepicker" name="document[created]" value="{{ document.created }}" />
+									<input type="text" class="form-control datepicker" name="document[date]" value="{{ document.date|date }}" />
 								</div>
 							</div>
 
@@ -350,7 +350,7 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+						<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
 						<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
 						<th>{% trans "Tags" %}</th>
 						<th colspan="3">&nbsp;</th>
@@ -359,32 +359,32 @@
 				<tbody>
 			{% endif %}
 
-					<tr>
-						<td>{{ document.id }}</td>
-						<td>{{ document.created|date }}</td>
-						<td>{{ document.title }}</td>
-						<td>
-							{% set document_tags = [] %}
-							{% for tag in tags if document.has_tag(tag)%}
-								{% set document_tags = document_tags|merge([tag]) %}
-							{% endfor %}
+			<tr>
+				<td>{{ document.id }}</td>
+				<td>{{ document.date|date }}</td>
+				<td>{{ document.title }}</td>
+				<td>
+					{% set document_tags = [] %}
+					{% for tag in tags if document.has_tag(tag)%}
+						{% set document_tags = document_tags|merge([tag]) %}
+					{% endfor %}
 
-							{% for document_tag in document_tags %}
-								{{ document_tag.name }}{% if not loop.last %}, {% endif %}
-							{% endfor %}
+					{% for document_tag in document_tags %}
+						{{ document_tag.name }}{% if not loop.last %}, {% endif %}
+					{% endfor %}
 
-						</td>
-						<td width="20">
-							<a href="/administrative/document?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
-						</td>
-						<td width="20">
-							<a href="/administrative/document?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
-								<span class="glyphicon glyphicon-trash"></span>
-							</a>
-						</td>
-					</tr>
+				</td>
+				<td width="20">
+					<a href="/administrative/document?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</a>
+				</td>
+				<td width="20">
+					<a href="/administrative/document?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
+						<span class="glyphicon glyphicon-trash"></span>
+					</a>
+				</td>
+			</tr>
 
 			{% if loop.last %}
 				</tbody>
