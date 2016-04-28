@@ -63,7 +63,7 @@ class Web_Module_Administrative_Document extends Module {
 		$pager->add_sort_permission('title');
 		$pager->add_sort_permission('file.name');
 
-		$pager->set_sort('created');
+		$pager->set_sort('date');
 		$pager->set_direction('DESC');
 		if (isset($_GET['search'])) {
 			$pager->set_condition('%search%', $_GET['search']);
@@ -104,6 +104,8 @@ class Web_Module_Administrative_Document extends Module {
 				$template->assign('document', $document);
 				$template->assign('selected_tags', $selected_tags);
 			} else {
+				$document->save();
+				$document->date = $document->created;
 				$document->save();
 
 				foreach ($selected_tags as $tag) {
