@@ -41,9 +41,8 @@ class Transaction_Reminder_Invoice extends Transaction {
 			$email->assign('customer_contact', $customer_contact);
 			foreach ($invoices as $invoice) {
 				$email->add_attachment($invoice->get_pdf());
+				Log::create('Sending reminder to ' . $customer_contact->firstname . ' ' . $customer_contact->lastname . ' (' . $customer_contact->email . ')', $invoice);
 			}
-
-			echo 'sending reminder to customer: ' . $customer_contact->firstname . ' ' . $customer_contact->lastname . ' (' . $customer_contact->email . ') ' . "\n";
 			$email->send();
 		}
 

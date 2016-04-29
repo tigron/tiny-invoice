@@ -242,9 +242,7 @@
 					<dt>&nbsp;</dt>
 					{% endif %}
 
-					<dd>
-						{{ log.created|datetime() }}: {{ log.content }} ({{ log.user.firstname }})
-					</dd>
+					<dd>{{ log.created|datetime }}: {{ log.get_content() }}</dd>
 
 				{% endfor %}
 				</dl>

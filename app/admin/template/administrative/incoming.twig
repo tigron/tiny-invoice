@@ -42,8 +42,10 @@
 							{{ incoming_page.file.name }}
 						</div>
 						<div class="panel-body zoom">
-							<img src="/picture?id={{ incoming_page.preview_file_id }}" class="hide"/>
-							<img src="/picture?id={{ incoming_page.preview_file_id }}&size=incoming_preview" />
+							{% if incoming_page.preview_file_id > 0 %}
+								<img src="/picture?id={{ incoming_page.preview_file_id }}" class="hide"/>
+								<img src="/picture?id={{ incoming_page.preview_file_id }}&size=incoming_preview" />
+							{% endif %}
 						</div>
 
 						<div class="panel-footer">

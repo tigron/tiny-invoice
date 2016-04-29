@@ -27,7 +27,7 @@ class Log {
 			$by = '';
 		}
 
-		return $this->content . $by ;
+		return $this->content . $by;
 	}
 
 	/**
@@ -89,4 +89,3 @@ class Log {
 		return $log;
 	}
 }
-
