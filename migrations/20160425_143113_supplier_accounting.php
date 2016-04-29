@@ -18,10 +18,10 @@ class Migration_20160425_143113_Supplier_accounting extends \Skeleton\Database\M
 	 */
 	public function up() {
 		$db = Database::get();
-		$db->query('
+		$db->query("
 			ALTER TABLE `supplier`
 			ADD `accounting_identifier` varchar(64) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `comment`;
-		', []);
+		", []);
 
 	}
 
