@@ -41,11 +41,13 @@ class Incoming_Page {
 	 * @access public
 	 */
 	public function create_preview() {
-		system('/usr/bin/convert -density 150 -background white -alpha remove -resize 600 ' . $this->file->get_path() . '[0] ' . \Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg');
-		$file = File::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(\Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg'));
-		$this->preview_file_id = $file->id;
-		$this->save();
-		unlink(\Skeleton\File\Picture\Config::$tmp_dir . '/preview.jpg');
+		system('/usr/bin/convert -density 150 -background white -alpha remove -resize 600 ' . $this->file->get_path() . '[0] ' . \Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg');
+		if (file_exists(\Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg')) {
+			$file = File::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(\Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg'));
+			$this->preview_file_id = $file->id;
+			$this->save();
+			unlink(\Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg');
+		}
 	}
 
 	/**

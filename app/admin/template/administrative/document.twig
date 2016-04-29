@@ -112,6 +112,7 @@
 							</div>
 
 							<div class="classname_fields classname_document_incoming_invoice">
+								<hr>
 								<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
 									<div class="col-xs-9">
@@ -123,7 +124,7 @@
 
 								<div class="form-group{% if 'price_excl' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Price excl VAT" %}</label>
-									<div class="col-xs-9">
+									<div class="col-xs-5">
 										<div class="input-group">
 											<span class="input-group-addon">&euro;</span>
 											<input type="text" name="document[price_excl]" class="form-control" value="{{ document.price_excl }}" >
@@ -134,7 +135,7 @@
 
 								<div class="form-group{% if 'price_incl' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Price incl VAT" %}</label>
-									<div class="col-xs-9">
+									<div class="col-xs-5">
 										<div class="input-group">
 											<span class="input-group-addon">&euro;</span>
 											<input type="text" name="document[price_incl]" class="form-control" value="{{ document.price_incl }}" >
@@ -145,7 +146,7 @@
 
 								<div class="form-group{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
-									<div class="col-xs-9">
+									<div class="col-xs-5">
 										<input type="text" class="form-control datepicker" name="document[expiration_date]" value="{{ document.expiration_date }}">
 										{{ form.invalid_input('expiration_date', errors) }}
 									</div>
@@ -160,6 +161,7 @@
 
 							</div>
 
+							<hr>
 
 							<div class="form-group">
 								<div class="col-xs-9 col-xs-offset-3">
@@ -234,7 +236,7 @@
 					<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
 						<label for="file_id" class="col-xs-3 control-label">{% trans "File" %}</label>
 						<div class="col-xs-9">
-							<div id="document-file" class="form-control-static">
+							<div id="document-file" class="form-control-static hide">
 								{% if document.file_id > 0 %}
 									<div class="file">
 										<input type="hidden" name="document[file_id]" value="{{ document.file_id }}" />
@@ -464,8 +466,9 @@
 						var source = $("#document-file-template").html();
 						Handlebars.setDelimiter('(',')');
 						var template = Handlebars.compile(source);
-						if($('#document-file').find('.file').length == 1) {
+						if ($('#document-file').find('.file').length == 1) {
 							$("#document-file").html('');
+							$('#document-file').addClass('hide');
 						}
 
 						try {
@@ -474,9 +477,11 @@
 							$('#document-dropzone').hide();
 							$('#document-file').find('.help-block').remove();
 							$('#document-file').closest('.form-group').removeClass('has-error');
+							$('#document-file').removeClass('hide');
 						}
 						catch (e) {
 							$('#document-file').html(e);
+							$('#document-file').removeClass('hide');
 						}
 					});
 
@@ -497,11 +502,13 @@
 
 			if ($('#document-file').find('.file').length == 1) {
 				$('#document-dropzone').hide();
+				$('#document-file').removeClass('hide');
 			}
 
 			function remove_file(object) {
 				object.remove();
 				$('#document-dropzone').show();
+				$('#document-file').addClass('hide');
 			}
 
 			$(document).ready(function() {
