@@ -3,7 +3,7 @@
 {% block content %}
 
 	<p>{% trans "Hello" %}</p>
-	<p>{% trans "The following purchase documents need your attention." %}</p>
+	<p>{% trans "The following incoming invoices need your attention." %}</p>
 
 	<table cellpadding="0" cellspacing="0" border="0" style="border: solid 1px #cccccc">
 	<thead>
@@ -15,12 +15,12 @@
 		</tr>
 	</thead>
 	<tbody>
-	{% for purchase in purchases %}
+	{% for incoming_invoice in incoming_invoices %}
 		<tr>
-			<td width="45%">{{ purchase.supplier.company }}</td>
-			<td width="25%">{{ purchase.expiration_date|date }}</td>
-			<td width="15%">&euro;{{ purchase.price_excl|number_format }}</td>
-			<td width="15%">&euro;{{ purchase.price_incl|number_format }}</td>
+			<td width="45%">{{ incoming_invoice.supplier.company }}</td>
+			<td width="25%">{{ incoming_invoice.expiration_date|date }}</td>
+			<td width="15%">&euro;{{ incoming_invoice.price_excl|number_format }}</td>
+			<td width="15%">&euro;{{ incoming_invoice.price_incl|number_format }}</td>
 		</tr>
 	{% endfor %}
 	</tbody>

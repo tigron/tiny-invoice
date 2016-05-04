@@ -1,0 +1,12 @@
+{% extends "_default/layout.base.text.twig" %}
+
+{% block content %}
+
+{% trans "Hello" %}
+{% trans "The following incoming invoices need your attention." %}
+
+{% for incoming_invoice in incoming_invoices %}
+- {{ incoming_invoice.supplier.company }} - {{ incoming_invoice.expiration_date|date }} - €{{ incoming_invoice.price_excl|number_format }} / €{{ incoming_invoice.price_incl|number_format }}
+{% endfor %}
+
+{% endblock content %}

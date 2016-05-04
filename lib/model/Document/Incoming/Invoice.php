@@ -211,5 +211,24 @@ class Document_Incoming_Invoice extends Document {
 		return $ids;
 	}
 
+	/**
+	 * Get expiring incoming invoices
+	 *
+	 * @access public
+	 * @param  string $days_to_expire
+	 * @return array Purchases
+	 */
+	public static function get_expiring($days_to_expire = '+7 days') {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT document_id FROM document_incoming_invoice WHERE paid = 0 AND DATE(expiration_date) <= ?', [ strtotime($days_to_expire) ]);
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
+		}
+
+		return $items;
+	}
+
 
 }
