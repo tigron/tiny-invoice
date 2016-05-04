@@ -49,6 +49,11 @@ class Web_Module_Administrative_Document extends Module {
 				}
 			}
 		}
+
+		if (isset($_POST['search'])) {
+			$pager->set_search($_POST['search']);
+		}
+
 		if (count($tag_ids) > 0) {
 			$pager->add_join('document_tag', 'document_id', 'document.id');
 			$pager->add_condition('document_tag.tag_id', 'IN', $tag_ids);
