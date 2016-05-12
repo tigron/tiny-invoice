@@ -59,20 +59,6 @@ class Migration_20160512_211831_Transfers extends \Skeleton\Database\Migration {
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 		", []);
-
-		$db->query("
-			CREATE TABLE `transfer` (
-			  `id` int(11) NOT NULL AUTO_INCREMENT,
-			  `invoice_id` int(10) unsigned NOT NULL,
-			  `type` tinyint(4) NOT NULL,
-			  `amount` decimal(10,2) NOT NULL,
-			  `created` datetime NOT NULL,
-			  PRIMARY KEY (`id`),
-			  KEY `invoice_id` (`invoice_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-		", []);
-
-
 	}
 
 	/**
