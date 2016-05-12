@@ -25,7 +25,7 @@
 	<script type="text/javascript" src="/autogrow-textarea/jquery.autogrowtextarea.min.js"></script>
 	<script type="text/javascript" src="/jquery-ui/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="/bootstrap-checkbox/js/bootstrap-checkbox.js"></script>
-
+	<script type="text/javascript" src="/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
 
 	{% spaceless %}
 		{% block head %}{% endblock head %}
@@ -33,7 +33,7 @@
 </head>
 <body>
 	{% include '_default/nav_bar.twig' %}
-	<div class="container">{% block content %}{% endblock content %}</div>
+	<div class="container-fluid">{% block content %}{% endblock content %}</div>
 
 	{% spaceless %}
 		{% block javascript %}{% endblock %}

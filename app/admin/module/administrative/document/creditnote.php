@@ -14,7 +14,7 @@ use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 use \Skeleton\Pager\Web\Pager;
 
-class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrative_Document {
+class Web_Module_Administrative_Document_Creditnote extends Web_Module_Administrative_Document {
 
 	/**
 	 * Template to use
@@ -22,7 +22,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 	 * @access public
 	 * @var string $template
 	 */
-	public $template = 'administrative/document/invoice.twig';
+	public $template = 'administrative/document/creditnote.twig';
 
 	/**
 	 * Display method
@@ -55,32 +55,24 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 
 		if (isset($_POST['paid'])) {
 			if ($_POST['paid'] == 1) {
-				$pager->add_condition('document_incoming_invoice.paid', 1);
+				$pager->add_condition('document_incoming_creditnote.paid', 1);
 			} elseif ($_POST['paid'] == 0) {
-				$pager->add_condition('document_incoming_invoice.paid', 0);
+				$pager->add_condition('document_incoming_creditnote.paid', 0);
 			} else {
-				$pager->clear_condition('document_incoming_invoice.paid');
+				$pager->clear_condition('document_incoming_creditnote.paid');
 			}
 		} else {
-			$pager->add_condition('document_incoming_invoice.paid', 0);
+			$pager->add_condition('document_incoming_creditnote.paid', 0);
 		}
 
-		if (isset($_POST['supplier_id'])) {
-			if ($_POST['supplier_id'] > 0) {
-				$pager->add_condition('document_incoming_invoice.supplier_id', $_POST['supplier_id']);
-			}
-		}
-
-		$pager->add_condition('classname', 'Document_Incoming_Invoice');
-		$pager->add_join('document_incoming_invoice', 'document_id', 'document.id');
+		$pager->add_condition('classname', 'Document_Incoming_Creditnote');
+		$pager->add_join('document_incoming_creditnote', 'document_id', 'document.id');
 
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('date');
 		$pager->add_sort_permission('title');
 		$pager->add_sort_permission('paid');
-		$pager->add_sort_permission('document_incoming_invoice.expiration_date');
-		$pager->add_sort_permission('supplier.company');
-		$pager->add_sort_permission('document_incoming_invoice.price_incl');
+		$pager->add_sort_permission('document_incoming_creditnote.price_incl');
 
 		$pager->set_sort('date');
 		$pager->set_direction('DESC');
@@ -96,27 +88,19 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
 		$template->assign('selected_tags', $selected_tags);
-		$template->assign('suppliers', Supplier::get_all('company'));
 	}
 
 	/**
-	 * Edit an incoming invoice
+	 * Edit an incoming creditnote
 	 *
 	 * @access public
 	 */
 	public function display_edit() {
 		$document = Document::get_by_id($_GET['id']);
-		if ($document->classname != 'Document_Incoming_Invoice') {
+		if ($document->classname != 'Document_Incoming_Creditnote') {
 			Session::redirect('/administrative/document?action=edit&id=' . $_GET['id']);
 		}
 
-		if (isset($_POST['document'])) {
-			if ($_POST['payment_message_type'] == 'payment_message_type_structured') {
-				$_POST['document']['payment_message'] = '';
-			} else {
-				$_POST['document']['payment_structured_message'] = '';
-			}
-		}
 		parent::display_edit();
 	}
 

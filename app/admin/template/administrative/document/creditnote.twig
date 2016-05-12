@@ -1,6 +1,5 @@
 {% extends "/administrative/document.twig" %}
 
-
 {% block pager %}
 	{% if action == 'edit' %}
 
@@ -8,15 +7,15 @@
 		<ul class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</li></a>
 			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-			<li><a href="/administrative/document/invoice">{% trans "Incoming Invoices" %}</a></li>
-			<li class="active">{% trans "Edit Incoming Invoice" %}</li>
+			<li><a href="/administrative/document/creditnote">{% trans "Incoming Creditnotes" %}</a></li>
+			<li class="active">{% trans "Edit Incoming Creditnote" %}</li>
 		</ul>
 		{% endblock breadcrumb %}
 	{% endif %}
 	<ol class="breadcrumb">
 		<li><a href="/">{% trans "Home" %}</a></li>
 		<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-		<li class="active">{% trans "Incoming invoices" %}</li>
+		<li class="active">{% trans "Incoming creditnotes" %}</li>
 	</ol>
 
 	<div class="panel panel-default">
@@ -40,24 +39,12 @@
 				</div>
 
 				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
-					<div class="col-xs-9">
-						<select name="supplier_id" class="form-control">
-							<option value="0">{% trans "Any" %}</option>
-							{% for supplier in suppliers %}
-								<option value="{{ supplier.id }}" {% if pager.has_condition('document_incoming_invoice.supplier_id', supplier.id) %}selected{% endif %}>{{ supplier.company }}</option>
-							{% endfor %}
-						</select>
-					</div>
-				</div>
-
-				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Paid" %}</label>
 					<div class="col-xs-9">
 						<select name="paid" class="form-control">
 							<option value="-1">{% trans "All" %}</option>
-							<option value="1" {% if pager.has_condition('document_incoming_invoice.paid', 1) %}selected{% endif %}>{% trans "Yes" %}</option>
-							<option value="0" {% if pager.has_condition('document_incoming_invoice.paid', 0) %}selected{% endif %}>{% trans "No" %}</option>
+							<option value="1" {% if pager.has_condition('document_incoming_creditnote.paid', 1) %}selected{% endif %}>{% trans "Yes" %}</option>
+							<option value="0" {% if pager.has_condition('document_incoming_creditnote.paid', 0) %}selected{% endif %}>{% trans "No" %}</option>
 						</select>
 					</div>
 				</div>
@@ -79,14 +66,14 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			{{ base.pager_count(pager.item_count) }}  - {% trans "Total:" %} &euro; {{ pager.get_sum('document_incoming_invoice.price_incl') }}
-
 			<div class="pull-right">
-				<a href="/administrative/document/invoice/pay" title="">
+				<a href="/administrative/document?action=add" title="">
 					<span class="glyphicon glyphicon-plus-sign"></span>
-					{% trans "Pay invoices" %}
+					{% trans "Add document" %}
 				</a>
 			</div>
+
+			{{ base.pager_count(pager.item_count) }}  - {% trans "Total:" %} &euro; {{ pager.get_sum('document_incoming_creditnote.price_incl') }}
 		</div>
 		<div class="panel-body">
 		{% for document in pager.items %}
@@ -96,12 +83,10 @@
 				<tr>
 					<th>#</th>
 					<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
-					<th>{{ pager.create_header('Expiration date'|trans, 'document_incoming_invoice.expiration_date')|raw }}</th>
 					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
-					<th>{{ pager.create_header('Supplier'|trans, 'supplier.company')|raw }}
 					<th>{% trans "Tags" %}</th>
 					<th>{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
-					<th class="text-right">{{ pager.create_header('Price'|trans, 'document_incoming_invoice.price_incl')|raw }}</th>
+					<th class="text-right">{{ pager.create_header('Price'|trans, 'document_incoming_creditnote.price_incl')|raw }}</th>
 					<th width="30">&nbsp;</th>
 					<th colspan="2">&nbsp;</th>
 				</tr>
@@ -109,12 +94,10 @@
 			<tbody>
 		{% endif %}
 
-		<tr {% if date(document.expiration_date) < date() %}class="danger"{% endif %}>
+		<tr>
 			<td>{{ document.id }}</td>
 			<td>{{ document.date|date }}</td>
-			<td>{{ document.expiration_date|date }}</td>
 			<td>{{ document.title }}</td>
-			<td>{{ document.supplier.company }}</td>
 			<td>
 				{% set document_tags = [] %}
 				{% for tag in tags if document.has_tag(tag)%}

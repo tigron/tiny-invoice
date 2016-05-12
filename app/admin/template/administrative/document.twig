@@ -46,6 +46,7 @@
 									<select name="document[classname]" class="form-control" onchange="show_classname_fields()" id="slc_classname">
 										<option value="Document" {% if document.classname == 'Document' %}selected{% endif %}>{% trans "Standard document" %}</option>
 										<option value="Document_Incoming_Invoice" {% if document.classname == 'Document_Incoming_Invoice' %}selected{% endif %}>{% trans "Incoming invoice" %}</option>
+										<option value="Document_Incoming_Creditnote" {% if document.classname == 'Document_Incoming_Creditnote' %}selected{% endif %}>{% trans "Incoming creditnote" %}</option>
 									</select>
 								</div>
 							</div>
@@ -93,6 +94,18 @@
 								</div>
 							</div>
 
+							<div class="classname_fields classname_document_incoming_invoice classname_document_incoming_creditnote">
+
+								<div class="form-group{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
+									<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
+									<div class="col-xs-9">
+										<input type="text" class="form-control datepicker" name="document[expiration_date]" value="{{ document.expiration_date }}">
+										{{ form.invalid_input('expiration_date', errors) }}
+									</div>
+								</div>
+
+							</div>
+
 							<div class="form-group">
 								<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
 								<div class="col-xs-9">
@@ -107,17 +120,19 @@
 								</div>
 							</div>
 
-							<div class="classname_fields classname_document">
+							<div class="classname_document">
 
 							</div>
 
-							<div class="classname_fields classname_document_incoming_invoice">
+
+							<!-- Incoming invoice specific fields -->
+							<div class="classname_document_incoming_invoice classname_document_incoming_creditnote">
 								<hr>
 								<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
 									<div class="col-xs-9">
 										<input type="text" id="autocomplete_supplier" name="supplier" class="form-control typeahead" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
-										<input type="hidden" id="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
+										<input type="hidden" class="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
 
 									</div>
 								</div>
@@ -127,7 +142,7 @@
 									<div class="col-xs-5">
 										<div class="input-group">
 											<span class="input-group-addon">&euro;</span>
-											<input type="text" name="document[price_excl]" class="form-control" value="{{ document.price_excl }}" >
+											<input type="text" name="document[price_excl]" onchange="check_vat();" class="form-control" value="{{ document.price_excl }}" >
 										</div>
 										{{ form.invalid_input('price_excl', errors) }}
 									</div>
@@ -138,17 +153,68 @@
 									<div class="col-xs-5">
 										<div class="input-group">
 											<span class="input-group-addon">&euro;</span>
-											<input type="text" name="document[price_incl]" class="form-control" value="{{ document.price_incl }}" >
+											<input type="text" name="document[price_incl]" onchange="check_vat();" data-toggle="popover" title="{% trans "VAT problem" %}" data-content="{% trans "The VAT amount seems to be incorrect" %}" class="form-control" value="{{ document.price_incl }}" >
 										</div>
 										{{ form.invalid_input('price_incl', errors) }}
 									</div>
 								</div>
 
-								<div class="form-group{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
-									<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
-									<div class="col-xs-5">
-										<input type="text" class="form-control datepicker" name="document[expiration_date]" value="{{ document.expiration_date }}">
-										{{ form.invalid_input('expiration_date', errors) }}
+								<script type="text/javascript">
+									function check_vat() {
+										price_incl = $('input[name="document[price_incl]"]').val();
+										price_excl = $('input[name="document[price_excl]"]').val();
+
+										vat = 100 / price_excl * price_incl - 100;
+										console.log(vat);
+										vat = Math.round(vat * 100) / 100
+										console.log(vat);
+
+										if (vat != 21 && vat != 6 && vat != 12) {
+//											$('input[name="document[price_incl]"]').attr('data-content', vat);
+											$('input[name="document[price_incl]"]').popover({
+												container: 'body'
+											});
+
+											$('input[name="document[price_incl]"]').popover('show');
+										} else {
+											$('input[name="document[price_incl]"]').popover('hide');
+										}
+									}
+
+
+
+//									$('input[name="document[price_incl]"]').popover('show');
+								</script>
+
+								<div class="form-group classname_document_incoming_invoice">
+									<label class="col-xs-3 control-label">{% trans "Payment message" %}</label>
+									<div class="col-xs-9">
+										<div class="radio">
+											<label><input type="radio" name="payment_message_type" value="payment_message_type_structured" {% if document.payment_message == '' %}checked{% endif %}>{% trans "Structured message" %}</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payment_message_type" value="payment_message_type_free" {% if document.payment_message != '' %}checked{% endif %}>{% trans "Free message" %}</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group {% if 'payment_structured_message' in errors|keys %} has-error{% endif %}" id="payment_message_type_structured">
+									<div class="col-xs-9 col-xs-offset-3">
+										<input type="text" class="form-control" name="document[payment_structured_message]" value="{{ document.payment_structured_message }}" />
+									</div>
+								</div>
+
+
+								<div class="form-group" id="payment_message_type_free">
+									<div class="col-xs-9 col-xs-offset-3">
+										<textarea name="document[payment_message]" class="form-control autogrow">{{ document.payment_message }}</textarea>
+									</div>
+								</div>
+
+								<div class="form-group classname_document_incoming_invoice">
+									<label class="col-xs-3 control-label">{% trans "IBAN" %}</label>
+									<div class="col-xs-9">
+										<p class="form-control-static" id="iban">{% if document.supplier_id == '' or document.supplier.iban == '' %}<em>{% trans "Unknown IBAN" %}</em>{% else %}{{ document.supplier.iban }}{% endif %}</p>
 									</div>
 								</div>
 
@@ -158,8 +224,32 @@
 										<input type="checkbox" name="document[paid]" id="paid" data-group-cls="btn-group-sm" {% if document.paid %}checked{% endif %}/>
 									</div>
 								</div>
+								<script type="text/javascript">
+									$(document).ready(function() {
+										$('input[name="document[payment_structured_message]"]').mask("000/0000/00000", {placeholder: "___/____/_____"});
 
+										$('input[name=payment_message_type]').on('change', function() {
+											select_payment_message_type();
+										});
+										select_payment_message_type();
+									});
+									function select_payment_message_type() {
+										value = $('input[name=payment_message_type]:checked').val();
+
+										value = $('input[name=payment_message_type]:checked').val();
+										$('#payment_message_type_structured').hide();
+										$('#payment_message_type_free').hide();
+
+										if ( $('input[name=payment_message_type]').parents('.form-group').is(':visible') ){
+											$('#' + value).show();
+										}
+
+
+									}
+								</script>
 							</div>
+
+							<!-- End of incoming invoice specific fields -->
 
 							<hr>
 
@@ -191,8 +281,10 @@
 		<script type="text/javascript">
 			function show_classname_fields() {
 				classname = $('#slc_classname').val();
-				$('.classname_fields').hide();
+
+				$('[class*="classname_"]').hide();
 				$('.classname_' + classname.toLowerCase()).show();
+				select_payment_message_type();
 			}
 
 			show_classname_fields();
@@ -308,6 +400,7 @@
 								<option value=""> - - - </option>
 								<option value="Document" {% if pager.has_condition('classname', 'Document') %}selected{% endif %}>{% trans "Standard document" %}</option>
 								<option value="Document_Incoming_Invoice" {% if pager.has_condition('classname', 'Document_Incoming_Invoice') %}selected{% endif %}>{% trans "Incoming invoice" %}</option>
+								<option value="Document_Incoming_Creditnote" {% if pager.has_condition('classname', 'Document_Incoming_Creditnote') %}selected{% endif %}>{% trans "Incoming creditnote" %}</option>
 							</select>
 						</div>
 					</div>
@@ -541,7 +634,12 @@
 				source:	suppliers.ttAdapter()
 			});
 			$('#autocomplete_supplier').on('typeahead:selected typeahead:autocompleted', function(e,data) {
-				$('#supplier_id').val(data.id);
+				$('.supplier_id').val(data.id);
+				if (data.iban != "") {
+					$('#iban').html(data.iban);
+				} else {
+					$('#iban').html('<em>{% trans "Unknown IBAN" %}</em>');
+				}
 			});
 		</script>
 	{% endif %}

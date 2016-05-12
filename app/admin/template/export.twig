@@ -1,0 +1,41 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block header_js %}
+    {% embed "@skeleton-package-crud/javascript.twig" %}{% endembed %}
+{% endblock header_js %}
+
+{% block header_css %}
+    {% embed "@skeleton-package-crud/css.twig" %}{% endembed %}
+{% endblock header_css %}
+
+{% block content %}
+    {% embed "@skeleton-package-crud/content.twig" with {'object_name': 'Exports'|trans} %}
+		{% block page_pager_breadcrumb %}
+			{{ parent() }}
+			{% if env.sticky_session.message == 'updated' %}
+				<div class="alert alert-success">
+					{% trans "A new export has been added." %} {% trans "You can find it in the list below." %}
+				</div>
+			{% endif %}
+		{% endblock page_pager_breadcrumb %}
+
+		{% block pager_table_head %}
+			<th>{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
+			<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+			<th>{{ pager.create_header('Filename'|trans, 'file.name')|raw }}</th>
+			<th width="20">&nbsp;</th>
+		{% endblock pager_table_head %}
+
+		{% block pager_table_row %}
+			<td>{{ object.id }}</td>
+			<td>{{ object.created }}</td>
+			<td>{{ object.file.name }}</td>
+			<td>
+				<a href="/file?id={{ object.file_id }}">
+					<i class="fa fa-download" aria-hidden="true"></i>
+				</a>
+			</td>
+		{% endblock %}
+
+    {% endembed %}
+{% endblock content %}

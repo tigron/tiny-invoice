@@ -1,0 +1,214 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+	{% if action == 'import' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
+			<li>{% trans "Import" %}</li>
+		</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Import bank transactions" %}</div>
+			<div class="panel-body">
+				<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
+					<label for="file_id" class="col-xs-3 control-label">{% trans "File" %}</label>
+					<div class="col-xs-9">
+						<div id="import-file" class="form-control-static hide">
+							{% if import.file_id > 0 %}
+								<div class="file">
+									<input type="hidden" name="import[file_id]" value="{{ import.file_id }}" />
+									<span>
+										<strong>{{ import.file.name }}</strong>
+									</span>
+									[ {{ import.file.get_human_size() }} ]
+									<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
+										<span class="glyphicon glyphicon-trash"></span>
+									</a>
+								</div>
+							{% endif %}
+
+							{{ form.invalid_input('file_id', errors) }}
+						</div>
+
+						<div class="dropzone" id="import-dropzone">
+							<div class="dz-default dz-message">
+								<span>{% trans "Drag and Drop file" %}</span>
+								<span>({% trans "or click here" %})</span>
+							</div>
+							<div class="progress">
+								<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+									<span class="sr-only">0% Complete</span>
+								</div>
+							</div>
+							<div class="fallback"></div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="/dropzone/dist/dropzone.js"></script>
+		<script type="text/javascript" src="/handlebars/handlebars.min.js"></script>
+		<script type="text/x-handlebars-template" id="import-file-template">
+			<div class="file">
+				<div class="row">
+					<input type="hidden" name="import[file_id]" value="((file.id))" />
+					<span>
+						<strong>((file.name))</strong>
+					</span>
+					[ ((file.human_size)) ]
+					<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
+						<span class="glyphicon glyphicon-trash"></span>
+-					</a>
+				</div>
+				<div class="row">
+					((parser.classname))
+				</div>
+
+			</div>
+
+		</script>
+		<script type="text/javascript">
+
+			Dropzone.autoDiscover = false;
+
+			$('#import-dropzone').dropzone({
+				url: '/financial/account?action=add_file',
+				paramName: 'file',
+				parallelUploads: 1,
+				createImageThumbnails: false,
+				init: function() {
+					this.on('success', function(file, responseText) {
+						var source = $("#import-file-template").html();
+						Handlebars.setDelimiter('(',')');
+						var template = Handlebars.compile(source);
+						if ($('#import-file').find('.file').length == 1) {
+							$("#import-file").html('');
+							$('#import-file').addClass('hide');
+						}
+
+						try {
+							response = jQuery.parseJSON(responseText);
+							$("#import-file").append(template(response));
+							$('#import-dropzone').hide();
+							$('#import-file').find('.help-block').remove();
+							$('#import-file').closest('.form-group').removeClass('has-error');
+							$('#import-file').removeClass('hide');
+						}
+						catch (e) {
+							$('#import-file').html(e);
+							$('#import-file').removeClass('hide');
+						}
+					});
+
+					this.on('uploadprogress', function(file, progress) {
+						$(this.element).find('.progress-bar').css('width', progress + '%');
+					});
+
+					this.on('complete', function() {
+						$(this.element).find('.progress-bar').css('width', '100%');
+						$(this.element).find('.progress').fadeOut();
+					});
+
+					this.on('addedfile', function() {
+						$(this.element).find('.progress').show();
+					});
+				}
+			});
+
+			if ($('#import-file').find('.file').length == 1) {
+				$('#import-dropzone').hide();
+				$('#import-file').removeClass('hide');
+			}
+
+			function remove_file(object) {
+				object.remove();
+				$('#import-dropzone').show();
+				$('#import-file').addClass('hide');
+			}
+
+		</script>
+
+	{% else %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li class="active">{% trans "Bank accounts" %}</li>
+		</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Filter" %}
+			</div>
+			<div class="panel-body">
+				<form method="post" action="/financial/account" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Search" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="pull-right">
+					<a href="/financial/account?action=import" title="">
+						<span class="glyphicon glyphicon-plus-sign"></span>
+						{% trans "Import" %}
+					</a>
+				</div>
+				{{ base.pager_count(pager.item_count) }}
+			</div>
+			<div class="panel-body">
+			{% for customer in pager.items %}
+				{% if loop.first %}
+					<table class="table table-hover table-striped table-condensed table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>{{ pager.create_header('Identifier'|trans, 'identifier')|raw }}</th>
+							<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+				{% endif %}
+
+				<tr>
+					<td>{{ account.identifier }}</td>
+					<td>{{ account.name }}</td>
+					<td>
+						<a href="/financial/account?id={{ account.id }}" title="">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+				</tr>
+
+				{% if loop.last %}
+					</tbody>
+					</table>
+
+					{{ pager.links|raw }}
+				{% endif %}
+
+			{% else %}
+
+				<p><em>{% trans "No bank accounts found." %}</em></p>
+
+			{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+
+{% endblock content %}

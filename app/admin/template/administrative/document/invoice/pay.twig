@@ -1,0 +1,115 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+
+<ul class="breadcrumb">
+	<li><a href="/">{% trans "Home" %}</li></a>
+	<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
+	<li><a href="/administrative/document/invoice">{% trans "Incoming Invoices" %}</a></li>
+	<li class="active">{% trans "Pay Incoming Invoice" %}</li>
+</ul>
+
+{% for unpaid_invoice in unpaid_invoices %}
+
+	{% if loop.first %}
+		<form class="form-horizontal" method="post" action="/administrative/document/invoice/pay?action=download">
+		<table class="table-alternate table-hover table table-condensed">
+		<thead>
+			<tr>
+				<th width="120"><input type="checkbox" class="original2" data-group-cls="btn-group-xs" onchange="toggle_all();"></th>
+				<th>{% trans "Date" %}</th>
+				<th>{% trans "Supplier" %}</th>
+				<th>{% trans "IBAN" %}</th>
+				<th>{% trans "Message" %}</th>
+				<th class="text-right">{% trans "Price" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+	{% endif %}
+
+	<tr data-price="{{ unpaid_invoice.price_incl }}">
+		<td><input type="checkbox" data-group-cls="btn-group-xs" name="invoice[{{ unpaid_invoice.id }}]" onchange="calculate_sum();"></td>
+		<td>{{ unpaid_invoice.date|date }}</td>
+		<td>{{ unpaid_invoice.supplier.company }}</td>
+		<td>{{ unpaid_invoice.supplier.iban }}</td>
+		<td>
+
+			{% if unpaid_invoice.payment_structured_message != '' %}
+				***{{ unpaid_invoice.payment_structured_message }}***
+			{% else %}
+				{{ unpaid_invoice.payment_message }}
+			{% endif %}
+
+		</td>
+		<td class="text-right">
+			&euro;{{ unpaid_invoice.price_incl }}
+		</td>
+	</tr>
+
+	{% if loop.last %}
+		</tbody>
+		</table>
+
+		<div class="well">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Total amount" %}</label>
+				<div class="col-xs-9">
+					<p class="form-control-static" id="total_amount">&euro;0</p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export format" %}</label>
+				<div class="col-xs-4">
+					<select name="export_format" class="form-control">
+						<option value="Export_Payment_Belfius">Belfius CSV</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Mark selected items as paid" %}</label>
+				<div class="col-xs-9">
+					<input type="checkbox" name="mark_paid" data-group-cls="btn-group-xs"  />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">
+						{% trans "Download" %}
+					</button>
+				</div>
+			</div>
+
+		</div>
+		</form>
+
+	{% endif %}
+{% else %}
+	<div class="alert alert-info">{% trans "There are no unpaid invoices" %}</div>
+{% endfor %}
+
+<script type="text/javascript">
+	function toggle_all() {
+		console.log( $('th input[type=checkbox]') );
+		if ($('th input[type=checkbox]').is(':checked')) {
+			$('td input[type=checkbox]').prop('checked', true);
+		} else {
+			$('td input[type=checkbox]').prop('checked', false);
+		}
+	}
+
+	function calculate_sum() {
+		total = 0;
+		$('tbody tr').each(function() {
+			if ( $(this).find('input[type=checkbox]').is(':checked') ){
+				total += Math.round( parseFloat( $(this).data('price') ) * 100) / 100;
+			}
+		});
+		$('#total_amount').html('&euro;' + Math.round(total*100)/100 );
+	}
+</script>
+
+
+{% endblock content %}
