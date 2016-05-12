@@ -1,13 +1,13 @@
 <?php
 /**
- * Document_Incoming_Invoice class
+ * Document_Incoming_Creditnote class
  *
  * @author David Vandemaele <david@tigron.be>
  */
 
 use \Skeleton\Database\Database;
 
-class Document_Incoming_Invoice extends Document {
+class Document_Incoming_Creditnote extends Document {
 
 	/**
 	 * Local details
@@ -26,7 +26,7 @@ class Document_Incoming_Invoice extends Document {
 		parent::get_details();
 		$db = Database::Get();
 
-		$local_details = $db->get_row('SELECT * FROM document_incoming_invoice WHERE document_id=?', [ $this->id ]);
+		$local_details = $db->get_row('SELECT * FROM document_incoming_creditnote WHERE document_id=?', [ $this->id ]);
 		if ($local_details === null) {
 			$this->local_details = array();
 		}
@@ -45,7 +45,7 @@ class Document_Incoming_Invoice extends Document {
 			return $this;
 		}
 		$db = Database::get();
-		$db->query('DELETE FROM document_incoming_invoice WHERE document_id=?', [ $this->id ]);
+		$db->query('DELETE FROM document_incoming_creditnote WHERE document_id=?', [ $this->id ]);
 		return parent::change_classname($classname);
 	}
 
@@ -56,7 +56,7 @@ class Document_Incoming_Invoice extends Document {
 	 */
 	public function delete() {
 		$db = Database::get();
-		$db->query('DELETE FROM document_incoming_invoice WHERE document_id=?', [ $this->id ]);
+		$db->query('DELETE FROM document_incoming_creditnote WHERE document_id=?', [ $this->id ]);
 		parent::delete();
 	}
 
@@ -73,30 +73,9 @@ class Document_Incoming_Invoice extends Document {
 
 		$required_fields = [ 'supplier_id', 'expiration_date', 'price_incl', 'price_excl' ];
 		foreach ($required_fields as $required_field) {
-			if (!isset($this->local_details[$required_field]) OR $this->local_details[$required_field] == '') {
+			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
 			}
-		}
-
-		if (!empty($this->local_details['payment_structured_message'])) {
-			$parts = explode('/', $this->details['payment_structured_message']);
-			if (count($parts) != 3) {
-				$errors['payment_structured_message'] = 'incorrect';
-			} elseif (strlen($parts[0]) != 3 OR strlen($parts[1]) != 4 OR strlen($parts[2]) != 5) {
-				$errors['payment_structured_message'] = 'incorrect';
-			} else {
-				$number = $this->local_details['payment_structured_message'];
-				$number = str_replace('/', '', $number);
-				$modulus = substr($number, -2);
-				$number = substr($number, 0, 10);
-				if ($number % 97 != $modulus) {
-					$errors['payment_structured_message'] = 'incorrect';
-				}
-			}
-		}
-
-		if ($this->local_details['price_incl'] < $this->local_details['price_excl']) {
-			$errors['price_incl'] = 'incorrect';
 		}
 
 		$errors = array_merge($errors, $parent_errors);
@@ -179,12 +158,12 @@ class Document_Incoming_Invoice extends Document {
 		$this->local_details['document_id'] = $this->id;
 
 		$db = Database::Get();
-		$count = $db->get_one('SELECT count(*) FROM document_incoming_invoice WHERE document_id=?', [ $this->id ]);
+		$count = $db->get_one('SELECT count(*) FROM document_incoming_creditnote WHERE document_id=?', [ $this->id ]);
 		if ($count == 0) {
-			$db->insert('document_incoming_invoice', $this->local_details);
+			$db->insert('document_incoming_creditnote', $this->local_details);
 		} else {
 			$where = 'document_id = ' . $db->quote($this->id);
-			$db->update('document_incoming_invoice', $this->local_details, $where);
+			$db->update('document_incoming_creditnote', $this->local_details, $where);
 		}
 
 		parent::save();
@@ -209,7 +188,7 @@ class Document_Incoming_Invoice extends Document {
 
 		$sql = '
 			SELECT document_id
-			FROM document_incoming_invoice
+			FROM document_incoming_creditnote
 			WHERE
 			1';
 
@@ -231,25 +210,4 @@ class Document_Incoming_Invoice extends Document {
 		$ids = $db->get_column($sql, []);
 		return $ids;
 	}
-
-	/**
-	 * Get expiring incoming invoices
-	 *
-	 * @access public
-	 * @param  string $days_to_expire
-	 * @return array Purchases
-	 */
-	public static function get_expiring($days_to_expire = '+7 days') {
-		$db = Database::get();
-		$ids = $db->get_column('SELECT document_id FROM document_incoming_invoice WHERE paid = 0 AND DATE(expiration_date) <= ?', [ strtotime($days_to_expire) ]);
-
-		$items = [];
-		foreach ($ids as $id) {
-			$items[] = self::get_by_id($id);
-		}
-
-		return $items;
-	}
-
-
 }

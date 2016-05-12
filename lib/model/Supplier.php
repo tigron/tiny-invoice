@@ -6,6 +6,7 @@
  */
 
 use \Skeleton\Database\Database;
+use IBAN\Validation\IBANValidator;
 
 class Supplier {
 	use \Skeleton\Object\Model;
@@ -29,9 +30,16 @@ class Supplier {
 			}
 		}
 
-		if (isset($this->details['vat']) AND $this->details['vat'] != '') {
+		if (!empty($this->details['vat'])) {
 			if (!Validation::validate_vat($this->details['vat'], $this->country)) {
 				$errors['vat'] = 'incorrect';
+			}
+		}
+
+		if (!empty($this->details['iban'])) {
+			$ibanValidator = new IBANValidator();
+			if (!$ibanValidator->validate($this->details['iban'])) {
+				$errors['iban'] = 'incorrect';
 			}
 		}
 
@@ -41,7 +49,7 @@ class Supplier {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Get VAT formatted
 	 *

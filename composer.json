@@ -10,6 +10,9 @@
 		"dompdf/dompdf": "dev-master",
 		"filp/whoops": "1.*",
 		"fxp/composer-asset-plugin": "~1.0",
+		"codelicious/php-coda-parser": "^1.0",
+		"jschaedl/iban": "1.1.6",
+		"azuyalabs/yasumi": "@stable",
 		"bower-asset/font-awesome": "*",
 		"bower-asset/moment": "2.10.*",
 		"bower-asset/tigron-datetimepicker": "0.*",
@@ -22,6 +25,7 @@
 		"bower-asset/jquery-ui": "*",
 		"bower-asset/bootstrap-checkbox": "*",
 		"bower-asset/bootstrap": "3.3.5",
+		"bower-asset/jquery-mask-plugin": "@stable",
         "phpdocumentor/reflection-docblock": "^3.0",
 		"ext-imap": "*"
     },

@@ -60,6 +60,7 @@ class Web_Module_Administrative_Supplier extends Module {
 		$template = Template::Get();
 
 		if (isset($_POST['supplier'])) {
+			$_POST['supplier']['iban'] = str_replace(' ', '', $_POST['supplier']['iban']);
 			$supplier = new Supplier();
 
 			$supplier->load_array($_POST['supplier']);
@@ -86,6 +87,7 @@ class Web_Module_Administrative_Supplier extends Module {
 		$supplier = Supplier::get_by_id($_GET['id']);
 
 		if (isset($_POST['supplier'])) {
+			$_POST['supplier']['iban'] = str_replace(' ', '', $_POST['supplier']['iban']);
 			$supplier->load_array($_POST['supplier']);
 			if ($supplier->validate($errors) === false) {
 				$template->assign('errors', $errors);
@@ -119,7 +121,8 @@ class Web_Module_Administrative_Supplier extends Module {
 			$name = $supplier->company;
 			$data[] = [
 				'id' => $supplier->id,
-				'value' => $name
+				'value' => $name,
+				'iban' => $supplier->iban
 			];
 		}
 		echo json_encode($data);

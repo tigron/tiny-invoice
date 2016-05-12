@@ -48,7 +48,7 @@ $(document).ready(function(){
 		}
 	});
 
-	$(':checkbox').checkboxpicker();
+	$(':checkbox:not(.original)').checkboxpicker();
 
 });
 
