@@ -12,7 +12,6 @@
 		"fxp/composer-asset-plugin": "~1.0",
 		"codelicious/php-coda-parser": "^1.0",
 		"jschaedl/iban": "1.1.6",
-		"azuyalabs/yasumi": "@stable",
 		"bower-asset/font-awesome": "*",
 		"bower-asset/moment": "2.10.*",
 		"bower-asset/tigron-datetimepicker": "0.*",
@@ -26,6 +25,7 @@
 		"bower-asset/bootstrap-checkbox": "*",
 		"bower-asset/bootstrap": "3.3.5",
 		"bower-asset/jquery-mask-plugin": "@stable",
+		"bower-asset/codemirror": "@stable",
         "phpdocumentor/reflection-docblock": "^3.0",
 		"ext-imap": "*"
     },

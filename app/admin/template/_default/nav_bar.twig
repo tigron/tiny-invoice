@@ -59,6 +59,9 @@
 						<li {% if env.module.get_name() == 'setting_configuration' %}class="active"{% endif %}><a href="/setting/configuration">{% trans "Configuration" %}</a></li>
 						<li {% if env.module.get_name() == 'setting_company' %}class="active"{% endif %}><a href="/setting/company">{% trans "Company" %}</a></li>
 						<li {% if env.module.get_name() == 'setting_mailscanner' %}class="active"{% endif %}><a href="/setting/mailscanner">{% trans "Mailscanner" %}</a></li>
+						{% if settings.setasign_pdf_extractor %}
+							<li {% if env.module.get_name() == 'setting_extractor' %}class="active"{% endif %}><a href="/setting/extractor">{% trans "PDF Extractor" %}</a></li>
+						{% endif %}
 						<li {% if env.module.get_name() == 'setting_api' %}class="active"{% endif %}><a href="/setting/api">{% trans "Api settings" %}</a></li>
 					</ul>
 				</li>

@@ -1,0 +1,103 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block header_js %}
+    {% embed "@skeleton-package-crud/javascript.twig" %}{% endembed %}
+{% endblock header_js %}
+
+{% block header_css %}
+    {% embed "@skeleton-package-crud/css.twig" %}{% endembed %}
+{% endblock header_css %}
+
+{% block content %}
+    {% embed "@skeleton-package-crud/content.twig" with {'object_name': 'Extractor'|trans} %}
+    	{% block form_edit %}
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Name" %}</label>
+				<div class="col-xs-9"><input type="text" class="form-control" name="object[name]" value="{{ object.name }}" /></div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Document" %}</label>
+				<div class="col-xs-9">
+					<p class="form-control-static">
+						<span>{{ object.document.file.name }}</span> [ {{ object.document.file.get_human_size() }} ]
+
+						<a href="/administrative/document?action=download&id={{ object.document.id }}">
+							<span class="glyphicon glyphicon-download"></span>
+						</a>
+					</p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Fingerprints" %}</label>
+				<div class="col-xs-9">
+					<p class="form-control-static">
+					{% set count = object.get_extractor_fingerprints()|length %}
+					{% if count == 1 %}
+						{% trans "1 fingerprint defined" %}
+					{% else %}
+						{{ count }} {% trans "fingerprints defined" %}
+					{% endif %}
+					( <a href="/setting/extractor/fingerprint?id={{ object.id }}">{% trans "Manage fingerprints" %}</a> )
+					</p>
+				</div>
+			</div>
+    	{% endblock form_edit %}
+
+    	{% block page_edit_footer %}
+			<div class="row">
+				<div class="col-xs-6">
+					<pre>
+					{{ object.extract_content() }}
+					</pre>
+				</div>
+
+				<div class="col-xs-6">
+					<div class="form-group">
+						<textarea class="form-control autogrow code" id="eval">{{ object.eval }}</textarea>
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-primary" onclick="run_eval();">{% trans "Run" %}</button>
+					</div>
+
+					<div class="form-group">
+						<pre id="output"></pre>
+					</div>
+				</div>
+			</div>
+
+			<script type="text/javascript">
+				function run_eval() {
+					data = {
+						'eval': editor.getValue()
+					}
+					$.post('/setting/extractor?action=eval&id={{ object.id }}', data, function(response) {
+						$('#output').html(response);
+					});
+				}
+
+
+
+				editor = CodeMirror.fromTextArea(document.getElementById("eval"), {
+					lineNumbers: true,
+					mode: "application/x-httpd-php-open",
+					indentUnit: 4,
+					indentWithTabs: true
+				});
+			</script>
+
+    	{% endblock  %}
+
+    	{% block  pager_table_head%}
+			<th width="40">{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
+			<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
+    	{% endblock pager_table_head %}
+
+    	{% block pager_table_row %}
+			<td>{{ object.id }}</td>
+			<td>{{ object.name }}</td>
+    	{% endblock pager_table_row %}
+
+    {% endembed %}
+{% endblock content %}

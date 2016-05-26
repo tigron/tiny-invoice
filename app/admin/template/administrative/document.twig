@@ -137,6 +137,20 @@
 									</div>
 								</div>
 
+								<div class="form-group">
+									<label class="col-xs-3 control-label">{% trans "Supplier identifier" %}</label>
+									<div class="col-xs-5">
+										<input type="text" name="document[supplier_identifier]" class="form-control" value="{{ document.supplier_identifier }}" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-xs-3 control-label">{% trans "Accounting identifier" %}</label>
+									<div class="col-xs-5">
+										<input type="text" name="document[accounting_identifier]" class="form-control" value="{{ document.accounting_identifier }}" />
+									</div>
+								</div>
+
 								<div class="form-group{% if 'price_excl' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Price excl VAT" %}</label>
 									<div class="col-xs-5">
@@ -170,7 +184,6 @@
 										console.log(vat);
 
 										if (vat != 21 && vat != 6 && vat != 12) {
-//											$('input[name="document[price_incl]"]').attr('data-content', vat);
 											$('input[name="document[price_incl]"]').popover({
 												container: 'body'
 											});
@@ -181,9 +194,6 @@
 										}
 									}
 
-
-
-//									$('input[name="document[price_incl]"]').popover('show');
 								</script>
 
 								<div class="form-group classname_document_incoming_invoice">
@@ -243,8 +253,6 @@
 										if ( $('input[name=payment_message_type]').parents('.form-group').is(':visible') ){
 											$('#' + value).show();
 										}
-
-
 									}
 								</script>
 							</div>
@@ -252,11 +260,13 @@
 							<!-- End of incoming invoice specific fields -->
 
 							<hr>
-
 							<div class="form-group">
 								<div class="col-xs-9 col-xs-offset-3">
 									<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 									<a href="/administrative/document?action=delete&id={{ document.id }}" class="btn btn-danger" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?" >{% trans "Delete" %}</a>
+									{% if settings.setasign_pdf_extractor %}
+										<a href="javascript:void(0);" class="btn btn-default" id="btn_extractor">{% trans "Extractor" %}</a>
+									{% endif %}
 								</div>
 							</div>
 
@@ -268,7 +278,17 @@
 			{% if document.preview_file_id > 0 %}
 			<div class="col-xs-4">
 				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Preview" %}</div>
+					<div class="panel-heading">
+						{% trans "Preview" %}
+
+						{% if settings.setasign_pdf_extractor %}
+						<span class="pull-right">
+							<a href="/setting/extractor?action=create&document_id={{ document.id }}">
+								<i class="fa fa-file-text" aria-hidden="true"></i> {% trans "Create extractor" %}
+							</a>
+						</span>
+						{% endif %}
+					</div>
 					<div class="panel-body text-center zoom">
 						<img src="/picture?id={{ document.preview_file_id }}&size=document_preview" />
 					</div>
@@ -278,6 +298,9 @@
 
 		</div>
 
+		{% include 'administrative/document/extractor/modal.extractor_error.twig' with {id: 'extractor_error' }  %}
+		{% include 'administrative/document/extractor/modal.extractor.twig' with {id: 'extractor', modal_size: 'lg' }  %}
+
 		<script type="text/javascript">
 			function show_classname_fields() {
 				classname = $('#slc_classname').val();
@@ -286,6 +309,21 @@
 				$('.classname_' + classname.toLowerCase()).show();
 				select_payment_message_type();
 			}
+
+			$('#btn_extractor').on('click', function() {
+				$(this).html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i> {% trans "Extractor" %}');
+
+				$.getJSON('/administrative/document?action=ajax_extractor&id={{ document.id }}', function(data) {
+					$('#btn_extractor').html('{% trans "Extractor" %}');
+
+					if (data === false) {
+						$('#extractor_error').modal('show');
+					} else {
+						$('#extractor .modal-body #form_extract').load( '/administrative/document?action=ajax_extract_content&id={{ document.id }}&extractor_id=' + data.id);
+						$('#extractor').modal('show');
+					}
+				});
+			});
 
 			show_classname_fields();
 		</script>

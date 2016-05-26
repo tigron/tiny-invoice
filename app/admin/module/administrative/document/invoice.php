@@ -62,7 +62,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 				$pager->clear_condition('document_incoming_invoice.paid');
 			}
 		} else {
-			$pager->add_condition('document_incoming_invoice.paid', 0);
+			$pager->clear_condition('document_incoming_invoice.paid');
 		}
 
 		if (isset($_POST['supplier_id'])) {
@@ -70,6 +70,9 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 				$pager->add_condition('document_incoming_invoice.supplier_id', $_POST['supplier_id']);
 			}
 		}
+
+		// Fix for pager
+		$pager->add_condition('document_incoming_invoice.document_id', '>', 0);
 
 		$pager->add_condition('classname', 'Document_Incoming_Invoice');
 		$pager->add_join('document_incoming_invoice', 'document_id', 'document.id');
@@ -111,12 +114,23 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		}
 
 		if (isset($_POST['document'])) {
-			if ($_POST['payment_message_type'] == 'payment_message_type_structured') {
-				$_POST['document']['payment_message'] = '';
-			} else {
-				$_POST['document']['payment_structured_message'] = '';
+			if (isset($_POST['payment_message_type'])) {
+				if ($_POST['payment_message_type'] == 'payment_message_type_structured') {
+					$_POST['document']['payment_message'] = '';
+				} else {
+					$_POST['document']['payment_structured_message'] = '';
+				}
 			}
+
+			if (isset($_POST['document']['paid'])) {
+				$_POST['document']['paid'] = true;
+			} else {
+				$_POST['document']['paid'] = false;
+			}
+
 		}
+
+
 		parent::display_edit();
 	}
 

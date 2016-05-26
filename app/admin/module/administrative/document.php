@@ -153,7 +153,6 @@ class Web_Module_Administrative_Document extends Module {
 		$selected_tags = $document->get_tags();
 
 		if (isset($_POST['document'])) {
-
 			if (!isset($_POST['document']['file_id']) OR $document->file_id != $_POST['document']['file_id']) {
 				$document->file->expire();
 				$document->file_id = NULL;
@@ -169,12 +168,6 @@ class Web_Module_Administrative_Document extends Module {
 
 			$document = $document->change_classname($_POST['document']['classname']);
 			unset($_POST['document']['classname']);
-			if (isset($_POST['document']['paid'])) {
-				$_POST['document']['paid'] = true;
-			} else {
-				$_POST['document']['paid'] = false;
-			}
-
 			$document->load_array($_POST['document']);
 			if ($document->validate($errors) === false) {
 				$template->assign('errors', $errors);
@@ -248,6 +241,46 @@ class Web_Module_Administrative_Document extends Module {
 	}
 
 	/**
+	 * Ajax extractor
+	 *
+	 * @access public
+	 */
+	public function display_ajax_extractor() {
+		$this->template = false;
+		$document = Document::get_by_id($_GET['id']);
+		$extractors = Extractor::get_all();
+		foreach ($extractors as $extractor) {
+			if ($extractor->match($document)) {
+				echo json_encode($extractor->get_info());
+				return;
+			}
+		}
+		echo json_encode(false);
+	}
+
+	/**
+	 * Ajax extract content
+	 *
+	 * @access public
+	 */
+	public function display_ajax_extract_content() {
+		$this->template = 'administrative/document/extractor/extract_content.twig';
+		$document = Document::get_by_id($_GET['id']);
+		$extractor = Extractor::get_by_id($_GET['extractor_id']);
+
+		try {
+			$fields = $extractor->parse_content($document);
+		} catch (Exception $e) {
+			$fields = [];
+		}
+
+		$template = Template::get();
+		$template->assign('fields', $fields);
+		$template->assign('document', $document);
+		$template->assign('extractor', $extractor);
+	}
+
+	/**
 	 * Load document (ajax)
 	 *
 	 * @access public
@@ -257,5 +290,4 @@ class Web_Module_Administrative_Document extends Module {
 		$document = Document::get_by_id($_GET['id']);
 		echo json_encode($document->get_info());
 	}
-
 }
