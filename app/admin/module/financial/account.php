@@ -34,6 +34,26 @@ class Web_Module_Financial_Account extends Module {
 	 * @access public
 	 */
 	public function display() {
+
+		$document = Document::get_by_id(59);
+
+
+		// create a document instance
+		$document = SetaPDF_Core_Document::loadByFilename($document->file->get_path());
+
+		// create an extractor instance
+		$extractor = new SetaPDF_Extractor($document);
+
+		// get the plain text from page 1
+		$result = $extractor->getResultByPageNumber(1);
+
+		// output
+		echo '<pre>';
+		echo $result;
+		echo '</pre>';
+
+die();
+
 		$template = Template::Get();
 
 		$pager = new Pager('bank_account');

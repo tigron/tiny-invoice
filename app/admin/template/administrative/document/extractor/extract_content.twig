@@ -1,0 +1,26 @@
+<div class="alert alert-info">{% trans "Values fetched with extractor" %} <b>{{ extractor.name }}</b></div>
+
+{% for key, value in fields %}
+	{% if loop.first %}
+		<table class="table table-alternate table-hover table-condensed">
+		<thead>
+			<tr>
+				<th>{% trans "Field" %}</th>
+				<th>{% trans "Current value" %}</th>
+				<th>{% trans "Extracted Value" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+	{% endif %}
+
+	<tr>
+		<th><p class="form-control-static">{{ key }}</p></th>
+		<td><p class="form-control-static">{{ attribute(document, key)|truncate(50) }}</p></td>
+		<td><input type="text" class="form-control" name="document[{{ key }}]" value="{{ value }}" /></td>
+	</tr>
+
+	{% if loop.last %}
+		</tbody>
+		</table>
+	{% endif %}
+{% endfor %}

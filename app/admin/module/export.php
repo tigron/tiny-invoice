@@ -11,9 +11,6 @@ use Skeleton\Package\Crud\Web\Module\Crud;
 use Skeleton\Pager\Web\Pager;
 use Skeleton\Core\Web\Session;
 
-use Yasumi\Yasumi;
-use Yasumi\Filters\OfficialHolidaysFilter;
-
 class Web_Module_Export extends Crud {
 
     /**
@@ -30,13 +27,6 @@ class Web_Module_Export extends Crud {
      * @return Pager $pager
      */
     public function get_pager() {
-// Use the factory to create a new holiday provider instance
-$holidays = Yasumi::create('Belgium', 2016);
-
-foreach ($holidays->getHolidayDates() as $date) {
-//    echo $date . PHP_EOL;
-}
-
     	$pager = new Pager('export');
     	$pager->add_sort_permission('created');
     	$pager->add_sort_permission('id');

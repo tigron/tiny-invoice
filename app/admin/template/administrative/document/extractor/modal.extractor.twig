@@ -1,0 +1,21 @@
+{% extends "_default/modal.base.twig" %}
+{% block header %}{% trans "Extractor parse content" %}{% endblock header %}
+
+{% block body %}
+<form action="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" method="post" class="form-horizontal">
+	<input type="hidden" name="document[file_id]" value="{{ document.file_id }}" />
+	<input type="hidden" name="document[paid]" value="{{ document.paid }}" />
+
+	<div id="form_extract">
+		<div class="alert alert-info">
+			<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
+			{% trans "Loading content" %}
+		</div>
+	</form>
+</form>
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+{% endblock footer %}

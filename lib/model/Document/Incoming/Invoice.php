@@ -79,7 +79,7 @@ class Document_Incoming_Invoice extends Document {
 		}
 
 		if (!empty($this->local_details['payment_structured_message'])) {
-			$parts = explode('/', $this->details['payment_structured_message']);
+			$parts = explode('/', $this->local_details['payment_structured_message']);
 			if (count($parts) != 3) {
 				$errors['payment_structured_message'] = 'incorrect';
 			} elseif (strlen($parts[0]) != 3 OR strlen($parts[1]) != 4 OR strlen($parts[2]) != 5) {
@@ -95,8 +95,10 @@ class Document_Incoming_Invoice extends Document {
 			}
 		}
 
-		if ($this->local_details['price_incl'] < $this->local_details['price_excl']) {
-			$errors['price_incl'] = 'incorrect';
+		if (isset($this->local_details['price_incl']) AND isset($this->local_details['price_excl'])) {
+			if ($this->local_details['price_incl'] < $this->local_details['price_excl']) {
+				$errors['price_incl'] = 'incorrect';
+			}
 		}
 
 		$errors = array_merge($errors, $parent_errors);

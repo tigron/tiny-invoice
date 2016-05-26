@@ -109,7 +109,7 @@
 			<tbody>
 		{% endif %}
 
-		<tr {% if date(document.expiration_date) < date() %}class="danger"{% endif %}>
+		<tr {% if date(document.expiration_date) < date() and not document.paid%}class="danger"{% endif %}>
 			<td>{{ document.id }}</td>
 			<td>{{ document.date|date }}</td>
 			<td>{{ document.expiration_date|date }}</td>

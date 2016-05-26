@@ -254,6 +254,19 @@ class Document {
 	}
 
 	/**
+	 * Get preview
+	 *
+	 * @access public
+	 * @return Picture $picture
+	 */
+	public function get_preview() {
+		if (empty($this->details['preview_file_id'])) {
+			$this->create_preview();
+		}
+		return File::get_by_id($this->preview_file_id);
+	}
+
+	/**
 	 * Create preview
 	 *
 	 * @access public
