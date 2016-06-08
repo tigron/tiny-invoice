@@ -137,17 +137,18 @@
 									</div>
 								</div>
 
-								<div class="form-group">
+								<div class="form-group{% if 'supplier_identifier' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Supplier identifier" %}</label>
 									<div class="col-xs-5">
-										<input type="text" name="document[supplier_identifier]" class="form-control" value="{{ document.supplier_identifier }}" />
+										<input type="text" name="document[supplier_identifier]" class="form-control" value="{{ document.supplier_identifier }}" data-toggle="popover" title="{% trans "Already in use" %}" data-content="{% trans "This identifier is already used for another invoice." %}" onchange="check_supplier_identifier();" />
 									</div>
+									{{ form.invalid_input('supplier_identifier', errors) }}
 								</div>
 
 								<div class="form-group">
 									<label class="col-xs-3 control-label">{% trans "Accounting identifier" %}</label>
 									<div class="col-xs-5">
-										<input type="text" name="document[accounting_identifier]" class="form-control" value="{{ document.accounting_identifier }}" />
+										<input type="text" name="document[accounting_identifier]" class="form-control" value="{{ document.accounting_identifier }}"/>
 									</div>
 								</div>
 
@@ -192,6 +193,27 @@
 										} else {
 											$('input[name="document[price_incl]"]').popover('hide');
 										}
+									}
+
+									function check_supplier_identifier() {
+										supplier_id = $('input[name="document[supplier_id]"]').val();
+										supplier_identifier = $('input[name="document[supplier_identifier]"]').val();
+										data = {
+											'supplier_id': supplier_id,
+											'supplier_identifier': supplier_identifier,
+											'document_id': {{ document.id }}
+										}
+										$.post('/administrative/document/invoice?action=check_supplier_identifier', data, function(response) {
+											$('input[name="document[supplier_identifier]"]').popover({
+												container: 'body'
+											});
+											if (response > 0) {
+												$('input[name="document[supplier_identifier]"]').popover('show');
+											} else {
+												$('input[name="document[supplier_identifier]"]').popover('hide');
+											}
+										});
+
 									}
 
 								</script>

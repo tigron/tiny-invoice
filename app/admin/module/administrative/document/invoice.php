@@ -117,5 +117,26 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		parent::display_edit();
 	}
 
+	/**
+	 * AJAX: check supplier_identifier
+	 *
+	 * @access public
+	 */
+	public function display_check_supplier_identifier() {
+		$this->template = null;
+
+		try {
+			$supplier = Supplier::get_by_id($_POST['supplier_id']);
+			$invoices = Document_Incoming_Invoice::get_by_supplier_supplier_identifier($supplier, $_POST['supplier_identifier']);
+			foreach ($invoices as $key => $invoice) {
+				if ($invoice->id == $_POST['document_id']) {
+					unset($invoices[$key]);
+				}
+			}
+			echo count($invoices);
+		} catch (Exception $e) {
+			echo 0;
+		}
+	}
 
 }
