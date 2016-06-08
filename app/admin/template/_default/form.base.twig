@@ -22,6 +22,7 @@
 			{% if attribute(errors, field) == 'required' %}{% trans "This field is required." %}
 			{% elseif attribute(errors, field) == 'already_exists' %}{% trans "The e-mail address has already been entered before." %}
 			{% elseif attribute(errors, field) == 'invalid_email' %}{% trans "The e-mail address is invalid." %}
+			{% elseif attribute(errors, field) == 'unique' %}{% trans "This field should be unique" %}
 			{% else %}{{ attribute(errors, field) }}
 			{% endif %}
 		</div>
