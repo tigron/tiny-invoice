@@ -95,7 +95,7 @@ class Document_Incoming_Invoice extends Document {
 			}
 		}
 
-		if (isset($this->details['supplier_id']) and isset($this->details['supplier_identifier']) and isset($this->details['price_excl'])) {
+		if (!empty($this->details['supplier_id']) and !empty($this->details['supplier_identifier']) and !empty($this->details['price_excl'])) {
 			$supplier = Supplier::get_by_id($this->details['supplier_id']);
 			$invoices = self::get_by_supplier_supplier_identifier($supplier, $this->details['supplier_identifier']);
 			foreach ($invoices as $key => $invoice) {
@@ -108,6 +108,18 @@ class Document_Incoming_Invoice extends Document {
 			}
 			if (count($invoices) > 0) {
 				$errors['supplier_identifier'] = 'unique';
+			}
+		}
+
+		if (!empty($this->details['accounting_identifier'])) {
+			$invoices = self::get_by_accounting_identifier($this->details['accounting_identifier']);
+			foreach ($invoices as $key => $invoice) {
+				if ($invoice->id == $this->id) {
+					unset($invoices[$key]);
+				}
+			}
+			if (count($invoices) > 0) {
+				$errors['accounting_identifier'] = 'unique';
 			}
 		}
 
@@ -279,6 +291,24 @@ class Document_Incoming_Invoice extends Document {
 	public static function get_by_supplier_supplier_identifier(Supplier $supplier, $supplier_identifier) {
 		$db = Database::get();
 		$ids = $db->get_column('SELECT document_id FROM document_incoming_invoice WHERE supplier_id=? AND supplier_identifier=?', [ $supplier->id, $supplier_identifier]);
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Get by accounting_identifier
+	 *
+	 * @access public
+	 * @param string $accounting_identifier
+	 */
+	public static function get_by_accounting_identifier($accounting_identifier) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT document_id FROM document_incoming_invoice WHERE accounting_identifier=?', [ $accounting_identifier]);
 
 		$items = [];
 		foreach ($ids as $id) {

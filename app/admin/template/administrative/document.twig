@@ -145,11 +145,12 @@
 									{{ form.invalid_input('supplier_identifier', errors) }}
 								</div>
 
-								<div class="form-group">
+								<div class="form-group{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Accounting identifier" %}</label>
 									<div class="col-xs-5">
 										<input type="text" name="document[accounting_identifier]" class="form-control" value="{{ document.accounting_identifier }}"/>
 									</div>
+									{{ form.invalid_input('accounting_identifier', errors) }}
 								</div>
 
 								<div class="form-group{% if 'price_excl' in errors|keys %} has-error{% endif %}">
