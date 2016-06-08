@@ -94,8 +94,9 @@
 			<table class="table table-hover table-striped table-condensed table-responsive">
 			<thead>
 				<tr>
-					<th>#</th>
+					<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
 					<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
+					<th>{{ pager.create_header('Accounting ID'|trans, 'document_incoming_invoice.accounting_identifier')|raw }}</th>
 					<th>{{ pager.create_header('Expiration date'|trans, 'document_incoming_invoice.expiration_date')|raw }}</th>
 					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
 					<th>{{ pager.create_header('Supplier'|trans, 'supplier.company')|raw }}
@@ -112,6 +113,7 @@
 		<tr {% if date(document.expiration_date) < date() and not document.paid%}class="danger"{% endif %}>
 			<td>{{ document.id }}</td>
 			<td>{{ document.date|date }}</td>
+			<td>{{ document.accounting_identifier }}</td>
 			<td>{{ document.expiration_date|date }}</td>
 			<td>{{ document.title }}</td>
 			<td>{{ document.supplier.company }}</td>
