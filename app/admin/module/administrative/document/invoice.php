@@ -81,6 +81,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		$pager->add_sort_permission('date');
 		$pager->add_sort_permission('title');
 		$pager->add_sort_permission('paid');
+		$pager->add_sort_permission('document_incoming_invoice.accounting_identifier');
 		$pager->add_sort_permission('document_incoming_invoice.expiration_date');
 		$pager->add_sort_permission('supplier.company');
 		$pager->add_sort_permission('document_incoming_invoice.price_incl');
@@ -112,24 +113,6 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		if ($document->classname != 'Document_Incoming_Invoice') {
 			Session::redirect('/administrative/document?action=edit&id=' . $_GET['id']);
 		}
-
-		if (isset($_POST['document'])) {
-			if (isset($_POST['payment_message_type'])) {
-				if ($_POST['payment_message_type'] == 'payment_message_type_structured') {
-					$_POST['document']['payment_message'] = '';
-				} else {
-					$_POST['document']['payment_structured_message'] = '';
-				}
-			}
-
-			if (isset($_POST['document']['paid'])) {
-				$_POST['document']['paid'] = true;
-			} else {
-				$_POST['document']['paid'] = false;
-			}
-
-		}
-
 
 		parent::display_edit();
 	}

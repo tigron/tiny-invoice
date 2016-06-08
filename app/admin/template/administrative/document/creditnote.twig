@@ -81,7 +81,7 @@
 			<table class="table table-hover table-striped table-condensed table-responsive">
 			<thead>
 				<tr>
-					<th>#</th>
+					<th>{{ pager.create_header('#'|trans, 'id')|raw }}</th>
 					<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
 					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
 					<th>{% trans "Tags" %}</th>

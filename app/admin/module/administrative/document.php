@@ -154,16 +154,32 @@ class Web_Module_Administrative_Document extends Module {
 
 		if (isset($_POST['document'])) {
 			if (!isset($_POST['document']['file_id']) OR $document->file_id != $_POST['document']['file_id']) {
-				$document->file->expire();
-				$document->file_id = NULL;
+				try {
+					$document->file->expire();
+					$document->file_id = NULL;
+				} catch (Exception $e) { }
 			}
 
-			$selected_tags = [];
 			if (isset($_POST['tag_ids'])) {
+				$selected_tags = [];
 				$tag_ids = array_filter(explode(',', $_POST['tag_ids']));
 				foreach ($tag_ids as $tag_id) {
 					$selected_tags[] = Tag::get_by_id($tag_id);
 				}
+			}
+
+			if (isset($_POST['payment_message_type'])) {
+				if ($_POST['payment_message_type'] == 'payment_message_type_structured') {
+					$_POST['document']['payment_message'] = '';
+				} else {
+					$_POST['document']['payment_structured_message'] = '';
+				}
+			}
+
+			if (empty($_POST['document']['paid'])) {
+				$_POST['document']['paid'] = false;
+			}  else {
+				$_POST['document']['paid'] = true;
 			}
 
 			$document = $document->change_classname($_POST['document']['classname']);
