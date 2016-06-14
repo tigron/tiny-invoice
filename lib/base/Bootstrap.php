@@ -64,13 +64,17 @@ class Bootstrap {
 			$setting->name = 'setasign_pdf_extractor';
 			$setting->value = 0;
 		}
+
 		if (file_exists($root_path . '/lib/component/SetaPDF/Autoload.php')) {
 			require_once $root_path . '/lib/component/SetaPDF/Autoload.php';
 			$setting->value = 1;
 		} else {
 			$setting->value = 0;
 		}
-		$setting->save();
+
+		try {
+			$setting->save();
+		} catch (Exception $e) { }
 
 		/**
 		 * Initialize the file store

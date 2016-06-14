@@ -18,7 +18,8 @@ class Migration_20160509_230233_Transaction_recurring extends \Skeleton\Database
 	 */
 	public function up() {
 		$db = Database::get();
-		$db->query("UPDATE transaction SET recurring=1, completed=0, failed=0 WHERE classname IN ('Mailscanner', 'Reminder_Invoice', 'Reminder_Document_Incoming_Invoice', 'Cleanup_File')", []);
+
+		$db->query("UPDATE transaction SET completed=0, failed=0 WHERE classname IN ('Mailscanner', 'Reminder_Invoice', 'Reminder_Document_Incoming_Invoice', 'Cleanup_File')", []);
 	}
 
 	/**
