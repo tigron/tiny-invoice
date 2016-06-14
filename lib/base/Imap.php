@@ -87,14 +87,10 @@ class Imap {
 	 * @access private
 	 */
 	private function connect($host, $login, $password) {
-		$url = '{' . $host . ':993/imap/ssl/novalidate-cert}';
-		$this->connection = imap_open($url, $login, $password);
+		$url = '{' . $host . ':143/novalidate-cert}';
+		$this->connection = @imap_open($url, $login, $password);
 		if ($this->connection === false) {
-			$url = '{' . $this->host . ':143}';
-			$this->connection = @imap_open($url, $this->login, $this->password);
-			if ($this->connection === false) {
-				throw new Exception('Unable to connect to IMAP server');
-			}
+			throw new Exception('Unable to connect to IMAP server');
 		}
 		$this->url = $url;
 		$this->message_count = imap_num_msg($this->connection);
