@@ -62,7 +62,7 @@
 		{% endfor %}
 
 		<script type="text/javascript">
-			$(document).ready(function(){
+			$(window).load(function(){
 				/**
 				 * Zoom thumbnails
 				 */
@@ -78,6 +78,7 @@
 						highest = height;
 					}
 				});
+
 				$('.panel-body').height(highest);
 
 				/**
