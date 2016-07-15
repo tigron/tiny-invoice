@@ -59,7 +59,9 @@ class Mailscanner {
 			if (!$attachment['is_attachment']) {
 				continue;
 			}
-
+			if ($attachment['filename'] == '') {
+				$attachment['filename'] = 'document.pdf';
+			}
 			$file = \Skeleton\File\File::store($attachment['filename'], $attachment['attachment']);
 
 			if (!$file->is_pdf()) {
