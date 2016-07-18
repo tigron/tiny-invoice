@@ -48,7 +48,7 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 			$document_ids[] = $document_id;
 		}
 
-		if (!in_array($_POST['export_format'], [ 'Export_Payment_Belfius' ])) {
+		if (!in_array($_POST['export_format'], [ 'Export_Payment_Belfius', 'Export_Payment_Sepa' ])) {
 			Session::redirect('/administrative/document/invoice/pay');
 		}
 

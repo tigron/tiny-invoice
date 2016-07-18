@@ -80,8 +80,16 @@
 					<div class="form-group{% if 'iban' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "IBAN" %}</label>
 						<div class="col-xs-9">
-							<input type="text" name="supplier[iban]" id="vat" class="form-control" value="{{ supplier.iban }}">
+							<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{{ supplier.iban }}">
 							{{ form.invalid_input('iban', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'bic' in errors|keys %} has-error{% endif %}">
+						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "BIC" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="supplier[bic]" id="bic" class="form-control" value="{{ supplier.bic }}">
+							{{ form.invalid_input('bic', errors) }}
 						</div>
 					</div>
 
@@ -184,8 +192,16 @@
 					<div class="form-group{% if 'iban' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "IBAN" %}</label>
 						<div class="col-xs-9">
-							<input type="text" name="supplier[iban]" id="vat" class="form-control" value="{{ supplier.iban }}">
+							<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{{ supplier.iban }}">
 							{{ form.invalid_input('iban', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'bic' in errors|keys %} has-error{% endif %}">
+						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "BIC" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="supplier[bic]" id="bic" class="form-control" value="{{ supplier.bic }}">
+							{{ form.invalid_input('bic', errors) }}
 						</div>
 					</div>
 
