@@ -27,7 +27,8 @@
 		"bower-asset/jquery-mask-plugin": "@stable",
 		"bower-asset/codemirror": "@stable",
         "phpdocumentor/reflection-docblock": "^3.0",
-		"ext-imap": "*"
+		"ext-imap": "*",
+        "wytse/sepa-xml": "^0.2.0"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",

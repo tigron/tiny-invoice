@@ -1,5 +1,7 @@
 #!/usr/bin/env php
 <?php
+ini_set('memory_limit', '512M');
+ini_set('display_errors', 1);
 
 include __DIR__ . '/../../config/global.php';
 

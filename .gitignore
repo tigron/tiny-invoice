@@ -7,7 +7,6 @@ store/file/*
 store/documentation/*
 lib/external/*
 lib/component/*
-composer.lock
 util/tmp/*
 migrations/db_version
 store/email/*

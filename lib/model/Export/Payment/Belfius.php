@@ -1,6 +1,6 @@
 <?php
 /**
- * Export_Multivers class
+ * Export_Payment_Belfius class
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
