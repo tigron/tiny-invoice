@@ -73,9 +73,9 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 
 		// Fix for pager
 		$pager->add_condition('document_incoming_invoice.document_id', '>', 0);
-
 		$pager->add_condition('classname', 'Document_Incoming_Invoice');
 		$pager->add_join('document_incoming_invoice', 'document_id', 'document.id');
+		$pager->add_join('supplier', 'id', 'document_incoming_invoice.supplier_id');
 
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('date');
