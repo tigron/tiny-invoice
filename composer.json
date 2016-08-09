@@ -12,9 +12,11 @@
 		"fxp/composer-asset-plugin": "~1.0",
 		"codelicious/php-coda-parser": "^1.0",
 		"jschaedl/iban": "1.1.6",
+		"bower-asset/jquery": "~1.8",
 		"bower-asset/font-awesome": "*",
 		"bower-asset/moment": "2.10.*",
 		"bower-asset/tigron-datetimepicker": "0.*",
+		"bower-asset/eonasdan-bootstrap-datetimepicker": "dev-master",
 		"bower-asset/tigron-confirm-modal": "0.*",
 		"bower-asset/dropzone": "~4.0",
 		"bower-asset/autogrow-textarea": "dev-master",
@@ -28,7 +30,8 @@
 		"bower-asset/codemirror": "@stable",
         "phpdocumentor/reflection-docblock": "^3.0",
 		"ext-imap": "*",
-        "wytse/sepa-xml": "^0.2.0"
+        "wytse/sepa-xml": "^0.2.0",
+        "bower-asset/highcharts": "^4.2"
     },
     "require-dev": {
         "tigron/skeleton-database": "dev-master",
