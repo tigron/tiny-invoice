@@ -49,7 +49,7 @@
 		}
 
 		#invoice_items th {
-			border-bottom: solid 1px #9ccb3b;
+			border-bottom: solid 1px #ccc;
 		}
 
 		#invoice_items .even td {
@@ -75,7 +75,7 @@
 				$y = 50;
 			}
 
-			$font = Font_Metrics::get_font("calibri", "bold");
+			$font = $fontMetrics->get_font("calibri", "bold");
 			$size = 14;
 			$invoice_label = "{% trans "Invoice" %} {{ invoice.number }} ";
 			$pdf->text($x, $y, $invoice_label, $font, $size);

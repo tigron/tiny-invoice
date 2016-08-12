@@ -98,10 +98,10 @@
 
 					$current_page = "{% trans "Page" %} ". $PAGE_NUM . "/" . $PAGE_COUNT;
 					$size = 8;
-					$font = Font_Metrics::get_font("verdana", "normal");
+					$font = $fontMetrics->get_font("verdana", "normal");
 
 					$y = $pdf->get_height() - 41;
-					$x = $pdf->get_width() - 62 - Font_Metrics::get_text_width($current_page, $font, $size);
+					$x = $pdf->get_width() - 62 - $fontMetrics->get_text_width($current_page, $font, $size);
 
 					$pdf->text($x, $y, $current_page, $font, $size, array(0.4,0.4,0.4));
 
