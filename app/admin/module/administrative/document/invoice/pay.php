@@ -63,8 +63,9 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 
 		$export = new $_POST['export_format']();
 		$export->data = json_encode($data);
-		$export->run();
 		$export->save();
+		$export->run();
+
 		Session::redirect('/export?action=created');
 	}
 
