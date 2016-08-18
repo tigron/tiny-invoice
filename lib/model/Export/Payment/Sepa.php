@@ -31,7 +31,6 @@ class Export_Payment_Sepa extends Export {
 			$total_price += $document->price_incl;
 		}
 
-
 		$sepaFile = new TransferFile();
 		$sepaFile->messageIdentification = $this->id;
 		$sepaFile->initiatingPartyName = Setting::get_by_name('company')->value;
@@ -47,7 +46,7 @@ class Export_Payment_Sepa extends Export {
 				'id'                    => $document->id,
 				'debtorName'            => Setting::get_by_name('company')->value,
 				'debtorAccountIBAN'     => Setting::get_by_name('iban')->value,
-				'debtorAgentBIC'        => Setting::get_by_name('bic')->value
+				'debtorAgentBIC'        => strtoupper(Setting::get_by_name('bic')->value)
 			//  'debtorAccountCurrency' => 'GPB', // optional, defaults to 'EUR'
 			//  'categoryPurposeCode'   => 'SUPP', // optional, defaults to NULL
 			));
@@ -66,7 +65,7 @@ class Export_Payment_Sepa extends Export {
 				'id'                    => $document->id,
 				'currency'              => 'EUR',
 				'amount'                => $document->price_incl, // or as float: 0.02 or as integer: 2
-				'creditorBIC'           => $document->supplier->bic,
+				'creditorBIC'           => strtoupper($document->supplier->bic),
 				'creditorName'          => $document->supplier->company,
 				'creditorAccountIBAN'   => $document->supplier->iban,
 				'remittanceInformation' => $message,
