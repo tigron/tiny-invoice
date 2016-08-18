@@ -40,6 +40,10 @@
 								<i class="fa fa-arrows-alt"></i>
 							</span>
 							{{ incoming_page.file.name }}
+
+							<span class="pull-right">
+								<a href="/administrative/incoming?action=rotate_page&id={{ incoming_page.id }}" alt="{% trans "Rotate clockwise" %}"><i class="fa fa-repeat"></i></a>
+							</span>
 						</div>
 						<div class="panel-body zoom">
 							{% if incoming_page.preview_file_id > 0 %}

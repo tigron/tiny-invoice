@@ -61,6 +61,12 @@ class Web_Module_Administrative_Incoming extends Module {
 		$template->assign('incoming', $incoming);
 	}
 
+	public function display_rotate_page() {
+		$page = Incoming_Page::get_by_id($_GET['id']);
+		$page->rotate();
+		Session::redirect('/administrative/incoming?action=edit&id=' . $page->incoming_id);
+	}
+
 	/**
 	 * merge
 	 *
