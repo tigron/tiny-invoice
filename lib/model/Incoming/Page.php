@@ -36,6 +36,19 @@ class Incoming_Page {
 	}
 
 	/**
+	 * Rotate (90gr clockwise)
+	 *
+	 * @access public
+	 */
+	public function rotate() {
+		$rotated = $this->file->rotate(90);
+		$this->file->expire();
+		$this->file_id = $rotated->id;
+		$this->save();
+		$this->create_preview();
+	}
+
+	/**
 	 * Create preview
 	 *
 	 * @access public
