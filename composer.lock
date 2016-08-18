@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "40b7df35572d6d450d671a3a45f2f2b5",
-    "content-hash": "ecae02385478c2b11d890de1da95a09b",
+    "hash": "51acc4c18704462ac66974b4bcd52772",
+    "content-hash": "21ca3cb825597a76b92dd248a8cd3ed8",
     "packages": [
         {
             "name": "bower-asset/autogrow-textarea",
@@ -369,16 +369,16 @@
         },
         {
             "name": "bower-asset/jquery",
-            "version": "1.12.1-patch1",
+            "version": "1.12.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jquery/jquery-dist.git",
-                "reference": "e409311a9966092cd40b6a1c4a64ad0b105e364c"
+                "reference": "5e89585e0121e72ff47de177c5ef604f3089a53d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/e409311a9966092cd40b6a1c4a64ad0b105e364c",
-                "reference": "e409311a9966092cd40b6a1c4a64ad0b105e364c",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/5e89585e0121e72ff47de177c5ef604f3089a53d",
+                "reference": "5e89585e0121e72ff47de177c5ef604f3089a53d",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -1214,28 +1214,29 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "30eed06dd6bc88410a4ff7f77b6d22f3ce13dbde"
+                "reference": "bb2d123231c095735130cc8f6d31385a44c7b308"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/30eed06dd6bc88410a4ff7f77b6d22f3ce13dbde",
-                "reference": "30eed06dd6bc88410a4ff7f77b6d22f3ce13dbde",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/bb2d123231c095735130cc8f6d31385a44c7b308",
+                "reference": "bb2d123231c095735130cc8f6d31385a44c7b308",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3|^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.6"
+                "phpunit/phpunit": "^4.6",
+                "sebastian/version": "^1.0.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -1259,7 +1260,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2015-08-24 13:29:44"
+            "time": "2016-08-09 15:02:57"
         },
         {
             "name": "wytse/sepa-xml",
@@ -1747,7 +1748,7 @@
         },
         {
             "name": "tigron/skeleton-console",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-console.git",
@@ -1786,16 +1787,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "8bb0b2e65b3fa30882a35567653434b22eef9461"
+                "reference": "13b32e14bf75dc790eab243d04450ca27ee3bfed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/8bb0b2e65b3fa30882a35567653434b22eef9461",
-                "reference": "8bb0b2e65b3fa30882a35567653434b22eef9461",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/13b32e14bf75dc790eab243d04450ca27ee3bfed",
+                "reference": "13b32e14bf75dc790eab243d04450ca27ee3bfed",
                 "shasum": ""
             },
             "type": "library",
@@ -1815,11 +1816,11 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2016-07-13 09:08:49"
+            "time": "2016-07-05 12:49:52"
         },
         {
             "name": "tigron/skeleton-database",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-database.git",
@@ -1855,7 +1856,7 @@
         },
         {
             "name": "tigron/skeleton-email",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-email.git",
@@ -1892,7 +1893,7 @@
         },
         {
             "name": "tigron/skeleton-error",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-error.git",
@@ -1929,16 +1930,16 @@
         },
         {
             "name": "tigron/skeleton-file",
-            "version": "dev-master",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-file.git",
-                "reference": "8383d5f82135c113bba5ae7d1b90e95bf17b1793"
+                "reference": "3622c73be6464a738dddf37b1cea89ccc103c638"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-file/zipball/8383d5f82135c113bba5ae7d1b90e95bf17b1793",
-                "reference": "8383d5f82135c113bba5ae7d1b90e95bf17b1793",
+                "url": "https://api.github.com/repos/tigron/skeleton-file/zipball/3622c73be6464a738dddf37b1cea89ccc103c638",
+                "reference": "3622c73be6464a738dddf37b1cea89ccc103c638",
                 "shasum": ""
             },
             "require-dev": {
@@ -1962,20 +1963,20 @@
                 }
             ],
             "description": "Tigron File utilities",
-            "time": "2016-07-20 14:01:52"
+            "time": "2016-06-14 12:10:13"
         },
         {
             "name": "tigron/skeleton-file-pdf",
-            "version": "dev-master",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-file-pdf.git",
-                "reference": "ccb819bc8281e4ab04c56fa4e5a93efb3f30c758"
+                "reference": "82d34f5b00ad9f1b9ea1b18a16d87ec7943b193b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-file-pdf/zipball/ccb819bc8281e4ab04c56fa4e5a93efb3f30c758",
-                "reference": "ccb819bc8281e4ab04c56fa4e5a93efb3f30c758",
+                "url": "https://api.github.com/repos/tigron/skeleton-file-pdf/zipball/82d34f5b00ad9f1b9ea1b18a16d87ec7943b193b",
+                "reference": "82d34f5b00ad9f1b9ea1b18a16d87ec7943b193b",
                 "shasum": ""
             },
             "require": {
@@ -2001,11 +2002,11 @@
                 }
             ],
             "description": "Tigron PDF utilities",
-            "time": "2016-08-08 15:55:14"
+            "time": "2016-08-18 18:44:56"
         },
         {
             "name": "tigron/skeleton-file-picture",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-file-picture.git",
@@ -2041,7 +2042,7 @@
         },
         {
             "name": "tigron/skeleton-i18n",
-            "version": "dev-master",
+            "version": "v0.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-i18n.git",
@@ -2078,7 +2079,7 @@
         },
         {
             "name": "tigron/skeleton-migrate",
-            "version": "dev-master",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-migrate.git",
@@ -2111,7 +2112,7 @@
         },
         {
             "name": "tigron/skeleton-object",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-object.git",
@@ -2150,7 +2151,7 @@
         },
         {
             "name": "tigron/skeleton-package-api",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-package-api.git",
@@ -2186,7 +2187,7 @@
         },
         {
             "name": "tigron/skeleton-package-crud",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-package-crud.git",
@@ -2223,7 +2224,7 @@
         },
         {
             "name": "tigron/skeleton-pager",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-pager.git",
@@ -2259,7 +2260,7 @@
         },
         {
             "name": "tigron/skeleton-template",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-template.git",
@@ -2292,7 +2293,7 @@
         },
         {
             "name": "tigron/skeleton-template-twig",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-template-twig.git",
@@ -2331,7 +2332,7 @@
         },
         {
             "name": "tigron/skeleton-transaction",
-            "version": "dev-master",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-transaction.git",
@@ -2484,24 +2485,7 @@
         "bower-asset/jquery-zoom": 20,
         "bower-asset/bootstrap-multiselect": 20,
         "bower-asset/jquery-mask-plugin": 0,
-        "bower-asset/codemirror": 0,
-        "tigron/skeleton-database": 20,
-        "tigron/skeleton-object": 20,
-        "tigron/skeleton-file": 20,
-        "tigron/skeleton-file-picture": 20,
-        "tigron/skeleton-file-pdf": 20,
-        "tigron/skeleton-i18n": 20,
-        "tigron/skeleton-pager": 20,
-        "tigron/skeleton-template-twig": 20,
-        "tigron/skeleton-core": 20,
-        "tigron/skeleton-error": 20,
-        "tigron/skeleton-template": 20,
-        "tigron/skeleton-email": 20,
-        "tigron/skeleton-console": 20,
-        "tigron/skeleton-migrate": 20,
-        "tigron/skeleton-transaction": 20,
-        "tigron/skeleton-package-api": 20,
-        "tigron/skeleton-package-crud": 20
+        "bower-asset/codemirror": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
