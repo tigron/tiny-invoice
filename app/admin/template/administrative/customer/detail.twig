@@ -70,7 +70,20 @@
 		<div class="form-group{% if 'country_id' in errors|keys %} has-error{% endif %}">
 			<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
 			<div class="col-xs-9">
-				{{ form.select_country(countries, 'customer[country_id]', 'country_id', customer.country_id|default(203)) }}
+				<select name="supplier[country_id]" class="form-control" onchange="change_country();">
+				{% for group in countries|keys  %}
+					{% if group == 'european' %}
+						<optgroup label="{% trans "European" %}">
+					{% else %}
+						<optgroup label="{% trans "Rest of the world" %}">
+					{% endif %}
+
+					{% for country in countries[group] %}
+						<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if customer.country_id == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>
+					{% endfor %}
+					</optgroup>
+				{% endfor %}
+				</select>
 				{{ form.invalid_input('country_id', errors) }}
 			</div>
 		</div>
@@ -109,6 +122,15 @@
 
 		<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
 			<label for="vat" class="col-xs-3 control-label">{% trans "Vat" %}</label>
+			<div class="col-xs-1"><input type="text" class="form-control" id="vat_prefix" readonly value="AT" /></div>
+			<div class="col-xs-3">
+				<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ supplier.vat }}">
+				{{ form.invalid_input('vat', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
+			<label for="vat" class="col-xs-3 control-label">{% trans "Vat" %}</label>
 			<div class="col-xs-4">
 				<input type="text" name="customer[vat]" id="vat" class="form-control" value="{{ customer.vat }}">
 				{{ form.invalid_input('vat', errors) }}
@@ -137,5 +159,13 @@
 			</div>
 		</div>
 	</form>
+
+	<script type="text/javascript">
+		function change_country() {
+			iso2 = $('select[name="supplier[country_id]"] option:selected').attr('data-iso2');
+			$('#vat_prefix').val(iso2);
+		}
+		change_country();
+	</script>
 
 {% endblock tab %}

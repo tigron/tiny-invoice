@@ -28,7 +28,7 @@
 
 					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
 						<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="supplier[company]" id="company" class="form-control" value="{{ supplier.company }}">
 							{{ form.invalid_input('company', errors) }}
 						</div>
@@ -36,34 +36,48 @@
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Street" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[street]" class="form-control" value="{{ supplier.street }}" /></div>
+						<div class="col-xs-5"><input type="text" name="supplier[street]" class="form-control" value="{{ supplier.street }}" /></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Housenumber" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ supplier.housenumber }}"/></div>
+						<div class="col-xs-5"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ supplier.housenumber }}"/></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Zipcode" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ supplier.zipcode }}" /></div>
+						<div class="col-xs-5"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ supplier.zipcode }}" /></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "City" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[city]" class="form-control" value="{{ supplier.city }}" /></div>
+						<div class="col-xs-5"><input type="text" name="supplier[city]" class="form-control" value="{{ supplier.city }}" /></div>
 					</div>
 
 					<div class="form-group{% if 'country_id' in errors|keys %} has-error{% endif %}">
 						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
-						<div class="col-xs-9">
-							{{ form.select_country(countries, 'supplier[country_id]', 'country_id', supplier.country_id|default(203)) }}
+						<div class="col-xs-5">
+							<select name="supplier[country_id]" class="form-control" onchange="change_country();">
+							{% for group in countries|keys  %}
+								{% if group == 'european' %}
+									<optgroup label="{% trans "European" %}">
+								{% else %}
+									<optgroup label="{% trans "Rest of the world" %}">
+								{% endif %}
+
+								{% for country in countries[group] %}
+									<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if supplier.country_id == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>
+								{% endfor %}
+								</optgroup>
+							{% endfor %}
+							</select>
 						</div>
 					</div>
 
 					<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
 						<label for="vat" class="control-label col-xs-3">{% trans "Vat" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-1"><input type="text" class="form-control" id="vat_prefix" readonly value="AT" /></div>
+						<div class="col-xs-4">
 							<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ supplier.vat }}">
 							{{ form.invalid_input('vat', errors) }}
 						</div>
@@ -71,7 +85,7 @@
 
 					<div class="form-group{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "Accounting identifier" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="supplier[accounting_identifier]" class="form-control" value="{{ supplier.accounting_identifier }}">
 							{{ form.invalid_input('accounting_identifier', errors) }}
 						</div>
@@ -79,7 +93,7 @@
 
 					<div class="form-group{% if 'iban' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "IBAN" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{{ supplier.iban }}">
 							{{ form.invalid_input('iban', errors) }}
 						</div>
@@ -87,7 +101,7 @@
 
 					<div class="form-group{% if 'bic' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "BIC" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="supplier[bic]" id="bic" class="form-control" value="{{ supplier.bic }}">
 							{{ form.invalid_input('bic', errors) }}
 						</div>
@@ -95,7 +109,7 @@
 
 					<div class="form-group">
 					    <label class="col-xs-3 control-label">{% trans "Comments" %}</label>
-					    <div class="col-xs-9">
+					    <div class="col-xs-5">
 					        <textarea name="supplier[comment]" class="form-control">{{ supplier.comment }}</textarea>
 					    </div>
 					</div>
@@ -115,6 +129,12 @@
 			$(document).ready(function() {
 				$('input[name="supplier[iban]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000', { placeholder: '____ ____ ____ ____ ____ ____ ____'  });
 			});
+
+			function change_country() {
+				iso2 = $('select[name="supplier[country_id]"] option:selected').attr('data-iso2');
+				$('#vat_prefix').val(iso2);
+			}
+			change_country();
 		</script>
 
 	{% elseif action == 'add' %}
@@ -140,7 +160,7 @@
 
 					<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
 						<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="supplier[company]" id="company" class="form-control" value="{{ env.post.supplier.company }}">
 							{{ form.invalid_input('company', errors) }}
 						</div>
@@ -148,34 +168,48 @@
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Street" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[street]" class="form-control" value="{{ env.post.supplier.street }}"/></div>
+						<div class="col-xs-5"><input type="text" name="supplier[street]" class="form-control" value="{{ env.post.supplier.street }}"/></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Housenumber" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ env.post.supplier.housenumber }}"/></div>
+						<div class="col-xs-5"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ env.post.supplier.housenumber }}"/></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Zipcode" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ env.post.supplier.zipcode }}"/></div>
+						<div class="col-xs-5"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ env.post.supplier.zipcode }}"/></div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "City" %}</label>
-						<div class="col-xs-9"><input type="text" name="supplier[city]" class="form-control" value="{{ env.post.supplier.city }}"/></div>
+						<div class="col-xs-5"><input type="text" name="supplier[city]" class="form-control" value="{{ env.post.supplier.city }}"/></div>
 					</div>
 
 					<div class="form-group {% if 'country_id' in errors|keys %} has-error{% endif %}">
 						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
-						<div class="col-xs-9">
-							{{ form.select_country(countries, 'supplier[country_id]', 'country_id', env.post.supplier.country_id|default(203)) }}
+						<div class="col-xs-5">
+							<select name="supplier[country_id]" class="form-control" onchange="change_country();">
+							{% for group in countries|keys  %}
+								{% if group == 'european' %}
+									<optgroup label="{% trans "European" %}">
+								{% else %}
+									<optgroup label="{% trans "Rest of the world" %}">
+								{% endif %}
+
+								{% for country in countries[group] %}
+									<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if env.post.supplier.country_id == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>
+								{% endfor %}
+								</optgroup>
+							{% endfor %}
+							</select>
 						</div>
 					</div>
 
 					<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
 						<label for="vat" class="control-label col-xs-3">{% trans "Vat" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-1"><input type="text" class="form-control" id="vat_prefix" readonly value="AT" /></div>
+						<div class="col-xs-4">
 							<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ env.post.supplier.vat }}">
 							{{ form.invalid_input('vat', errors) }}
 						</div>
@@ -183,7 +217,7 @@
 
 					<div class="form-group{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "Accounting identifier" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="supplier[accounting_identifier]" id="vat" class="form-control" value="{{ supplier.accounting_identifier }}">
 							{{ form.invalid_input('accounting_identifier', errors) }}
 						</div>
@@ -191,7 +225,7 @@
 
 					<div class="form-group{% if 'iban' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "IBAN" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{{ supplier.iban }}">
 							{{ form.invalid_input('iban', errors) }}
 						</div>
@@ -199,7 +233,7 @@
 
 					<div class="form-group{% if 'bic' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "BIC" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="supplier[bic]" id="bic" class="form-control" value="{{ supplier.bic }}">
 							{{ form.invalid_input('bic', errors) }}
 						</div>
@@ -207,7 +241,7 @@
 
 					<div class="form-group">
 					    <label class="col-xs-3 control-label">{% trans "Comments" %}</label>
-					    <div class="col-xs-9">
+					    <div class="col-xs-5">
 					        <textarea name="supplier[comment]" class="form-control">{{ env.post.supplier.comment }}</textarea>
 					    </div>
 					</div>
@@ -227,6 +261,12 @@
 			$(document).ready(function() {
 				$('input[name="supplier[iban]"]').mask('SS00 0000 0000 0000 0000 00', { placeholder: '____ ____ ____ ____ ____ __'  });
 			});
+
+			function change_country() {
+				iso2 = $('select[name="supplier[country_id]"] option:selected').attr('data-iso2');
+				$('#vat_prefix').val(iso2);
+			}
+			change_country();
 		</script>
 
 	{% else %}
@@ -244,7 +284,7 @@
 				<form method="post" action="/administrative/supplier" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-5">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
