@@ -213,7 +213,7 @@ class Invoice {
 			return $this->file;
 		}
 
-		$pdf = new PDF('invoice', $this->customer->language);
+		$pdf = new Pdf('invoice', $this->customer->language);
 		$pdf->assign('invoice', $this);
 		$settings = Setting::get_as_array();
 		if (isset($settings['country_id'])) {
