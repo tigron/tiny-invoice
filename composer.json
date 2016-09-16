@@ -30,8 +30,8 @@
 		"bower-asset/codemirror": "@stable",
         "phpdocumentor/reflection-docblock": "^3.0",
 		"ext-imap": "*",
-        "wytse/sepa-xml": "^0.2.0",
-        "bower-asset/highcharts": "^4.2"
+        "bower-asset/highcharts": "^4.2",
+        "tigron/sepa-payments": "0.0.1"
     },
     "require-dev": {
         "tigron/skeleton-database": "0.1.0",
@@ -41,7 +41,7 @@
         "tigron/skeleton-file-pdf": "0.2.0",
         "tigron/skeleton-i18n": "0.0.4",
         "tigron/skeleton-pager": "0.1.0",
-        "tigron/skeleton-template-twig": "0.1.0",
+        "tigron/skeleton-template-twig": "0.1.1",
         "tigron/skeleton-core": "0.1.0",
         "tigron/skeleton-error": "0.1.0",
         "tigron/skeleton-template": "0.1.0",

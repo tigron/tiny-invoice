@@ -4,9 +4,66 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "51acc4c18704462ac66974b4bcd52772",
-    "content-hash": "21ca3cb825597a76b92dd248a8cd3ed8",
+    "hash": "6a38e9f33f229e6f5b705103537f24c1",
+    "content-hash": "a6b715ed88c562e75d1c8ed4b80efecb",
     "packages": [
+        {
+            "name": "aptoma/twig-markdown",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aptoma/twig-markdown.git",
+                "reference": "64a9c5c7418c08faf91c4410b34bdb65fb25c23d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aptoma/twig-markdown/zipball/64a9c5c7418c08faf91c4410b34bdb65fb25c23d",
+                "reference": "64a9c5c7418c08faf91c4410b34bdb65fb25c23d",
+                "shasum": ""
+            },
+            "require": {
+                "twig/twig": "~1.12"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "erusev/parsedown": "^1.6",
+                "knplabs/github-api": "~1.2",
+                "league/commonmark": "~0.5",
+                "michelf/php-markdown": "~1",
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "~0.6"
+            },
+            "suggest": {
+                "knplabs/github-api": "Needed for using GitHub's Markdown engine provided through their API.",
+                "michelf/php-markdown": "Original Markdown engine with MarkdownExtra."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Aptoma": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joris Berthelot",
+                    "email": "joris@berthelot.tel"
+                },
+                {
+                    "name": "Gunnar Lium",
+                    "email": "gunnar@aptoma.com"
+                }
+            ],
+            "description": "Twig extension to work with Markdown content",
+            "keywords": [
+                "markdown",
+                "twig"
+            ],
+            "time": "2015-10-23 20:27:08"
+        },
         {
             "name": "bower-asset/autogrow-textarea",
             "version": "dev-master",
@@ -173,16 +230,16 @@
         },
         {
             "name": "bower-asset/codemirror",
-            "version": "5.17.0",
+            "version": "5.18.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codemirror/CodeMirror.git",
-                "reference": "b6c7f3ff2e04a3d41937c30cdedbd004e5eb22d2"
+                "reference": "136324e0b7c8f3c163d633161fb01ed2066d57b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codemirror/CodeMirror/zipball/b6c7f3ff2e04a3d41937c30cdedbd004e5eb22d2",
-                "reference": "b6c7f3ff2e04a3d41937c30cdedbd004e5eb22d2",
+                "url": "https://api.github.com/repos/codemirror/CodeMirror/zipball/136324e0b7c8f3c163d633161fb01ed2066d57b8",
+                "reference": "136324e0b7c8f3c163d633161fb01ed2066d57b8",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -426,16 +483,16 @@
         },
         {
             "name": "bower-asset/jquery-ui",
-            "version": "1.12.0.1",
+            "version": "1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/jqueryui.git",
-                "reference": "2c9359a9d199da254dd278bef3d4ced047d6581c"
+                "reference": "dec4c50123193d4f7c8ae6cd0bff45478e1ad276"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/jqueryui/zipball/2c9359a9d199da254dd278bef3d4ced047d6581c",
-                "reference": "2c9359a9d199da254dd278bef3d4ced047d6581c",
+                "url": "https://api.github.com/repos/components/jqueryui/zipball/dec4c50123193d4f7c8ae6cd0bff45478e1ad276",
+                "reference": "dec4c50123193d4f7c8ae6cd0bff45478e1ad276",
                 "shasum": ""
             },
             "require": {
@@ -948,6 +1005,57 @@
             "time": "2014-11-07 14:44:46"
         },
         {
+            "name": "michelf/php-markdown",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michelf/php-markdown.git",
+                "reference": "156e56ee036505ec637d761ee62dc425d807183c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/156e56ee036505ec637d761ee62dc425d807183c",
+                "reference": "156e56ee036505ec637d761ee62dc425d807183c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-lib": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Michelf": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Michel Fortin",
+                    "email": "michel.fortin@michelf.ca",
+                    "homepage": "https://michelf.ca/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "John Gruber",
+                    "homepage": "https://daringfireball.net/"
+                }
+            ],
+            "description": "PHP Markdown",
+            "homepage": "https://michelf.ca/projects/php-markdown/",
+            "keywords": [
+                "markdown"
+            ],
+            "time": "2015-12-24 01:37:31"
+        },
+        {
             "name": "phenx/php-font-lib",
             "version": "0.4",
             "source": {
@@ -1213,6 +1321,223 @@
             "time": "2013-12-03 13:33:24"
         },
         {
+            "name": "tigron/sepa-payments",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tigron/sepa-payments.git",
+                "reference": "504e3979df374cd707f8d6566d68af636b3be5d7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tigron/sepa-payments/zipball/504e3979df374cd707f8d6566d68af636b3be5d7",
+                "reference": "504e3979df374cd707f8d6566d68af636b3be5d7",
+                "shasum": ""
+            },
+            "require": {
+                "tigron/skeleton-template": "*",
+                "tigron/skeleton-template-twig": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tigron\\Sepa\\": "lib/Tigron/Sepa"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tigron BVBA",
+                    "email": "support@tigron.be"
+                }
+            ],
+            "description": "A package to create SEPA 001.001.03 payment files",
+            "time": "2016-09-16 12:27:57"
+        },
+        {
+            "name": "tigron/skeleton-template",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tigron/skeleton-template.git",
+                "reference": "9df3c6284529883635b03dcf714e25246306e779"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tigron/skeleton-template/zipball/9df3c6284529883635b03dcf714e25246306e779",
+                "reference": "9df3c6284529883635b03dcf714e25246306e779",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Skeleton\\Template\\": "lib/Skeleton/Template/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tigron BVBA",
+                    "email": "support@tigron.be"
+                }
+            ],
+            "description": "Template library for skeleton",
+            "time": "2016-05-25 19:04:00"
+        },
+        {
+            "name": "tigron/skeleton-template-twig",
+            "version": "0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tigron/skeleton-template-twig.git",
+                "reference": "0e48dd3a2f65ffe14b6247afa70c52debb7f1eff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tigron/skeleton-template-twig/zipball/0e48dd3a2f65ffe14b6247afa70c52debb7f1eff",
+                "reference": "0e48dd3a2f65ffe14b6247afa70c52debb7f1eff",
+                "shasum": ""
+            },
+            "require": {
+                "aptoma/twig-markdown": "2.0.*",
+                "michelf/php-markdown": "*",
+                "twig/extensions": "1.0.*@dev",
+                "twig/twig": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Skeleton\\Template\\Twig\\": "lib/Skeleton/Template/Twig/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tigron BVBA",
+                    "email": "support@tigron.be"
+                }
+            ],
+            "description": " Twig templating for Skeleton",
+            "time": "2016-09-15 12:16:05"
+        },
+        {
+            "name": "twig/extensions",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig-extensions.git",
+                "reference": "f91a82ec225e5bb108e01a0f93c9be04f84dcfa0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
+                "reference": "f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
+                "shasum": ""
+            },
+            "require": {
+                "twig/twig": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_Extensions_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Common additional features for Twig that do not directly belong in core",
+            "homepage": "https://github.com/fabpot/Twig-extensions",
+            "keywords": [
+                "debug",
+                "i18n",
+                "text"
+            ],
+            "time": "2013-10-18 19:37:15"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.24.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
+                "reference": "33093f6e310e6976baeac7b14f3a6ec02f2d79b7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.7"
+            },
+            "require-dev": {
+                "symfony/debug": "~2.7",
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.24-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
+                },
+                {
+                    "name": "Twig Team",
+                    "homepage": "http://twig.sensiolabs.org/contributors",
+                    "role": "Contributors"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "http://twig.sensiolabs.org",
+            "keywords": [
+                "templating"
+            ],
+            "time": "2016-09-01 17:50:53"
+        },
+        {
             "name": "webmozart/assert",
             "version": "1.1.0",
             "source": {
@@ -1261,99 +1586,9 @@
                 "validate"
             ],
             "time": "2016-08-09 15:02:57"
-        },
-        {
-            "name": "wytse/sepa-xml",
-            "version": "0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wvell/php-sepa-xml.git",
-                "reference": "787971916fbdf834529a109b26f086b99eda143b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/wvell/php-sepa-xml/zipball/787971916fbdf834529a109b26f086b99eda143b",
-                "reference": "787971916fbdf834529a109b26f086b99eda143b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Wytse Vellema",
-                    "email": "w.vellema@gmail.com"
-                }
-            ],
-            "description": "Creates an XML file for (SEPA) pain001.001.03",
-            "time": "2014-01-06 11:17:07"
         }
     ],
     "packages-dev": [
-        {
-            "name": "aptoma/twig-markdown",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/aptoma/twig-markdown.git",
-                "reference": "64a9c5c7418c08faf91c4410b34bdb65fb25c23d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/aptoma/twig-markdown/zipball/64a9c5c7418c08faf91c4410b34bdb65fb25c23d",
-                "reference": "64a9c5c7418c08faf91c4410b34bdb65fb25c23d",
-                "shasum": ""
-            },
-            "require": {
-                "twig/twig": "~1.12"
-            },
-            "require-dev": {
-                "codeclimate/php-test-reporter": "dev-master",
-                "erusev/parsedown": "^1.6",
-                "knplabs/github-api": "~1.2",
-                "league/commonmark": "~0.5",
-                "michelf/php-markdown": "~1",
-                "phpunit/phpunit": "~4.0",
-                "satooshi/php-coveralls": "~0.6"
-            },
-            "suggest": {
-                "knplabs/github-api": "Needed for using GitHub's Markdown engine provided through their API.",
-                "michelf/php-markdown": "Original Markdown engine with MarkdownExtra."
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Aptoma": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Joris Berthelot",
-                    "email": "joris@berthelot.tel"
-                },
-                {
-                    "name": "Gunnar Lium",
-                    "email": "gunnar@aptoma.com"
-                }
-            ],
-            "description": "Twig extension to work with Markdown content",
-            "keywords": [
-                "markdown",
-                "twig"
-            ],
-            "time": "2015-10-23 20:27:08"
-        },
         {
             "name": "cocur/slugify",
             "version": "v1.3",
@@ -1416,57 +1651,6 @@
                 "slugify"
             ],
             "time": "2015-09-02 20:14:32"
-        },
-        {
-            "name": "michelf/php-markdown",
-            "version": "1.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "156e56ee036505ec637d761ee62dc425d807183c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/156e56ee036505ec637d761ee62dc425d807183c",
-                "reference": "156e56ee036505ec637d761ee62dc425d807183c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-lib": "1.4.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Michelf": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Michel Fortin",
-                    "email": "michel.fortin@michelf.ca",
-                    "homepage": "https://michelf.ca/",
-                    "role": "Developer"
-                },
-                {
-                    "name": "John Gruber",
-                    "homepage": "https://daringfireball.net/"
-                }
-            ],
-            "description": "PHP Markdown",
-            "homepage": "https://michelf.ca/projects/php-markdown/",
-            "keywords": [
-                "markdown"
-            ],
-            "time": "2015-12-24 01:37:31"
         },
         {
             "name": "setasign/fpdi",
@@ -1566,16 +1750,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.1.3",
+            "version": "v3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "f9e638e8149e9e41b570ff092f8007c477ef0ce5"
+                "reference": "8ea494c34f0f772c3954b5fbe00bffc5a435e563"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/f9e638e8149e9e41b570ff092f8007c477ef0ce5",
-                "reference": "f9e638e8149e9e41b570ff092f8007c477ef0ce5",
+                "url": "https://api.github.com/repos/symfony/console/zipball/8ea494c34f0f772c3954b5fbe00bffc5a435e563",
+                "reference": "8ea494c34f0f772c3954b5fbe00bffc5a435e563",
                 "shasum": ""
             },
             "require": {
@@ -1622,7 +1806,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-26 08:04:17"
+            "time": "2016-08-19 06:48:39"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -2259,78 +2443,6 @@
             "time": "2016-06-09 10:08:41"
         },
         {
-            "name": "tigron/skeleton-template",
-            "version": "v0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tigron/skeleton-template.git",
-                "reference": "9df3c6284529883635b03dcf714e25246306e779"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-template/zipball/9df3c6284529883635b03dcf714e25246306e779",
-                "reference": "9df3c6284529883635b03dcf714e25246306e779",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Skeleton\\Template\\": "lib/Skeleton/Template/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tigron BVBA",
-                    "email": "support@tigron.be"
-                }
-            ],
-            "description": "Template library for skeleton",
-            "time": "2016-05-25 19:04:00"
-        },
-        {
-            "name": "tigron/skeleton-template-twig",
-            "version": "v0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tigron/skeleton-template-twig.git",
-                "reference": "84fe82b5b2079ce3a4bbd6b2059222943cd04f7b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-template-twig/zipball/84fe82b5b2079ce3a4bbd6b2059222943cd04f7b",
-                "reference": "84fe82b5b2079ce3a4bbd6b2059222943cd04f7b",
-                "shasum": ""
-            },
-            "require": {
-                "aptoma/twig-markdown": "2.0.*",
-                "michelf/php-markdown": "*",
-                "twig/extensions": "1.0.*@dev",
-                "twig/twig": "1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Skeleton\\Template\\Twig\\": "lib/Skeleton/Template/Twig/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tigron BVBA",
-                    "email": "support@tigron.be"
-                }
-            ],
-            "description": " Twig templating for Skeleton",
-            "time": "2016-03-22 13:47:18"
-        },
-        {
             "name": "tigron/skeleton-transaction",
             "version": "v0.1.0",
             "source": {
@@ -2366,114 +2478,6 @@
             ],
             "description": "Background tasks for skeleton",
             "time": "2016-07-01 10:26:08"
-        },
-        {
-            "name": "twig/extensions",
-            "version": "v1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twigphp/Twig-extensions.git",
-                "reference": "f91a82ec225e5bb108e01a0f93c9be04f84dcfa0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
-                "reference": "f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
-                "shasum": ""
-            },
-            "require": {
-                "twig/twig": "~1.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Twig_Extensions_": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Common additional features for Twig that do not directly belong in core",
-            "homepage": "https://github.com/fabpot/Twig-extensions",
-            "keywords": [
-                "debug",
-                "i18n",
-                "text"
-            ],
-            "time": "2013-10-18 19:37:15"
-        },
-        {
-            "name": "twig/twig",
-            "version": "v1.24.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3566d311a92aae4deec6e48682dc5a4528c4a512",
-                "reference": "3566d311a92aae4deec6e48682dc5a4528c4a512",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2.7"
-            },
-            "require-dev": {
-                "symfony/debug": "~2.7",
-                "symfony/phpunit-bridge": "~2.7"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.24-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Twig_": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
-                },
-                {
-                    "name": "Armin Ronacher",
-                    "email": "armin.ronacher@active-4.com",
-                    "role": "Project Founder"
-                },
-                {
-                    "name": "Twig Team",
-                    "homepage": "http://twig.sensiolabs.org/contributors",
-                    "role": "Contributors"
-                }
-            ],
-            "description": "Twig, the flexible, fast, and secure template language for PHP",
-            "homepage": "http://twig.sensiolabs.org",
-            "keywords": [
-                "templating"
-            ],
-            "time": "2016-05-30 09:11:59"
         }
     ],
     "aliases": [],
