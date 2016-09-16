@@ -12,7 +12,7 @@
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-class PDF {
+class Pdf {
 	/**
 	 * PDF type
 	 *
