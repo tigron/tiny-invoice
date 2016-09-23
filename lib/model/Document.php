@@ -232,8 +232,6 @@ class Document {
 	 * @access public
 	 */
 	public function delete() {
-		$this->file->delete();
-
 		$document_tags = Document_Tag::get_by_document($this);
 		foreach ($document_tags as $document_tag) {
 			$document_tag->delete();
