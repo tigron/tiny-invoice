@@ -18,6 +18,7 @@
 			<tr>
 				<th width="120"><input type="checkbox" class="original2" data-group-cls="btn-group-xs" onchange="toggle_all();"></th>
 				<th>{% trans "Date" %}</th>
+				<th>{% trans "Expiration date" %}</th>
 				<th>{% trans "Supplier" %}</th>
 				<th>{% trans "IBAN" %}</th>
 				<th>{% trans "Message" %}</th>
@@ -30,6 +31,7 @@
 	<tr data-price="{{ unpaid_invoice.price_incl }}">
 		<td><input type="checkbox" data-group-cls="btn-group-xs" name="invoice[{{ unpaid_invoice.id }}]" onchange="calculate_sum();"></td>
 		<td>{{ unpaid_invoice.date|date }}</td>
+		<td>{{ unpaid_invoice.expiration_date|date }}</td>
 		<td>{{ unpaid_invoice.supplier.company }}</td>
 		<td>{{ unpaid_invoice.supplier.iban }}</td>
 		<td>
