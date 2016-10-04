@@ -49,6 +49,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('price');
+		$pager->add_sort_permission('qty');
 		$pager->add_sort_permission('customer.lastname');
 		$pager->add_sort_permission('processed_to_invoice_item_id');
 
@@ -80,7 +81,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 				$template->assign('errors', 'select_customer');
 			} else {
 				$_SESSION['invoice_queue']['customer_id'] = $_POST['customer_id'];
-				Session::redirect('/administrative/invoice/queue?action=create_step2');
+				Session::redirect('/sales/invoice/queue?action=create_step2');
 			}
 		}
 
@@ -104,7 +105,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 				$template->assign('errors', 'select_customer_contact');
 			} else {
 				$_SESSION['invoice_queue']['customer_contact_id'] = $_POST['customer_contact_id'];
-				Session::redirect('/administrative/invoice/queue?action=create_step3');
+				Session::redirect('/sales/invoice/queue?action=create_step3');
 			}
 		}
 
@@ -151,7 +152,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 
 				unset($_SESSION['invoice_queue']);
 
-				Session::redirect('/administrative/invoice/queue');
+				Session::redirect('/sales/invoice/queue');
 
 			}
 
@@ -160,6 +161,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 		$customer_contact = customer_contact::get_by_id($_SESSION['invoice_queue']['customer_contact_id']);
 		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($customer_contact->country));
 		$template->assign('action', 'create_step3');
+		$template->assign('product_types', Product_Type::get_all());
 	}
 
 	/**
@@ -176,11 +178,12 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 			$invoice_queue->save();
 
 			Session::set_sticky('message', 'updated');
-			Session::redirect('/administrative/invoice/queue?action=edit&id=' . $invoice_queue->id);
+			Session::redirect('/sales/invoice/queue?action=edit&id=' . $invoice_queue->id);
 		}
 
 		$template->assign('invoice_queue', $invoice_queue);
 		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($invoice_queue->customer_contact->country));
+		$template->assign('product_types', Product_Type::get_all());
 	}
 
 	/**

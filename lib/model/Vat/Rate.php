@@ -8,5 +8,8 @@
  */
 
 class Vat_Rate {
-	use Model, Get, Save, Delete;
+	use \Skeleton\Object\Model;
+	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete;
 }

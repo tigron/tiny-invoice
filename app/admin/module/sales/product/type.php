@@ -36,9 +36,10 @@ class Web_Module_Sales_Product_Type extends Module {
 		$template = Template::Get();
 
 		$pager = new Pager('product_type');
+		$pager->add_sort_permission('name');
 
 		if (isset($_POST['search'])) {
-			$pager->set_condition('%search%', $_POST['search']);
+			$pager->set_search($_POST['search']);
 		}
 		$pager->page();
 

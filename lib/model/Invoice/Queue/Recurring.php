@@ -46,29 +46,30 @@ class Invoice_Queue_Recurring {
 	 */
 	public function run() {
 		$invoice_queue = new Invoice_Queue();
-		$invoice_queue->invoice_customer_contact_id = $this->invoice_queue_recurring_group->invoice_customer_contact_id;
+		$invoice_queue->customer_contact_id = $this->invoice_queue_recurring_group->customer_contact_id;
 
-		$invoice_customer_contact = $invoice_queue->invoice_customer_contact;
+		$customer_contact = $invoice_queue->customer_contact;
 
 		$invoice_queue->customer_id = $this->invoice_queue_recurring_group->customer_id;
-		$invoice_queue->article_id = $this->article_id;
+		$invoice_queue->product_type_id = $this->product_type_id;
 
-		$name = $this->name;
+		$description = $this->description;
 
 		$next_run = strtotime($this->invoice_queue_recurring_group->next_run);
 
-		$name = str_replace('%%day%%', date('d', $next_run), $name);
-		$name = str_replace('%%month%%', date('m', $next_run), $name);
-		$name = str_replace('%%year%%', date('Y', $next_run), $name);
-		$name = str_replace('%%period_start%%', date('d-m-Y', $next_run), $name);
-		$name = str_replace('%%period_end%%', date('d-m-Y', strtotime($this->invoice_queue_recurring_group->repeat_every, $next_run)), $name);
-		$name = str_replace('%%day_name%%', date('l', $next_run), $name);
-		$name = str_replace('%%month_name%%', date('F', $next_run), $name);
+		$name = str_replace('%%day%%', date('d', $next_run), $description);
+		$name = str_replace('%%month%%', date('m', $next_run), $description);
+		$name = str_replace('%%year%%', date('Y', $next_run), $description);
+		$name = str_replace('%%period_start%%', date('d-m-Y', $next_run), $description);
+		$name = str_replace('%%period_end%%', date('d-m-Y', strtotime($this->invoice_queue_recurring_group->repeat_every, $next_run)), $description);
+		$name = str_replace('%%day_name%%', date('l', $next_run), $description);
+		$name = str_replace('%%month_name%%', date('F', $next_run), $description);
 
-		$invoice_queue->name = $name;
+		$invoice_queue->description = $description;
 		$invoice_queue->price = $this->price;
+		$invoice_queue->qty = $this->qty;
 
-		$vat = $invoice_customer_contact->get_vat(Vat_Rate::get_by_id(1));
+		$vat = $customer_contact->get_vat(Vat_Rate::get_by_id(1));
 		$invoice_queue->vat = $vat;
 
 		$invoice_queue->save();

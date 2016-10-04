@@ -32,12 +32,16 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
         $pager->add_condition('archived', '=', '0000-00-00 00:00:00');
         $pager->add_sort_permission('id');
 		$pager->add_sort_permission('created');
+		$pager->add_sort_permission('next_run');
+		$pager->add_sort_permission('stop_after');
 		$pager->add_sort_permission('name');
 
 		if (isset($_POST['search'])) {
 			$search_fields = [
 				'invoice_queue_recurring_group.id',
 				'invoice_queue_recurring_group.name',
+				'customer.company',
+				'customer.lastname'
 			];
 			$pager->set_search($_POST['search'], $search_fields);
 		}
@@ -153,6 +157,9 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 		$updated = false;
 
 		if (isset($_POST['invoice_queue_recurring_group'])) {
+			if (isset($_POST['invoice_queue_recurring_group']['run_forever'])) {
+				$_POST['invoice_queue_recurring_group']['stop_after'] = null;
+			}
 			$invoice_queue_recurring_group->load_array($_POST['invoice_queue_recurring_group']);
 			$invoice_queue_recurring_group->save();
 			$updated = true;
@@ -177,6 +184,6 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 		}
 
 		$template->assign('invoice_queue_recurring_group', $invoice_queue_recurring_group);
-		$template->assign('customer_contacts', $invoice_queue_recurring_group->customer->get_active_customer_contacts());
+		$template->assign('product_types', Product_Type::get_all('name'));
 	}
 }

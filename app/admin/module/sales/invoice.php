@@ -185,6 +185,7 @@ class Web_Module_Sales_Invoice extends Module {
 		$template->assign('invoice_queue_items', $invoice_queue_items);
 		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->customer_contact->country));
 		$template->assign('action', 'create_step3');
+		$template->assign('product_types', Product_Type::get_all());
 	}
 
 	/**

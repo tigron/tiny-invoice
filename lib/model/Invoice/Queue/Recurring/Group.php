@@ -8,6 +8,8 @@
  * @author Lionel Laffineur <lionel@tigron.be>
  */
 
+use \Skeleton\Database\Database;
+
 class Invoice_Queue_Recurring_Group {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
@@ -96,7 +98,7 @@ class Invoice_Queue_Recurring_Group {
 	 */
 	public static function get_runnable() {
 		$db = Database::Get();
-		$ids = $db->getCol('SELECT id FROM invoice_queue_recurring_group WHERE archived = "0000-00-00 00:00:00" AND next_run < NOW()', array());
+		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring_group WHERE archived = "0000-00-00 00:00:00" AND next_run < NOW() AND (next_run < stop_after OR stop_after = "0000-00-00 00:00:00")', array());
 		$groups = array();
 		foreach ($ids as $id) {
 			$groups[] = Invoice_Queue_Recurring_Group::get_by_id($id);
@@ -113,7 +115,7 @@ class Invoice_Queue_Recurring_Group {
 	 */
 	public static function get_by_customer_contact(Customer_Contact $customer_contact) {
 		$db = Database::Get();
-		$ids = $db->getCol('SELECT id FROM invoice_queue_recurring_group WHERE archived = "0000-00-00 00:00:00" AND invoice_customer_contact_id = ?', [$customer_contact->id]);
+		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring_group WHERE archived = "0000-00-00 00:00:00" AND invoice_customer_contact_id = ?', [$customer_contact->id]);
 		$groups = array();
 		foreach ($ids as $id) {
 			$groups[] = Invoice_Queue_Recurring_Group::get_by_id($id);
