@@ -6,7 +6,7 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/invoice" title="">{% trans "Invoices" %}</a></li>
+			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
 			<li class="active">{% trans "Details" %}</li>
 		</ol>
 
@@ -38,7 +38,7 @@
 
 					<dt>{% trans "Download PDF" %}</dt>
 					<dd>
-						<a href="/administrative/invoice?action=download&id={{ invoice.id }}">{% trans "Download" %}</a>
+						<a href="/sales/invoice?action=download&id={{ invoice.id }}">{% trans "Download" %}</a>
 					</dd>
 				</dl>
 			</div>
@@ -114,6 +114,7 @@
 							<th class="text-right">{% trans "Subtotal" %}</th>
 						</tr>
 					</thead>
+					<tbody>
 					{% for invoice_item in invoice.get_invoice_items() %}
 						<tr>
 							<td>{{ invoice_item.description|nl2br }}</td>
@@ -137,11 +138,12 @@
 						<td colspan="4"><strong>{% trans "Total incl VAT" %}</strong></td>
 						<td class="text-right"><strong>&euro;{{ invoice.get_price_incl()|number_format }}</strong></td>
 					</tr>
+					</tbody>
 				</table>
 			</div>
 		</div>
 
-		{% include 'administrative/invoice/modal.transfer.twig' with {id: 'add_transfer', 'invoice': invoice}  %}
+		{% include 'sales/invoice/modal.transfer.twig' with {id: 'add_transfer', 'invoice': invoice}  %}
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -178,7 +180,7 @@
 			</div>
 		</div>
 
-		<form class="form-horizontal" action="/administrative/invoice?action=edit&id={{ invoice.id }}" method="post">
+		<form class="form-horizontal" action="/sales/invoice?action=edit&id={{ invoice.id }}" method="post">
 		<div class="panel panel-default">
 			<div class="panel-heading">{% trans "Invoice settings" %}</div>
 			<div class="panel-body">
@@ -253,7 +255,7 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/invoice" title="">{% trans "Invoices" %}</a></li>
+			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
 			<li>{% trans "Create invoice" %}</li>
 			<li class="active">{% trans "Select customer" %}</li>
 		</ol>
@@ -269,7 +271,7 @@
 				{% trans "Select customer" %}
 			</div>
 			<div class="panel-body">
-				<form method="post" action="/administrative/invoice?action=create_step1" class="form-horizontal" id="invoice-create-step1">
+				<form method="post" action="/sales/invoice?action=create_step1" class="form-horizontal" id="invoice-create-step1">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
 						<div class="col-xs-9">
@@ -293,12 +295,12 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/invoice" title="">{% trans "Invoices" %}</a></li>
+			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
 			<li>{% trans "Create invoice" %}</li>
 			<li class="active">{% trans "Select invoice contact" %}</li>
 		</ol>
 
-		{% include 'administrative/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact'} %}
+		{% include 'sales/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact', 'redirect': '/sales/invoice?action=create_step2'} %}
 
 		{% if errors is defined %}
 		<div class="alert alert-danger">
@@ -347,7 +349,7 @@
 					</div>
 				</div>
 
-				<form method="post" action="/administrative/invoice?action=create_step2" id="invoice-create-step2">
+				<form method="post" action="/sales/invoice?action=create_step2" id="invoice-create-step2">
 					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
 					<button class="btn btn-primary">
 						{% trans "Next" %}
@@ -373,7 +375,7 @@
 			});
 
 			function delete_contact(id) {
-				$.get('/administrative/invoice/contact?action=delete&id=' + id, function(data) {
+				$.get('/sales/invoice/contact?action=delete&id=' + id, function(data) {
 					if(data['status'] == 1) {
 						$('#customer-contact-' + id).remove();
 						$('#invoice-create-step2 input').val('');
@@ -389,7 +391,7 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/invoice" title="">{% trans "Invoices" %}</a></li>
+			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
 			<li>{% trans "Create invoice" %}</li>
 			<li class="active">{% trans "Add items" %}</li>
 		</ol>
@@ -400,7 +402,7 @@
 		</div>
 		{% endif %}
 
-		<form method="post" action="/administrative/invoice?action=create_step3">
+		<form method="post" action="/sales/invoice?action=create_step3">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					{% trans "Additional info" %}
@@ -523,7 +525,7 @@
 				{% trans "Filter" %}
 			</div>
 			<div class="panel-body">
-				<form method="post" action="/administrative/invoice" class="form-horizontal">
+				<form method="post" action="/sales/invoice" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
 						<div class="col-xs-9">
@@ -593,7 +595,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="pull-right">
-					<a href="/administrative/invoice?action=create_step1" title="">
+					<a href="/sales/invoice?action=create_step1" title="">
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						{% trans "Add invoice" %}
 					</a>
@@ -608,12 +610,14 @@
 					<tr>
 						<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
 						<th width="10%">{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
-						<th width="20%">{{ pager.create_header('Customer'|trans, 'customer.lastname')|raw }}</th>
+						<th>{{ pager.create_header('Customer'|trans, 'customer.lastname')|raw }}</th>
 						<th width="20%">{{ pager.create_header('Company'|trans, 'customer.company')|raw }}</th>
 						<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
 						<th width="10%" class="text-right">{{ pager.create_header('Price excl'|trans, 'price_excl')|raw }}</th>
 						<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
-						<th style="width: 10%" colspan="3">&nbsp;</th>
+						<th width="30"></th>
+						<th width="30"></th>
+						<th width="30"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -621,7 +625,7 @@
 
 			<tr>
 				<td>
-					<a href="/administrative/invoice?action=edit&id={{ invoice.id }}" title="">
+					<a href="/sales/invoice?action=edit&id={{ invoice.id }}" title="">
 						{{ invoice.number }}
 					</a>
 				</td>
@@ -642,17 +646,17 @@
 				{% endif %}
 				</td>
 				<td>
-					<a href="/administrative/invoice?action=download&id={{ invoice.id }}">
+					<a href="/sales/invoice?action=download&id={{ invoice.id }}">
 						<span class="glyphicon glyphicon-download"></span>
 					</a>
 				</td>
 				<td>
-					<a href="/administrative/invoice?action=send&id={{ invoice.id }}">
+					<a href="/sales/invoice?action=send&id={{ invoice.id }}">
 						<span class="glyphicon glyphicon-envelope"></span>
 					</a>
 				</td>
 				<td class="text-right">
-					<a href="/administrative/invoice?action=edit&id={{ invoice.id }}" title="">
+					<a href="/sales/invoice?action=edit&id={{ invoice.id }}" title="">
 						<span class="glyphicon glyphicon-pencil"></span>
 					</a>
 				</td>

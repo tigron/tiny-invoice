@@ -9,7 +9,7 @@ use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 
-class Web_Module_Administrative_Customer_Contact extends Module {
+class Web_Module_Sales_Customer_Contact extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes
