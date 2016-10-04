@@ -10,7 +10,7 @@ use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 use \Skeleton\Pager\Web\Pager;
 
-class Web_Module_Administrative_Invoice_Queue extends Module {
+class Web_Module_Sales_Invoice_Queue extends Module {
 	/**
 	 * Login required
 	 *
@@ -25,7 +25,7 @@ class Web_Module_Administrative_Invoice_Queue extends Module {
 	 * @access protected
 	 * @var string $template
 	 */
-	protected $template = 'administrative/invoice/queue.twig';
+	protected $template = 'sales/invoice/queue.twig';
 
 	/**
 	 * Display method
