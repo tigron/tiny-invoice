@@ -425,6 +425,7 @@
 					<table class="table table-hover table-striped table-condensed">
 						<thead>
 							<tr>
+								<th>{% trans "Product definition" %}</th>
 								<th width="50%">{% trans "Description" %}</th>
 								<th width="10%">{% trans "Qty" %}</th>
 								<th width="10%">{% trans "Price" %}</th>
@@ -432,7 +433,44 @@
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
-						<tbody id="invoice-items"></tbody>
+						<tbody id="invoice-items">
+							{% for invoice_queue_item in invoice_queue_items %}
+							<tr>
+								<td>
+									<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-control">
+										{% for product_type in product_types %}
+											<option value="{{ product_type.id }}" {% if product_type.id == invoice_queue_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
+										{% endfor %}
+									</select>
+								</td>
+								<td>
+									<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_queue_item.id }}">
+									<textarea class="form-control" name="invoice_item[{{ loop.index }}][description]">{{ invoice_queue_item.description }}</textarea>
+								</td>
+								<td>
+									<input type="text" class="form-control" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_queue_item.qty }}">
+								</td>
+								<td>
+									<input type="text" class="form-control" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_queue_item.price }}">
+								</td>
+								<td>
+									<select name="invoice_item[{{ loop.index }}][vat]" class="form-control">
+									{% for vat_rate in vat_rates %}
+										<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
+									{% endfor %}
+									</select>
+								</td>
+								<td>
+									<div class="form-control-static">
+										<a href="javascript:void(0);" onclick="remove_item($(this));">
+											<span class="glyphicon glyphicon-trash"></span>
+										</a>
+									</div>
+								</td>
+							</tr>
+							{% endfor %}
+
+						</tbody>
 					</table>
 
 					<div class="text-right">
@@ -454,6 +492,13 @@
 		<script type="text/x-handlebars-template" id="new-invoice-item-tmpl">
 			<tr>
 				<td>
+					<select name="invoice_item[((nr))][product_type_id]" class="form-control">
+						{% for product_type in product_types %}
+							<option value="{{ product_type.id }}">{{ product_type.name }}</option>
+						{% endfor %}
+					</select>
+				</td>
+				<td>
 					<input type="hidden" name="invoice_item[((nr))][invoice_queue_id]" value="((invoice_queue_id))">
 					<textarea class="form-control" name="invoice_item[((nr))][description]">((description))</textarea>
 				</td>
@@ -471,22 +516,15 @@
 					</select>
 				</td>
 				<td>
-					<a href="javascript:void(0);" onclick="remove_item($(this));">
-						<span class="glyphicon glyphicon-trash"></span>
-					</a>
+					<div class="form-control-static">
+						<a href="javascript:void(0);" onclick="remove_item($(this));">
+							<span class="glyphicon glyphicon-trash"></span>
+						</a>
+					</div>
 				</td>
 			</tr>
 		</script>
 		<script type="text/javascript">
-
-			$(document).ready(function() {
-				{% for invoice_queue_item in invoice_queue_items %}
-					add_item({'invoice_queue_id': {{ invoice_queue_item.id }}, 'qty': {{ invoice_queue_item.qty }}, 'price': '{{ invoice_queue_item.price }}', 'description': '{{ invoice_queue_item.description|e('js') }}'});
-				{% else %}
-					add_item({});
-				{% endfor %}
-			});
-
 			function add_item(data) {
 
 				items = $('#invoice-items').find('tr input[name*="qty"]');

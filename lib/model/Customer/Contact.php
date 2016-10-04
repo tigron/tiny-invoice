@@ -167,4 +167,24 @@ class Customer_Contact {
 
 		return $items;
 	}
+
+	/**
+	 * Get by Customer
+	 *
+	 * @access public
+	 * @param Customer $customer
+	 * @return array Customer_Contact $items
+	 */
+	public static function get_by_customer(Customer $customer) {
+		$db = Database::get();
+		$table = self::trait_get_database_table();
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE customer_id = ? ORDER BY created DESC', [ $customer->id ]);
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
+		}
+
+		return $items;
+	}
 }

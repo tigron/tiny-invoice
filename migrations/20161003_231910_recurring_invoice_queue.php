@@ -67,6 +67,25 @@ class Migration_20161003_231910_Recurring_invoice_queue extends \Skeleton\Databa
 			);
 		", []);
 
+		$db->query("
+			ALTER TABLE `invoice_queue_recurring`
+			CHANGE `article_id` `product_type_id` int NOT NULL AFTER `invoice_queue_recurring_group_id`;
+		", []);
+
+		$db->query("
+			ALTER TABLE `invoice_item`
+			ADD `product_type_id` int NULL AFTER `invoice_queue_id`;
+		", []);
+
+		$db->query("
+			ALTER TABLE `invoice_queue`
+			ADD `product_type_id` int NOT NULL AFTER `customer_contact_id`;
+		", []);
+
+		$db->query("
+			ALTER TABLE `invoice_queue_recurring_group`
+			ADD `stop_after` datetime NOT NULL AFTER `next_run`;
+		", []);
 
 	}
 

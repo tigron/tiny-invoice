@@ -56,4 +56,14 @@ class Customer {
 		return Customer_Contact::get_active_by_customer($this);
 	}
 
+	/**
+	 * Get invoice contacts
+	 *
+	 * @access public
+	 * @return array Customer_Contact $items
+	 */
+	public function get_customer_contacts() {
+		return Customer_Contact::get_by_customer($this);
+	}
+
 }
