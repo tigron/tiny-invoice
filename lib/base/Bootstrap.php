@@ -52,7 +52,6 @@ class Bootstrap {
 		/**
 		 * Initialize the database
 		 */
-		$database = \Skeleton\Database\Database::Get($config->database_smarty);
 		$database = \Skeleton\Database\Database::Get($config->database, true);
 
 		/**
@@ -122,6 +121,8 @@ class Bootstrap {
 		 * Set the database migration path
 		 */
 		\Skeleton\Database\Migration\Config::$migration_directory = $root_path . '/migrations/';
+		\Skeleton\Database\Migration\Config::$version_storage  = 'database';  // Version will be stored in a database
+		\Skeleton\Database\Migration\Config::$database_table  = 'db_version'; // Version will be stored in this database table
 
 		/**
 		 * Sticky pager
