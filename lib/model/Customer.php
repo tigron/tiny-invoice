@@ -47,6 +47,27 @@ class Customer {
 	}
 
 	/**
+	 * Get display_name
+	 *
+	 * @access public
+	 * @return string $display_name
+	 */
+	public function get_display_name() {
+		$display_name = '';
+		if (!empty($this->details['company'])) {
+			$display_name .= $this->details['company'];
+
+			if (!empty($this->details['firstname']) or !empty($this->details['lastname'])) {
+				$display_name .= ' (' . $this->details['firstname'] . ' ' . $this->details['lastname'] . ')';
+			}
+
+			return $display_name;
+		}
+
+		return $this->details['firstname'] . ' ' . $this->details['lastname'];
+	}
+
+	/**
 	 * Get active invoice contacts
 	 *
 	 * @access public
