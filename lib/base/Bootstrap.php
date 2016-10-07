@@ -115,7 +115,7 @@ class Bootstrap {
 		 * Set the email path
 		 */
 		\Skeleton\Email\Config::$email_directory = $root_path . '/store/email/';
-		\Skeleton\Email\Config::$archive_mailbox = $config->archive_mailbox;
+		\Skeleton\Email\Config::$archive_mailbox = Setting::get_by_name('archive_mailbox')->value;
 
 		/**
 		 * Set the database migration path
