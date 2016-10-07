@@ -113,7 +113,7 @@
 
 	<script type="text/javascript">
 
-		$('#manage-invoice-contact').on('show.bs.modal', function (e) {
+		$('#manage-customer-contact').on('show.bs.modal', function (e) {
 
 			$('#invoice-contact-form input, select').val('');
 			$('.form-group').removeClass('has-error');
@@ -121,10 +121,12 @@
 			current_customer_contact_id = 0;
 
 			var $invoker = $(e.relatedTarget);
+
 			if($invoker.data('customer-contacts') == 0) {
+
 				load_customer_data($invoker.data('customer-id'));
-			} else if($invoker.data('invoice-contact-id')) {
-				load_customer_contact_data($invoker.data('invoice-contact-id'));
+			} else if($invoker.data('customer-contact-id')) {
+				load_customer_contact_data($invoker.data('customer-contact-id'));
 			}
 
 			$('#invoice-contact-form #customer_id').val($invoker.data('customer-id'));
@@ -142,7 +144,7 @@
 		}
 
 		function load_customer_contact_data(id) {
-			$.get('/administrative/invoice/contact?action=load_customer_contact&id=' + id, function(data) {
+			$.get('/sales/customer/contact?action=load_customer_contact&id=' + id, function(data) {
 				$.each(data, function(key, value) {
 					if($('#invoice-contact-form #' + key).length == 1) {
 						$('#invoice-contact-form #' + key).val(value);
@@ -158,9 +160,9 @@
 
 			$('.form-group').removeClass('has-error');
 
-			$.post('/administrative/invoice/contact?action=manage&id=' + current_customer_contact_id, data, function(data) {
+			$.post('/sales/customer/contact?action=manage&id=' + current_customer_contact_id, data, function(data) {
 				if ("id" in data) {
-					window.location = '/administrative/invoice?action=create_step2';
+					window.location = '{{ redirect }}';
 				} else {
 					$('.alert').removeClass('hide');
 					$.each(data, function(key, value) {

@@ -42,7 +42,7 @@ class Web_Module_User extends Module {
 		$pager->add_sort_permission('lastname');
 
 		if (isset($_POST['search'])) {
-			$pager->set_condition('%search%', $_POST['search']);
+			$pager->set_search($_POST['search']);
 		}
 		$pager->page();
 

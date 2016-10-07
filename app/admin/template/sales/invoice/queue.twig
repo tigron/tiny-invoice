@@ -6,7 +6,7 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+			<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
 			<li class="active">{% trans "Edit invoice queue item" %}</li>
 		</ol>
 
@@ -19,7 +19,7 @@
 				{% trans "Invoice queue item details" %}
 			</div>
 			<div class="panel-body">
-				<form method="post" action="/administrative/invoice/queue?action=edit&id={{ invoice_queue.id }}" class="form-horizontal form-condensed">
+				<form method="post" action="/sales/invoice/queue?action=edit&id={{ invoice_queue.id }}" class="form-horizontal form-condensed">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
 						<div class="col-xs-6">
@@ -32,6 +32,18 @@
 							<p class="form-control-static">{{ invoice_queue.customer_contact.firstname }} {{ invoice_queue.customer_contact.lastname }} [ID: {{ invoice_queue.customer_contact_id }}]</p>
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Product definitin" %}</label>
+						<div class="col-xs-9">
+							<select name="invoice_queue[product_type_id]" class="form-control">
+								{% for product_type in product_types %}
+									<option value="{{ product_type.id }}" {% if invoice_queue.product_type_id == product_type.id %}selected{% endif %}>{{ product_type.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Description" %}</label>
 						<div class="col-xs-6">
@@ -78,7 +90,7 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+			<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
 			<li>{% trans "Create invoice queue item" %}</li>
 			<li class="active">{% trans "Select customer" %}</li>
 		</ol>
@@ -94,7 +106,7 @@
 				{% trans "Select customer" %}
 			</div>
 			<div class="panel-body">
-				<form method="post" action="/administrative/invoice/queue?action=create_step1" class="form-horizontal" id="invoice-queue-create-step1">
+				<form method="post" action="/sales/invoice/queue?action=create_step1" class="form-horizontal" id="invoice-queue-create-step1">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
 						<div class="col-xs-6">
@@ -117,12 +129,12 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+			<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
 			<li>{% trans "Create invoice queue item" %}</li>
 			<li class="active">{% trans "Select invoice contact" %}</li>
 		</ol>
 
-		{% include 'administrative/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact'} %}
+		{% include 'sales/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact'} %}
 
 		{% if errors is defined %}
 		<div class="alert alert-danger">
@@ -172,7 +184,7 @@
 					</div>
 				</div>
 
-				<form method="post" action="/administrative/invoice/queue?action=create_step2" id="invoice-queue-create-step2">
+				<form method="post" action="/sales/invoice/queue?action=create_step2" id="invoice-queue-create-step2">
 					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
 					<button class="btn btn-primary">
 						{% trans "Next" %}
@@ -199,7 +211,7 @@
 			});
 
 			function delete_contact(id) {
-				$.get('/administrative/invoice/contact?action=delete&id=' + id, function(data) {
+				$.get('/sales/invoice/contact?action=delete&id=' + id, function(data) {
 					if(data['status'] == 1) {
 						$('#customer-contact-' + id).remove();
 						$('#invoice-queue-create-step2 input').val('');
@@ -215,7 +227,7 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+			<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
 			<li>{% trans "Create invoice queue item" %}</li>
 			<li class="active">{% trans "Add items" %}</li>
 		</ol>
@@ -231,10 +243,11 @@
 				{% trans "Add items" %}
 			</div>
 			<div class="panel-body">
-				<form method="post" action="/administrative/invoice/queue?action=create_step3">
+				<form method="post" action="/sales/invoice/queue?action=create_step3">
 					<table class="table table-hover table-striped table-condensed">
 						<thead>
 							<tr>
+								<th>{% trans "Product definition" %}</th>
 								<th width="50%">{% trans "Description" %}</th>
 								<th width="10%">{% trans "Qty" %}</th>
 								<th width="10%">{% trans "Price" %}</th>
@@ -259,6 +272,12 @@
 
 		<script type="text/x-handlebars-template" id="new-invoice-queue-item-tmpl">
 			<tr>
+				<td>
+					<select name="invoice_queue_item[((nr))][product_type_id]" class="form-control">
+						{% for product_type in product_types %}
+							<option value="{{ product_type.id }}">{{ product_type.name }}</option>
+						{% endfor %}
+					</select>
 				<td>
 					<textarea class="form-control" name="invoice_queue_item[((nr))][description]"></textarea>
 				</td>
@@ -328,7 +347,7 @@
 			</div>
 			<div class="panel-body">
 				{% set conditions = pager.get_conditions() %}
-				<form method="post" action="/administrative/invoice/queue" class="form-horizontal">
+				<form method="post" action="/sales/invoice/queue" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
 						<div class="col-xs-9">
@@ -363,7 +382,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="pull-right">
-					<a href="/administrative/invoice/queue?action=create_step1" title="">
+					<a href="/sales/invoice/queue?action=create_step1" title="">
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						{% trans "Add item" %}
 					</a>
@@ -380,8 +399,10 @@
 						<th>{{ pager.create_header('Processed'|trans, 'processed_to_invoice_item_id')|raw }}</th>
 						<th>{{ pager.create_header('Customer'|trans, 'customer')|raw }}</th>
 						<th>{% trans "Description" %}</th>
+						<th>{{ pager.create_header('Qty'|trans, 'qty')|raw }}</th>
 						<th>{{ pager.create_header('Price'|trans, 'price')|raw }}</th>
-						<th colspan="2">&nbsp;</th>
+						<th width="30">&nbsp;</th>
+						<th width="30">&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -398,15 +419,16 @@
 					</td>
 					<td>{{ invoice_queue.customer.firstname }} {{ invoice_queue.customer.lastname }}{% if invoice_queue.customer.company != '' %} ({{ invoice_queue.customer.company }}){% endif %}</td>
 					<td>{{ invoice_queue.description }}</td>
+					<td>{{ invoice_queue.qty }}</td>
 					<td>&euro;{{ invoice_queue.get_price_excl()|number_format }}</td>
 					<td>
-						<a href="/administrative/invoice/queue?action=edit&id={{ invoice_queue.id }}" title="">
+						<a href="/sales/invoice/queue?action=edit&id={{ invoice_queue.id }}" title="">
 							<span class="glyphicon glyphicon-pencil"></span>
 						</a>
 					</td>
 					<td>
 					{% if not invoice_queue.is_processed() %}
-						<a href="/administrative/invoice?action=create_step1&customer_id={{ invoice_queue.customer.id }}&customer_contact_id={{ invoice_queue.customer_contact.id }}">
+						<a href="/sales/invoice?action=create_step1&customer_id={{ invoice_queue.customer.id }}&customer_contact_id={{ invoice_queue.customer_contact.id }}">
 							<span class="glyphicon glyphicon-play-circle"><span>
 						</a>
 					{% endif %}
@@ -416,6 +438,7 @@
 			{% if loop.last %}
 				</tbody>
 				</table>
+				{{ pager.links|raw }}
 			{% endif %}
 
 			{% else %}

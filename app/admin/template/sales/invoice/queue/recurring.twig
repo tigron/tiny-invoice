@@ -1,0 +1,614 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+
+	{% if action == 'edit' %}
+		<ol class="breadcrumb">
+			<li>{% trans "Sales" %}</li>
+			<li><a href="?">{% trans "Recurring invoice queue" %}</a></li>
+			<li class="active">{% trans "Edit recurring invoice queue" %}</li>
+		</ol>
+
+		{% if env.sticky_session.message == 'updated' %}
+			<div class="alert alert-success">
+				{% trans "The invoice queue has been updated." %}
+			</div>
+		{% elseif env.sticky_session.message == 'removed' %}
+			<div class="alert alert-warning">
+				{% trans "The selected element has been removed." %}
+			</div>
+		{% endif %}
+
+		<form class="form-horizontal form-condensed" method="post" action="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Edit recurring invoice queue" %}
+			</div>
+			<div class="panel-body">
+				<div class="col-md-6">
+					<div class="form-group {% if errors.name is defined %}has-error{% endif %}">
+						<label class="col-xs-3 control-label">{% trans "Name" %}</label>
+						<div class="col-xs-5">
+							<input type="text" class="form-control" id="alias" name="invoice_queue_recurring_group[name]" value="{{ invoice_queue_recurring_group.name }}">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Repeat" %}</label>
+						<div class="col-xs-5">
+							<select class="form-control" name="invoice_queue_recurring_group[repeat_every]">
+								<option value="+1 day"{% if invoice_queue_recurring_group.repeat_every == '+1 day' %} selected="selected"{% endif %}>{% trans "Every day" %}</option>
+								<option value="+1 week"{% if invoice_queue_recurring_group.repeat_every == '+1 week' %} selected="selected"{% endif %}>{% trans "Every week" %}</option>
+								<option value="+1 month"{% if invoice_queue_recurring_group.repeat_every == '+1 month' %} selected="selected"{% endif %}>{% trans "Every month" %}</option>
+								<option value="+3 months"{% if invoice_queue_recurring_group.repeat_every == '+3 months' %} selected="selected"{% endif %}>{% trans "Every 3 months" %}</option>
+								<option value="+1 year"{% if invoice_queue_recurring_group.repeat_every == '+1 year' %} selected="selected"{% endif %}>{% trans "Every year" %}</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Next run" %}</label>
+						<div class="col-xs-5">
+							<input type="text" class="form-control datepicker" name="invoice_queue_recurring_group[next_run]" id="date_start" value="{{ invoice_queue_recurring_group.next_run }}">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Run forever" %}</label>
+						<div class="col-xs-9"><input type="checkbox" id="run_forever" name="invoice_queue_recurring_group[run_forever]" data-group-cls="btn-group-xs" {% if invoice_queue_recurring_group.stop_after == '0000-00-00 00:00:00' %}checked{% endif %} onchange="toggle_run_forever();"></div>
+					</div>
+
+					<div class="form-group" id="stop_after">
+						<label class="col-xs-3 control-label">{% trans "Stop after" %}</label>
+						<div class="col-xs-9">
+							<input type="text" class="form-control datepicker" name="invoice_queue_recurring_group[stop_after]" value="{{ invoice_queue_recurring_group.stop_after }}">
+						</div>
+					</div>
+
+					<script type="text/javascript">
+						function toggle_run_forever() {
+							if ($('#run_forever').is(':checked')) {
+								$('#stop_after').addClass('hide');
+							} else {
+								$('#stop_after').removeClass('hide');
+							}
+						}
+						toggle_run_forever();
+					</script>
+
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Created" %}</label>
+						<div class="col-xs-5">
+							<p class="form-control-static">{{ invoice_queue_recurring_group.created|date }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Total" %}</label>
+						<div class="col-xs-5">
+							<p class="form-control-static">&euro;{{ invoice_queue_recurring_group.get_total_price()|number_format }}</p>
+						</div>
+					</div>
+				</div>
+
+				{% set customer_contacts = invoice_queue_recurring_group.customer.get_customer_contacts() %}
+
+				<div class="col-md-6">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+						<div class="col-xs-5">
+							<p class="form-control-static">{{ invoice_queue_recurring_group.customer.firstname }} {{ invoice_queue_recurring_group.customer.lastname }}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Invoice contact" %}</label>
+						<div class="col-xs-5">
+							<select class="form-control" name="invoice_queue_recurring_group[customer_contact_id]" id="invoice_contact" onchange="javascript:update_invoice_contact()">
+								{% for customer_contact in customer_contacts %}
+									<option value="{{ customer_contact.id }}" {% if customer_contact.id == invoice_queue_recurring_group.customer_contact_id %}selected="selected"{% endif %}>
+										{{ customer_contact.firstname }} {{ customer_contact.lastname }}{% if not customer_contact.active %} [{% trans "inactive" %}]{% endif %}
+									</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-5 col-xs-offset-3">
+
+
+						{% for customer_contact in customer_contacts %}
+						<address {% if customer_contact.id != invoice_queue_recurring_group.customer_contact_id %}class="hide"{% endif %} id="customer_contact_{{ customer_contact.id }}">
+							{% if customer_contact.company == '' %}
+								<strong>{{ customer_contact.firstname }} {{ customer_coontact.lastname }}
+							{% elseif customer_contact.firstname == '' and customer_contact.lastname == '' %}
+								<strong>{{ customer_contact.company }}</strong>
+							{% else %}
+								<strong>{{ customer_contact.firstname }} {{ customer_contact.lastname }} ({{ customer_contact.company }})</strong>
+							{% endif %}
+							<br />
+							{{ customer_contact.street }} {{ customer_contact.housenumber }}<br />
+							{{ customer_contact.zipcode }} {{ customer_contact.city }}<br />
+							{% if customer_contact.vat != '' %}
+								{{ customer_contact.country.iso2 }} {{ customer_contact.vat }} <br />
+							{% endif %}
+							{{ customer_contact.email }}
+						</address>
+						{% endfor %}
+
+
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Queue content" %}
+				<div class="pull-right">
+					<a href="javascript:add_queue_item();"">
+						<div class="glyphicon glyphicon-plus"></div> {% trans "Add item" %}
+					</a>
+				</div>
+			</div>
+			<div class="panel-body">
+
+				<table id="queue_items_table" class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th width="350">{% trans "Product definition" %}</th>
+							<th>{% trans "Description" %}</th>
+							<th width="150">{% trans "VAT" %}</th>
+							<th width="150">{% trans "Quantity" %}</th>
+							<th width="150">{% trans "Price" %}</th>
+							<th width="30">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for invoice_queue_recurring in invoice_queue_recurring_group.get_invoice_queue_recurring() %}
+						<tr>
+							<td>{{ invoice_queue_recurring.product_type.name }}</td>
+							<td>{{ invoice_queue_recurring.description|truncate(50, true) }}</td>
+							<td>{{ invoice_queue_recurring.vat }}%</td>
+							<td>{{ invoice_queue_recurring.qty }}</td>
+							<td>&euro;{{ invoice_queue_recurring.price|number_format }}</td>
+							<td>
+								<a href="/sales/invoice/queue/recurring?action=delete_queue_element&id={{ invoice_queue_recurring.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this item" %}">
+									<span class="glyphicon glyphicon-trash"></span>
+								</a>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="col-xs-12">
+			<div class="form-group">
+				<div class="pull-right">
+					<button type="submit" class="btn btn-primary">
+						{% trans "Save" %}
+					</button>
+				</div>
+			</div>
+		</div>
+
+		</form>
+
+		<script>
+			function update_invoice_contact() {
+				contact_id = $('#invoice_contact').val()
+				$('address').addClass('hide');
+				$('address#customer_contact_' + contact_id).removeClass('hide');
+			}
+
+			function add_queue_item() {
+				var key = $("#queue_items_table").find("tr").length;
+				var context = { key: key };
+				var source = $("#cloneable").html();
+				Handlebars.setDelimiter('(',')');
+				var template = Handlebars.compile(source);
+				var html = template(context);
+				$("#queue_items_table tbody").append(html);
+			}
+		</script>
+		<script id="cloneable" type="text/x-handlebars-template">
+			<tr>
+				<td>
+					<select name="queue_item[product_type_id][]" class="form-control">
+					{% for product_type in product_types %}
+						<option value="{{ product_type.id }}">{{ product_type.name }}</option>
+					{% endfor %}
+					</select>
+				</td>
+				<td>
+					<textarea name="queue_item[description][]" class="form-control autoresize"></textarea>
+				</td>
+				<td>
+					<select name="queue_item[vat][]" class="form-control">
+						<option value="6">6%</option>
+						<option value="12">12%</option>
+						<option value="21" selected>21%</option>
+					</select>
+				</td>
+				<td>
+					<input type="text" class="form-control" name="queue_item[qty][]" />
+				</td>
+				<td>
+					<input type="text" name="queue_item[price][]" class="form-control"/>
+				</td>
+				<td>
+					<div class="form-control-static">
+						<a href="javascript:void(0);" onclick="remove_queue_item($(this));" title="{% trans "Delete" %}"><span class="glyphicon glyphicon-trash"></span></a>
+					</div>
+				</td>
+			</tr>
+		</script>
+
+	{% elseif action == 'add_step3' %}
+		<ol class="breadcrumb">
+			<li>{% trans "Sales" %}</li>
+			<li><a href="?">{% trans "Recurring invoice queue" %}</a></li>
+			<li class="active">{% trans "Add invoice queue step 3" %}</li>
+		</ol>
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Step 3: Queue name and content" %}</div>
+			<div class="panel-body">
+				<form class="form form-horizontal form-condensed" method="post" action="?action=add_step3">
+					<div class="alert alert-info" id="error" style="display: none;">{% trans "If you make any changes to this contact, existing invoices for this contact will retain the original contact-information" %}.</div>
+					{% if errors|length > 0 %}
+						<div class="alert alert-danger">
+							{% trans "Some fields were filled in incorrectly." %} {% trans "Your modifications were not saved." %} {% trans "Please correct them and save again." %}
+						</div>
+					{% endif %}
+					<div class="form-group {% if errors.name is defined %}has-error{% endif %}">
+						<label class="col-xs-3 control-label">{% trans "Name" %}</label>
+						<div class="col-xs-5">
+							<input type="text" class="form-control" name="invoice_queue_recurring_group[name]">
+						</div>
+					</div>
+					<div class="form-group {% if errors.repeat_every is defined %}has-error{% endif %}">
+						<label class="col-xs-3 control-label">{% trans "Repeat" %}</label>
+						<div class="col-xs-5">
+							<select class="form-control" name="invoice_queue_recurring_group[repeat_every]">
+								<option value="+1 day">{% trans "Every day" %}</option>
+								<option value="+1 week">{% trans "Every week" %}</option>
+								<option value="+1 month">{% trans "Every month" %}</option>
+								<option value="+3 months">{% trans "Every 3 months" %}</option>
+								<option value="+1 year">{% trans "Every year" %}</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group {% if errors.next_run is defined %}has-error{% endif %}">
+						<label class="col-xs-3 control-label">{% trans "Start date" %}</label>
+						<div class="col-xs-5">
+							<input type="datetime" class="form-control datepicker" name="invoice_queue_recurring_group[next_run]">
+						</div>
+					</div>
+					<div class="pull-right">
+						<button type="submit" class="btn btn-primary">{% trans "Next" %}</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	{% elseif action == 'add_step2' %}
+		<ol class="breadcrumb">
+			<li>{% trans "Sales" %}</li>
+			<li><a href="?">{% trans "Recurring invoice queue" %}</a></li>
+			<li class="active">{% trans "Add invoice queue step 2" %}</li>
+		</ol>
+
+		{% include 'sales/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue/recurring?action=add_step2'} %}
+
+		{% if errors is defined %}
+		<div class="alert alert-danger">
+			{% trans "Please select an invoice contact." %}
+		</div>
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Select a invoice contact" %}
+			</div>
+			<div class="panel-body">
+				<div class="row">
+				{% for customer_contact in customer_contacts %}
+					<div class="col-xs-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
+						<div class="panel panel-default">
+							<div class="panel-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
+								<div class="actions hide">
+									<a href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</a>
+									<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
+										<span class="glyphicon glyphicon-trash"></span>
+									</a>
+
+								</div>
+
+								{% if customer_contact.company != '' %}{{ customer_contact.company }}<br>{% endif %}
+								{{ customer_contact.firstname }} {{ customer_contact.lastname }}<br>
+								{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
+								{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
+								{{ customer_contact.country.name }}
+								{% if customer_contact.vat != '' %}<br>{{ customer_contact.get_vat_formatted() }}{% endif %}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+					<div class="col-xs-3">
+						<div class="panel panel-default">
+							<div class="panel-body text-center">
+								<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
+									{% trans "Create new" %}
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<form method="post" action="/sales/invoice/queue/recurring?action=add_step2">
+					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
+					<button class="btn btn-primary">
+						{% trans "Next" %}
+					</button>
+				</form>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+
+			$('.customer_contact').on({
+				mouseenter: function() {
+					$(this).find('.actions').toggleClass('hide');
+				},
+				mouseleave: function() {
+					$(this).find('.actions').toggleClass('hide');
+				},
+				click: function() {
+					$('.customer_contact').find('.panel-body').removeClass('bg-info');
+					$(this).find('.panel-body').first().addClass('bg-info');
+					$('#invoice-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
+				}
+			});
+
+			function delete_contact(id) {
+				$.get('/sales/invoice/contact?action=delete&id=' + id, function(data) {
+					if(data['status'] == 1) {
+						$('#customer-contact-' + id).remove();
+						$('#invoice-create-step2 input').val('');
+					} else {
+						alert('Error deleting contact');
+					}
+				}, 'json');
+			}
+
+		</script>
+
+
+
+	{% elseif action == 'add_step1' %}
+		<ol class="breadcrumb">
+			<li>{% trans "Sales" %}</li>
+			<li><a href="?">{% trans "Recurring invoice queue" %}</a></li>
+			<li class="active">{% trans "Add invoice queue step 1" %}</li>
+		</ol>
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Step 1: Choose customer" %}</div>
+			<div class="panel-body">
+				<form class="form form-horizontal" method="post" action="?action=add_step1" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+						<div class="col-xs-9">
+							<input type="text" id="autocomplete_customer" name="customer" class="form-control typeahead" value="{% if env.session.invoice.customer_id > 0 %}{{ env.session.invoice.customer.firstname }} {{ env.session.invoice.customer.lastname }}{% endif %}" placeholder="{% trans "Search customer" %}...">
+							<input type="hidden" id="customer_id" name="customer_id" value="{% if env.session.invoice.customer_id > 0 %}{{ env.session.invoice.customer.id }}{% endif %}">
+						</div>
+					</div>
+					<div class="pull-right">
+						<button type="submit" class="btn btn-primary">{% trans "Next" %}</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	{% elseif action == 'edit' %}
+		<ol class="breadcrumb">
+			<li>{% trans "Sales" %}</li>
+			<li><a href="?">{% trans "Recurring invoice queue" %}</a></li>
+			<li class="active">{{ invoice_queue.name }}</li>
+		</ol>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Edit recurring invoice queue" %}</div>
+			<div class="panel-body">
+				<form class="form form-horizontal" method="post" action="?action=edit&id={{ invoice_queue.id }}">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Invoice to" %}</label>
+							<div class="col-xs-5"><p class="form-control-static">{{ invoice_queue.customer.person.firstname }} {{ invoice_queue.customer.person.lastname }} ({{ invoice_queue.customer.person.company }})</p></div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Invoice contact" %}</label>
+						<div class="col-xs-5"><p class="form-control-static">{{ invoice_queue.invoice_customer_contact.customer.firstname }} {{ invoice_queue.invoice_customer_contact.customer.lastname }} ({{ invoice_queue.invoice_customer_contact.customer.company }})</p></div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Name" %}</label>
+						<div class="col-xs-5"><input type="text" class="form-control" name="invoice_queue[name]" value="{{ invoice_queue.name }}" /></div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Price" %}&nbsp;(&euro;)</label>
+						<div class="col-xs-5"><p class="form-control-static">{{ invoice_queue.get_total_price() }}</p></div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Added to queue" %}</label>
+						<div class="col-xs-5"><p class="form-control-static">{{ invoice_queue.created }}</p></div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Processed to invoice" %}</label>
+							<div class="col-xs-5">
+							<p class="form-control-static">
+								{% if invoice_queue.processed_to_invoice_item_id > 0 %}
+									{% trans "Invoice" %} <a href="/sales/invoice?action=edit&id={{ invoice_queue.processed_to_invoice_item.invoice_id }}" title="{% trans "Invoice" %}">{{ invoice_queue.processed_to_invoice_item.invoice_id }}</a>
+								{% else %}
+									{% trans "Not yet processed" %}.
+								{% endif %}
+							</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-5 col-xs-offset-3">
+							<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	{% else %}
+		<ol class="breadcrumb">
+			<li>{% trans "Sales" %}</li>
+			<li class="active">{% trans "Recurring invoice queue" %}</li>
+		</ol>
+
+		<form class="form-horizontal" method="post" action="/sales/invoice/queue/recurring">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{% trans "Filter" %}
+
+					<span class="pull-right">
+						<a href="?action=add_step1">
+							<i class="fa fa-plus"></i> {% trans "Create recurring invoice queue" %}
+						</a>
+					</span>
+
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="control-label col-xs-3">{% trans "Search" %}</label>
+							<div class="col-xs-5">
+							<input type="text" class="form-control" name="search" value="{{ pager.get_search() }}" data-default="" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<div class="controls col-xs-offset-3 col-xs-5">
+							<button class="btn btn-primary" type="submit">
+								{% trans "Search" %}
+							</button>
+
+							<button class="btn btn-default" type="reset">
+								{% trans "Reset" %}
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+		{% for queue in pager.items %}
+			{% if loop.first %}
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{{ base.pager_count(pager.item_count) }}
+				</div>
+				<div class="panel-body">
+					<table class="table table-striped table-hover table-condensed">
+					<thead>
+						<tr>
+							<th width="50">{{ pager.create_header('Id'|trans, 'id')|raw }}</th>
+							<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+							<th>{{ pager.create_header('Next run'|trans, 'next_run')|raw }}</th>
+							<th>{{ pager.create_header('Stop after'|trans, 'stop_after')|raw }}</th>
+							<th>{{ pager.create_header('Customer'|trans, 'customer_id')|raw }}</th>
+							<th>{{ pager.create_header('Contact'|trans, 'invoice_customer_contact_id')|raw }}</th>
+							<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
+							<th class="text-right">{{ pager.create_header('Price'|trans, 'price')|raw }}</th>
+							<th width="20">&nbsp;</th>
+							<th width="30"></th>
+							<th width="30"></th>
+						</tr>
+					</thead>
+					<tbody>
+			{% endif %}
+
+			<tr {% if queue.next_run >= queue.stop_after and queue.stop_after != '0000-00-00 00:00:00' %}class="warning"{% endif %}>
+				<td>{{ queue.id }}</td>
+				<td>{{ queue.created|date("d/m/Y") }}</td>
+				<td>{{ queue.next_run|date("d/m/Y") }}</td>
+				<td>{% if queue.stop_after == '0000-00-00 00:00:00' %}<i>{% trans "never" %}</i>{% else %}{{ queue.next_run|date("d/m/Y") }}{% endif %}</td>
+				<td><a href="/administrative/customer/detail?id={{  queue.customer.id }}">{{ queue.customer.firstname }} {{ queue.customer.lastname }} ({{ queue.customer.company }})</a></td>
+				<td>{{ queue.customer_contact.firstname }} {{ queue.customer_contact.lastname }} ({{ queue.customer_contact.company }})</td>
+				<td>{{ queue.name|truncate(50, true) }}</td>
+				<td class="text-right">&euro;&nbsp;{{ queue.get_total_price()|number_format }}</td>
+				<td>&nbsp;</td>
+				<td>
+					<a href="/sales/invoice/queue/recurring?action=edit&id={{ queue.id }}">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</a>
+				</td>
+				<td>
+					<a href="/sales/invoice/queue/recurring?action=delete&id={{ queue.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete the recurring invoice queue selected" %}?">
+						<span class="glyphicon glyphicon-remove" /></span>
+					</a>
+				</td>
+			</tr>
+
+			{% if loop.last %}
+					</tbody>
+					</table>
+
+					{{ pager.links|raw }}
+				</div>
+				</div>
+			{% endif %}
+		{% else %}
+			{% trans "Nothing found." %}
+		{% endfor %}
+
+	{% endif %}
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+{% if action == 'add_step1' %}
+	<script type="text/javascript" src="/bloodhound.min.js"></script>
+	<script type="text/javascript" src="/typeahead.min.js"></script>
+	<script type="text/javascript">
+
+		var customers = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			remote: '/administrative/customer?action=ajax_search&search=%QUERY'
+		});
+
+		customers.initialize();
+
+		$('#autocomplete_customer').typeahead({
+			hint: true,
+			highlight: true,
+			minLength: 2
+		},{
+			name:	'customer',
+			displayKey: 'value',
+			source:	customers.ttAdapter()
+		});
+		$('#autocomplete_customer').on('typeahead:selected typeahead:autocompleted', function(e,data) {
+			$('#customer_id').val(data.id);
+		});
+	</script>
+{% elseif action == 'create_step3' %}
+	<script type="text/javascript" src="/handlebars/handlebars.js"></script>
+{% endif %}
+
+{% endblock javascript %}
+
+
+{% block head %}
+
+	{% if action == 'add_step1' %}
+		<link rel="stylesheet" type="text/css" href="/typeahead.css">
+	{% endif %}
+
+{% endblock head %}

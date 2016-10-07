@@ -10,7 +10,7 @@ use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 use \Skeleton\Pager\Web\Pager;
 
-class Web_Module_Administrative_Invoice extends Module {
+class Web_Module_Sales_Invoice extends Module {
 	/**
 	 * Login required
 	 *
@@ -25,7 +25,7 @@ class Web_Module_Administrative_Invoice extends Module {
 	 * @access protected
 	 * @var string $template
 	 */
-	protected $template = 'administrative/invoice.twig';
+	protected $template = 'sales/invoice.twig';
 
 	/**
 	 * Display method
@@ -87,7 +87,7 @@ class Web_Module_Administrative_Invoice extends Module {
 		if (isset($_GET['customer_id']) AND isset($_GET['customer_contact_id'])) {
 			$_SESSION['invoice']->customer_id = $_GET['customer_id'];
 			$_SESSION['invoice']->customer_contact_id = $_GET['customer_contact_id'];
-			Session::redirect('/administrative/invoice?action=create_step3');
+			Session::redirect('/sales/invoice?action=create_step3');
 		}
 
 		if (isset($_POST['customer_id'])) {
@@ -95,7 +95,7 @@ class Web_Module_Administrative_Invoice extends Module {
 				$template->assign('errors', 'select_customer');
 			} else {
 				$_SESSION['invoice']->customer_id = $_POST['customer_id'];
-				Session::redirect('/administrative/invoice?action=create_step2');
+				Session::redirect('/sales/invoice?action=create_step2');
 			}
 		}
 
@@ -115,7 +115,7 @@ class Web_Module_Administrative_Invoice extends Module {
 				$template->assign('errors', 'select_customer_contact');
 			} else {
 				$_SESSION['invoice']->customer_contact_id = $_POST['customer_contact_id'];
-				Session::redirect('/administrative/invoice?action=create_step3');
+				Session::redirect('/sales/invoice?action=create_step3');
 			}
 		}
 
@@ -175,7 +175,7 @@ class Web_Module_Administrative_Invoice extends Module {
 
 				unset($_SESSION['invoice']);
 
-				Session::redirect('/administrative/invoice');
+				Session::redirect('/sales/invoice');
 
 			}
 
@@ -185,6 +185,7 @@ class Web_Module_Administrative_Invoice extends Module {
 		$template->assign('invoice_queue_items', $invoice_queue_items);
 		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->customer_contact->country));
 		$template->assign('action', 'create_step3');
+		$template->assign('product_types', Product_Type::get_all());
 	}
 
 	/**
@@ -201,7 +202,7 @@ class Web_Module_Administrative_Invoice extends Module {
 			$invoice->save();
 
 			Session::set_sticky('message', 'updated');
-			Session::redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
+			Session::redirect('/sales/invoice?action=edit&id=' . $invoice->id);
 		}
 
 		if (isset($_POST['transfer'])) {
@@ -218,7 +219,7 @@ class Web_Module_Administrative_Invoice extends Module {
 	 */
 	public function display_add_transfer() {
 		if (!isset($_GET['id']) || $_POST['transfer']['amount'] == '') {
-			Session::redirect('/administrative/invoice');
+			Session::redirect('/sales/invoice');
 		}
 
 		$invoice = Invoice::get_by_id($_GET['id']);
@@ -231,7 +232,7 @@ class Web_Module_Administrative_Invoice extends Module {
 
 		$invoice->add_transfer($transfer);
 
-		Session::redirect('/administrative/invoice?action=edit&id=' . $invoice->id);
+		Session::redirect('/sales/invoice?action=edit&id=' . $invoice->id);
 	}
 
 	/**
@@ -255,7 +256,7 @@ class Web_Module_Administrative_Invoice extends Module {
 		$invoice->send_invoice_email();
 
 		Session::set_sticky('message', 'invoice_sent');
-		Session::redirect('/administrative/invoice');
+		Session::redirect('/sales/invoice');
 	}
 
 }

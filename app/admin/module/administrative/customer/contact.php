@@ -75,19 +75,20 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 			Session::redirect('/administrative/customer/contact?id=' . $customer->id);
 		}
 
-		if ($updated AND isset($_POST['customer_contact_id']) AND $_POST['customer_contact_id'] != 0 AND $customer_contact->validate()) {
+		if ($updated AND isset($_POST['customer_contact_id']) AND $_POST['customer_contact_id'] != 0) {
 			$customer_contact->active = false;
 			$customer_contact->save(false);
 		}
 
-		$customer_contact = new Customer_Contact();
-		$customer_contact->load_array($_POST['customer_contact']);
-		$customer_contact->customer_id = $customer->id;
-		if ($customer_contact->validate($errors)) {
-			$customer_contact->save();
+		$new_customer_contact = new Customer_Contact();
+		$new_customer_contact->load_array($_POST['customer_contact']);
+		$new_customer_contact->customer_id = $customer->id;
+		$new_customer_contact->active = true;
+		if ($new_customer_contact->validate($errors)) {
+			$new_customer_contact->save();
 
-			Session::set_sticky('message', 'contact_updated');
-			Session::set_sticky('updated_customer_contact_id', $customer_contact->id);
+			Session::set_sticky('message', 'customer_contact_updated');
+			Session::set_sticky('updated_customer_contact_id', $new_customer_contact->id);
 			Session::redirect('/administrative/customer/contact?id=' . $customer->id);
 		} else {
 			$template = Template::Get();
@@ -95,7 +96,6 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 			$template->assign('action', 'edit');
 
 			$this->display();
-
 		}
 	}
 }
