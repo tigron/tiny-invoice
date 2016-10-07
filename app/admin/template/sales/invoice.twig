@@ -628,6 +628,10 @@
 			{% else %}
 				{{ base.display_flash_message(env.sticky_session.message, 'invoice') }}
 			{% endif %}
+		{% elseif env.sticky_session.message_sent_error is defined %}
+			<div class="alert alert-danger alert-dismissable">
+				{{ env.sticky_session.message_sent_error }}
+			</div>
 		{% endif %}
 
 		<div class="panel panel-default">
@@ -649,7 +653,6 @@
 						<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
 						<th width="10%">{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
 						<th>{{ pager.create_header('Customer'|trans, 'customer.lastname')|raw }}</th>
-						<th width="20%">{{ pager.create_header('Company'|trans, 'customer.company')|raw }}</th>
 						<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
 						<th width="10%" class="text-right">{{ pager.create_header('Price excl'|trans, 'price_excl')|raw }}</th>
 						<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
@@ -670,10 +673,9 @@
 				<td>{{ invoice.created|date }}</td>
 				<td>
 					<a href="/administrative/customer?action=edit&id={{ invoice.customer.id }}" title="">
-						{{ invoice.customer.firstname }} {{ invoice.customer.lastname }}
+						{{ invoice.customer.get_display_name }}
 					</a>
 				</td>
-				<td>{{ invoice.customer.company }}</td>
 				<td class="text-right">€{{ invoice.price_incl|number_format }}</td>
 				<td class="text-right">€{{ invoice.price_excl|number_format }}</td>
 				<td>

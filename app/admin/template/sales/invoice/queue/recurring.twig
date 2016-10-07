@@ -536,8 +536,8 @@
 				<td>{{ queue.created|date("d/m/Y") }}</td>
 				<td>{{ queue.next_run|date("d/m/Y") }}</td>
 				<td>{% if queue.stop_after == '0000-00-00 00:00:00' %}<i>{% trans "never" %}</i>{% else %}{{ queue.next_run|date("d/m/Y") }}{% endif %}</td>
-				<td><a href="/administrative/customer/detail?id={{  queue.customer.id }}">{{ queue.customer.firstname }} {{ queue.customer.lastname }} ({{ queue.customer.company }})</a></td>
-				<td>{{ queue.customer_contact.firstname }} {{ queue.customer_contact.lastname }} ({{ queue.customer_contact.company }})</td>
+				<td><a href="/administrative/customer/detail?id={{  queue.customer.id }}">{{ queue.customer.get_display_name() }}</a></td>
+				<td>{{ queue.customer_contact.get_display_name() }}</td>
 				<td>{{ queue.name|truncate(50, true) }}</td>
 				<td class="text-right">&euro;&nbsp;{{ queue.get_total_price()|number_format }}</td>
 				<td>&nbsp;</td>
