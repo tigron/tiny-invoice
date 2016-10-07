@@ -83,11 +83,11 @@
 		<div class="alert alert-success">
 			{% trans "Customer contact was updated." %}
 		</div>
-	{% elseif env.sticky_session.message == 'customer_contact_no_update' %}
+	{% elseif env.sticky_session.message == 'contact_no_update' %}
 		<div class="alert alert-info">
 			{% trans "No changes have been made to the selected customer contact." %}
 		</div>
-	{% elseif env.sticky_session.message == 'customer_contact_removed' %}
+	{% elseif env.sticky_session.message == 'contact_removed' %}
 		<div class="alert alert-success">
 			{% trans "The selected customer contact has been archived." %}
 		</div>
@@ -103,11 +103,7 @@
 				<optgroup label="{% trans "Existing contacts" %}">
 					{% for customer_contact in customer_contacts %}
 						<option value="{{ customer_contact.id }}" {% if env.post.customer_contact_id == customer_contact.id or env.sticky_session.updated_customer_contact_id == customer_contact.id %}selected{% endif %}>
-							{% if customer_contact.alias != '' %}
-								({{ customer_contact.alias }}) {{ customer_contact.firstname }} {{ customer_contact.lastname }}
-							{% else %}
-								{{ customer_contact.firstname }} {{ customer_contact.lastname }}
-							{% endif %}
+							{{ customer_contact.get_display_name() }}
 						</option>
 					{% endfor %}
 				</optgroup>
