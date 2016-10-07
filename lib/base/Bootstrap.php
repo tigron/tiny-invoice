@@ -52,6 +52,7 @@ class Bootstrap {
 		/**
 		 * Initialize the database
 		 */
+		$database = \Skeleton\Database\Database::Get($config->database_smarty);
 		$database = \Skeleton\Database\Database::Get($config->database, true);
 
 		/**
