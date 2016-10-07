@@ -170,7 +170,6 @@ class Web_Module_Sales_Invoice extends Module {
 						$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
 						$invoice_queue->save();
 					}
-
 				}
 
 				unset($_SESSION['invoice']);
@@ -253,9 +252,13 @@ class Web_Module_Sales_Invoice extends Module {
 	 */
 	public function display_send() {
 		$invoice = Invoice::get_by_id($_GET['id']);
-		$invoice->send_invoice_email();
+		try {
+			$invoice->send_invoice_email();
+			Session::set_sticky('message', 'invoice_sent');
+		} catch (Exception $e) {
+			Session::set_sticky('message_sent_error', $e->getMessage());
+		}
 
-		Session::set_sticky('message', 'invoice_sent');
 		Session::redirect('/sales/invoice');
 	}
 
