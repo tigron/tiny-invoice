@@ -51,22 +51,23 @@ class Export_Payment_Sepa extends Export {
 		$debtor->street = Setting::get_by_name('street')->value;
 		$debtor->housenumber = Setting::get_by_name('housenumber')->value;
 
+		// Create a payment
+		$payment = new \Tigron\Sepa\Payment();
+		$payment->paymentInformationIdentification = 'document_' . $document->id;
+
+		$document_date = new DateTime($document->date);
+		$now = new DateTime();
+
+		if ($document_date < $now) {
+			$document_date = $now;
+		}
+
+		$payment->requestedExecutionDate = $document_date;
+		$payment->debtorAccount = Setting::get_by_name('iban')->value;
+		$payment->debtorAgent = Setting::get_by_name('bic')->value;
+		$payment->debtor = $debtor;
+
 		foreach ($documents as $document) {
-			// Create a payment
-			$payment = new \Tigron\Sepa\Payment();
-			$payment->paymentInformationIdentification = 'document_' . $document->id;
-
-			$document_date = new DateTime($document->date);
-			$now = new DateTime();
-
-			if ($document_date < $now) {
-				$document_date = $now;
-			}
-
-			$payment->requestedExecutionDate = $document_date;
-			$payment->debtorAccount = Setting::get_by_name('iban')->value;
-			$payment->debtorAgent = Setting::get_by_name('bic')->value;
-			$payment->debtor = $debtor;
 
 			// Create a transaction
 			$supplier = $document->supplier;
@@ -91,7 +92,15 @@ class Export_Payment_Sepa extends Export {
 			}
 
 			$payment->transactions[] = $transaction;
-			$credit->payments[] = $payment;
+		}
+
+		$credit->payments[] = $payment;
+
+		if ($data['mark_paid']) {
+			foreach ($documents as $document) {
+				$document->paid = true;
+				$document->save();
+			}
 		}
 
 		$xml = $credit->render();
