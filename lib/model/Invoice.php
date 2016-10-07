@@ -236,8 +236,13 @@ class Invoice {
 	 */
 	public function send_invoice_email() {
 		$mail = new Email('invoice', $this->customer_contact->language);
-		$mail->add_to($this->customer_contact->email, $this->customer_contact->firstname . ' ' . $this->customer_contact->lastname);
-		if ($this->customer_contact->email != $this->customer->email) {
+		if ($this->customer_contact->email != '') {
+			$mail->add_to($this->customer_contact->email, $this->customer_contact->firstname . ' ' . $this->customer_contact->lastname);
+		}
+		if ($this->customer_contact->email == '' and $this->customer->email != '') {
+			$mail->add_to($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
+		}
+		if ($this->customer_contact->email != $this->customer->email AND $this->customer->email != '') {
 			$mail->add_cc($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
 		}
 
@@ -251,7 +256,11 @@ class Invoice {
 		$mail->add_attachment($this->get_pdf());
 		$mail->assign('invoice', $this);
 
-		$mail->send();
+		try {
+			$mail->send();
+		} catch (Exception $e) {
+			throw new \Exception('Mail could not be sent. Error: ' . $e->getMessage());
+		}
 	}
 
 	/**
