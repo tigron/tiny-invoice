@@ -24,7 +24,7 @@ class Invoice_Queue {
 	public function validate(&$errors = []) {
 		$required_fields = array('description', 'qty', 'price');
 		foreach ($required_fields as $required_field) {
-			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
+			if (!isset($this->details[$required_field]) OR $this->details[$required_field] === '') {
 				$errors[$required_field] = 'required';
 			}
 		}
