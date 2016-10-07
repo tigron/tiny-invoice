@@ -1,8 +1,109 @@
 {% extends "_default/layout.base.twig" %}
 
 {% block content %}
+	{% if action == 'batch_process' %}
 
-	{% if action == 'edit' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+			<li class="active">{% trans "Batch process" %}</li>
+		</ol>
+
+
+		{% for customer_contact in customer_contacts %}
+			{% if loop.first %}
+				<form class="form-horizontal" method="post" action="/sales/invoice/queue?action=process_batch">
+				<table class="table table-alternate table-hover">
+					<thead>
+						<tr>
+							<th width="120"><input type="checkbox" class="original2" data-group-cls="btn-group-xs" onchange="toggle_all();"></th>
+							<th>{% trans "Customer" %}</th>
+							<th>{% trans "Customer contact " %}</th>
+							<th>{% trans "Number of items" %}</th>
+							<th class="text-right">{% trans "Total price" %} ({% trans "excl VAT" %})</th>
+						</tr>
+					</thead>
+					<tbody>
+
+			{% endif %}
+
+
+
+			{% set invoice_queue = customer_contact.get_outstanding_invoice_queue() %}
+			{% set total_price = 0 %}
+			{% for invoice_queue_item in invoice_queue %}
+				{% set total_price = total_price + invoice_queue_item.price*invoice_queue_item.qty %}
+			{% endfor %}
+
+			<tr data-price="{{ total_price }}">
+				<td><input type="checkbox" data-group-cls="btn-group-xs" name="customer_contact[{{ customer_contact.id }}]" onchange="calculate_sum();"></td>
+				<td>
+					<a href="/administrative/customer?action=edit&id={{ customer_contact.customer_id }}">
+						{{ customer_contact.customer.get_display_name() }}
+					</a>
+				</td>
+				<td>
+					{{ customer_contact.get_display_name() }}
+				</td>
+				<td>
+					{{ invoice_queue|length }}</td>
+				</td>
+				<td class="text-right">
+					&euro;{{ total_price }}
+				</td>
+			</tr>
+
+			{% if loop.last %}
+					</tbody>
+				</table>
+
+				<div class="well">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Total amount" %}</label>
+						<div class="col-xs-9">
+							<p class="form-control-static" id="total_amount">&euro;0</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-9 col-xs-offset-3">
+							<button type="submit" class="btn btn-primary">
+								{% trans "Create invoices" %}
+							</button>
+						</div>
+					</div>
+
+				</div>
+				</form>
+			{% endif %}
+		{% else %}
+			<div class="alert alert-info">{% trans "There are no invoice queue items to be invoiced" %}</div>
+		{% endfor %}
+
+
+
+
+		<script type="text/javascript">
+			function toggle_all() {
+				if ($('th input[type=checkbox]').is(':checked')) {
+					$('td input[type=checkbox]').prop('checked', true);
+				} else {
+					$('td input[type=checkbox]').prop('checked', false);
+				}
+			}
+
+			function calculate_sum() {
+				total = 0;
+				$('tbody tr').each(function() {
+					if ( $(this).find('input[type=checkbox]').is(':checked') ){
+						total += Math.round( parseFloat( $(this).data('price') ) * 100) / 100;
+					}
+				});
+				$('#total_amount').html('&euro;' + Math.round(total*100)/100 );
+			}
+		</script>
+
+	{% elseif action == 'edit' %}
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
@@ -347,6 +448,7 @@
 			</div>
 			<div class="panel-body">
 				{% set conditions = pager.get_conditions() %}
+
 				<form method="post" action="/sales/invoice/queue" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
@@ -359,8 +461,8 @@
 						<div class="col-xs-9">
 							<select name="status" class="form-control">
 								<option value=""> - - - </option>
-								<option value="unprocessed"{% if conditions.processed_to_invoice_item_id is defined and conditions.processed_to_invoice_item_id[0][0] == 'IS' %} selected{% endif %}>{% trans "Unprocessed" %}</option>
-								<option value="processed"{% if conditions.processed_to_invoice_item_id is defined and conditions.processed_to_invoice_item_id[0][0] == 'IS NOT' %} selected{% endif %}>{% trans "Processed" %}</option>
+								<option value="unprocessed"{% if pager.has_condition('processed_to_invoice_item_id', 'IS', '') %} selected{% endif %}>{% trans "Unprocessed" %}</option>
+								<option value="processed"{% if pager.has_condition('processed_to_invoice_item_id', 'IS NOT', '') %} selected{% endif %}>{% trans "Processed" %}</option>
 							</select>
 						</div>
 					</div>
@@ -386,27 +488,32 @@
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						{% trans "Add item" %}
 					</a>
+					-
+					<a href="/sales/invoice/queue?action=batch_process">
+						<span class="glyphicon glyphicon-play-circle"></span>
+						{% trans "Batch process" %}
+					</a>
 				</div>
 				{{ base.pager_count(pager.item_count) }}
 			</div>
 			<div class="panel-body">
 			{% for invoice_queue in pager.items %}
-			{% if loop.first %}
-				<table class="table table-hover table-striped table-condensed table-responsive">
-				<thead>
-					<tr>
-						<th>{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
-						<th>{{ pager.create_header('Processed'|trans, 'processed_to_invoice_item_id')|raw }}</th>
-						<th>{{ pager.create_header('Customer'|trans, 'customer')|raw }}</th>
-						<th>{% trans "Description" %}</th>
-						<th>{{ pager.create_header('Qty'|trans, 'qty')|raw }}</th>
-						<th>{{ pager.create_header('Price'|trans, 'price')|raw }}</th>
-						<th width="30">&nbsp;</th>
-						<th width="30">&nbsp;</th>
-					</tr>
-				</thead>
-				<tbody>
-			{% endif %}
+				{% if loop.first %}
+					<table class="table table-hover table-striped table-condensed table-responsive">
+					<thead>
+						<tr>
+							<th>{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
+							<th>{{ pager.create_header('Processed'|trans, 'processed_to_invoice_item_id')|raw }}</th>
+							<th>{{ pager.create_header('Customer'|trans, 'customer.company')|raw }}</th>
+							<th>{{ pager.create_header('Description'|trans, 'description')|raw }}</th>
+							<th>{{ pager.create_header('Qty'|trans, 'qty')|raw }}</th>
+							<th>{{ pager.create_header('Price'|trans, 'price')|raw }}</th>
+							<th width="30">&nbsp;</th>
+							<th width="30">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+				{% endif %}
 
 				<tr>
 					<td>{{ invoice_queue.id }}</td>
@@ -417,7 +524,7 @@
 							<span class="glyphicon glyphicon-ok"></span>
 						{% endif %}
 					</td>
-					<td>{{ invoice_queue.customer.firstname }} {{ invoice_queue.customer.lastname }}{% if invoice_queue.customer.company != '' %} ({{ invoice_queue.customer.company }}){% endif %}</td>
+					<td>{{ invoice_queue.customer.get_display_name() }}</td>
 					<td>{{ invoice_queue.description }}</td>
 					<td>{{ invoice_queue.qty }}</td>
 					<td>&euro;{{ invoice_queue.get_price_excl()|number_format }}</td>
@@ -435,11 +542,11 @@
 					</td>
 				</tr>
 
-			{% if loop.last %}
-				</tbody>
-				</table>
-				{{ pager.links|raw }}
-			{% endif %}
+				{% if loop.last %}
+					</tbody>
+					</table>
+					{{ pager.links|raw }}
+				{% endif %}
 
 			{% else %}
 

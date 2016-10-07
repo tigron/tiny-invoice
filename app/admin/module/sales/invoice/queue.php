@@ -50,11 +50,12 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('price');
 		$pager->add_sort_permission('qty');
-		$pager->add_sort_permission('customer.lastname');
+		$pager->add_sort_permission('description');
+		$pager->add_sort_permission('customer.company');
 		$pager->add_sort_permission('processed_to_invoice_item_id');
 
 		if (isset($_POST['search'])) {
-			$pager->set_search($_POST['search']);
+			$pager->set_search($_POST['search'], [ 'customer_contact.firstname', 'customer_contact.lastname', 'customer_contact.company', 'invoice_queue.description']);
 		}
 
 		$pager->set_direction('desc');
@@ -226,6 +227,73 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 
 		$customer = Customer::get_by_id($_GET['id']);
 		echo json_encode($customer->get_info());
+	}
+
+	/**
+	 * Batch process
+	 *
+	 * @access public
+	 */
+	public function display_batch_process() {
+		$template = Template::get();
+
+		$pager = new Pager('invoice_queue');
+		$pager->add_condition('processed_to_invoice_item_id', 'IS', NULL);
+		$pager->set_direction('asc');
+		$pager->page(true);
+		$invoice_queues = $pager->items;
+		$customer_contacts = [];
+
+		foreach ($invoice_queues as $invoice_queue) {
+			$customer_contacts[$invoice_queue->customer_contact_id] = $invoice_queue->customer_contact;
+		}
+		$template->assign('customer_contacts', $customer_contacts);
+	}
+
+	/**
+	 * Process batch
+	 *
+	 * @access public
+	 */
+	public function display_process_batch() {
+		if (!isset($_POST['customer_contact'])) {
+			Session::redirect('/sales/invoice/queue?action=batch_process');
+		}
+
+		if (count($_POST['customer_contact']) == 0) {
+			Session::redirect('/sales/invoice/queue?action=batch_process');
+		}
+
+
+		foreach ($_POST['customer_contact'] as $customer_contact_id => $ignore) {
+			$customer_contact = Customer_Contact::get_by_id($customer_contact_id);
+			$invoice_queue = $customer_contact->get_outstanding_invoice_queue();
+			if (count($invoice_queue) == 0) {
+				continue;
+			}
+
+			$invoice = new Invoice();
+			$invoice->customer_id = $customer_contact->customer_id;
+			$invoice->customer_contact_id = $customer_contact->id;
+			$invoice->expiration_date = date('YmdHis', strtotime('+2 weeks'));
+			$invoice->generate_number();
+			$invoice->save();
+
+			foreach ($invoice_queue as $invoice_queue_item) {
+				$invoice_item = new Invoice_Item();
+				$invoice_item->description = $invoice_queue_item->description;
+				$invoice_item->qty = $invoice_queue_item->qty;
+				$invoice_item->price = $invoice_queue_item->price;
+				$invoice_item->vat = $invoice_queue_item->vat;
+				$invoice_item->save();
+				$invoice->add_invoice_item($invoice_item);
+
+				$invoice_queue_item->processed_to_invoice_item_id = $invoice_item->id;
+				$invoice_queue_item->save();
+			}
+		}
+		Session::redirect('/sales/invoice/queue');
+
 	}
 
 }
