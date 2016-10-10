@@ -118,7 +118,7 @@
 						{% for customer_contact in customer_contacts %}
 						<address {% if customer_contact.id != invoice_queue_recurring_group.customer_contact_id %}class="hide"{% endif %} id="customer_contact_{{ customer_contact.id }}">
 							{% if customer_contact.company == '' %}
-								<strong>{{ customer_contact.firstname }} {{ customer_coontact.lastname }}
+								<strong>{{ customer_contact.firstname }} {{ customer_coontact.lastname }}</strong>
 							{% elseif customer_contact.firstname == '' and customer_contact.lastname == '' %}
 								<strong>{{ customer_contact.company }}</strong>
 							{% else %}
@@ -168,7 +168,7 @@
 						{% for invoice_queue_recurring in invoice_queue_recurring_group.get_invoice_queue_recurring() %}
 						<tr>
 							<td>{{ invoice_queue_recurring.product_type.name }}</td>
-							<td>{{ invoice_queue_recurring.description|truncate(50, true) }}</td>
+							<td>{{ invoice_queue_recurring.description|nl2br }}</td>
 							<td>{{ invoice_queue_recurring.vat }}%</td>
 							<td>{{ invoice_queue_recurring.qty }}</td>
 							<td>&euro;{{ invoice_queue_recurring.price|number_format }}</td>

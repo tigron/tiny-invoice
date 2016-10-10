@@ -445,7 +445,7 @@
 								</td>
 								<td>
 									<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_queue_item.id }}">
-									<textarea class="form-control" name="invoice_item[{{ loop.index }}][description]">{{ invoice_queue_item.description }}</textarea>
+									<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_queue_item.description }}</textarea>
 								</td>
 								<td>
 									<input type="text" class="form-control" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_queue_item.qty }}">
@@ -500,7 +500,7 @@
 				</td>
 				<td>
 					<input type="hidden" name="invoice_item[((nr))][invoice_queue_id]" value="((invoice_queue_id))">
-					<textarea class="form-control" name="invoice_item[((nr))][description]">((description))</textarea>
+					<textarea class="form-control autogrow" name="invoice_item[((nr))][description]">((description))</textarea>
 				</td>
 				<td>
 					<input type="text" class="form-control" name="invoice_item[((nr))][qty]" value="((qty))">
@@ -541,6 +541,7 @@
 				Handlebars.setDelimiter('(',')');
 				var template = Handlebars.compile(source);
 				$('#invoice-items').append(template(data));
+				$('.autogrow').autoGrow();
 			}
 
 			function remove_item(obj) {
