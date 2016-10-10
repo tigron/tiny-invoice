@@ -55,15 +55,12 @@ class Invoice_Queue_Recurring {
 
 		$description = $this->description;
 
-		$next_run = strtotime($this->invoice_queue_recurring_group->next_run);
-
-		$name = str_replace('%%day%%', date('d', $next_run), $description);
-		$name = str_replace('%%month%%', date('m', $next_run), $description);
-		$name = str_replace('%%year%%', date('Y', $next_run), $description);
-		$name = str_replace('%%period_start%%', date('d-m-Y', $next_run), $description);
-		$name = str_replace('%%period_end%%', date('d-m-Y', strtotime($this->invoice_queue_recurring_group->repeat_every, $next_run)), $description);
-		$name = str_replace('%%day_name%%', date('l', $next_run), $description);
-		$name = str_replace('%%month_name%%', date('F', $next_run), $description);
+		$template = new \Skeleton\Template\Template();
+		$root_path = realpath(dirname(__FILE__) . '/../../../../');
+		$template->set_template_directory($root_path . '/store/invoice_queue_recurring/');
+		$template->assign('invoice_queue_recurring', $this);
+		$template->assign('invoice_queue_recurring_group', $this->invoice_queue_recurring_group);
+		$description = trim($template->render('template.twig'));
 
 		$invoice_queue->description = $description;
 		$invoice_queue->price = $this->price;
