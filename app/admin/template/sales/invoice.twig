@@ -402,7 +402,7 @@
 		</div>
 		{% endif %}
 
-		<form method="post" action="/sales/invoice?action=create_step3">
+		<form method="post" action="/sales/invoice?action=create_step3" class="form-horizontal">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					{% trans "Additional info" %}
@@ -412,6 +412,18 @@
 						<label class="col-xs-3 control-label">{% trans "Reference" %}</label>
 						<div class="col-xs-9">
 							<input type="text" class="form-control" id="reference" name="invoice[reference]" value="{{ env.session.invoice.reference }}">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
+						<div class="col-xs-9">
+							<select name="invoice[expiration_date]" class="form-control">
+								<option value="+14 days">2 {% trans "weeks" %}</option>
+								<option value="+1 month" selected>1 {% trans "month" %}</option>
+								<option value="+60 days">60 {% trans "days" %}</option>
+								<option value="+90 days">90 {% trans "days" %}</option>
+							</select>
 						</div>
 					</div>
 				</div>
