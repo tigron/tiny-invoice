@@ -2,7 +2,7 @@
 
 {% block tab %}
 
-	{% for invoice in pager.items %}
+	{% for invoice_queue_recurring_group in pager.items %}
 		{% if loop.first %}
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -13,10 +13,8 @@
 					<thead>
 						<tr>
 							<th>{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
-							<th>{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
-							<th>{{ pager.create_header('Date'|trans, 'created')|raw }}</th>
-							<th>{% trans "Price" %}</th>
-							<th>{% trans "Download" %}</th>
+							<th>{{ pager.create_header('Description'|trans, 'description')|raw }}</th>
+							<th>{{ pager.create_header('Price'|trans, 'price')|raw }}</th>
 							<th width="20">&nbsp;</th>
 						</tr>
 					</thead>
@@ -24,17 +22,11 @@
 		{% endif %}
 
 		<tr>
-			<td>{{ invoice.id }}</td>
-			<td>{{ invoice.number }}</td>
-			<td>{{ invoice.created|date }}</td>
-			<td>&euro;{{ invoice.get_price_incl()|number_format }}</td>
+			<td>{{ invoice_queue_recurring_group.id }}</td>
+			<td>{{ invoice_queue_recurring_group.name }}</td>
+			<td>&euro;{{ invoice_queue_recurring_group.get_total_price() }}</td>
 			<td>
-					<a href="/sales/invoice?action=download&id={{ invoice.id }}">
-						<span class="glyphicon glyphicon-download"></span> {% trans "Invoice" %}
-					</a>
-			</td>
-			<td>
-				<a href="/sales/invoice?action=edit&id={{ invoice.id }}">
+				<a href="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}">
 					<span class="glyphicon glyphicon-pencil"></span>
 				</a>
 			</td>
@@ -48,6 +40,6 @@
 		</div>
 		{% endif %}
 	{% else %}
-		<p>{% trans "No invoices found for this customer." %}
+		<p>{% trans "No recurring invoice queues found for this customer." %}
 	{% endfor %}
 {% endblock tab %}

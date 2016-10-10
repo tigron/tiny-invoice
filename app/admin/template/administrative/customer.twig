@@ -181,9 +181,18 @@
 		</ol>
 
 		<ul class="nav nav-tabs">
-			<li {% if env.module.get_name() == 'administrative_customer_detail' %}class="active"{% endif %}><a href="/administrative/customer/detail?id={{ customer.id }}">{% trans "Details" %}</a></li>
-			<li {% if env.module.get_name() == 'administrative_customer_contact' %}class="active"{% endif %}><a href="/administrative/customer/contact?id={{ customer.id }}">{% trans "Contacts" %}</a></li>
-			<li {% if env.module.get_name() == 'administrative_customer_invoice' %}class="active"{% endif %}><a href="/administrative/customer/invoice?id={{ customer.id }}">{% trans "Invoices" %}</a></li>
+			<li {% if env.module.get_name() == 'administrative_customer_detail' %}class="active"{% endif %}>
+				<a href="/administrative/customer/detail?id={{ customer.id }}">{% trans "Details" %}</a>
+			</li>
+			<li {% if env.module.get_name() == 'administrative_customer_contact' %}class="active"{% endif %}>
+				<a href="/administrative/customer/contact?id={{ customer.id }}">{% trans "Contacts" %}</a>
+			</li>
+			<li {% if env.module.get_name() == 'administrative_customer_invoice' %}class="active"{% endif %}>
+				<a href="/administrative/customer/invoice?id={{ customer.id }}">{% trans "Invoices" %}</a>
+			</li>
+			<li {% if env.module.get_name() == 'administrative_customer_recurring' %}class="active"{% endif %}>
+				<a href="/administrative/customer/recurring?id={{ customer.id }}">{% trans "Recurring invoice queue" %}</a>
+			</li>
 		</ul>
 
 		<div class="tab-content">
