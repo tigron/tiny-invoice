@@ -157,7 +157,7 @@ class Web_Module_Sales_Invoice extends Module {
 				$template->assign('errors', $errors);
 			} else {
 				$invoice = $_SESSION['invoice'];
-				$invoice->expiration_date = date('YmdHis', strtotime('+2 weeks'));
+				$invoice->expiration_date = date('YmdHis', strtotime($_POST['invoice']['expiration_date']));
 				$invoice->reference = $_POST['invoice']['reference'];
 				$invoice->generate_number();
 				$invoice->save();

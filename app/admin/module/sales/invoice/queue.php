@@ -275,7 +275,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 			$invoice = new Invoice();
 			$invoice->customer_id = $customer_contact->customer_id;
 			$invoice->customer_contact_id = $customer_contact->id;
-			$invoice->expiration_date = date('YmdHis', strtotime('+2 weeks'));
+			$invoice->expiration_date = date('YmdHis', strtotime($_POST['invoice']['expiration_date']));
 			$invoice->generate_number();
 			$invoice->save();
 
