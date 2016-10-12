@@ -60,6 +60,18 @@ class Web_Module_Sales_Customer_Contact extends Module {
 				$new_customer_contact->active = true;
 				$new_customer_contact->save();
 
+				$invoice_queue_recurring_groups = Invoice_Queue_Recurring_Group::get_by_customer_contact($customer_contact);
+				foreach ($invoice_queue_recurring_groups as $invoice_queue_recurring_group) {
+					$invoice_queue_recurring_group->customer_contact_id = $new_customer_contact->id;
+					$invoice_queue_recurring_group->save();
+				}
+
+				$invoice_queue = Invoice_Queue::get_unprocessed_by_customer_contact($customer_contact);
+				foreach ($invoice_queue as $invoice_queue_item) {
+					$invoice_queue_item->customer_contact_id = $new_customer_contact->id;
+					$invoice_queue_item->save();
+				}
+
 				echo json_encode($new_customer_contact->get_info());
 			} else {
 				$customer_contact->active = true;

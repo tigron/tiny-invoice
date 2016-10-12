@@ -115,7 +115,7 @@ class Invoice_Queue_Recurring_Group {
 	 */
 	public static function get_by_customer_contact(Customer_Contact $customer_contact) {
 		$db = Database::Get();
-		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring_group WHERE archived = "0000-00-00 00:00:00" AND invoice_customer_contact_id = ?', [$customer_contact->id]);
+		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring_group WHERE archived = "0000-00-00 00:00:00" AND customer_contact_id = ?', [$customer_contact->id]);
 		$groups = array();
 		foreach ($ids as $id) {
 			$groups[] = Invoice_Queue_Recurring_Group::get_by_id($id);
