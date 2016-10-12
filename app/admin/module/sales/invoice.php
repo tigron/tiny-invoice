@@ -139,6 +139,7 @@ class Web_Module_Sales_Invoice extends Module {
 		if (isset($_POST['invoice_item'])) {
 
 			$errors = [];
+			$total_price = 0;
 			$invoice_items = [];
 			foreach ($_POST['invoice_item'] as $row => $item) {
 				$invoice_item = new Invoice_Item();
@@ -151,6 +152,10 @@ class Web_Module_Sales_Invoice extends Module {
 				} else {
 					$invoice_items[] = $invoice_item;
 				}
+				$total_price += $invoice_item->price;
+			}
+			if ($total_price == 0) {
+				$errors[-1] = 'free';
 			}
 
 			if (count($errors) > 0) {

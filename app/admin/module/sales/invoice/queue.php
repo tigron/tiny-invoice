@@ -268,6 +268,14 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 		foreach ($_POST['customer_contact'] as $customer_contact_id => $ignore) {
 			$customer_contact = Customer_Contact::get_by_id($customer_contact_id);
 			$invoice_queue = $customer_contact->get_outstanding_invoice_queue();
+			$total_price = 0;
+			foreach ($invoice_queue as $invoice_queue_item) {
+				$total_price += $invoice_queue_item->price;
+			}
+
+			if ($total_price == 0) {
+				continue;
+			}
 			if (count($invoice_queue) == 0) {
 				continue;
 			}

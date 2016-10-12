@@ -403,10 +403,12 @@
 			<li class="active">{% trans "Add items" %}</li>
 		</ol>
 
-		{% if errors is defined %}
-		<div class="alert alert-danger">
-			{{ errors|print_r }}
-		</div>
+		{% if errors[-1] is defined %}
+			<div class="alert alert-danger">{% trans "The price must be larger than €0" %}</div>
+		{% elseif errors is defined %}
+			<div class="alert alert-danger">
+				{{ errors|print_r }}
+			</div>
 		{% endif %}
 
 		<form method="post" action="/sales/invoice?action=create_step3" class="form-horizontal">
