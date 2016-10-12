@@ -19,6 +19,12 @@ class Migration_20161010_151206_Utf8_innodb_baby extends \Skeleton\Database\Migr
 	public function up() {
 		$db = Database::get();
 		$tables = $db->get_column('SHOW tables;', []);
+
+		$db->query("
+			ALTER TABLE `language`
+			DROP INDEX `name_short`;
+		", []);
+
 		foreach ($tables as $table) {
 			$db->query("
 				ALTER TABLE `" . $table . "`
