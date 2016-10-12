@@ -291,6 +291,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 				$invoice_queue_item->processed_to_invoice_item_id = $invoice_item->id;
 				$invoice_queue_item->save();
 			}
+			Log::create('add', $invoice);
 		}
 		Session::redirect('/sales/invoice/queue');
 

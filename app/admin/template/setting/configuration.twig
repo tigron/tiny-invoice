@@ -24,12 +24,45 @@
 				</div>
 
 				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Enable Click & Post" %}</label>
+					<div class="col-xs-9">
+						<input type="checkbox" id="chk_enable_click_post" data-group-cls="btn-group-xs" name="setting[enable_click_post]" {% if settings.enable_click_post %}checked{% endif %} onchange="toggle_click_post();">
+					</div>
+				</div>
+
+				<div class="form-group click_post_option hidden">
+					<label class="col-xs-3 control-label">{% trans "Click & Post username" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[click_post_username]" value="{{ settings.click_post_username }}" />
+					</div>
+				</div>
+
+				<div class="form-group click_post_option hidden">
+					<label class="col-xs-3 control-label">{% trans "Click & Post password" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[click_post_password]" value="{{ settings.click_post_password }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
 					<div class="col-xs-9 col-xs-offset-3">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>
 				</div>
+
 			</div>
 		</div>
+
+		<script type="text/javascript">
+			function toggle_click_post() {
+				if ($('#chk_enable_click_post').is(':checked')) {
+					$('.click_post_option').removeClass('hidden');
+				} else {
+					$('.click_post_option').addClass('hidden');
+				}
+			}
+			toggle_click_post();
+		</script>
 
 		<div class="panel panel-default">
 			<div class="panel-heading">{% trans "Skins" %}</div>

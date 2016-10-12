@@ -149,6 +149,7 @@ class Invoice {
 		if ($this->get_amount_paid() >= $this->get_price_incl()) {
 			$this->mark_paid();
 		}
+		Log::create('Transfer added', $this);
 	}
 
 	/**
@@ -210,7 +211,8 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-			return $this->file;
+			//return $this->file;
+			$this->file->delete();
 		}
 
 		$pdf = new Pdf('invoice', $this->customer->language);
@@ -230,37 +232,13 @@ class Invoice {
 	}
 
 	/**
-	 * Send invoice
+	 * Send
 	 *
 	 * @access public
+	 * @param Invoice_Method $invoice_method
 	 */
-	public function send_invoice_email() {
-		$mail = new Email('invoice', $this->customer_contact->language);
-		if ($this->customer_contact->email != '') {
-			$mail->add_to($this->customer_contact->email, $this->customer_contact->firstname . ' ' . $this->customer_contact->lastname);
-		}
-		if ($this->customer_contact->email == '' and $this->customer->email != '') {
-			$mail->add_to($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
-		}
-		if ($this->customer_contact->email != $this->customer->email AND $this->customer->email != '') {
-			$mail->add_cc($this->customer->email, $this->customer->firstname . ' ' . $this->customer->lastname);
-		}
-
-		try {
-			$email_from = Setting::get_by_name('email')->value;
-			$company = Setting::get_by_name('company')->value;
-			$mail->set_sender($email_from, $company);
-		} catch (Exception $e) {
-		}
-
-		$mail->add_attachment($this->get_pdf());
-		$mail->assign('invoice', $this);
-
-		try {
-			$mail->send();
-		} catch (Exception $e) {
-			throw new \Exception('Mail could not be sent. Error: ' . $e->getMessage());
-		}
+	public function send(Invoice_Method $invoice_method) {
+		$invoice_method->send($this);
 	}
 
 	/**
@@ -309,5 +287,6 @@ class Invoice {
 	private function mark_paid() {
 		$this->paid = true;
 		$this->save();
+		Log::create('Invoice marked as paid', $this);
 	}
 }

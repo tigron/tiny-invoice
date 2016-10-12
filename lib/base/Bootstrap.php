@@ -45,6 +45,9 @@ class Bootstrap {
 		 * Register the autoloader
 		 */
 		$autoloader = new \Skeleton\Core\Autoloader();
+		if (file_exists($root_path . '/lib/component')) {
+			$autoloader->add_include_path($root_path . '/lib/component/');
+		}
 		$autoloader->add_include_path($root_path . '/lib/model/');
 		$autoloader->add_include_path($root_path . '/lib/base/');
 		$autoloader->register();

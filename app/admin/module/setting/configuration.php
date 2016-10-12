@@ -38,6 +38,9 @@ class Web_Module_Setting_Configuration extends Module {
 		$template = Template::Get();
 
 		if (isset($_POST['setting'])) {
+			if (!isset($_POST['setting']['enable_click_post'])) {
+				$_POST['setting']['enable_click_post'] = false;
+			}
 			foreach ($_POST['setting'] as $key => $value) {
 				try {
 					$setting = Setting::get_by_name($key);
