@@ -173,6 +173,7 @@ class Web_Module_Sales_Invoice extends Module {
 				}
 
 				unset($_SESSION['invoice']);
+				Log::create('add', $invoice);
 
 				Session::redirect('/sales/invoice');
 
@@ -184,7 +185,7 @@ class Web_Module_Sales_Invoice extends Module {
 		$template->assign('invoice_queue_items', $invoice_queue_items);
 		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->customer_contact->country));
 		$template->assign('action', 'create_step3');
-		$template->assign('product_types', Product_Type::get_all());
+		$template->assign('product_types', Product_Type::get_all('name'));
 	}
 
 	/**
@@ -208,6 +209,8 @@ class Web_Module_Sales_Invoice extends Module {
 			$this->display_add_transfer();
 		}
 
+		$invoice_methods = Invoice_Method::get_all();
+		$template->assign('invoice_methods', $invoice_methods);
 		$template->assign('invoice', $invoice);
 	}
 
@@ -235,6 +238,18 @@ class Web_Module_Sales_Invoice extends Module {
 	}
 
 	/**
+	 * Set reminder
+	 *
+	 * @access public
+	 */
+	public function display_set_reminder() {
+		$invoice = Invoice::get_by_id($_GET['id']);
+		$invoice->send_reminder_mail = $_POST['send_reminder_mail'];
+		$invoice->save();
+		$this->template = false;
+	}
+
+	/**
 	 * Download PDF
 	 *
 	 * @access public
@@ -242,7 +257,7 @@ class Web_Module_Sales_Invoice extends Module {
 	public function display_download() {
 		$invoice = Invoice::get_by_id($_GET['id']);
 		$file = $invoice->get_pdf();
-		$file->client_download();
+		$file->client_inline(); //download();
 	}
 
 	/**
@@ -252,14 +267,9 @@ class Web_Module_Sales_Invoice extends Module {
 	 */
 	public function display_send() {
 		$invoice = Invoice::get_by_id($_GET['id']);
-		try {
-			$invoice->send_invoice_email();
-			Session::set_sticky('message', 'invoice_sent');
-		} catch (Exception $e) {
-			Session::set_sticky('message_sent_error', $e->getMessage());
-		}
-
-		Session::redirect('/sales/invoice');
+		$invoice_method = Invoice_Method::get_by_id($_GET['invoice_method_id']);
+		$invoice->send($invoice_method);
+		Session::redirect('/sales/invoice?action=edit&id=' . $_GET['id']);
 	}
 
 }

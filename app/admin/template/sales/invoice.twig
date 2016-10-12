@@ -14,35 +14,93 @@
 			{{ base.display_flash_message(env.sticky_session.message, 'invoice') }}
 		{% endif %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Details" %}</div>
-			<div class="panel-body">
-				<dl class="dl-horizontal">
-					<dt>{% trans "Invoice number" %}</dt>
-					<dd>{{ invoice.id }}</dd>
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">{% trans "Details" %}</div>
+					<div class="panel-body">
+						<dl class="dl-horizontal">
+							<dt>{% trans "Invoice number" %}</dt>
+							<dd>{{ invoice.id }}</dd>
 
-					<dt>{% trans "Created" %}</dt>
-					<dd>{{ invoice.created|datetime() }}</dd>
+							<dt>{% trans "Created" %}</dt>
+							<dd>{{ invoice.created|datetime() }}</dd>
 
-					<dt>{% trans "Price excl VAT" %}</dt>
-					<dd>{{ "€%.2f"|format(invoice.get_price_excl()) }}</dd>
+							<dt>{% trans "Price excl VAT" %}</dt>
+							<dd>{{ "€%.2f"|format(invoice.get_price_excl()) }}</dd>
 
-					<dt>{% trans "Price incl VAT" %}</dt>
-					<dd>{{ "€%.2f"|format(invoice.get_price_incl()) }}</dd>
+							<dt>{% trans "Price incl VAT" %}</dt>
+							<dd>{{ "€%.2f"|format(invoice.get_price_incl()) }}</dd>
 
-					<dt>{% trans "Paid" %}</dt>
-					<dd>{% if invoice.paid %}<span class="glyphicon glyphicon-ok"></span> {% trans "Yes" %}{% else %}<span class="glyphicon glyphicon-remove"></span> {% trans "No" %}{% endif %}</dd>
+							<dt>{% trans "Paid" %}</dt>
+							<dd>
+								{% if invoice.paid %}
+									<span class="glyphicon glyphicon-ok"></span> {% trans "Yes" %}
+								{% else %}
+									<span class="glyphicon glyphicon-remove"></span> {% trans "No" %}
+								{% endif %}
+							</dd>
 
-					<dt>{% trans "Reference" %}</dt>
-					<dd>{{ invoice.reference }}</dd>
+							<dt>{% trans "Reference" %}</dt>
+							<dd>{{ invoice.reference }}</dd>
 
-					<dt>{% trans "Download PDF" %}</dt>
-					<dd>
-						<a href="/sales/invoice?action=download&id={{ invoice.id }}">{% trans "Download" %}</a>
-					</dd>
-				</dl>
+							<dt>{% trans "Download PDF" %}</dt>
+							<dd>
+								<a href="/sales/invoice?action=download&id={{ invoice.id }}"><i class="fa fa-file-pdf-o"></i> invoice_{{ invoice.number }}.pdf</a>
+							</dd>
+						</dl>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-6">
+				<form class="form-horizontal form-condensed" action="/sales/invoice?action=edit&id={{ invoice.id }}" method="post">
+				<div class="panel panel-default">
+					<div class="panel-heading">{% trans "Invoice settings" %}</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="control-label col-md-3">{% trans "Send reminder mails" %}</label>
+							<div class="col-xs-9">
+								<p class="form-control-static">
+									<input type="checkbox" name="invoice[send_reminder_mail]" data-group-cls="btn-group-xs" {% if invoice.send_reminder_mail %}checked{% endif %} onchange="set_reminder(this);">
+								</p>
+							</div>
+						</div>
+
+						{% for invoice_method in invoice_methods %}
+						<div class="form-group">
+							<label class="col-xs-3 control-label">{% trans "Send invoice" %} ({{ invoice_method.name }})</label>
+							<div class="col-xs-9">
+								<p class="form-control-static">
+									<a href="/sales/invoice?action=send&id={{ invoice.id }}&invoice_method_id={{ invoice_method.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to send the invoice via" %} {{ invoice_method.name }}?">
+										<i class="{{ invoice_method.icon }}"></i> {% trans "send" %}
+									</a>
+								</p>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+				</form>
 			</div>
 		</div>
+
+		<script type="text/javascript">
+			function set_reminder(element) {
+				if ($(element).is(':checked')) {
+					data = {
+						'send_reminder_mail': 1
+					};
+				} else {
+					data = {
+						'send_reminder_mail': 0
+					};
+				}
+				$.post('/sales/invoice?action=set_reminder&id={{ invoice.id }}', data, function(response) {
+
+				});
+			}
+		</script>
 
 		<div class="row">
 			<div class="col-md-6">
@@ -150,7 +208,7 @@
 				{% trans "Payments" %}
 				<div class="pull-right">
 					<a href="#add_transfer" data-toggle="modal">
-						<span class="glyphicon glyphicon-plus-sign"></span> {% trans "Add Transfer" %}
+						<span class="glyphicon glyphicon-plus-sign"></span> {% trans "Add Payment" %}
 					</a>
 				</div>
 			</div>
@@ -180,61 +238,10 @@
 			</div>
 		</div>
 
-		<form class="form-horizontal" action="/sales/invoice?action=edit&id={{ invoice.id }}" method="post">
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Invoice settings" %}</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="control-label col-md-3">{% trans "Send reminder mails" %}</label>
-					<div class="col-md-9">
-						<label class="radio inline">
-							<input type="radio" name="invoice[send_reminder_mail]" value="1"{% if invoice.send_reminder_mail == 1 %} checked{% endif %}> {% trans "Yes" %}
-						</label>
-						<label class="radio inline">
-							<input type="radio" name="invoice[send_reminder_mail]" value="0"{% if invoice.send_reminder_mail == 0 %} checked{% endif %}> {% trans "No" %}
-						</label>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-md-9 col-md-offset-3">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		</form>
-
 		<div class="panel panel-default">
 			<div class="panel-heading">{% trans "Logs" %}</div>
 			<div class="panel-body">
 				<dl class="dl-horizontal">
-				{% set transfers = invoice.get_transfers() %}
-				{% for transfer in transfers %}
-
-					{% if loop.first %}
-					<dt>{% trans "Payments" %}</dt>
-					{% else %}
-					<dt>&nbsp;</dt>
-					{% endif %}
-
-					<dd>
-						{{ transfer.created|datetime() }}:
-						{% if transfer.type == 1 %}
-						{% trans "Manual payment added" %}
-						{% endif %}
-
-						&euro;{{ transfer.amount|number_format }}
-					</dd>
-
-				{% else %}
-					<dt>{% trans "Payments" %}</dt>
-					<dd>{% trans "No payments added yet" %}.</dd>
-				{% endfor %}
-
-					<dt>&nbsp;</dt>
-					<dd>&nbsp;</dd>
-
 				{% set logs = invoice.get_logs() %}
 				{% for log in logs %}
 
@@ -671,7 +678,6 @@
 						<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
 						<th width="30"></th>
 						<th width="30"></th>
-						<th width="30"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -701,11 +707,6 @@
 				<td>
 					<a href="/sales/invoice?action=download&id={{ invoice.id }}">
 						<span class="glyphicon glyphicon-download"></span>
-					</a>
-				</td>
-				<td>
-					<a href="/sales/invoice?action=send&id={{ invoice.id }}">
-						<span class="glyphicon glyphicon-envelope"></span>
 					</a>
 				</td>
 				<td class="text-right">

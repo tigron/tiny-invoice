@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1bbe3441a4d057c53350313a6f444933",
-    "content-hash": "a5969a74cc893b5f2ea706959e1fb4a1",
+    "hash": "8923c15861f4ecc3fa07c43dcef4aa3c",
+    "content-hash": "e261bc90326effe0e1bac48cfcbfcd5a",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -576,16 +576,16 @@
         },
         {
             "name": "bower-asset/moment-timezone",
-            "version": "0.5.5",
+            "version": "0.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/moment/moment-timezone.git",
-                "reference": "32ef9eff5781a7fa57f75a84caebedc905d2ab8a"
+                "reference": "7ad329aa12e5abb86ea4faa6a5fc468b48bba526"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/32ef9eff5781a7fa57f75a84caebedc905d2ab8a",
-                "reference": "32ef9eff5781a7fa57f75a84caebedc905d2ab8a",
+                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/7ad329aa12e5abb86ea4faa6a5fc468b48bba526",
+                "reference": "7ad329aa12e5abb86ea4faa6a5fc468b48bba526",
                 "shasum": ""
             },
             "require": {
@@ -605,6 +605,9 @@
                     "package.json"
                 ]
             },
+            "license": [
+                "MIT"
+            ],
             "description": "Parse and display moments in any timezone."
         },
         {
@@ -857,16 +860,16 @@
         },
         {
             "name": "fxp/composer-asset-plugin",
-            "version": "v1.2.1",
+            "version": "v1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fxpio/composer-asset-plugin.git",
-                "reference": "d7d189e8ffac26a2e39e26a9c75e1fc5c2e2b98d"
+                "reference": "60bc94db574103dfc73acb907fa79c6dfc86c96e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fxpio/composer-asset-plugin/zipball/d7d189e8ffac26a2e39e26a9c75e1fc5c2e2b98d",
-                "reference": "d7d189e8ffac26a2e39e26a9c75e1fc5c2e2b98d",
+                "url": "https://api.github.com/repos/fxpio/composer-asset-plugin/zipball/60bc94db574103dfc73acb907fa79c6dfc86c96e",
+                "reference": "60bc94db574103dfc73acb907fa79c6dfc86c96e",
                 "shasum": ""
             },
             "require": {
@@ -909,7 +912,7 @@
                 "npm",
                 "package"
             ],
-            "time": "2016-08-03 07:44:07"
+            "time": "2016-10-12 08:03:45"
         },
         {
             "name": "jschaedl/bav",
@@ -1654,16 +1657,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
             "require": {
@@ -1697,7 +1700,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-09-19 16:02:08"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "setasign/fpdi",
@@ -2034,6 +2037,39 @@
                 "qrcode"
             ],
             "time": "2015-09-12 10:08:34"
+        },
+        {
+            "name": "tigron/click-post",
+            "version": "0.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tigron/click-post.git",
+                "reference": "714aecc63e838c2d167ae25c7b9b966e43e80f1f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tigron/click-post/zipball/714aecc63e838c2d167ae25c7b9b966e43e80f1f",
+                "reference": "714aecc63e838c2d167ae25c7b9b966e43e80f1f",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Esker\\": "lib/Esker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tigron BVBA",
+                    "email": "support@tigron.be"
+                }
+            ],
+            "description": "An API client for Ricoh Click & Post service",
+            "time": "2016-10-12 20:40:31"
         },
         {
             "name": "tigron/skeleton-console",
