@@ -520,6 +520,7 @@
 							<th>{{ pager.create_header('Price'|trans, 'price')|raw }}</th>
 							<th width="30">&nbsp;</th>
 							<th width="30">&nbsp;</th>
+							<th width="30">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -541,6 +542,11 @@
 					<td>
 						<a href="/sales/invoice/queue?action=edit&id={{ invoice_queue.id }}" title="">
 							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+					<td>
+						<a href="/sales/invoice/queue?action=delete&id={{ invoice_queue.id }}" title="" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to remove this invoice queue item?" %}">
+							<span class="glyphicon glyphicon-remove"></span>
 						</a>
 					</td>
 					<td>
