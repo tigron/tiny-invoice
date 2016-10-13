@@ -411,57 +411,6 @@
 				</form>
 			</div>
 		</div>
-	{% elseif action == 'edit' %}
-		<ol class="breadcrumb">
-			<li>{% trans "Sales" %}</li>
-			<li><a href="?">{% trans "Recurring invoice queue" %}</a></li>
-			<li class="active">{{ invoice_queue.name }}</li>
-		</ol>
-
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Edit recurring invoice queue" %}</div>
-			<div class="panel-body">
-				<form class="form form-horizontal" method="post" action="?action=edit&id={{ invoice_queue.id }}">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Invoice to" %}</label>
-							<div class="col-xs-5"><p class="form-control-static">{{ invoice_queue.customer.person.firstname }} {{ invoice_queue.customer.person.lastname }} ({{ invoice_queue.customer.person.company }})</p></div>
-					</div>
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Invoice contact" %}</label>
-						<div class="col-xs-5"><p class="form-control-static">{{ invoice_queue.invoice_customer_contact.customer.firstname }} {{ invoice_queue.invoice_customer_contact.customer.lastname }} ({{ invoice_queue.invoice_customer_contact.customer.company }})</p></div>
-					</div>
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Name" %}</label>
-						<div class="col-xs-5"><input type="text" class="form-control" name="invoice_queue[name]" value="{{ invoice_queue.name }}" /></div>
-					</div>
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Price" %}&nbsp;(&euro;)</label>
-						<div class="col-xs-5"><p class="form-control-static">{{ invoice_queue.get_total_price() }}</p></div>
-					</div>
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Added to queue" %}</label>
-						<div class="col-xs-5"><p class="form-control-static">{{ invoice_queue.created }}</p></div>
-					</div>
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Processed to invoice" %}</label>
-							<div class="col-xs-5">
-							<p class="form-control-static">
-								{% if invoice_queue.processed_to_invoice_item_id > 0 %}
-									{% trans "Invoice" %} <a href="/sales/invoice?action=edit&id={{ invoice_queue.processed_to_invoice_item.invoice_id }}" title="{% trans "Invoice" %}">{{ invoice_queue.processed_to_invoice_item.invoice_id }}</a>
-								{% else %}
-									{% trans "Not yet processed" %}.
-								{% endif %}
-							</p>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-xs-5 col-xs-offset-3">
-							<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
 
 	{% else %}
 		<ol class="breadcrumb">
