@@ -168,6 +168,7 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 		if (isset($_POST['queue_item'])) {
 			foreach ($_POST['queue_item']['description'] as $key => $value) {
 				$invoice_queue_recurring = new Invoice_Queue_Recurring();
+				$invoice_queue_recurring->product_type_id = $_POST['queue_item']['product_type_id'][$key];
 				$invoice_queue_recurring->description = $_POST['queue_item']['description'][$key];
 				$invoice_queue_recurring->vat = $_POST['queue_item']['vat'][$key];
 				$invoice_queue_recurring->qty = $_POST['queue_item']['qty'][$key];
