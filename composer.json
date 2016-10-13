@@ -31,7 +31,7 @@
         "phpdocumentor/reflection-docblock": "^3.0",
 		"ext-imap": "*",
         "bower-asset/highcharts": "^4.2",
-        "tigron/sepa-payments": "0.0.1"
+        "tigron/sepa-payments": "0.0.2"
     },
     "require-dev": {
         "tigron/skeleton-database": "0.1.0",
