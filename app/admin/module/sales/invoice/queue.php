@@ -188,6 +188,20 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 	}
 
 	/**
+	 * Delete
+	 *
+	 * @access public
+	 */
+	public function display_delete() {
+		$template = Template::get();
+		$invoice_queue = Invoice_Queue::get_by_id($_GET['id']);
+		$invoice_queue->delete();
+
+		Session::set_sticky('message', 'deleted');
+		Session::redirect('/sales/invoice/queue');
+	}
+
+	/**
 	 * Search customer (ajax)
 	 *
 	 * @access public
