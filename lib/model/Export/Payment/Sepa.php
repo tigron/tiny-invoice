@@ -53,7 +53,7 @@ class Export_Payment_Sepa extends Export {
 
 		// Create a payment
 		$payment = new \Tigron\Sepa\Payment();
-		$payment->paymentInformationIdentification = 'document_' . $document->id;
+		$payment->paymentInformationIdentification = 'export_' . $this->id;
 
 		$document_date = new DateTime($document->date);
 		$now = new DateTime();
