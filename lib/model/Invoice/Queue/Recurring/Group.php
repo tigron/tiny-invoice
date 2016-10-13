@@ -50,7 +50,7 @@ class Invoice_Queue_Recurring_Group {
 		$items = $this->get_invoice_queue_recurring();
 		$total = 0;
 		foreach ($items as $item) {
-			$total += $item->price;
+			$total += $item->price*$item->qty;
 		}
 		return $total;
 	}
