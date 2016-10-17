@@ -1,0 +1,21 @@
+{% extends "_default/modal.base.twig" %}
+{% block header %}{% trans "Book outgoing invoice" %}{% endblock header %}
+
+{% block body %}
+
+<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal">
+<div class="form-group">
+	<label class="col-xs-3 control-label">{% trans "Transaction amount" %}</label>
+	<div class="col-xs-9">
+		<p class="form-control-static">
+			&euro;{{ transaction.amount }}
+		</p>
+	</div>
+</div>
+</form>
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+{% endblock footer %}

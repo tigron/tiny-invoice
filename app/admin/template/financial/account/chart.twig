@@ -1,0 +1,52 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block head %}
+	<script type="text/javascript" src="/highcharts/highstock.js"></script>
+{% endblock head %}
+
+{% block content %}
+	<ol class="breadcrumb">
+		<li><a href="/">{% trans "Home" %}</a></li>
+		<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
+		<li>{% trans "Edit Bank Account" %}</li>
+	</ol>
+
+	{% include "financial/account/tabs.twig" %}
+
+	<div id="container" style="height: 400px; min-width: 310px"></div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			$.getJSON('/json/bank/account?id={{ bank_account.id }}', function (data) {
+				window.chart = new Highcharts.StockChart({
+					chart : {
+					    renderTo : 'container'
+
+					},
+					xAxis: {
+					    type: 'datetime',
+					    //minRange: 1,
+					    ordinal: false
+					},
+					rangeSelector : {
+					    selected : 1
+					},
+					series : [{
+					    data : data,
+						events: {
+							click: function(e) {
+								console.log(
+									e.point.id
+								)
+							}
+						}
+
+					}]
+				});
+
+			});
+		});
+	</script>
+
+{% endblock content %}
