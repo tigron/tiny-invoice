@@ -32,6 +32,17 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 	 * @param \Skeleton\File\File $file
 	 */
 	public function parse(\Skeleton\File\File $file) {
+		$parser = new Parser();
+		$statements = $parser->parseFile($file->get_path(), 'raw');
+
+		foreach ($statements as $statement) {
+			print_r($statement);
+
+			foreach ($statement->transactions as $transaction) {
+
+			}
+
+		}
 	}
 
 }
