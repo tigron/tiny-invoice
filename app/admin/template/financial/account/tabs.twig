@@ -1,0 +1,7 @@
+<div>
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist">
+		<li {% if env.module.get_name() == 'financial_account_transaction' %}class="active"{% endif %}><a href="/financial/account/transaction?id={{ bank_account.id }}">{% trans "Transactions" %}</a></li>
+		<li {% if env.module.get_name() == 'financial_account_chart' %}class="active"{% endif %}><a href="/financial/account/chart?id={{ bank_account.id }}">{% trans "Chart" %}</a></li>
+	</ul>
+</div>
