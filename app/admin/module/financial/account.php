@@ -9,6 +9,7 @@
 
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
+use \Skeleton\Core\Web\Session;
 use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Financial_Account extends Module {
@@ -34,26 +35,6 @@ class Web_Module_Financial_Account extends Module {
 	 * @access public
 	 */
 	public function display() {
-
-		$document = Document::get_by_id(59);
-
-
-		// create a document instance
-		$document = SetaPDF_Core_Document::loadByFilename($document->file->get_path());
-
-		// create an extractor instance
-		$extractor = new SetaPDF_Extractor($document);
-
-		// get the plain text from page 1
-		$result = $extractor->getResultByPageNumber(1);
-
-		// output
-		echo '<pre>';
-		echo $result;
-		echo '</pre>';
-
-die();
-
 		$template = Template::Get();
 
 		$pager = new Pager('bank_account');
@@ -68,6 +49,13 @@ die();
 
 		$template = Template::Get();
 		$template->assign('pager', $pager);
+
+
+		$statements = Bank_Account_Statement::get_all();
+		foreach ($statements as $statement) {
+			$statement->populate();
+		}
+
 	}
 
 	/**
@@ -76,13 +64,22 @@ die();
 	 * @access public
 	 */
 	public function display_import() {
-		$parsers = Bank_Account_Statement_Parser::get_all();
-		$file = \Skeleton\File\File::get_by_id(183);
-		foreach ($parsers as $parser) {
+		if (isset($_POST['import'])) {
+			$file = File::get_by_id($_POST['import']['file_id']);
+			$parsers = Bank_Account_Statement_Parser::get_all();
+			$valid_parser = null;
+			foreach ($parsers as $parser) {
+				if ($parser->detect($file)) {
+					$valid_parser = $parser;
+				}
+			}
 
-			print_r($parser->detect($file));
+			if ($valid_parser === null) {
+				throw new \Exception('Cannot import this');
+			}
+
+			$valid_parser->parse($file);
 		}
-
 	}
 
 	/**
@@ -124,6 +121,15 @@ die();
 				]
 			);
 		}
+	}
+
+	/**
+	 * Edit an account
+	 *
+	 * @access public
+	 */
+	public function display_edit() {
+		Session::redirect('/financial/account/transaction?id=' . $_GET['id']);
 	}
 
 
