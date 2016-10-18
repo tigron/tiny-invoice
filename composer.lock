@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "20ee839f9b40a0a76c72fe3968723ebd",
-    "content-hash": "72735c2e2d47476d1722ada90936d9c1",
+    "hash": "3673a6ecf4f4ce2d9b1f35b069ab4b43",
+    "content-hash": "692777caf30ca62cdceaa9791111fd9e",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -2112,16 +2112,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "13b32e14bf75dc790eab243d04450ca27ee3bfed"
+                "reference": "528f3060a70e185786b1915a1835891aff404e22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/13b32e14bf75dc790eab243d04450ca27ee3bfed",
-                "reference": "13b32e14bf75dc790eab243d04450ca27ee3bfed",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/528f3060a70e185786b1915a1835891aff404e22",
+                "reference": "528f3060a70e185786b1915a1835891aff404e22",
                 "shasum": ""
             },
             "type": "library",
@@ -2141,7 +2141,7 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2016-07-05 12:49:52"
+            "time": "2016-10-18 09:14:43"
         },
         {
             "name": "tigron/skeleton-database",
