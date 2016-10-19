@@ -134,5 +134,10 @@ class Bootstrap {
 		 */
 		\Skeleton\Pager\Config::$sticky_pager = true;
 
+		/**
+		 * API
+		 */
+		\Skeleton\Package\Api\Config::$api_keys = $config->api_keys;
+
 	}
 }

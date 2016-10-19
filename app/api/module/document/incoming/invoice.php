@@ -40,7 +40,7 @@ class Web_Module_Document_Incoming_Invoice extends \Skeleton\Package\Api\Web\Mod
 	 * @param string $tag_ids Comma seperated ids
 	 * @return array $ids ids of incoming_invoices
 	 */
-	public function call_get_by_tag_ids() {
+	public function call_getByTagIds() {
 		$pager = new Pager('document');
 		$pager->add_condition('classname', 'Document_Incoming_Invoice');
 		$pager->add_join('document_tag', 'document_id', 'document.id');

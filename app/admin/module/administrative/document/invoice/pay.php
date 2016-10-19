@@ -68,6 +68,13 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 
 		Session::redirect('/export?action=created');
 	}
-
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.document';
+	}
 
 }

@@ -40,7 +40,7 @@ class Log {
 		$db = Database::get();
 		$table = self::trait_get_database_table();
 		$classname = get_class($object);
-		$ids = $db->get_col('SELECT id FROM ' . $table . ' WHERE classname=? AND object_id=? ORDER BY id DESC LIMIT 50', [$classname, $object->id]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE classname=? AND object_id=? ORDER BY id DESC LIMIT 50', [$classname, $object->id]);
 
 		$logs = [];
 		foreach ($ids as $id) {

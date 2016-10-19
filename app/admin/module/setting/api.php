@@ -73,4 +73,13 @@ class Web_Module_Setting_Api extends Module {
 		$template->assign('selected_tags', $selected_tags);
 		$template->assign('settings', Setting::get_as_array());
 	}
+
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.setting';
+	}
 }

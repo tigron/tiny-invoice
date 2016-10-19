@@ -144,8 +144,6 @@ class Invoice {
 		$transfer->invoice_id = $this->id;
 		$transfer->save();
 
-		Object_Log::create('add', $transfer);
-
 		if ($this->get_amount_paid() >= $this->get_price_incl()) {
 			$this->mark_paid();
 		}
@@ -166,10 +164,10 @@ class Invoice {
 	 * Get all logs for this invoice
 	 *
 	 * @access public
-	 * @return array Object_Log $items
+	 * @return array Log $items
 	 */
 	public function get_logs() {
-		return Object_Log::get_by_object($this);
+		return Log::get_by_object($this);
 	}
 
 	/**
@@ -211,8 +209,8 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-			//return $this->file;
-			$this->file->delete();
+			return $this->file;
+//			$this->file->delete();
 		}
 
 		$pdf = new Pdf('invoice', $this->customer->language);

@@ -40,6 +40,7 @@ class Web_Module_User extends Module {
 		$pager->add_sort_permission('username');
 		$pager->add_sort_permission('firstname');
 		$pager->add_sort_permission('lastname');
+		$pager->add_sort_permission('role.name');
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
@@ -72,7 +73,7 @@ class Web_Module_User extends Module {
 				Session::redirect('/user');
 			}
 		}
-
+		$template->assign('roles', Role::get_all());
 		$template->assign('languages', Language::get_all());
 	}
 
@@ -100,7 +101,7 @@ class Web_Module_User extends Module {
 				Session::redirect('/user?action=edit&id=' . $user->id);
 			}
 		}
-
+		$template->assign('roles', Role::get_all());
 		$template->assign('user', $user);
 		$template->assign('languages', Language::get_all());
 	}
@@ -124,5 +125,14 @@ class Web_Module_User extends Module {
 		}
 
 		Session::redirect('/user');
+	}
+
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.user';
 	}
 }

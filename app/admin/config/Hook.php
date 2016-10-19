@@ -24,6 +24,13 @@ class Hook_Admin {
 			User::set($_SESSION['user']);
 		}
 
+		if (is_callable([ $module, 'secure' ])) {
+			$identifier = $module->secure();
+			if (!$_SESSION['user']->has_permission($identifier)) {
+				\Skeleton\Core\Web\Session::redirect('/403');
+			}
+		}
+
 		// Assign the sticky session object to our template
 		$template = \Skeleton\Core\Web\Template::get();
 		$sticky_session = new \Skeleton\Core\Web\Session\Sticky();
