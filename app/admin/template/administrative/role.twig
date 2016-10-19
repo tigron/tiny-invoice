@@ -1,0 +1,177 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+{% if action == 'edit' %}
+	<ol class="breadcrumb">
+		<li><a href="/">{% trans "Home" %}</a></li>
+		<li><a href="/administrative/role">{% trans "Roles" %}</a></li>
+		<li class="active">{{ role.name }}</li>
+	</ol>
+
+	{% if env.sticky_session.message == 'updated' %}
+		{{ base.display_flash_message(env.sticky_session.message, 'role') }}
+	{% endif %}
+
+
+	<form class="form-horizontal" method="post" action="/administrative/role?action=edit&id={{ role.id }}">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Role details" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Name" %}</label>
+					<div class="col-xs-9"><input type="text" name="role[name]" class="form-control" value="{{ role.name }}" /></div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-offset-3 col-xs-9">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</form>
+
+	{% if env.sticky_session.message == 'updated_permissions' %}
+		{{ base.display_flash_message('updated', 'role permissions') }}
+	{% endif %}
+
+	<form class="form-horizontal" method="post" action="/administrative/role?action=edit_permissions&id={{ role.id }}">
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Permissions" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Select permissions" %}</label>
+					<div class="col-xs-9">
+						<select name="permission_ids[]" class="multiselect" multiple="multiple">
+							{% for permission in permissions %}
+								<option value="{{ permission.id }}" {% if role.has_permission(permission) %}selected{% endif %}>
+									{% if permission.identifier == "admin.user" %}
+										{% trans "Users" %}
+									{% elseif permission.identifier == 'admin.customer' %}
+										{% trans "Customers" %}
+									{% elseif permission.identifier == 'admin.supplier' %}
+										{% trans "Suppliers" %}
+									{% elseif permission.identifier == 'admin.export' %}
+										{% trans "Exports" %}
+									{% elseif permission.identifier == 'admin.invoice' %}
+										{% trans "Invoices" %}
+									{% elseif permission.identifier == 'admin.creditnote' %}
+										{% trans "Credit notes" %}
+									{% elseif permission.identifier == 'admin.invoice_queue' %}
+										{% trans "Invoice Queue" %}
+									{% elseif permission.identifier == 'admin.invoice_queue_recurring' %}
+										{% trans "Recurring Invoice Queue" %}
+									{% elseif permission.identifier == 'admin.product_type' %}
+										{% trans "Product definitions" %}
+									{% elseif permission.identifier == 'admin.document' %}
+										{% trans "Document management" %}
+									{% elseif permission.identifier == 'admin.setting' %}
+										{% trans "Settings" %}
+									{% endif %}
+								</option>
+							{% endfor %}
+						</select>
+
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-offset-3 col-xs-9">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+
+{% else %}
+	<ol class="breadcrumb">
+		<li><a href="/">{% trans "Home" %}</a></li>
+		<li class="active">{% trans "Roles" %}</li>
+	</ol>
+
+	<form class="form-horizontal" method="post" action="/administrative/role">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			{% trans "Filter" %}
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="control-label col-xs-3">{% trans "Search" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" name="search" value="{{ pager.get_search() }}"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="controls col-xs-offset-3 col-xs-9">
+					<button class="btn btn-primary" type="submit">
+						{% trans "Search" %}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+
+	{% include "administrative/role/new.twig" with {"id": "new_role"} %}
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="pull-right">
+				<a href="#new_role" data-toggle="modal">
+					<span class="glyphicon glyphicon-plus-sign"></span>
+					{% trans "Add role" %}
+				</a>
+			</div>
+
+			{{ base.pager_count(pager.item_count) }}
+		</div>
+		<div class="panel-body">
+			{% for role in pager.items %}
+				{% if loop.first %}
+				<table class="table table-striped table-hover table-condensed">
+					<thead>
+						<tr>
+							<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
+							<th width="20">&nbsp;</th>
+							<th width="20">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+				{% endif %}
+				<tr>
+					<td>{{ role.name }}</td>
+
+					<td>
+						<a href="/administrative/role?id={{ role.id }}&action=edit">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+					</td>
+					<td>
+						<a href="/administrative/role?id={{ role.id }}&action=delete" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
+							<span class="glyphicon glyphicon-remove" />
+						</a>
+					</td>
+				</tr>
+
+				{% if loop.last %}
+					</tbody>
+				</table>
+				{{ pager.links|raw }}
+				{% endif %}
+			{% else %}
+
+				<p><em>{% trans "No customers found." %}</em></p>
+
+			{% endfor %}
+		</div>
+	</div>
+
+{% endif %}
+
+{% endblock content %}

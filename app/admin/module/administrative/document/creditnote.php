@@ -103,6 +103,13 @@ class Web_Module_Administrative_Document_Creditnote extends Web_Module_Administr
 
 		parent::display_edit();
 	}
-
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.document';
+	}
 
 }

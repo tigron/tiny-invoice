@@ -277,4 +277,12 @@ class Web_Module_Sales_Invoice extends Module {
 		Session::redirect('/sales/invoice?action=edit&id=' . $_GET['id']);
 	}
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.invoice';
+	}
 }

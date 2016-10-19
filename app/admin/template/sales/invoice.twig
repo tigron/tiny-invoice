@@ -110,7 +110,7 @@
 						<dl class="dl-horizontal">
 							<dt>{% trans "Name" %}</dt>
 							<dd>
-								<a href="/administrative/customer?action=edit&id={{ invoice.customer.id }}" title="">
+								<a href="/administrative/customer/detail?id={{ invoice.customer.id }}" title="">
 									{{ invoice.customer.firstname }} {{ invoice.customer.lastname }}
 								</a>
 							</dd>
@@ -599,10 +599,8 @@
 								<option value=""> - - - </option>
 								{% for customer in customers %}
 								    <option value="{{ customer.id }}"{% if pager.has_condition('customer_id', customer.id) %} selected{% endif %}>
-										{{ customer.firstname }} {{ customer.lastname }}
-										{% if customer.company != '' %}
-											({{ customer.company }})
-										{% endif %}
+								    	{{ customer.get_display_name() }}
+								    </option>
 								{% endfor %}
 							</select>
 						</div>
@@ -675,8 +673,8 @@
 						<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
 						<th width="10%">{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
 						<th>{{ pager.create_header('Customer'|trans, 'customer.lastname')|raw }}</th>
-						<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
 						<th width="10%" class="text-right">{{ pager.create_header('Price excl'|trans, 'price_excl')|raw }}</th>
+						<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
 						<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
 						<th width="30"></th>
 						<th width="30"></th>
@@ -693,12 +691,12 @@
 				</td>
 				<td>{{ invoice.created|date }}</td>
 				<td>
-					<a href="/administrative/customer?action=edit&id={{ invoice.customer.id }}" title="">
+					<a href="/administrative/customer/detail?id={{ invoice.customer.id }}" title="">
 						{{ invoice.customer.get_display_name }}
 					</a>
 				</td>
-				<td class="text-right">€{{ invoice.price_incl|number_format }}</td>
 				<td class="text-right">€{{ invoice.price_excl|number_format }}</td>
+				<td class="text-right">€{{ invoice.price_incl|number_format }}</td>
 				<td>
 				{% if invoice.paid %}
 					<span class="glyphicon glyphicon-ok"></span>

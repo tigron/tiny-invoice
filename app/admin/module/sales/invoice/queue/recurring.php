@@ -187,4 +187,13 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 		$template->assign('invoice_queue_recurring_group', $invoice_queue_recurring_group);
 		$template->assign('product_types', Product_Type::get_all('name'));
 	}
+
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.invoice_queue_recurring';
+	}
 }

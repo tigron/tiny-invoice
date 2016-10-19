@@ -316,7 +316,15 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 			Log::create('add', $invoice);
 		}
 		Session::redirect('/sales/invoice/queue');
+	}
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.invoice_queue';
 	}
 
 }

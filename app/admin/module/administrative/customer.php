@@ -115,4 +115,13 @@ class Web_Module_Administrative_Customer extends Module {
 		echo json_encode($customer->get_info());
 	}
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.customer';
+	}
+
 }

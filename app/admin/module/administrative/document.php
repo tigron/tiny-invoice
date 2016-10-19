@@ -306,4 +306,12 @@ class Web_Module_Administrative_Document extends Module {
 		$document = Document::get_by_id($_GET['id']);
 		echo json_encode($document->get_info());
 	}
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.document';
+	}
 }

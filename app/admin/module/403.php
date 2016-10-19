@@ -1,31 +1,31 @@
 <?php
 /**
- * Module Index
+ * Module 404
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
- * @author David Vandemaele <david@tigron.be>
  */
 
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 
-class Web_Module_Index extends Module {
-
+class Web_Module_403 extends Module {
 	/**
-	 * Login required
+	 * Login required ?
+	 * Default = yes
 	 *
-	 * @var $login_required
+	 * @access public
+	 * @var bool $login_required
 	 */
-	protected $login_required = true;
+	public $login_required = false;
 
 	/**
-	 * Template
+	 * Template to use
 	 *
-	 * @access protected
+	 * @access public
 	 * @var string $template
 	 */
-	protected $template = 'index.twig';
+	public $template = '403.twig';
 
 	/**
 	 * Display method
@@ -35,5 +35,4 @@ class Web_Module_Index extends Module {
 	public function display() {
 
 	}
-
 }
