@@ -307,7 +307,7 @@
 			<li class="active">{% trans "Select invoice contact" %}</li>
 		</ol>
 
-		{% include 'sales/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact', 'redirect': '/sales/invoice?action=create_step2'} %}
+		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact', 'redirect': '/sales/invoice?action=create_step2'} %}
 
 		{% if errors is defined %}
 		<div class="alert alert-danger">
@@ -332,21 +332,19 @@
 									<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
 										<span class="glyphicon glyphicon-trash"></span>
 									</a>
-
 								</div>
 
-								{% if customer_contact.company != '' %}{{ customer_contact.company }}<br>{% endif %}
-								{{ customer_contact.firstname }} {{ customer_contact.lastname }}<br>
-								{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
-								{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
-								{{ customer_contact.country.name }}
-								{% if customer_contact.vat != '' %}<br>{{ customer_contact.get_vat_formatted() }}{% endif %}
+								<div class="pull-left">
+									<input type="radio" name="customer_contact" />
+								</div>
+
+								{{ base.customer_contact(customer_contact, settings) }}
 							</div>
 						</div>
 					</div>
 				{% endfor %}
 					<div class="col-xs-3">
-						<div class="panel panel-default">
+						<div class="panel panel-default customer_contact">
 							<div class="panel-body text-center">
 								<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
 									{% trans "Create new" %}
@@ -375,9 +373,11 @@
 					$(this).find('.actions').toggleClass('hide');
 				},
 				click: function() {
+					$('.customer_contact').find('input[type=radio]').prop('checked', false);
 					$('.customer_contact').find('.panel-body').removeClass('bg-info');
 					$(this).find('.panel-body').first().addClass('bg-info');
 					$('#invoice-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
+					$(this).find('input[type=radio]').prop('checked', true);
 				}
 			});
 
