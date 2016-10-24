@@ -261,7 +261,7 @@
 				{% endif %}
 
 				<tr>
-					<td>{{ customer.id }}</td>
+					<td>{{ customer.get_identifier() }}</td>
 					<td>{{ customer.firstname }}</td>
 					<td>{{ customer.lastname }}</td>
 					<td>{{ customer.company }}</td>

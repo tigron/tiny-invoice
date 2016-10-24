@@ -30,3 +30,18 @@
 	{% else %}{% trans "results" %}{% endif %}
 
 {% endmacro %}
+
+{% macro customer_contact(customer_contact, settings) %}
+	<address>
+		<strong>{{ customer_contact.get_display_name() }} - {{ customer_contact.get_identifier() }}</strong><br />
+		{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
+		{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
+		{{ customer_contact.country.name }}<br />
+		{% if customer_contact.vat != '' %}{{ customer_contact.get_vat_formatted() }}<br />{% endif %}
+		<abbr title="Phone">P:</abbr>{{ customer_contact.phone }} <abbr title="{% trans "Fax" %}">F:</abbr>{{ customer_contact.fax }}<br />
+		<a href="mailto:{{ customer_contact.email }}">{{ customer_contact.email }}</a>
+		{% if settings.enable_click_post %}
+			<br />{% trans "Invoice via" %}: <strong>{{ customer_contact.invoice_method.name }}</strong>
+		{% endif %}
+	</address>
+{% endmacro %}

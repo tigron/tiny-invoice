@@ -125,6 +125,11 @@
 			{{ base.display_flash_message(env.sticky_session.message, 'invoice queue') }}
 		{% endif %}
 
+		{% include 'sales/invoice/queue/modal.customer_contacts.twig' with {'id': 'change_customer_contact', 'modal_size': 'lg', 'invoice_queue_group': invoice_queue } %}
+
+		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue/recurring?action=edit&id=' ~ invoice_queue_recurring_group.id, 'modal_size': 'lg'} %}
+
+
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				{% trans "Invoice queue item details" %}
@@ -134,13 +139,25 @@
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
 						<div class="col-xs-6">
-							<p class="form-control-static">{{ invoice_queue.customer.firstname }} {{ invoice_queue.customer.lastname }} [ID: {{ invoice_queue.customer_id }}]</p>
+							<p class="form-control-static">
+								<a href="/administrative/customer/detail?id={{ invoice_queue.customer_id }}">
+									{{ invoice_queue.customer.get_display_name() }}
+								</a>
+							</p>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Invoice contact" %}</label>
 						<div class="col-xs-6">
-							<p class="form-control-static">{{ invoice_queue.customer_contact.firstname }} {{ invoice_queue.customer_contact.lastname }} [ID: {{ invoice_queue.customer_contact_id }}]</p>
+							<p class="form-control-static">
+								{{ invoice_queue.customer_contact.get_display_name() }}aze
+								<a href="#change_customer_contact" data-toggle="modal">
+									{% trans "Change customer contact" %}
+								</a> /
+								<a href="#manage-customer-contact" data-toggle="modal" data-customer-contact-id="{{ invoice_queue.customer_contact_id }}">
+									{% trans "Modify customer contact" %}
+								</a>
+							</p>
 						</div>
 					</div>
 
@@ -245,7 +262,7 @@
 			<li class="active">{% trans "Select invoice contact" %}</li>
 		</ol>
 
-		{% include 'sales/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact'} %}
+		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact'} %}
 
 		{% if errors is defined %}
 		<div class="alert alert-danger">

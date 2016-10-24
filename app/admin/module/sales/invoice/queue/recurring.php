@@ -93,6 +93,7 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 	 */
 	public function display_add_step2() {
 		$template = Template::get();
+
 		if (isset($_POST['customer_contact_id'])) {
 			if ($_POST['customer_contact_id'] == '') {
 				$template->assign('errors', 'select_customer_contact');
