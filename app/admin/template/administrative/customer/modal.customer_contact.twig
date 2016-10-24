@@ -1,0 +1,215 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Manage invoice contact" %}{% endblock header %}
+
+{% block body %}
+
+	<div class="alert alert-danger hide">
+		{% trans "Some fields were not filled in correctly" %}. {% trans "Please correct them" %}.
+	</div>
+
+	<form class="form-horizontal form-condensed" method="post" id="invoice-contact-form" onsubmit="return validate_customer_contact();">
+		<input type="hidden" name="customer_contact[customer_id]" id="customer_id" value="">
+
+		<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
+			<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[company]" id="company" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'firstname' in errors|keys %} has-error{% endif %}">
+			<label for="firstname" class="control-label col-xs-3">{% trans "Firstname" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[firstname]" id="firstname" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'lastname' in errors|keys %} has-error{% endif %}">
+			<label for="lastname" class="control-label col-xs-3">{% trans "Lastname" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[lastname]" id="lastname" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'street' in errors|keys %} has-error{% endif %}">
+			<label for="street" class="control-label col-xs-3">{% trans "Street" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[street]" id="street" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'housenumber' in errors|keys %} has-error{% endif %}">
+			<label for="housenumber" class="control-label col-xs-3">{% trans "Housenumber" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[housenumber]" id="housenumber" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'city' in errors|keys %} has-error{% endif %}">
+			<label for="city" class="control-label col-xs-3">{% trans "City" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[city]" id="city" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'zipcode' in errors|keys %} has-error{% endif %}">
+			<label for="zipcode" class="control-label col-xs-3">{% trans "Zip code" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[zipcode]" id="zipcode" class="form-control" value="">
+			</div>
+
+		</div>
+
+		<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
+			<label for="country_id" class="control-label col-xs-3">{% trans "Country" %}</label>
+			<div class="col-xs-9">
+				<select id="country_id" name="customer_contact[country_id]" class="form-control">
+
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group{% if 'email' in errors|keys %} has-error{% endif %}">
+			<label for="email" class="control-label col-xs-3">{% trans "Email" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[email]" id="email" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'phone' in errors|keys %} has-error{% endif %}">
+			<label for="phone" class="control-label col-xs-3">{% trans "Phone" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[phone]" id="phone" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'mobile' in errors|keys %} has-error{% endif %}">
+			<label for="mobile" class="control-label col-xs-3">{% trans "Mobile" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[mobile]" id="mobile" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'fax' in errors|keys %} has-error{% endif %}">
+			<label for="fax" class="control-label col-xs-3">{% trans "Fax" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[fax]" id="fax" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
+			<label for="vat" class="control-label col-xs-3">{% trans "Vat" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[vat]" id="vat" class="form-control" value="">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="language_id" class="control-label col-xs-3">{% trans "Language" %}</label>
+			<div class="col-xs-9">
+				{{ form.select_language(languages, 'customer_contact[language_id]', 'language_id', 0) }}
+			</div>
+		</div>
+
+		{% if settings.enable_click_post %}
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Invoice method" %}</label>
+				<div class="col-xs-9">
+					<select name="customer_contact[invoice_method_id]" class="form-control" id="invoice_method_id">
+						<option value="1">{% trans "Mail" %}</option>
+						<option value="2">{% trans "Click & Post" %}</option>
+					</select>
+				</div>
+			</div>
+		{% endif %}
+	</form>
+
+	<script type="text/javascript">
+		load_countries()
+
+		$('#manage-customer-contact').on('show.bs.modal', function (e) {
+
+			$('#invoice-contact-form input, select').val('');
+			$('.form-group').removeClass('has-error');
+			current_customer_contact_id = 0;
+
+			var $invoker = $(e.relatedTarget);
+console.log($invoker);
+			if($invoker.data('customer-contacts') == 0) {
+				load_customer_data($invoker.data('customer-id'));
+			} else if($invoker.data('customer-contact-id')) {
+				load_customer_contact_data($invoker.data('customer-contact-id'));
+			}
+
+			$('#invoice-contact-form #customer_id').val($invoker.data('customer-id'));
+		});
+
+		function load_countries() {
+			$.get('/administrative/customer/contact?action=load_countries', function(data) {
+				$.each(data, function(key, value) {
+					var optgroup = $('<optgroup />');
+					optgroup.attr('label', key);
+
+					$.each(value, function(key, country) {
+						var option = $('<option></option>');
+						option.val(country.id);
+						option.text(country.name);
+						optgroup.append(option);
+					});
+					optgroup.appendTo($('#country_id'));
+				});
+			}, 'json');
+		}
+
+		function load_customer_data(id) {
+			$.get('/administrative/customer?action=load_customer&id=' + id, function(data) {
+				$.each(data, function(key, value) {
+					if($('#invoice-contact-form #' + key).length == 1) {
+						$('#invoice-contact-form #' + key).val(value);
+					}
+				});
+
+			}, 'json');
+		}
+
+		function load_customer_contact_data(id) {
+			$.get('/administrative/customer/contact?action=load_customer_contact&id=' + id, function(data) {
+				$.each(data, function(key, value) {
+					if($('#invoice-contact-form #' + key).length == 1) {
+						$('#invoice-contact-form #' + key).val(value);
+					}
+				});
+
+				current_customer_contact_id = id;
+			}, 'json');
+		}
+
+		function validate_customer_contact() {
+			data = $('#invoice-contact-form').serialize();
+
+			$('.form-group').removeClass('has-error');
+
+			$.post('/administrative/customer/contact?action=manage&id=' + current_customer_contact_id, data, function(data) {
+				if ("id" in data) {
+					window.location = '{{ redirect|raw }}';
+				} else {
+					$('.alert').removeClass('hide');
+					$.each(data, function(key, value) {
+						$('#invoice-contact-form #' + key).parents('.form-group').addClass('has-error');
+					});
+				}
+				return false;
+			}, 'json');
+
+			return false;
+		}
+
+	</script>
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+{% endblock footer %}
