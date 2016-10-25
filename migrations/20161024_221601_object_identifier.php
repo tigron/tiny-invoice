@@ -22,7 +22,7 @@ class Migration_20161024_221601_Object_identifier extends \Skeleton\Database\Mig
 		} catch (Exception $e) {
 			$setting = new Setting();
 			$setting->name = 'customer_identifier';
-			$settins->value = '%d';
+			$setting->value = '%d';
 			$setting->save();
 		}
 
@@ -31,7 +31,7 @@ class Migration_20161024_221601_Object_identifier extends \Skeleton\Database\Mig
 		} catch (Exception $e) {
 			$setting = new Setting();
 			$setting->name = 'customer_contact_identifier';
-			$settins->value = '%d';
+			$setting->value = '%d';
 			$setting->save();
 		}
 

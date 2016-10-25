@@ -38,7 +38,7 @@
 		{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
 		{{ customer_contact.country.name }}<br />
 		{% if customer_contact.vat != '' %}{{ customer_contact.get_vat_formatted() }}<br />{% endif %}
-		<abbr title="Phone">P:</abbr>{{ customer_contact.phone }} <abbr title="{% trans "Fax" %}">F:</abbr>{{ customer_contact.fax }}<br />
+		<abbr title="Phone">P:</abbr>{{ customer_contact.phone }} {% if customer_contact.fax != '' %}<abbr title="{% trans "Fax" %}">F:</abbr>{{ customer_contact.fax }}{% endif %}<br />
 		<a href="mailto:{{ customer_contact.email }}">{{ customer_contact.email }}</a>
 		{% if settings.enable_click_post %}
 			<br />{% trans "Invoice via" %}: <strong>{{ customer_contact.invoice_method.name }}</strong>
