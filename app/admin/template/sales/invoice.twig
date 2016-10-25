@@ -356,7 +356,7 @@
 
 				<form method="post" action="/sales/invoice?action=create_step2" id="invoice-create-step2">
 					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
-					<button class="btn btn-primary">
+					<button class="btn btn-primary pull-right">
 						{% trans "Next" %}
 					</button>
 				</form>
@@ -404,7 +404,7 @@
 		</ol>
 
 		{% if errors[-1] is defined %}
-			<div class="alert alert-danger">{% trans "The price must be larger than €0" %}</div>
+			<div class="alert alert-danger">{% trans "The price must be greater than €0" %}</div>
 		{% elseif errors is defined %}
 			<div class="alert alert-danger">
 				{{ errors|print_r }}
