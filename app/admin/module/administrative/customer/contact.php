@@ -59,7 +59,9 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 			$dirty_fields = $customer_contact->get_dirty_fields();
 			unset($dirty_fields['invoice_method_id']);
 			unset($dirty_fields['email']);
-
+			unset($dirty_fields['phone']);
+			unset($dirty_fields['fax']);
+			unset($dirty_fields['mobile']);
 
 			if ($customer_contact->id !== null AND count($dirty_fields) > 0) {
 				$customer_contact->active = false;
