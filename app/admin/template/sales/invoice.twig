@@ -695,8 +695,8 @@
 						{{ invoice.customer.get_display_name }}
 					</a>
 				</td>
-				<td class="text-right">€{{ invoice.price_excl|number_format }}</td>
-				<td class="text-right">€{{ invoice.price_incl|number_format }}</td>
+				<td class="text-right">€{{ invoice.get_price_excl()|number_format }}</td>
+				<td class="text-right">€{{ invoice.get_price_incl()|number_format }}</td>
 				<td>
 				{% if invoice.paid %}
 					<span class="glyphicon glyphicon-ok"></span>
