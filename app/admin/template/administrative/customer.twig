@@ -80,7 +80,7 @@
 					<div class="form-group{% if 'country_id' in errors|keys %} has-error{% endif %}">
 						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
 						<div class="col-xs-5">
-							<select name="supplier[country_id]" class="form-control" onchange="change_country();">
+							<select name="customer[country_id]" class="form-control" onchange="change_country();">
 							{% for group in countries|keys  %}
 								{% if group == 'european' %}
 									<optgroup label="{% trans "European" %}">
@@ -166,7 +166,7 @@
 		</form>
 		<script type="text/javascript">
 			function change_country() {
-				iso2 = $('select[name="supplier[country_id]"] option:selected').attr('data-iso2');
+				iso2 = $('select[name="customer[country_id]"] option:selected').attr('data-iso2');
 				$('#vat_prefix').val(iso2);
 			}
 			change_country();
