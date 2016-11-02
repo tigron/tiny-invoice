@@ -134,7 +134,7 @@
 						<label for="vat" class="col-xs-3 control-label">{% trans "Vat" %}</label>
 						<div class="col-xs-1"><input type="text" class="form-control" id="vat_prefix" readonly value="AT" /></div>
 						<div class="col-xs-4">
-							<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ supplier.vat }}">
+							<input type="text" name="customer[vat]" id="vat" class="form-control" value="{{ customer.vat }}">
 							{{ form.invalid_input('vat', errors) }}
 						</div>
 					</div>
