@@ -60,7 +60,7 @@
 												<input type="hidden" name="document[file_id]" value="{{ document.file_id }}" />
 												<span>{{ document.file.name }}</span> [ {{ document.file.get_human_size() }} ]
 												<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
-													<span class="glyphicon glyphicon-trash"></span>
+													<span class="glyphicon glyphicon-remove"></span>
 												</a>
 												<a href="/administrative/document?action=download&id={{ document.id }}">
 													<span class="glyphicon glyphicon-download"></span>
@@ -398,7 +398,7 @@
 										</span>
 										[ {{ document.file.get_human_size() }} ]
 										<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
-											<span class="glyphicon glyphicon-trash"></span>
+											<span class="glyphicon glyphicon-remove"></span>
 										</a>
 									</div>
 								{% endif %}
@@ -537,7 +537,7 @@
 				</td>
 				<td width="20">
 					<a href="/administrative/document?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
-						<span class="glyphicon glyphicon-trash"></span>
+						<span class="glyphicon glyphicon-remove"></span>
 					</a>
 				</td>
 			</tr>
@@ -602,7 +602,7 @@
 				</span>
 				[ ((file.human_size)) ]
 				<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
-					<span class="glyphicon glyphicon-trash"></span>
+					<span class="glyphicon glyphicon-remove"></span>
 				</a>
 			</div>
 		</script>
