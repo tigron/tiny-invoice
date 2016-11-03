@@ -245,7 +245,7 @@
 						<td>
 						{% if env.session.user.id != user.id %}
 							<a href="/user?id={{ user.id }}&action=delete" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to remove this user?" %}">
-								<span class="glyphicon glyphicon-trash" />
+								<span class="glyphicon glyphicon-remove" />
 							</a>
 						{% endif %}
 						</td>

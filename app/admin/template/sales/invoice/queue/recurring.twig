@@ -19,8 +19,6 @@
 			</div>
 		{% endif %}
 
-
-
 		<div class="row">
 		<div class="col-md-6">
 			<form class="form-horizontal form-condensed" method="post" action="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}">
@@ -163,19 +161,67 @@
 							<th width="150">{% trans "Quantity" %}</th>
 							<th width="150">{% trans "Price" %}</th>
 							<th width="30">&nbsp;</th>
+							<th width="30">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for invoice_queue_recurring in invoice_queue_recurring_group.get_invoice_queue_recurring() %}
-						<tr>
+						<tr class="edit hidden invoice_queue_recurring_{{ invoice_queue_recurring.id }}">
+							<td>
+								<select name="existing_queue_item[{{ invoice_queue_recurring.id }}][product_type_id]" class="form-control">
+								{% for product_type in product_types %}
+									<option value="{{ product_type.id }}" {% if invoice_queue_recurring.product_type_id == product_type.id %}selected{% endif %}>{{ product_type.name }}</option>
+								{% endfor %}
+								</select>
+							</td>
+							<td>
+								<textarea name="existing_queue_item[{{ invoice_queue_recurring.id }}][description]" class="form-control autogrow">{{ invoice_queue_recurring.description }}</textarea>
+							</td>
+
+
+							<td>
+								<select name="existing_queue_item[{{ invoice_queue_recurring.id }}][vat]" class="form-control">
+									<option value="6" {% if invoice_queue_recurring.vat == 6 %}selected{% endif %}>6%</option>
+									<option value="12" {% if invoice_queue_recurring.vat == 12 %}selected{% endif %}>12%</option>
+									<option value="21" {% if invoice_queue_recurring.vat == 21 %}selected{% endif %}>21%</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" class="form-control" name="existing_queue_item[{{ invoice_queue_recurring.id }}][qty]" value="{{ invoice_queue_recurring.qty }}" />
+							</td>
+							<td>
+								<input type="text" name="existing_queue_item[{{ invoice_queue_recurring.id }}][price]" class="form-control" value="{{ invoice_queue_recurring.price }}" />
+							</td>
+							<td>
+								<a href="javascript: void(0);" onclick="toggle_row({{ invoice_queue_recurring.id }});">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+							</td>
+
+
+							<td>
+								<a href="/sales/invoice/queue/recurring?action=delete_queue_element&id={{ invoice_queue_recurring.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this item" %}">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+							</td>
+						</tr>
+
+
+						<tr class="view invoice_queue_recurring_{{ invoice_queue_recurring.id }}">
 							<td>{{ invoice_queue_recurring.product_type.name }}</td>
 							<td>{{ invoice_queue_recurring.description|nl2br }}</td>
 							<td>{{ invoice_queue_recurring.vat }}%</td>
 							<td>{{ invoice_queue_recurring.qty }}</td>
 							<td>&euro;{{ invoice_queue_recurring.price|number_format }}</td>
 							<td>
+								<a href="javascript: void(0);" onclick="toggle_row({{ invoice_queue_recurring.id }});">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+							</td>
+
+							<td>
 								<a href="/sales/invoice/queue/recurring?action=delete_queue_element&id={{ invoice_queue_recurring.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this item" %}">
-									<span class="glyphicon glyphicon-trash"></span>
+									<span class="glyphicon glyphicon-remove"></span>
 								</a>
 							</td>
 						</tr>
@@ -196,8 +242,12 @@
 			</div>
 		</div>
 
-
 		<script>
+			function toggle_row(id) {
+				$('.invoice_queue_recurring_' + id).toggleClass('hidden');
+				$('.autogrow').autoGrow();
+			}
+
 			function update_invoice_contact() {
 				contact_id = $('#invoice_contact').val()
 				$('address').addClass('hide');
@@ -218,6 +268,7 @@
 				$(element).parents('tr').remove();
 			}
 		</script>
+
 		<script id="cloneable" type="text/x-handlebars-template">
 			<tr>
 				<td>
@@ -243,9 +294,10 @@
 				<td>
 					<input type="text" name="queue_item[price][]" class="form-control"/>
 				</td>
+				<td>&nbsp;</td>
 				<td>
 					<div class="form-control-static">
-						<a href="javascript:void(0);" onclick="remove_queue_item($(this));" title="{% trans "Delete" %}"><span class="glyphicon glyphicon-trash"></span></a>
+						<a href="javascript:void(0);" onclick="remove_queue_item($(this));" title="{% trans "Delete" %}"><span class="glyphicon glyphicon-remove"></span></a>
 					</div>
 				</td>
 			</tr>
@@ -328,7 +380,7 @@
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a>
 									<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
-										<span class="glyphicon glyphicon-trash"></span>
+										<span class="glyphicon glyphicon-remove"></span>
 									</a>
 								</div>
 
