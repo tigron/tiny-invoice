@@ -62,9 +62,10 @@ class Web_Module_Administrative_Document_Creditnote extends Web_Module_Administr
 				$pager->clear_condition('document_incoming_creditnote.paid');
 			}
 		} else {
-			$pager->add_condition('document_incoming_creditnote.paid', 0);
+			$pager->clear_condition('document_incoming_creditnote.paid', 0);
 		}
 
+		$pager->add_condition('document_incoming_creditnote.document_id', '>', 0);
 		$pager->add_condition('classname', 'Document_Incoming_Creditnote');
 		$pager->add_join('document_incoming_creditnote', 'document_id', 'document.id');
 
