@@ -41,6 +41,7 @@
 								<option value="+1 month"{% if invoice_queue_recurring_group.repeat_every == '+1 month' %} selected="selected"{% endif %}>{% trans "Every month" %}</option>
 								<option value="+2 months"{% if invoice_queue_recurring_group.repeat_every == '+2 months' %} selected="selected"{% endif %}>{% trans "Every 2 months" %}</option>
 								<option value="+3 months"{% if invoice_queue_recurring_group.repeat_every == '+3 months' %} selected="selected"{% endif %}>{% trans "Every 3 months" %}</option>
+								<option value="+6 months"{% if invoice_queue_recurring_group.repeat_every == '+6 months' %} selected="selected"{% endif %}>{% trans "Every 6 months" %}</option>
 								<option value="+1 year"{% if invoice_queue_recurring_group.repeat_every == '+1 year' %} selected="selected"{% endif %}>{% trans "Every year" %}</option>
 							</select>
 						</div>
@@ -334,6 +335,7 @@
 								<option value="+1 month">{% trans "Every month" %}</option>
 								<option value="+2 months">{% trans "Every 2 months" %}</option>
 								<option value="+3 months">{% trans "Every 3 months" %}</option>
+								<option value="+6 months">{% trans "Every 6 months" %}</option>
 								<option value="+1 year">{% trans "Every year" %}</option>
 							</select>
 						</div>
