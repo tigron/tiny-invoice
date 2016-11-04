@@ -32,7 +32,9 @@ $(document).ready(function(){
 	/**
 	 * Initialize multiselect
 	 */
-	$('.multiselect').multiselect();
+	$('.multiselect').multiselect({
+		maxHeight: 300
+	});
 
 	/**
 	 * Initialize autogrow

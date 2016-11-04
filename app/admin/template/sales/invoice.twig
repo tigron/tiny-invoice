@@ -572,6 +572,50 @@
 			}
 
 		</script>
+	{% elseif action == 'export' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/sales/invoice">{% trans "Invoices" %}</a></li>
+			<li class="active">{% trans "Export invoices" %}</li>
+		</ol>
+
+		<form class="form-horizontal" method="post" action="/sales/invoice?action=export">
+		<div class="well">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export invoices" %}</label>
+				<div class="col-xs-9">
+					<select name="months[]" class="form-control multiselect" multiple="multiple">
+					{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
+						<optgroup label="{{ year }}">
+							{% for month in 1..12 %}
+								{% if year < "now"|date("Y") or ( month <= "now"|date("m") and year >= "now"|date("Y") ) %}
+									<option value="{{ year }}-{{ month }}">{{ (year~'-'~month~'-01')|date("F Y") }}</option>
+								{% endif %}
+							{% endfor %}
+						</optgroup>
+					{% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export format" %}</label>
+				<div class="col-xs-4">
+					<select name="export_format" class="form-control">
+						<option value="Export_Expertm_Invoice">Expert/M</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">
+						{% trans "Download" %}
+					</button>
+				</div>
+			</div>
+		</div>
+		</form>
 
 	{% else %}
 
@@ -660,6 +704,10 @@
 					<a href="/sales/invoice?action=create_step1" title="">
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						{% trans "Add invoice" %}
+					</a>
+					-
+					<a href="/sales/invoice?action=export" title="{% trans "Export invoices" %}">
+						<i class="fa fa-file"></i> {% trans "Export invoices" %}
 					</a>
 				</div>
 				{{ base.pager_count(pager.item_count) }} (&euro;{{ pager.get_sum('price_incl')|number_format }})
