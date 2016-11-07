@@ -55,7 +55,12 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 		$pager->add_sort_permission('processed_to_invoice_item_id');
 
 		if (isset($_POST['search'])) {
-			$pager->set_search($_POST['search'], [ 'customer_contact.firstname', 'customer_contact.lastname', 'customer_contact.company', 'invoice_queue.description']);
+			$search_fields = [
+				'invoice_queue.description',
+				'customer.company',
+				'customer.lastname'
+			];
+			$pager->set_search($_POST['search'], $search_fields);
 		}
 
 		$pager->set_direction('desc');
