@@ -70,14 +70,14 @@ class Bank_Account_Statement {
 	 *
 	 * @access public
 	 * @param Bank_Account $bank_account
-	 * @param string $identifier
+	 * @param string $sequence
 	 * @return Bank_Account_Statement $bank_account_statement
 	 */
-	public static function get_by_bank_account_identifier(Bank_Account $bank_account, $identifier) {
+	public static function get_by_bank_account_sequence(Bank_Account $bank_account, $sequence) {
 		$db = Database::get();
-		$id = $db->get_one('SELECT id FROM bank_account_statement WHERE bank_account_id=? AND identifier=?', [ $bank_account->id, $identifier ]);
+		$id = $db->get_one('SELECT id FROM bank_account_statement WHERE bank_account_id=? AND sequence=?', [ $bank_account->id, $sequence ]);
 		if ($id === null) {
-			throw new Exception('Bank account statement for bank account ' . $bank_account->identifier . ' and identifier ' . $identifier . ' not found');
+			throw new Exception('Bank account statement for bank account ' . $bank_account->identifier . ' and sequence ' . $sequence . ' not found');
 		}
 		return self::get_by_id($id);
 	}

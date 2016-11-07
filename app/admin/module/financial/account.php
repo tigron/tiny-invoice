@@ -39,7 +39,7 @@ class Web_Module_Financial_Account extends Module {
 
 		$pager = new Pager('bank_account');
 
-		$pager->add_sort_permission('identifier');
+		$pager->add_sort_permission('number');
 		$pager->add_sort_permission('name');
 
 		if (isset($_POST['search'])) {
@@ -50,11 +50,6 @@ class Web_Module_Financial_Account extends Module {
 		$template = Template::Get();
 		$template->assign('pager', $pager);
 
-
-		$statements = Bank_Account_Statement::get_all();
-		foreach ($statements as $statement) {
-			$statement->populate();
-		}
 
 	}
 
@@ -99,6 +94,7 @@ class Web_Module_Financial_Account extends Module {
 		$file->expire();
 
 		$parsers = Bank_Account_Statement_Parser::get_all();
+
 		$valid_parser = null;
 		foreach ($parsers as $parser) {
 			if ($parser->detect($file)) {

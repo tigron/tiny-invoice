@@ -25,12 +25,12 @@
 
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Bank account" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.bank_account_statement.bank_account.identifier }}</p></div>
+					<div class="col-xs-9"><p class="form-control-static">{{ transaction.bank_account_statement.bank_account.number }}</p></div>
 				</div>
 
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Bank Account Statement" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.bank_account_statement.identifier }}</p></div>
+					<div class="col-xs-9"><p class="form-control-static">{{ transaction.bank_account_statement.sequence }}</p></div>
 				</div>
 
 				<div class="form-group">
@@ -50,7 +50,7 @@
 
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Message" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.message }}</p></div>
+					<div class="col-xs-9"><p class="form-control-static">{{ transaction.get_message() }}</p></div>
 				</div>
 			</div>
 		</div>
@@ -137,7 +137,7 @@
 								<option value="-1">{% trans "All" %}</option>
 								{% for bank_account_statement in bank_account.get_bank_account_statements() %}
 									<option value="{{ bank_account_statement.id }}" {% if pager.has_condition('bank_account_statement_transaction.bank_account_statement_id', bank_account_statement.id) %}selected{% endif %}>
-										{{ bank_account_statement.date|date }} {{ bank_account_statement.identifier }}
+										{{ bank_account_statement.date|date }} {{ bank_account_statement.sequence }}
 									</option>
 								{% endfor %}
 							</select>
@@ -167,9 +167,9 @@
 						<tr>
 							<th>#</th>
 							<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
-							<th>{{ pager.create_header('Bank Account Statement'|trans, 'bank_account_statement.id')|raw }}</th>
+							<th width="180">{{ pager.create_header('Bank Account Statement'|trans, 'bank_account_statement.id')|raw }}</th>
 							<th>{{ pager.create_header('Amount'|trans, 'amount')|raw }}</th>
-							<th>{{ pager.create_header('Message'|trans, 'message')|raw }}</th>
+							<th width="40%">{{ pager.create_header('Message'|trans, 'message')|raw }}</th>
 							<th>{{ pager.create_header('To/From'|trans, 'other_account_name')|raw }}</th>
 							<th width="20">&nbsp;</th>
 						</tr>
@@ -180,9 +180,9 @@
 				<tr>
 					<td>{{ transaction.id }}</td>
 					<td>{{ transaction.date|date }}</td>
-					<td>{{ transaction.bank_account_statement.identifier }}</td>
-					<td class="text-right">&euro;{{ transaction.amount }}</td>
-					<td>{{ transaction.message|truncate(80) }}</td>
+					<td>{{ transaction.bank_account_statement.sequence }}</td>
+					<td>&euro;{{ transaction.amount }}</td>
+					<td>{{ transaction.get_message|truncate(80) }}</td>
 					<td>{{ transaction.other_account_name }}</td>
 					<td>
 						<a href="/financial/account/transaction?action=edit&id={{ transaction.id }}" title="">
