@@ -304,6 +304,8 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 			foreach ($invoice_queue as $invoice_queue_item) {
 				$invoice_item = new Invoice_Item();
 				$invoice_item->description = $invoice_queue_item->description;
+				$invoice_item->product_type_id = $invoice_queue_item->product_type_id;
+				$invoice_item->invoice_queue_id = $invoice_queue_item->id;
 				$invoice_item->qty = $invoice_queue_item->qty;
 				$invoice_item->price = $invoice_queue_item->price;
 				$invoice_item->vat = $invoice_queue_item->vat;
