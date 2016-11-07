@@ -15,6 +15,23 @@ class Bank_Account_Statement_Transaction {
 	use \Skeleton\Pager\Page;
 
 	/**
+	 * Get message
+	 *
+	 * @access public
+	 * @return string $message
+	 */
+	public function get_message() {
+		if (!empty($this->message)) {
+			return $this->message;
+		}
+		if (empty($this->message) and empty($this->structured_message)) {
+			return '';
+		}
+		$message = '+++' . substr($this->structured_message, 0, 3) . '/' . substr($this->structured_message, 3, 4) . '/' . substr($this->structured_message, 7, 5) . '+++';
+		return $message;
+	}
+
+	/**
 	 * Get bank_account_statement_transaction_balances
 	 *
 	 * @access public
@@ -29,14 +46,14 @@ class Bank_Account_Statement_Transaction {
 	 *
 	 * @access public
 	 * @param Bank_Account_Statement $bank_account_statement
-	 * @param string $sequence_number
+	 * @param string $sequence
 	 * @return Bank_Account_Statement $bank_account_statement
 	 */
-	public static function get_by_bank_account_statement_sequence_number(Bank_Account_Statement $bank_account_statement, $sequence_number) {
+	public static function get_by_bank_account_statement_sequence(Bank_Account_Statement $bank_account_statement, $sequence) {
 		$db = Database::get();
-		$id = $db->get_one('SELECT id FROM bank_account_statement_transaction WHERE bank_account_statement_id=? AND sequence_number=?', [ $bank_account_statement->id, $sequence_number ]);
+		$id = $db->get_one('SELECT id FROM bank_account_statement_transaction WHERE bank_account_statement_id=? AND sequence=?', [ $bank_account_statement->id, $sequence ]);
 		if ($id === null) {
-			throw new Exception('Bank account statement transaction for bank account statement ' . $bank_account_statement->identifier . ' and sequence_number ' . $sequence_number . ' not found');
+			throw new Exception('Bank account statement transaction for bank account statement ' . $bank_account_statement->identifier . ' and sequence ' . $sequence . ' not found');
 		}
 		return self::get_by_id($id);
 	}
