@@ -174,6 +174,24 @@ class Web_Module_Sales_Creditnote extends Module {
 	}
 
 	/**
+	 * Export invoices
+	 *
+	 * @access public
+	 */
+	public function display_export() {
+		$template = Template::Get();
+
+		if (isset($_POST['export_format'])) {
+			$export = new $_POST['export_format']();
+			$export->data = json_encode( $_POST['months'] );
+			$export->save();
+			$export->run();
+
+			Session::redirect('/export?action=created');
+		}
+	}
+
+	/**
 	 * ajax_search
 	 *
 	 * @access public
