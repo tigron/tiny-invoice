@@ -270,7 +270,6 @@ class Web_Module_Sales_Invoice extends Module {
 
 			Session::redirect('/export?action=created');
 		}
-
 	}
 
 	/**

@@ -43,26 +43,16 @@ class Export_Expertm_User extends Export_Expertm {
 			$output .= $this->num(1, 1);
 			$output .= $this->alf(3, 'EUR');
 			$output .= $this->num(1, $customer_contact_export->vat_bound());
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-			$output .= $this->num(9, $customer_contact_export->country->iso2);
-
 			if ($customer_contact_export->vat == '') {
 				$output .= $this->alf(1, 'G');
 			} else {
 				$output .= $this->alf(1, 'B');
 			}
+
 			$output .= $this->alf(30, $this->export_vat($customer_contact_export->vat, $customer_contact_export->country));
 			$output .= '00' . $this->alf(90, '');
 			$output .= $this->alf(200, '');
-			$output .= $this->num(9, 700000);
+			$output .= $this->num(9, 7000000);
 			$output .= $this->num(8, 0);
 			$output .= $this->num(1, 0);
 			$output .= $this->num(1, 0);
@@ -71,7 +61,7 @@ class Export_Expertm_User extends Export_Expertm {
 			$output .= $this->num(1, 0);
 			$output .= "\r\n";
 		}
-		$file = \Skeleton\File\File::store('expertm_customers_' . date('Ymd') . '.csv', $output);
+		$file = \Skeleton\File\File::store('expertm_customers_' . date('Ymd') . '.txt', $output);
  		$this->file_id = $file->id;
 		$this->save();
 	}

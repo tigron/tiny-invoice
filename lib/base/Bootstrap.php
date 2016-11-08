@@ -117,7 +117,28 @@ class Bootstrap {
 		/**
 		 * Set the email path
 		 */
-		\Skeleton\Email\Config::$email_directory = $root_path . '/store/email/';
+
+		/**
+		 * Get the email skin
+		 */
+		try {
+			$setting = Setting::get_by_name('skin_email_id');
+		} catch (Exception $e) {
+			Skin_Email::synchronize();
+			$skin_emails = Skin_Email::get_all();
+			$setting = new Setting();
+			$setting->name = 'skin_email_id';
+			$setting->value = array_shift($skin_emails)->id;
+			$setting->save();
+		}
+
+		$skin_email = Skin_Email::get_by_id($setting->value);
+
+		/**
+		 * Set the email path
+		 */
+		\Skeleton\Email\Config::$email_directory = $root_path . '/store/email/' . $skin_email->path . '/';
+
 		try {
 			\Skeleton\Email\Config::$archive_mailbox = Setting::get_by_name('archive_mailbox')->value;
 		} catch (Exception $e) { }

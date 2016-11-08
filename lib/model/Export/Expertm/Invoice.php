@@ -33,8 +33,8 @@ class Export_Expertm_Invoice extends Export_Expertm {
 		$output2 = '';
 
 		foreach ($invoices as $invoice) {
-			$output1 .= $this->num(9, 400000);
-			$output1 .= $this->num(1, 9);
+			$output1 .= $this->num(9, 4000000);
+			$output1 .= $this->num(9, 1);
 			$output1 .= $this->num(9, $invoice->customer_contact->customer_contact_export_id);
 			$output1 .= $this->alf(3, 'EUR');
 			$output1 .= $this->alf(1, 'F');
@@ -47,7 +47,7 @@ class Export_Expertm_Invoice extends Export_Expertm {
 			$output1 .= $this->alf(20, '');
 			$output1 .= $this->alf(20, '');
 			$output1 .= $this->cur(20, $invoice->get_price_incl());
-			$output1 .= $this->cur(20, $invoice->get_price_excl());
+			$output1 .= $this->cur(20, $invoice->get_price_incl());
 			$output1 .= $this->cur(20, 0);
 			$output1 .= $this->num(2, date('n', strtotime($invoice->created)));
 			$output1 .= $this->num(6, date('Ym', strtotime($invoice->created)));
@@ -96,11 +96,11 @@ class Export_Expertm_Invoice extends Export_Expertm {
 			}
 
 		}
-		$file = \Skeleton\File\File::store('expertm_invoices_' . date('Ymd') . '_1.csv', $output1);
+		$file = \Skeleton\File\File::store('expertm_invoices_' . date('Ymd') . '_1.txt', $output1);
  		$this->file_id = $file->id;
 		$this->save();
 
-		$file = \Skeleton\File\File::store('expertm_invoices_' . date('Ymd') . '_2.csv', $output2);
+		$file = \Skeleton\File\File::store('expertm_invoices_' . date('Ymd') . '_2.txt', $output2);
 		$export = new self();
 		$export->file_id = $file->id;
 		$export->save();
