@@ -61,8 +61,10 @@ abstract class Export_Expertm extends Export {
 		$string = str_replace('ë', 'e', $string);
 		$string = str_replace('ä', 'a', $string);
 		$string = str_replace('â', 'a', $string);
+		$string = str_replace('à', 'a', $string);
 		$string = str_replace('ç', 'c', $string);
 		$string = str_replace('ô', 'o', $string);
+		$string = str_replace('ö', 'o', $string);
 		$string = str_replace("\r\n", ' ', $string);
 		$string = str_replace("\n", ' ', $string);
 		$string = trim($string);
