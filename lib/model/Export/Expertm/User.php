@@ -75,6 +75,7 @@ class Export_Expertm_User extends Export_Expertm {
 	 */
 	private function generate_alfa($name) {
 		$alfa = $name;
+		$alfa = $this->clean_string($alfa);
 		$alfa = str_replace(' ', '', $alfa);
 		$alfa = str_replace('.', '', $alfa);
 		$alfa = str_replace('@', '', $alfa);
