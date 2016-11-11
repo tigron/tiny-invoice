@@ -41,15 +41,13 @@ class Invoice {
 		$invoice_item->invoice_id = $this->id;
 		$invoice_item->save();
 
-		$price_incl = 0;
 		$price_excl = 0;
 
 		foreach ($this->get_invoice_items() as $invoice_item) {
-			$price_incl += $invoice_item->get_price_incl();
 			$price_excl += $invoice_item->get_price_excl();
 		}
 		$this->price_excl = $price_excl;
-		$this->price_incl = $price_incl;
+		$this->price_incl = $this->get_price_incl();
 		$this->save();
 
 		if (!is_null($invoice_item->invoice_queue_id)) {
@@ -110,8 +108,6 @@ class Invoice {
 		}
 
 		ksort($vat_array);
-
-
 		return $vat_array;
 	}
 
@@ -144,7 +140,7 @@ class Invoice {
 		$transfer->invoice_id = $this->id;
 		$transfer->save();
 
-		if ($this->get_amount_paid() >= $this->get_price_incl()) {
+		if (bcsub($this->get_price_incl(), $this->get_amount_paid(), 2) <= 0) {
 			$this->mark_paid();
 		}
 		Log::create('Transfer added', $this);
@@ -187,6 +183,10 @@ class Invoice {
 	 * @return double $amount
 	 */
 	public function get_ogm($raw = false){
+		if (!empty($this->ogm)) {
+			return $this->ogm;
+		}
+
 		$number = $this->number;
 		$modulo = $number - ((int)($number/97)*97);
 		if($modulo == 0) {
@@ -194,11 +194,15 @@ class Invoice {
 		}
 
 		$ogm = str_pad($number, 10, '0', STR_PAD_LEFT).str_pad($modulo, 2, '0', STR_PAD_LEFT);
+
+		$this->ogm = '+++' . substr($ogm,0,3).'/'.substr($ogm,3,4).'/'.substr($ogm,7) . '+++';
+		$this->save();
+
 		if($raw) {
 			return $ogm;
 		}
 
-		return '+++' . substr($ogm,0,3).'/'.substr($ogm,3,4).'/'.substr($ogm,7) . '+++';
+		return $this->ogm;
 	}
 
 	/**
@@ -210,7 +214,6 @@ class Invoice {
 	public function get_pdf() {
 		if ($this->file_id > 0) {
 			return $this->file;
-//			$this->file->delete();
 		}
 
 		$pdf = new Pdf('invoice', $this->customer->language);
