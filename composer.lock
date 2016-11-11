@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3673a6ecf4f4ce2d9b1f35b069ab4b43",
-    "content-hash": "692777caf30ca62cdceaa9791111fd9e",
+    "hash": "2c9da37c17a5fe7498f1711ae50d2542",
+    "content-hash": "d58c6278be9e3fa423399caa9e639496",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -576,16 +576,16 @@
         },
         {
             "name": "bower-asset/moment-timezone",
-            "version": "0.5.7",
+            "version": "0.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/moment/moment-timezone.git",
-                "reference": "d0f99d65cec675c6570694f59b5bed3f0c259b08"
+                "reference": "1800e6bee258842a5f6deee0d9bd885b0fe5f283"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/d0f99d65cec675c6570694f59b5bed3f0c259b08",
-                "reference": "d0f99d65cec675c6570694f59b5bed3f0c259b08",
+                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/1800e6bee258842a5f6deee0d9bd885b0fe5f283",
+                "reference": "1800e6bee258842a5f6deee0d9bd885b0fe5f283",
                 "shasum": ""
             },
             "require": {
@@ -609,6 +609,26 @@
                 "MIT"
             ],
             "description": "Parse and display moments in any timezone."
+        },
+        {
+            "name": "bower-asset/purl",
+            "version": "v2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/allmarkedup/purl.git",
+                "reference": "1771aec03be7f0ae31d83c7f2fca6149a4581821"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/allmarkedup/purl/zipball/1771aec03be7f0ae31d83c7f2fca6149a4581821",
+                "reference": "1771aec03be7f0ae31d83c7f2fca6149a4581821",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "purl.js"
+            },
+            "description": "An AMD compatible utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more."
         },
         {
             "name": "bower-asset/tigron-confirm-modal",
@@ -2112,16 +2132,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "528f3060a70e185786b1915a1835891aff404e22"
+                "reference": "9598f19a1ed9ed069d1e73f7c4aeaa7af3703d40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/528f3060a70e185786b1915a1835891aff404e22",
-                "reference": "528f3060a70e185786b1915a1835891aff404e22",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/9598f19a1ed9ed069d1e73f7c4aeaa7af3703d40",
+                "reference": "9598f19a1ed9ed069d1e73f7c4aeaa7af3703d40",
                 "shasum": ""
             },
             "type": "library",
@@ -2141,7 +2161,7 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2016-10-18 09:14:43"
+            "time": "2016-10-25 20:23:08"
         },
         {
             "name": "tigron/skeleton-database",
@@ -2549,16 +2569,16 @@
         },
         {
             "name": "tigron/skeleton-pager",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-pager.git",
-                "reference": "dda89888e5e3a4bb6e4a1eab395afd068d02a808"
+                "reference": "2f9cf5baa487d5b37a04f7b132c1d611a090e619"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-pager/zipball/dda89888e5e3a4bb6e4a1eab395afd068d02a808",
-                "reference": "dda89888e5e3a4bb6e4a1eab395afd068d02a808",
+                "url": "https://api.github.com/repos/tigron/skeleton-pager/zipball/2f9cf5baa487d5b37a04f7b132c1d611a090e619",
+                "reference": "2f9cf5baa487d5b37a04f7b132c1d611a090e619",
                 "shasum": ""
             },
             "require-dev": {
@@ -2581,7 +2601,7 @@
                 }
             ],
             "description": "Tigron Skeleton pager functionality",
-            "time": "2016-06-09 10:08:41"
+            "time": "2016-10-26 08:41:41"
         },
         {
             "name": "tigron/skeleton-transaction",
@@ -2630,7 +2650,9 @@
         "bower-asset/jquery-zoom": 20,
         "bower-asset/bootstrap-multiselect": 20,
         "bower-asset/jquery-mask-plugin": 0,
-        "bower-asset/codemirror": 0
+        "bower-asset/codemirror": 0,
+        "bower-asset/purl": 0,
+        "tigron/skeleton-pager": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
