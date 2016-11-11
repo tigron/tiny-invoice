@@ -3,7 +3,9 @@
 
 {% block body %}
 
-<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal">
+<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_invoices">
+<input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
+
 <div class="form-group">
 	<label class="col-xs-3 control-label">{% trans "Transaction amount" %}</label>
 	<div class="col-xs-9">
@@ -12,10 +14,64 @@
 		</p>
 	</div>
 </div>
-</form>
-{% endblock body %}
 
-{% block footer %}
-	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
-	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
-{% endblock footer %}
+<div class="form-group">
+	<label class="col-xs-3 control-label">{% trans "To/from" %}</label>
+	<div class="col-xs-9">
+		<p class="form-control-static">
+			{{ transaction.other_account_name }}
+		</p>
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-xs-3 control-label">{% trans "Balance" %}</label>
+	<div class="col-xs-9">
+		<p class="form-control-static">
+			&euro;{{ transaction.get_balance() }}
+		</p>
+	</div>
+</div>
+<hr />
+
+<div class="form-group">
+	<label class="col-xs-3 control-label">{% trans "Search invoice" %}</label>
+	<div class="col-xs-6">
+		<div class="input-group">
+			<input type="text" name="search" id="txt_search_invoices" class="form-control" value="{{ transaction.get_message() }}" />
+			<span class="input-group-btn">
+				<button class="btn btn-primary" type="button" onclick="search_invoices();">{% trans "Search" %}</button>
+			</span>
+		</div>
+	</div>
+</div>
+
+<div class="search_results"></div>
+
+</form>
+
+
+<script type="text/javascript">
+	$('#search_invoices').submit(function(event) {
+		search_invoices();
+		event.preventDefault();
+	});
+	function search_invoices() {
+		$('.search_results').load('/financial/account/transaction?action=search_invoices&transaction_id={{ transaction.id }}&search=' + $('#txt_search_invoices').val(), function() {
+			pager_ajax();
+		});
+	}
+
+	function pager_ajax() {
+		$('.skeleton-pager-link, .skeleton-pager-header-link').click(function(event) {
+			event.preventDefault();
+			url = $.url($(this).attr('href'));
+			q = url.param('q');
+			$('.search_results').load('/financial/account/transaction?action=search_invoices&transaction_id={{ transaction.id }}&q=' + q, function() {
+				pager_ajax();
+			});
+		});
+	}
+</script>
+
+{% endblock body %}

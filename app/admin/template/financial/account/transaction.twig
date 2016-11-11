@@ -49,13 +49,18 @@
 				</div>
 
 				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Balance" %}</label>
+					<div class="col-xs-9"><p class="form-control-static">&euro;{{ transaction.get_balance() }}</p></div>
+				</div>
+
+				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Message" %}</label>
 					<div class="col-xs-9"><p class="form-control-static">{{ transaction.get_message() }}</p></div>
 				</div>
 			</div>
 		</div>
 		</form>
-		{% include "financial/account/transaction/modal.outgoing_invoice.twig" with {id: 'modal_outgoing_invoice' } %}
+		{% include "financial/account/transaction/modal.outgoing_invoice.twig" with {id: 'modal_outgoing_invoice', modal_size: 'lg'} %}
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -74,8 +79,14 @@
 				</div>
 			</div>
 			<div class="panel-body">
+				{% if transaction.balanced %}
+					<div class="alert alert-success">
+						{% trans "This transaction is correctly linked." %}
+					</div>
+				{% endif %}
 				{% set balances = transaction.get_bank_account_statement_transaction_balances() %}
-				{% if balances.length == 0 %}
+
+				{% if not transaction.balanced %}
 					<div class="alert alert-danger">{% trans "This transaction is not booked yet" %}</div>
 				{% endif %}
 
@@ -85,20 +96,32 @@
 						<thead>
 							<tr>
 								<th>{% trans "Type" %}</th>
-								<th>{% trans "Counterparty" %}</th>
 								<th>{% trans "Amount" %}</th>
 							</tr>
 						</thead>
 						<tbody>
+						<tr>
+							<td>{% trans "Payment" %} {{ transaction.id }}</td>
+							<td>&euro;{{ transaction.amount }}</td>
+						</tr>
 					{% endif %}
 
 					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>
+							{{ balance.linked_object_classname }} {{ balance.linked_object_id }}
+						</td>
+						<td>
+							&euro;{{ balance.amount*-1 }}
+						</td>
 					</tr>
 
 					{% if loop.last %}
+						{% if balances|length > 0 %}
+							<tr>
+								<th>{% trans "Balance" %}</th>
+								<th>&euro;{{ transaction.get_balance() }}</th>
+							</tr>
+						{% endif %}
 						</tbody>
 						</table>
 					{% endif %}
@@ -106,7 +129,103 @@
 
 			</div>
 		</div>
+	{% elseif action == 'batch_link' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
+			<li class="active">{% trans "Batch link" %}</li>
+		</ol>
+		<div class="form-horizontal">
+		{% for transaction in transactions %}
+			{% if loop.first %}
+				<table class="table table-alternate table-hover">
+					<thead>
+						<tr>
+							<th width="120"><input type="checkbox" data-group-cls="btn-group-xs" onchange="toggle_all();"></th>
+							<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
+							<th>{{ pager.create_header('Amount'|trans, 'amount')|raw }}</th>
+							<th width="40%">{{ pager.create_header('Message'|trans, 'message')|raw }}</th>
+							<th>{{ pager.create_header('To/From'|trans, 'other_account_name')|raw }}</th>
+							<th width="30">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+			{% endif %}
 
+			<tr data-price="{{ transaction.amount }}" data-id="{{ transaction.id }}">
+				<td><input type="checkbox" data-group-cls="btn-group-xs" onchange="calculate_sum();"/></td>
+				<td>{{ transaction.date|date }}</td>
+				<td>{{ transaction.amount }}</td>
+				<td>{{ transaction.get_message() }}</td>
+				<td>{{ transaction.other_account_name }}</td>
+				<td class="status"></td>
+			</tr>
+
+			{% if loop.last %}
+					</tbody>
+				</table>
+				<div class="well">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Total amount" %}</label>
+						<div class="col-xs-9">
+							<p class="form-control-static" id="total_amount">&euro;0</p>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-9 col-xs-offset-3">
+							<button type="submit" class="btn btn-primary" id="btn_batch_link" onclick="batch_link();">
+								{% trans "Link transactions" %}
+							</button>
+						</div>
+					</div>
+
+				</div>
+			{% endif %}
+		{% endfor %}
+		</div>
+		<script type="text/javascript">
+			function toggle_all() {
+				if ($('th input[type=checkbox]').is(':checked')) {
+					$('td input[type=checkbox]').prop('checked', true);
+				} else {
+					$('td input[type=checkbox]').prop('checked', false);
+				}
+			}
+
+			function calculate_sum() {
+				total = 0;
+				$('tbody tr').each(function() {
+					if ( $(this).find('input[type=checkbox]').is(':checked') ){
+						total += Math.round( parseFloat( $(this).data('price') ) * 100) / 100;
+					}
+				});
+				$('#total_amount').html('&euro;' + Math.round(total*100)/100 );
+			}
+
+			function batch_link() {
+				$("#btn_batch_link").attr("disabled", true);
+				$('tbody tr').each(function() {
+					if ( $(this).find('input[type=checkbox]').is(':checked') ){
+						id = $(this).data('id');
+
+						data = {
+							id: id
+						};
+
+						$.post('/financial/account/transaction?action=link_transaction', data, function(data) {
+							if (data.success) {
+								$('tr[data-id=' + data.id + ']').find('.status').html('<i class="fa fa-check"></i>');
+							} else {
+								$('tr[data-id=' + data.id + ']').find('.status').html('<a href="#" title="' + data.message + '"><span class="glyphicon glyphicon-remove"></span></a>');
+							}
+						}, 'json');
+
+					}
+				});
+
+			}
+		</script>
 	{% else %}
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
@@ -145,6 +264,17 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Balanced" %}</label>
+						<div class="col-xs-9">
+							<select name="balanced" class="form-control">
+								<option value="-1">{% trans "Any" %}</option>
+								<option value="0" {% if pager.has_condition('bank_account_statement_transaction.balanced', 0) %}selected{% endif %}>{% trans "No" %}</option>
+								<option value="1" {% if pager.has_condition('bank_account_statement_transaction.balanced', 1) %}selected{% endif %}>{% trans "Yes" %}</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<div class="col-xs-3 col-xs-offset-3">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
@@ -158,6 +288,11 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				{{ base.pager_count(pager.item_count) }}
+				<div class="pull-right">
+					<a href="/financial/account/transaction?action=batch_link">
+						<i class="fa fa-link"></i> {% trans "Batch link" %}
+					</a>
+				</div>
 			</div>
 			<div class="panel-body">
 			{% for transaction in pager.items %}
@@ -177,7 +312,7 @@
 					<tbody>
 				{% endif %}
 
-				<tr>
+				<tr {% if not transaction.balanced %}class="warning"{% endif %}>
 					<td>{{ transaction.id }}</td>
 					<td>{{ transaction.date|date }}</td>
 					<td>{{ transaction.bank_account_statement.sequence }}</td>
