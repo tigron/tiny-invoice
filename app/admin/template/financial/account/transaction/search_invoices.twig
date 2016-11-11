@@ -1,0 +1,54 @@
+{% for invoice in pager.items %}
+	{% if loop.first %}
+		<table class="table table-hover table-striped table-condensed table-responsive" id="invoice-list">
+		<thead>
+			<tr>
+				<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
+				<th width="10%">{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+				<th>{{ pager.create_header('Customer'|trans, 'customer.lastname')|raw }}</th>
+				<th width="10%" class="text-right">{{ pager.create_header('Price excl'|trans, 'price_excl')|raw }}</th>
+				<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
+				<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
+				<th width="30"></th>
+			</tr>
+		</thead>
+		<tbody>
+	{% endif %}
+
+	<tr>
+		<td>
+			{{ invoice.number }}
+		</td>
+		<td>{{ invoice.created|date }}</td>
+		<td>
+			{{ invoice.customer.get_display_name }}
+		</td>
+		<td class="text-right">€{{ invoice.get_price_excl()|number_format }}</td>
+		<td class="text-right">€{{ invoice.get_price_incl()|number_format }}</td>
+		<td>
+		{% if invoice.paid %}
+			<span class="glyphicon glyphicon-ok"></span>
+		{% else %}
+			<span class="glyphicon glyphicon-remove"></span>
+		{% endif %}
+		</td>
+		<td>
+			{% if (transaction.get_balance()|number_format(2) ==  invoice.get_price_incl()|number_format(2)) %}
+				<a href="/financial/account/transaction?action=link_invoice&id={{ transaction.id }}&invoice_id={{ invoice.id }}">
+					<i class="fa fa-link"></i>
+				</a>
+			{% endif %}
+		</td>
+	</tr>
+
+	{% if loop.last %}
+		</tbody>
+		</table>
+
+		<div class="pager_links">
+			{{ pager.links|raw }}
+		</div>
+	{% endif %}
+{% else %}
+	<div class="alert alert-warning">{% trans "No invoices found" %}</div>
+{% endfor %}
