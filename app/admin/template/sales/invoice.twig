@@ -636,19 +636,7 @@
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
-						<div class="col-xs-9">
-							<select class="form-control" name="customer_id">
-								<option value=""> - - - </option>
-								{% for customer in customers %}
-								    <option value="{{ customer.id }}"{% if pager.has_condition('customer_id', customer.id) %} selected{% endif %}>
-								    	{{ customer.get_display_name() }}
-								    </option>
-								{% endfor %}
-							</select>
-						</div>
-					</div>
+
 					<div class="form-group">
 					    <label class="col-xs-3 control-label">{% trans "Paid" %}</label>
 					    <div class="col-xs-9">
