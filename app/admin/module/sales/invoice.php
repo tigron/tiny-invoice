@@ -56,10 +56,6 @@ class Web_Module_Sales_Invoice extends Module {
 			$pager->add_condition('created', 'BETWEEN', date('Y-m-d H:i:s', strtotime($_POST['date_start'] . ' 00:00:00')), date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59')));
 		}
 
-		if (isset($_POST['customer_id']) AND $_POST['customer_id'] != '') {
-			$pager->add_condition('customer_id', $_POST['customer_id']);
-		}
-
 		if (isset($_POST['paid']) AND $_POST['paid'] != '') {
 			$pager->add_condition('paid', $_POST['paid']);
 		}
