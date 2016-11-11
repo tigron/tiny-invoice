@@ -62,6 +62,7 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 			unset($dirty_fields['phone']);
 			unset($dirty_fields['fax']);
 			unset($dirty_fields['mobile']);
+			unset($dirty_fields['language_id']);
 
 			if ($customer_contact->id !== null AND count($dirty_fields) > 0) {
 				$customer_contact->active = false;
@@ -108,6 +109,11 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 		echo json_encode($customer_contact->get_info());
 	}
 
+	/**
+	 * Load the countries (AJAX)
+	 *
+	 * @access public
+	 */
 	public function display_load_countries() {
 		$countries = Country::get_grouped();
 		$result = [];
@@ -118,6 +124,20 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 				}
 				$result[$group][] = $country->get_info();
 			}
+		}
+		echo json_encode($result);
+	}
+
+	/**
+	 * Load the languages
+	 *
+	 * @access public
+	 */
+	public function display_load_languages() {
+		$languages = Language::get_all();
+		$result = [];
+		foreach ($languages as $language) {
+			$result[] = $language->get_info();
 		}
 		echo json_encode($result);
 	}

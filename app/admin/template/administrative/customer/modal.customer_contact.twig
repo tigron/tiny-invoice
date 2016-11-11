@@ -123,10 +123,22 @@
 				</div>
 			</div>
 		{% endif %}
+
+		<div class="form-group">
+			<label class="col-xs-3 control-label">{% trans "VAT Bound" %}</label>
+			<div class="col-xs-9">
+				<select name="customer_contact[vat_bound]" class="form-control" id="vat_bound">
+					<option value="-1">{% trans "Automatic" %}</option>
+					<option value="0">{% trans "No" %}</option>
+					<option value="1">{% trans "Yes" %}</option>
+				</select>
+			</div>
+		</div>
 	</form>
 
 	<script type="text/javascript">
-		load_countries()
+		load_countries();
+		load_languages();
 
 		$('#manage-customer-contact').on('show.bs.modal', function (e) {
 
@@ -158,6 +170,17 @@ console.log($invoker);
 						optgroup.append(option);
 					});
 					optgroup.appendTo($('#country_id'));
+				});
+			}, 'json');
+		}
+
+		function load_languages() {
+			$.get('/administrative/customer/contact?action=load_languages', function(data) {
+				$.each(data, function(key, language) {
+					var option = $('<option></option>');
+					option.val(language.id);
+					option.text(language.name);
+					option.appendTo($('#language_id'));
 				});
 			}, 'json');
 		}
