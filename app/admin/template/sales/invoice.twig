@@ -219,13 +219,25 @@
 						<thead>
 							<tr>
 								<th width="15%">{% trans "Date" %}</th>
+								<th>{% trans "Type" %}</th>
 								<th>{% trans "Amount" %}</th>
 							</tr>
 						</thead>
 						<tbody>
 				{% endif %}
 				<tr>
-					<td>{{ transfer.created|datetime }}</td>
+					<td>{{ transfer.created|date }}</td>
+					<td>
+						{% if transfer.type == 1 %}
+							{% trans "Manually added payment" %}
+						{% elseif transfer.type == 2 %}
+							{% trans "Paid via creditnote" %}
+						{% elseif transfer.type == 10 %}
+							{% trans "Paid with wiretransfer" %}
+						{% endif %}
+					</td>
+
+
 					<td>&euro;{{ transfer.amount|number_format }}</td>
 				</tr>
 				{% if loop.last %}
