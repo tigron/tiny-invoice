@@ -72,13 +72,17 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 				$bank_account_statement_transaction->valuta_date = $transaction->line21->valuta_date;
 				$bank_account_statement_transaction->amount = $transaction->line21->amount;
 				if ($transaction->line21->has_structured_message) {
-					$bank_account_statement_transaction->structured_message = $transaction->line21->structured_message;
+					$bank_account_statement_transaction->structured_message = $transaction->line21->structured_message . '';
 				} else {
 					$bank_account_statement_transaction->message = $transaction->line21->message;
 				}
 				$bank_account_statement_transaction->other_account_bic = $transaction->line22->other_account_bic;
-				$bank_account_statement_transaction->other_account_number = $transaction->line23->other_account_number_and_currency;
-				$bank_account_statement_transaction->other_account_name = $transaction->line23->other_account_name;
+				if (isset($transaction->line23->other_account_number_and_currency)) {
+					$bank_account_statement_transaction->other_account_number = $transaction->line23->other_account_number_and_currency;
+				}
+				if (isset($transaction->line23->other_account_name)) {
+					$bank_account_statement_transaction->other_account_name = $transaction->line23->other_account_name;
+				}
 				$bank_account_statement_transaction->save();
 			}
 
