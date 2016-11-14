@@ -33,7 +33,7 @@
 		{% endif %}
 		</td>
 		<td>
-			{% if (transaction.get_balance()|number_format(2) ==  invoice.get_price_incl()|number_format(2)) %}
+			{% if (transaction.get_balance() <=  invoice.get_price_incl()) %}
 				<a href="/financial/account/transaction?action=link_invoice&id={{ transaction.id }}&invoice_id={{ invoice.id }}">
 					<i class="fa fa-link"></i>
 				</a>

@@ -64,7 +64,7 @@ class Bank_Account_Statement_Transaction {
 	 */
 	public function link_invoice(Invoice $invoice, $amount = null) {
 		if ($amount === null) {
-			$amount = $invoice->get_price_incl();
+			$amount = $this->get_balance();
 		}
 		if (bcsub($this->get_balance(), $amount, 3) < 0) {
 			throw new Exception('Cannot link for amount ' . $amount . ', balance is ' . $this->get_balance());
