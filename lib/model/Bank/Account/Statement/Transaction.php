@@ -66,8 +66,8 @@ class Bank_Account_Statement_Transaction {
 		if ($amount === null) {
 			$amount = $this->get_balance();
 		}
-		if (bcsub($this->get_balance(), $amount, 3) < 0) {
-			throw new Exception('Cannot link for amount ' . $amount . ', balance is ' . $this->get_balance());
+		if ($amount > $invoice->get_balance()) {
+			$amount = $invoice->get_balance();
 		}
 
 		$balance = new Bank_Account_Statement_Transaction_Balance();
