@@ -137,6 +137,10 @@ class Invoice {
 	 * @param Transfer
 	 */
 	public function add_transfer(Transfer $transfer) {
+		if (bccomp(bcsub($this->get_price_incl(), $this->get_transfer_amount()), $transfer->amount) == -1) {
+			throw new Exception('Cannot add transfer with amount ' . $transfer->amount);
+		}
+
 		$transfer->invoice_id = $this->id;
 		$transfer->save();
 
@@ -144,6 +148,29 @@ class Invoice {
 			$this->mark_paid();
 		}
 		Log::create('Transfer added', $this);
+	}
+
+	/**
+	 * Get transfer amount
+	 *
+	 * @access public
+	 * @return double $amount
+	 */
+	public function get_transfer_amount() {
+		$amount = 0;
+		foreach ($this->get_transfers() as $transfer) {
+			$amount += $transfer->amount;
+		}
+		return $amount;
+	}
+
+	/**
+	 * Get balance
+	 *
+	 * @access public
+	 */
+	public function get_balance() {
+		return $this->get_price_incl() - $this->get_transfer_amount();
 	}
 
 	/**
