@@ -100,7 +100,7 @@ class Bank_Account_Statement_Transaction {
 		if ($this->amount > 0) {
 			$this->automatic_link_invoice();
 		} else {
-
+			throw new Exception('Not implemented yet');
 		}
 	}
 
