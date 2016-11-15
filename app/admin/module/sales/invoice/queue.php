@@ -46,6 +46,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 		} else {
 			$pager->add_condition('processed_to_invoice_item_id', 'IS', NULL);
 		}
+		$pager->add_condition('deleted', 'IS', NULL);
 
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('price');
