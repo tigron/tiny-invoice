@@ -265,8 +265,28 @@ class Invoice {
 	 * @access public
 	 * @param Invoice_Method $invoice_method
 	 */
-	public function send(Invoice_Method $invoice_method) {
+	public function send(Invoice_Method $invoice_method = null) {
+		if ($invoice_method === null) {
+			$invoice_method = $this->customer_contact->invoice_method;
+		}
+
 		$invoice_method->send($this);
+	}
+
+	/**
+	 * schedule Send
+	 *
+	 * @access public
+	 * @param Invoice_Method $invoice_method
+	 */
+	public function schedule_send() {
+		$transaction = new Transaction_Invoice_Send();
+		$data = [
+			'id' => $this->id
+		];
+		$transaction->data = json_encode($data);
+		$transaction->save();
+		$transaction->schedule();
 	}
 
 	/**

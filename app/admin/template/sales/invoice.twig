@@ -447,6 +447,13 @@
 							</select>
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Send invoice" %} ({{ env.session.invoice.customer_contact.invoice_method.name }})</label>
+						<div class="col-xs-9">
+							<input type="checkbox" data-group-cls="btn-group-xs" name="send_invoice" />
+						</div>
+					</div>
 				</div>
 			</div>
 
