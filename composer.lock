@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8d8444a3e2dcff07333a73e4b8d38699",
-    "content-hash": "02274726b3071266dd1a8f45657cd0d0",
+    "hash": "5d20f15c8d38c249fc1dfc4b21fd3631",
+    "content-hash": "31ac4b2cd084e2d608aa2dd8207e3a4e",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -2605,16 +2605,16 @@
         },
         {
             "name": "tigron/skeleton-transaction",
-            "version": "v0.1.1",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-transaction.git",
-                "reference": "7743dc062d25f1ad45095ffc62fbaa854249ea90"
+                "reference": "ab114289b50ce4010a0c44d5df6e533cb5684e86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/7743dc062d25f1ad45095ffc62fbaa854249ea90",
-                "reference": "7743dc062d25f1ad45095ffc62fbaa854249ea90",
+                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/ab114289b50ce4010a0c44d5df6e533cb5684e86",
+                "reference": "ab114289b50ce4010a0c44d5df6e533cb5684e86",
                 "shasum": ""
             },
             "require-dev": {
@@ -2638,7 +2638,7 @@
                 }
             ],
             "description": "Background tasks for skeleton",
-            "time": "2016-11-15 21:42:30"
+            "time": "2016-07-01 10:26:08"
         }
     ],
     "aliases": [],
