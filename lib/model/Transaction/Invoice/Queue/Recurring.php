@@ -29,10 +29,9 @@ class Transaction_Invoice_Queue_Recurring extends Transaction {
 	 */
 	public function run() {
 		$groups = Invoice_Queue_Recurring_Group::get_runnable();
-print_r($groups);
 		foreach ($groups as $group) {
 			$group->run();
 		}
-		//$this->schedule('1 day');
+		$this->schedule('1 hour');
 	}
 }

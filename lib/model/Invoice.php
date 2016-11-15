@@ -286,7 +286,6 @@ class Invoice {
 		];
 		$transaction->data = json_encode($data);
 		$transaction->save();
-		$transaction->schedule();
 	}
 
 	/**

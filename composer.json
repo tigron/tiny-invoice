@@ -49,7 +49,7 @@
         "tigron/skeleton-email": "0.1.0",
 		"tigron/skeleton-console": "0.1.0",
         "tigron/skeleton-migrate": "0.1.2",
-        "tigron/skeleton-transaction": "0.1.1",
+        "tigron/skeleton-transaction": "0.1.0",
         "tigron/skeleton-package-api": "0.1.0",
         "tigron/skeleton-package-crud": "0.1.0",
         "tigron/click-post": "0.0.3"
