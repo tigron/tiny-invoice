@@ -259,6 +259,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 
 		$pager = new Pager('invoice_queue');
 		$pager->add_condition('processed_to_invoice_item_id', 'IS', NULL);
+		$pager->add_condition('deleted', 'IS', NULL);
 		$pager->set_direction('asc');
 		$pager->page(true);
 		$invoice_queues = $pager->items;
