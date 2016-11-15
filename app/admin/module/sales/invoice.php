@@ -173,6 +173,10 @@ class Web_Module_Sales_Invoice extends Module {
 					}
 				}
 
+				if (isset($_POST['send_invoice'])) {
+					$invoice->schedule_send();
+				}
+
 				unset($_SESSION['invoice']);
 				Log::create('add', $invoice);
 
