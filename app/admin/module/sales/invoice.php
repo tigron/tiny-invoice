@@ -234,9 +234,7 @@ class Web_Module_Sales_Invoice extends Module {
 		$transfer = new Transfer();
 		$transfer->type = TRANSFER_TYPE_PAYMENT_MANUAL;
 		$transfer->amount = $_POST['transfer']['amount'];
-		$transfer->invoice_id = $invoice->id;
-		$transfer->save();
-
+		
 		$invoice->add_transfer($transfer);
 
 		Session::redirect('/sales/invoice?action=edit&id=' . $invoice->id);
