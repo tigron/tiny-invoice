@@ -161,5 +161,13 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$template->assign('transaction', $transaction);
 	}
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.financial';
+	}
 
 }
