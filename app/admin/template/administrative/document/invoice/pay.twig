@@ -9,7 +9,7 @@
 	<li class="active">{% trans "Pay Incoming Invoice" %}</li>
 </ul>
 
-{% for unpaid_invoice in unpaid_invoices %}
+{% for unpaid_invoice in pager.items %}
 
 	{% if loop.first %}
 		<form class="form-horizontal" method="post" action="/administrative/document/invoice/pay?action=download">
@@ -17,10 +17,10 @@
 		<thead>
 			<tr>
 				<th width="120"><input type="checkbox" class="original2" data-group-cls="btn-group-xs" onchange="toggle_all();"></th>
-				<th>{% trans "Date" %}</th>
-				<th>{% trans "Expiration date" %}</th>
-				<th>{% trans "Supplier" %}</th>
-				<th>{% trans "IBAN" %}</th>
+				<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
+				<th>{{ pager.create_header('Expiration date'|trans, 'document_incoming_invoice.expiration_date')|raw }}</th>
+				<th>{{ pager.create_header('Supplier'|trans, 'supplier.company')|raw }}</th>
+				<th>{{ pager.create_header('IBAN'|trans, 'supplier.iban')|raw }}</th>
 				<th>{% trans "Message" %}</th>
 				<th class="text-right">{% trans "Price" %}</th>
 			</tr>
