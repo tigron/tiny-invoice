@@ -15,7 +15,7 @@
 		{% endif %}
 
 		<div class="row">
-			<div class="col-xs-6">
+			<div class="col-xs-6" id="invoice-details">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Details" %}</div>
 					<div class="panel-body">
@@ -24,13 +24,16 @@
 							<dd>{{ invoice.id }}</dd>
 
 							<dt>{% trans "Created" %}</dt>
-							<dd>{{ invoice.created|datetime() }}</dd>
+							<dd>{{ invoice.created|datetime }}</dd>
 
 							<dt>{% trans "Price excl VAT" %}</dt>
 							<dd>{{ "€%.2f"|format(invoice.get_price_excl()) }}</dd>
 
 							<dt>{% trans "Price incl VAT" %}</dt>
 							<dd>{{ "€%.2f"|format(invoice.get_price_incl()) }}</dd>
+
+							<dt>{% trans "Expiration date" %}</dt>
+							<dd>{{ invoice.expiration_date|datetime }}</dd>
 
 							<dt>{% trans "Paid" %}</dt>
 							<dd>
@@ -53,7 +56,7 @@
 				</div>
 			</div>
 
-			<div class="col-xs-6">
+			<div class="col-xs-6" id="invoice-settings">
 				<form class="form-horizontal form-condensed" action="/sales/invoice?action=edit&id={{ invoice.id }}" method="post">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Invoice settings" %}</div>
@@ -86,6 +89,7 @@
 		</div>
 
 		<script type="text/javascript">
+
 			function set_reminder(element) {
 				if ($(element).is(':checked')) {
 					data = {
@@ -100,10 +104,11 @@
 
 				});
 			}
+
 		</script>
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6" id="invoice-customer">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Customer" %}</div>
 					<div class="panel-body">
@@ -131,7 +136,7 @@
 				</div>
 			</div>
 
-			<div class="col-md-6">
+			<div class="col-md-6" id="invoice-contact">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Invoice contact" %}</div>
 					<div class="panel-body">
@@ -269,6 +274,15 @@
 				</dl>
 			</div>
 		</div>
+
+		<script type="text/javascript">
+
+			$(function() {
+				$('#invoice-details, #invoice-settings').find('.panel-body').equaliseHeights();
+				$('#invoice-customer, #invoice-contact').find('.panel-body').equaliseHeights();
+			});
+
+		</script>
 
 	{% elseif action == 'create_step1' %}
 
