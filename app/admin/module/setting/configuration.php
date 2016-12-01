@@ -65,7 +65,14 @@ class Web_Module_Setting_Configuration extends Module {
 		Skin_Pdf::synchronize();
 		$skin_pdfs = Skin_Pdf::get_all();
 		$template->assign('skin_pdfs', $skin_pdfs);
+	}
 
-
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.setting';
 	}
 }

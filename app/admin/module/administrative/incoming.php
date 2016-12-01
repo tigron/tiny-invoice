@@ -138,4 +138,12 @@ class Web_Module_Administrative_Incoming extends Module {
 		Session::set_sticky('message', 'deleted');
 		Session::redirect('/administrative/incoming');
 	}
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.document';
+	}
 }

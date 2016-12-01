@@ -1,0 +1,43 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Select invoice contact" %}{% endblock header %}
+
+{% block body %}
+
+<form action="/sales/invoice/queue?action=edit&id={{ invoice_queue.id }}" method="post">
+<div class="row">
+	{% for customer_contact in invoice_queue.customer.get_active_customer_contacts %}
+		<div class="col-xs-4 customer_contact" id="customer-contact-{{ customer_contact.id }}">
+			<div class="panel panel-default">
+				<div class="panel-body{% if invoice_queue.customer_contact_id == customer_contact.id %} bg-info{% endif %}">
+					<div class="pull-left">
+						<input type="radio" name="customer_contact" {% if invoice_queue.customer_contact_id == customer_contact.id %}checked{% endif %}/>
+					</div>
+
+					{{ base.customer_contact(customer_contact, settings) }}
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	<input type="hidden" name="invoice_queue[customer_contact_id]" value="{{ invoice_queue.customer_contact_id }}" id="customer_contact_id" />
+</div>
+</form>
+
+<script type="text/javascript">
+	$('.customer_contact').on({
+		click: function() {
+			$('.customer_contact').find('input[type=radio]').prop('checked', false);
+			$('.customer_contact').find('.panel-body').removeClass('bg-info');
+			$(this).find('.panel-body').first().addClass('bg-info');
+			$('#customer_contact_id').val($(this).prop('id').replace('customer-contact-', ''));
+			$(this).find('input[type=radio]').prop('checked', true);
+		}
+	});
+</script>
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).closest('.modal-content').find('form').submit();">{% trans "Save" %} </button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}
+{% endblock footer %}

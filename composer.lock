@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "20ee839f9b40a0a76c72fe3968723ebd",
-    "content-hash": "72735c2e2d47476d1722ada90936d9c1",
+    "hash": "add9350d220feb1d0965d77c09d0017d",
+    "content-hash": "aa19f5947e368bf9cf643d78ce948d97",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -230,38 +230,19 @@
         },
         {
             "name": "bower-asset/codemirror",
-            "version": "5.19.0",
+            "version": "5.21.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/codemirror/CodeMirror.git",
-                "reference": "a350d03f15df2892e41b094faa85a08459942845"
+                "url": "https://github.com/components/codemirror.git",
+                "reference": "e2f8466a372b7295432c92a11316768fdf9c4d40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codemirror/CodeMirror/zipball/a350d03f15df2892e41b094faa85a08459942845",
-                "reference": "a350d03f15df2892e41b094faa85a08459942845",
+                "url": "https://api.github.com/repos/components/codemirror/zipball/e2f8466a372b7295432c92a11316768fdf9c4d40",
+                "reference": "e2f8466a372b7295432c92a11316768fdf9c4d40",
                 "shasum": ""
             },
-            "type": "bower-asset-library",
-            "extra": {
-                "bower-asset-main": [
-                    "lib/codemirror.js",
-                    "lib/codemirror.css"
-                ],
-                "bower-asset-ignore": [
-                    "**/.*",
-                    "node_modules",
-                    "components",
-                    "bin",
-                    "demo",
-                    "doc",
-                    "test",
-                    "index.html",
-                    "package.json",
-                    "mode/*/*test.js",
-                    "mode/*/*.html"
-                ]
-            }
+            "type": "bower-asset-library"
         },
         {
             "name": "bower-asset/dropzone",
@@ -344,16 +325,16 @@
         },
         {
             "name": "bower-asset/font-awesome",
-            "version": "v4.6.3",
+            "version": "v4.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "8e241f209faa1dd2182c9fdc9c352d8806504a4e"
+                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/8e241f209faa1dd2182c9fdc9c352d8806504a4e",
-                "reference": "8e241f209faa1dd2182c9fdc9c352d8806504a4e",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/a8386aae19e200ddb0f6845b5feeee5eb7013687",
+                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -457,16 +438,16 @@
         },
         {
             "name": "bower-asset/jquery-mask-plugin",
-            "version": "v1.14.0",
+            "version": "v1.14.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/igorescobar/jQuery-Mask-Plugin.git",
-                "reference": "38c008577722bd185d2053b33c93e141bc6089c2"
+                "reference": "bd9b1915452f403a3e5b1772c28054394a753c36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/igorescobar/jQuery-Mask-Plugin/zipball/38c008577722bd185d2053b33c93e141bc6089c2",
-                "reference": "38c008577722bd185d2053b33c93e141bc6089c2",
+                "url": "https://api.github.com/repos/igorescobar/jQuery-Mask-Plugin/zipball/bd9b1915452f403a3e5b1772c28054394a753c36",
+                "reference": "bd9b1915452f403a3e5b1772c28054394a753c36",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -576,16 +557,16 @@
         },
         {
             "name": "bower-asset/moment-timezone",
-            "version": "0.5.6",
+            "version": "0.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/moment/moment-timezone.git",
-                "reference": "7ad329aa12e5abb86ea4faa6a5fc468b48bba526"
+                "reference": "3e9abbf0e817134c6d03b4cb541f96471238d96c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/7ad329aa12e5abb86ea4faa6a5fc468b48bba526",
-                "reference": "7ad329aa12e5abb86ea4faa6a5fc468b48bba526",
+                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/3e9abbf0e817134c6d03b4cb541f96471238d96c",
+                "reference": "3e9abbf0e817134c6d03b4cb541f96471238d96c",
                 "shasum": ""
             },
             "require": {
@@ -609,6 +590,26 @@
                 "MIT"
             ],
             "description": "Parse and display moments in any timezone."
+        },
+        {
+            "name": "bower-asset/purl",
+            "version": "v2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/allmarkedup/purl.git",
+                "reference": "1771aec03be7f0ae31d83c7f2fca6149a4581821"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/allmarkedup/purl/zipball/1771aec03be7f0ae31d83c7f2fca6149a4581821",
+                "reference": "1771aec03be7f0ae31d83c7f2fca6149a4581821",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "purl.js"
+            },
+            "description": "An AMD compatible utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more."
         },
         {
             "name": "bower-asset/tigron-confirm-modal",
@@ -1009,16 +1010,16 @@
         },
         {
             "name": "michelf/php-markdown",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/michelf/php-markdown.git",
-                "reference": "156e56ee036505ec637d761ee62dc425d807183c"
+                "reference": "1f51cc520948f66cd2af8cbc45a5ee175e774220"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/156e56ee036505ec637d761ee62dc425d807183c",
-                "reference": "156e56ee036505ec637d761ee62dc425d807183c",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/1f51cc520948f66cd2af8cbc45a5ee175e774220",
+                "reference": "1f51cc520948f66cd2af8cbc45a5ee175e774220",
                 "shasum": ""
             },
             "require": {
@@ -1056,7 +1057,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2015-12-24 01:37:31"
+            "time": "2016-10-29 18:58:20"
         },
         {
             "name": "phenx/php-font-lib",
@@ -1227,16 +1228,16 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "0.2",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "b39c7a5b194f9ed7bd0dd345c751007a41862443"
+                "reference": "e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/b39c7a5b194f9ed7bd0dd345c751007a41862443",
-                "reference": "b39c7a5b194f9ed7bd0dd345c751007a41862443",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb",
+                "reference": "e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb",
                 "shasum": ""
             },
             "require": {
@@ -1270,7 +1271,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2016-06-10 07:14:17"
+            "time": "2016-11-25 06:54:22"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1481,16 +1482,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.26.1",
+            "version": "v1.28.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "a09d8ee17ac1cfea29ed60c83960ad685c6a898d"
+                "reference": "b22ce0eb070e41f7cba65d78fe216de29726459c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a09d8ee17ac1cfea29ed60c83960ad685c6a898d",
-                "reference": "a09d8ee17ac1cfea29ed60c83960ad685c6a898d",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b22ce0eb070e41f7cba65d78fe216de29726459c",
+                "reference": "b22ce0eb070e41f7cba65d78fe216de29726459c",
                 "shasum": ""
             },
             "require": {
@@ -1498,12 +1499,12 @@
             },
             "require-dev": {
                 "symfony/debug": "~2.7",
-                "symfony/phpunit-bridge": "~2.7"
+                "symfony/phpunit-bridge": "~3.2@dev"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.26-dev"
+                    "dev-master": "1.28-dev"
                 }
             },
             "autoload": {
@@ -1538,24 +1539,24 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-10-05 18:57:41"
+            "time": "2016-11-23 18:41:40"
         },
         {
             "name": "webmozart/assert",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "bb2d123231c095735130cc8f6d31385a44c7b308"
+                "reference": "2db61e59ff05fe5126d152bd0655c9ea113e550f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/bb2d123231c095735130cc8f6d31385a44c7b308",
-                "reference": "bb2d123231c095735130cc8f6d31385a44c7b308",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/2db61e59ff05fe5126d152bd0655c9ea113e550f",
+                "reference": "2db61e59ff05fe5126d152bd0655c9ea113e550f",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3|^7.0"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.6",
@@ -1564,7 +1565,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
@@ -1588,7 +1589,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-08-09 15:02:57"
+            "time": "2016-11-23 20:04:58"
         }
     ],
     "packages-dev": [
@@ -1800,16 +1801,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.1.5",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "6cb0872fb57b38b3b09ff213c21ed693956b9eb0"
+                "reference": "09d0fd33560e3573185a2ea17614e37ba38716c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/6cb0872fb57b38b3b09ff213c21ed693956b9eb0",
-                "reference": "6cb0872fb57b38b3b09ff213c21ed693956b9eb0",
+                "url": "https://api.github.com/repos/symfony/console/zipball/09d0fd33560e3573185a2ea17614e37ba38716c5",
+                "reference": "09d0fd33560e3573185a2ea17614e37ba38716c5",
                 "shasum": ""
             },
             "require": {
@@ -1820,17 +1821,19 @@
             "require-dev": {
                 "psr/log": "~1.0",
                 "symfony/event-dispatcher": "~2.8|~3.0",
+                "symfony/filesystem": "~2.8|~3.0",
                 "symfony/process": "~2.8|~3.0"
             },
             "suggest": {
                 "psr/log": "For using the console logger",
                 "symfony/event-dispatcher": "",
+                "symfony/filesystem": "",
                 "symfony/process": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -1857,20 +1860,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-28 00:11:12"
+            "time": "2016-11-16 22:18:16"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.1.5",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "e2b3f74a67fc928adc3c1b9027f73e1bc01190a8"
+                "reference": "9f923e68d524a3095c5a2ae5fc7220c7cbc12231"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/e2b3f74a67fc928adc3c1b9027f73e1bc01190a8",
-                "reference": "e2b3f74a67fc928adc3c1b9027f73e1bc01190a8",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/9f923e68d524a3095c5a2ae5fc7220c7cbc12231",
+                "reference": "9f923e68d524a3095c5a2ae5fc7220c7cbc12231",
                 "shasum": ""
             },
             "require": {
@@ -1887,7 +1890,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -1914,20 +1917,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2016-09-06 11:02:40"
+            "time": "2016-11-16 22:18:16"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "dff51f72b0706335131b00a7f49606168c582594"
+                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/dff51f72b0706335131b00a7f49606168c582594",
-                "reference": "dff51f72b0706335131b00a7f49606168c582594",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/e79d363049d1c2128f133a2667e4f4190904f7f4",
+                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4",
                 "shasum": ""
             },
             "require": {
@@ -1939,7 +1942,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "1.3-dev"
                 }
             },
             "autoload": {
@@ -1973,7 +1976,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-05-18 14:26:46"
+            "time": "2016-11-14 01:06:16"
         },
         {
             "name": "tecnickcom/tcpdf",
@@ -2112,16 +2115,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v0.1.0",
+            "version": "v0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "13b32e14bf75dc790eab243d04450ca27ee3bfed"
+                "reference": "9c556eec95a3469bcd7785cc4c022dbf9b9f2485"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/13b32e14bf75dc790eab243d04450ca27ee3bfed",
-                "reference": "13b32e14bf75dc790eab243d04450ca27ee3bfed",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/9c556eec95a3469bcd7785cc4c022dbf9b9f2485",
+                "reference": "9c556eec95a3469bcd7785cc4c022dbf9b9f2485",
                 "shasum": ""
             },
             "type": "library",
@@ -2141,7 +2144,7 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2016-07-05 12:49:52"
+            "time": "2016-11-30 14:37:26"
         },
         {
             "name": "tigron/skeleton-database",
@@ -2549,16 +2552,16 @@
         },
         {
             "name": "tigron/skeleton-pager",
-            "version": "v0.1.0",
+            "version": "v0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-pager.git",
-                "reference": "dda89888e5e3a4bb6e4a1eab395afd068d02a808"
+                "reference": "5129995f49321f89fb8d7b95895c16547f143299"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-pager/zipball/dda89888e5e3a4bb6e4a1eab395afd068d02a808",
-                "reference": "dda89888e5e3a4bb6e4a1eab395afd068d02a808",
+                "url": "https://api.github.com/repos/tigron/skeleton-pager/zipball/5129995f49321f89fb8d7b95895c16547f143299",
+                "reference": "5129995f49321f89fb8d7b95895c16547f143299",
                 "shasum": ""
             },
             "require-dev": {
@@ -2581,7 +2584,7 @@
                 }
             ],
             "description": "Tigron Skeleton pager functionality",
-            "time": "2016-06-09 10:08:41"
+            "time": "2016-11-08 21:25:07"
         },
         {
             "name": "tigron/skeleton-transaction",
@@ -2630,7 +2633,8 @@
         "bower-asset/jquery-zoom": 20,
         "bower-asset/bootstrap-multiselect": 20,
         "bower-asset/jquery-mask-plugin": 0,
-        "bower-asset/codemirror": 0
+        "bower-asset/codemirror": 0,
+        "bower-asset/purl": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,

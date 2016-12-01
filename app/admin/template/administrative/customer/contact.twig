@@ -4,208 +4,68 @@
 
 {% set customer_contacts = customer.get_active_customer_contacts() %}
 
-<script type="text/javascript">
-	var customer_contacts =	{};
+{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/administrative/customer/contact?id=' ~ customer.id, 'modal_size': 'lg'} %}
 
+
+<div class="row">
 	{% for customer_contact in customer_contacts %}
-		{% set info = customer_contact.get_info() %}
-		customer_contacts[0] = {
-			'firstname': '',
-			'lastname': '',
-			'company': '',
-			'street': '',
-			'housenumber': '',
-			'zipcode': '',
-			'city': '',
-			'state': '',
-			'country_id': '203',
-			'phone': '',
-			'mobile': '',
-			'fax': '',
-			'email': '',
-			'vat': '',
-			'vat_bound': -1
-		};
+		<div class="col-xs-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
+			<div class="panel panel-default">
+				<div class="panel-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
+					<div class="actions hide">
+						<a href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
+						<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
+							<span class="glyphicon glyphicon-remove"></span>
+						</a>
+					</div>
 
-		customer_contacts[{{ customer_contact.id }}] =
-		{% for key, value in info %}
-			{% if loop.first %}
-				{
-			{% endif %}
-			{{ key }}: "{{ value|raw }}"{% if not loop.last %},{% endif %}
-			{% if loop.last %}
-				};
-			{% endif %}
-		{% endfor %}
+					{{ base.customer_contact(customer_contact, settings) }}
+				</div>
+			</div>
+		</div>
 	{% endfor %}
+	<div class="col-xs-3 customer_contact">
+		<div class="panel panel-default">
+			<div class="panel-body text-center">
+				<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
+					{% trans "Create new" %}
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
 
-	function load_contact(element) {
-		id = $(element).val();
-		if (id != 0) {
-			$('button[name="delete_contact"]').show();
-		} else {
-			$('button[name="delete_contact"]').hide();
+<script type="text/javascript">
+
+	$('.customer_contact').on({
+		mouseenter: function() {
+			$(this).find('.actions').toggleClass('hide');
+		},
+		mouseleave: function() {
+			$(this).find('.actions').toggleClass('hide');
+		},
+		click: function() {
+			$('.customer_contact').find('input[type=radio]').prop('checked', false);
+			$('.customer_contact').find('.panel-body').removeClass('bg-info');
+			$(this).find('.panel-body').first().addClass('bg-info');
+			$('input[name=customer_contact_id]').val($(this).prop('id').replace('customer-contact-', ''));
+			$(this).find('input[type=radio]').prop('checked', true);
 		}
-		$.each(customer_contacts[id], function (key, value) {
-			$("[name='customer_contact[" + key + "]']").val(value);
-		});
-	}
-
-	$(document).ready(function() {
-		{% if not env.post.customer_contact is defined %}
-			load_contact($('#customer_contact'));
-		{% endif %}
-
-		$('button[data-confirm-message]').on('click', function(ev) {
-			var button_name = $(ev.target).prop('name');
-
-			$('#data-confirm-ok').on('click', function() {
-				$('#frm-customer-contact').append($('<input/>').prop('type', 'hidden').prop('name', button_name));
-				$('#frm-customer-contact').submit();
-			});
-
-			return false;
-		});
-
 	});
 
+	function delete_contact(id) {
+		$.get('/sales/invoice/contact?action=delete&id=' + id, function(data) {
+			if(data['status'] == 1) {
+				$('#customer-contact-' + id).remove();
+				$('#invoice-create-step2 input').val('');
+			} else {
+				alert('Error deleting contact');
+			}
+		}, 'json');
+	}
+
 </script>
-
-{% if customer_contact_errors is defined %}
-	<div class="alert alert-danger">
-		{% trans "Some fields were not filled in correctly." %}
-	</div>
-{% endif %}
-
-<form class="form-horizontal form-condensed" method="post" action="/administrative/customer/contact?id={{ customer.id }}&action=edit" id="frm-customer-contact">
-
-	{% if env.sticky_session.message == 'customer_contact_updated' %}
-		<div class="alert alert-success">
-			{% trans "Customer contact was updated." %}
-		</div>
-	{% elseif env.sticky_session.message == 'contact_no_update' %}
-		<div class="alert alert-info">
-			{% trans "No changes have been made to the selected customer contact." %}
-		</div>
-	{% elseif env.sticky_session.message == 'contact_removed' %}
-		<div class="alert alert-success">
-			{% trans "The selected customer contact has been archived." %}
-		</div>
-	{% endif %}
-
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Select invoice contact" %}</label>
-		<div class="col-xs-9">
-			<select name="customer_contact_id" id="customer_contact" onchange="javascript: load_contact(this)" class="form-control">
-				<optgroup label="{% trans "New customer contact" %}">
-					<option value="0" {% if env.post.customer_contact_id == 0 %}selected{% endif %}>{% trans "Create a new contact" %}</option>
-				</optgroup>
-				<optgroup label="{% trans "Existing contacts" %}">
-					{% for customer_contact in customer_contacts %}
-						<option value="{{ customer_contact.id }}" {% if env.post.customer_contact_id == customer_contact.id or env.sticky_session.updated_customer_contact_id == customer_contact.id %}selected{% endif %}>
-							{{ customer_contact.get_display_name() }}
-						</option>
-					{% endfor %}
-				</optgroup>
-			</select>
-		</div>
-	</div>
-
-	<hr>
-
-	<div class="form-group {% if customer_contact_errors.firstname is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Firstname" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[firstname]" class="form-control" value="{{ env.post.customer_contact.firstname }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.lastname is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Lastname" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[lastname]" class="form-control" value="{{ env.post.customer_contact.lastname }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.company is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Company" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[company]" class="form-control" value="{{ env.post.customer_contact.company }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.street is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Street" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[street]" class="form-control" value="{{ env.post.customer_contact.street }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.housenumber is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Housenumber" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[housenumber]" class="form-control" value="{{ env.post.customer_contact.housenumber }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.zipcode is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Zip code" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[zipcode]" class="form-control" value="{{ env.post.customer_contact.zipcode }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.city is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "City" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[city]" class="form-control" value="{{ env.post.customer_contact.city }}" /></div>
-	</div>
-
-	<div class="form-group {% if errors.country_id is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Country" %}</label>
-		<div class="col-xs-9">
-			<select name="customer_contact[country_id]" class="form-control">
-				{% for key, country_group in countries %}
-					<optgroup label="{{ key }}">
-					{% for country in country_group %}
-						<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if country.id == customer_contact.country_id %}selected{% endif %}>{{ country.name }}</option>
-					{% endfor %}
-					</optgroup>
-				{% endfor %}
-			</select>
-		</div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.phone is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Phone" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[phone]" class="form-control" value="{{ env.post.customer_contact.phone }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.mobile is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Mobile" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[mobile]" class="form-control" value="{{ env.post.customer_contact.mobile }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.fax is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Fax" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[fax]" class="form-control" value="{{ env.post.customer_contact.fax }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.email is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Email" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[email]" class="form-control" value="{{ env.post.customer_contact.email }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.vat is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "VAT number" %}</label>
-		<div class="col-xs-9"><input type="text" name="customer_contact[vat]" class="form-control" value="{{ env.post.customer_contact.vat }}" /></div>
-	</div>
-
-	<div class="form-group {% if customer_contact_errors.vat_bound is defined %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "VAT bound" %}</label>
-		<div class="col-xs-9">
-			<select name="customer_contact[vat_bound]" class="form-control">
-				<option value="-1" {% if env.post.customer_contact.vat_bound == -1 %}selected{% endif %}>{% trans "Automatic" %}</option>
-				<option value="1" {% if env.post.customer_contact.vat_bound == 1 %}selected{% endif %}>{% trans "Charge VAT" %}</option>
-				<option value="0" {% if env.post.customer_contact.vat_bound == 0 %}selected{% endif %}>{% trans "Don't charge VAT" %}</option>
-			</select>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<div class="col-xs-9 col-xs-offset-3">
-			<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-			<button type="submit" class="btn btn-danger" name="delete_contact" data-confirm-message="{% trans "Are you sure?" %}" data-confirm-title="{% trans "Delete customer contact" %}">{% trans "Delete" %}</button>
-		</div>
-	</div>
-
-</form>
 
 {% endblock tab %}

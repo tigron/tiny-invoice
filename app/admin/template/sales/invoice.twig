@@ -15,7 +15,7 @@
 		{% endif %}
 
 		<div class="row">
-			<div class="col-xs-6">
+			<div class="col-xs-6" id="invoice-details">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Details" %}</div>
 					<div class="panel-body">
@@ -24,13 +24,16 @@
 							<dd>{{ invoice.id }}</dd>
 
 							<dt>{% trans "Created" %}</dt>
-							<dd>{{ invoice.created|datetime() }}</dd>
+							<dd>{{ invoice.created|datetime }}</dd>
 
 							<dt>{% trans "Price excl VAT" %}</dt>
 							<dd>{{ "€%.2f"|format(invoice.get_price_excl()) }}</dd>
 
 							<dt>{% trans "Price incl VAT" %}</dt>
 							<dd>{{ "€%.2f"|format(invoice.get_price_incl()) }}</dd>
+
+							<dt>{% trans "Expiration date" %}</dt>
+							<dd>{{ invoice.expiration_date|datetime }}</dd>
 
 							<dt>{% trans "Paid" %}</dt>
 							<dd>
@@ -53,7 +56,7 @@
 				</div>
 			</div>
 
-			<div class="col-xs-6">
+			<div class="col-xs-6" id="invoice-settings">
 				<form class="form-horizontal form-condensed" action="/sales/invoice?action=edit&id={{ invoice.id }}" method="post">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Invoice settings" %}</div>
@@ -86,6 +89,7 @@
 		</div>
 
 		<script type="text/javascript">
+
 			function set_reminder(element) {
 				if ($(element).is(':checked')) {
 					data = {
@@ -100,17 +104,18 @@
 
 				});
 			}
+
 		</script>
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6" id="invoice-customer">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Customer" %}</div>
 					<div class="panel-body">
 						<dl class="dl-horizontal">
 							<dt>{% trans "Name" %}</dt>
 							<dd>
-								<a href="/administrative/customer?action=edit&id={{ invoice.customer.id }}" title="">
+								<a href="/administrative/customer/detail?id={{ invoice.customer.id }}" title="">
 									{{ invoice.customer.firstname }} {{ invoice.customer.lastname }}
 								</a>
 							</dd>
@@ -131,7 +136,7 @@
 				</div>
 			</div>
 
-			<div class="col-md-6">
+			<div class="col-md-6" id="invoice-contact">
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Invoice contact" %}</div>
 					<div class="panel-body">
@@ -219,13 +224,25 @@
 						<thead>
 							<tr>
 								<th width="15%">{% trans "Date" %}</th>
+								<th>{% trans "Type" %}</th>
 								<th>{% trans "Amount" %}</th>
 							</tr>
 						</thead>
 						<tbody>
 				{% endif %}
 				<tr>
-					<td>{{ transfer.created|datetime }}</td>
+					<td>{{ transfer.created|date }}</td>
+					<td>
+						{% if transfer.type == 1 %}
+							{% trans "Manually added payment" %}
+						{% elseif transfer.type == 2 %}
+							{% trans "Paid via creditnote" %}
+						{% elseif transfer.type == 10 %}
+							{% trans "Paid with wiretransfer" %}
+						{% endif %}
+					</td>
+
+
 					<td>&euro;{{ transfer.amount|number_format }}</td>
 				</tr>
 				{% if loop.last %}
@@ -257,6 +274,15 @@
 				</dl>
 			</div>
 		</div>
+
+		<script type="text/javascript">
+
+			$(function() {
+				$('#invoice-details, #invoice-settings').find('.panel-body').equaliseHeights();
+				$('#invoice-customer, #invoice-contact').find('.panel-body').equaliseHeights();
+			});
+
+		</script>
 
 	{% elseif action == 'create_step1' %}
 
@@ -307,7 +333,7 @@
 			<li class="active">{% trans "Select invoice contact" %}</li>
 		</ol>
 
-		{% include 'sales/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact', 'redirect': '/sales/invoice?action=create_step2'} %}
+		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact', 'redirect': '/sales/invoice?action=create_step2'} %}
 
 		{% if errors is defined %}
 		<div class="alert alert-danger">
@@ -330,23 +356,21 @@
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a>
 									<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
-										<span class="glyphicon glyphicon-trash"></span>
+										<span class="glyphicon glyphicon-remove"></span>
 									</a>
-
 								</div>
 
-								{% if customer_contact.company != '' %}{{ customer_contact.company }}<br>{% endif %}
-								{{ customer_contact.firstname }} {{ customer_contact.lastname }}<br>
-								{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
-								{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
-								{{ customer_contact.country.name }}
-								{% if customer_contact.vat != '' %}<br>{{ customer_contact.get_vat_formatted() }}{% endif %}
+								<div class="pull-left">
+									<input type="radio" name="customer_contact" />
+								</div>
+
+								{{ base.customer_contact(customer_contact, settings) }}
 							</div>
 						</div>
 					</div>
 				{% endfor %}
 					<div class="col-xs-3">
-						<div class="panel panel-default">
+						<div class="panel panel-default customer_contact">
 							<div class="panel-body text-center">
 								<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
 									{% trans "Create new" %}
@@ -358,7 +382,7 @@
 
 				<form method="post" action="/sales/invoice?action=create_step2" id="invoice-create-step2">
 					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
-					<button class="btn btn-primary">
+					<button class="btn btn-primary pull-right">
 						{% trans "Next" %}
 					</button>
 				</form>
@@ -375,9 +399,11 @@
 					$(this).find('.actions').toggleClass('hide');
 				},
 				click: function() {
+					$('.customer_contact').find('input[type=radio]').prop('checked', false);
 					$('.customer_contact').find('.panel-body').removeClass('bg-info');
 					$(this).find('.panel-body').first().addClass('bg-info');
 					$('#invoice-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
+					$(this).find('input[type=radio]').prop('checked', true);
 				}
 			});
 
@@ -404,7 +430,7 @@
 		</ol>
 
 		{% if errors[-1] is defined %}
-			<div class="alert alert-danger">{% trans "The price must be larger than €0" %}</div>
+			<div class="alert alert-danger">{% trans "The price must be greater than €0" %}</div>
 		{% elseif errors is defined %}
 			<div class="alert alert-danger">
 				{{ errors|print_r }}
@@ -433,6 +459,13 @@
 								<option value="+60 days">60 {% trans "days" %}</option>
 								<option value="+90 days">90 {% trans "days" %}</option>
 							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Send invoice" %} ({{ env.session.invoice.customer_contact.invoice_method.name }})</label>
+						<div class="col-xs-9">
+							<input type="checkbox" data-group-cls="btn-group-xs" name="send_invoice" />
 						</div>
 					</div>
 				</div>
@@ -484,7 +517,7 @@
 								<td>
 									<div class="form-control-static">
 										<a href="javascript:void(0);" onclick="remove_item($(this));">
-											<span class="glyphicon glyphicon-trash"></span>
+											<span class="glyphicon glyphicon-remove"></span>
 										</a>
 									</div>
 								</td>
@@ -539,7 +572,7 @@
 				<td>
 					<div class="form-control-static">
 						<a href="javascript:void(0);" onclick="remove_item($(this));">
-							<span class="glyphicon glyphicon-trash"></span>
+							<span class="glyphicon glyphicon-remove"></span>
 						</a>
 					</div>
 				</td>
@@ -572,6 +605,50 @@
 			}
 
 		</script>
+	{% elseif action == 'export' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/sales/invoice">{% trans "Invoices" %}</a></li>
+			<li class="active">{% trans "Export invoices" %}</li>
+		</ol>
+
+		<form class="form-horizontal" method="post" action="/sales/invoice?action=export">
+		<div class="well">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export invoices" %}</label>
+				<div class="col-xs-9">
+					<select name="months[]" class="form-control multiselect" multiple="multiple">
+					{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
+						<optgroup label="{{ year }}">
+							{% for month in 1..12 %}
+								{% if year < "now"|date("Y") or ( month <= "now"|date("m") and year >= "now"|date("Y") ) %}
+									<option value="{{ year }}-{{ month }}">{{ (year~'-'~month~'-01')|date("F Y") }}</option>
+								{% endif %}
+							{% endfor %}
+						</optgroup>
+					{% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export format" %}</label>
+				<div class="col-xs-4">
+					<select name="export_format" class="form-control">
+						<option value="Export_Expertm_Invoice">Expert/M</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">
+						{% trans "Download" %}
+					</button>
+				</div>
+			</div>
+		</div>
+		</form>
 
 	{% else %}
 
@@ -592,21 +669,7 @@
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
-						<div class="col-xs-9">
-							<select class="form-control" name="customer_id">
-								<option value=""> - - - </option>
-								{% for customer in customers %}
-								    <option value="{{ customer.id }}"{% if pager.has_condition('customer_id', customer.id) %} selected{% endif %}>
-										{{ customer.firstname }} {{ customer.lastname }}
-										{% if customer.company != '' %}
-											({{ customer.company }})
-										{% endif %}
-								{% endfor %}
-							</select>
-						</div>
-					</div>
+
 					<div class="form-group">
 					    <label class="col-xs-3 control-label">{% trans "Paid" %}</label>
 					    <div class="col-xs-9">
@@ -663,6 +726,10 @@
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						{% trans "Add invoice" %}
 					</a>
+					-
+					<a href="/sales/invoice?action=export" title="{% trans "Export invoices" %}">
+						<i class="fa fa-file"></i> {% trans "Export invoices" %}
+					</a>
 				</div>
 				{{ base.pager_count(pager.item_count) }} (&euro;{{ pager.get_sum('price_incl')|number_format }})
 			</div>
@@ -675,8 +742,8 @@
 						<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
 						<th width="10%">{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
 						<th>{{ pager.create_header('Customer'|trans, 'customer.lastname')|raw }}</th>
-						<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
 						<th width="10%" class="text-right">{{ pager.create_header('Price excl'|trans, 'price_excl')|raw }}</th>
+						<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
 						<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
 						<th width="30"></th>
 						<th width="30"></th>
@@ -693,12 +760,12 @@
 				</td>
 				<td>{{ invoice.created|date }}</td>
 				<td>
-					<a href="/administrative/customer?action=edit&id={{ invoice.customer.id }}" title="">
+					<a href="/administrative/customer/detail?id={{ invoice.customer.id }}" title="">
 						{{ invoice.customer.get_display_name }}
 					</a>
 				</td>
-				<td class="text-right">€{{ invoice.price_incl|number_format }}</td>
-				<td class="text-right">€{{ invoice.price_excl|number_format }}</td>
+				<td class="text-right">€{{ invoice.get_price_excl()|number_format }}</td>
+				<td class="text-right">€{{ invoice.get_price_incl()|number_format }}</td>
 				<td>
 				{% if invoice.paid %}
 					<span class="glyphicon glyphicon-ok"></span>

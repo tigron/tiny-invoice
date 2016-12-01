@@ -104,6 +104,30 @@ class Web_Module_Administrative_Customer extends Module {
 	}
 
 	/**
+	 * Export cutomers
+	 *
+	 * @access public
+	 */
+	public function display_export() {
+		$template = Template::Get();
+
+		$pager = new Pager('customer');
+		$pager->add_sort_permission('company');
+		$pager->page();
+		$template->assign('pager', $pager);
+
+		if (isset($_POST['export_format'])) {
+			$export = new $_POST['export_format']();
+			$export->data = json_encode([]);
+			$export->save();
+			$export->run();
+
+			Session::redirect('/export?action=created');
+		}
+
+	}
+
+	/**
 	 * Load customer (ajax)
 	 *
 	 * @access public
@@ -113,6 +137,15 @@ class Web_Module_Administrative_Customer extends Module {
 
 		$customer = Customer::get_by_id($_GET['id']);
 		echo json_encode($customer->get_info());
+	}
+
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.customer';
 	}
 
 }

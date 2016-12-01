@@ -34,7 +34,7 @@ class Invoice_Method_Mail extends Invoice_Method {
 		}
 
 		$mail->add_attachment($invoice->get_pdf());
-		$mail->assign('invoice', $this);
+		$mail->assign('invoice', $invoice);
 
 		try {
 			$mail->send();

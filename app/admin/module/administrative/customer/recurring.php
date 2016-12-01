@@ -39,6 +39,7 @@ class Web_Module_Administrative_Customer_Recurring extends Module {
 		$template->assign('customer', $customer);
 
 		$pager = new Pager('invoice_queue_recurring_group');
+        $pager->add_condition('archived', '=', '0000-00-00 00:00:00');
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('number');
 		$pager->add_sort_permission('created');

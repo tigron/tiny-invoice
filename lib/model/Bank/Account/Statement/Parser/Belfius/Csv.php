@@ -105,10 +105,10 @@ class Bank_Account_Statement_Parser_Belfius_Csv extends Bank_Account_Statement_P
 
 		foreach ($transactions as $transaction) {
 			try {
-				$bank_account = Bank_Account::get_by_identifier($transaction['Rekening']);
+				$bank_account = Bank_Account::get_by_number(str_replace(' ', '', $transaction['Rekening']));
 			} catch (Exception $e) {
 				$bank_account = new Bank_Account();
-				$bank_account->identifier = $transaction['Rekening'];
+				$bank_account->number = str_replace(' ', '', $transaction['Rekening']);
 				$bank_account->save();
 			}
 
@@ -117,28 +117,19 @@ class Bank_Account_Statement_Parser_Belfius_Csv extends Bank_Account_Statement_P
 			 */
 			$date = split("/", $transaction['Valutadatum']);
 			$date = $date[2] . '-' . $date[1] . '-' . $date[0];
-
-			$year = substr($date, 0, 4);
 			$number = $transaction['Afschriftnummer']; //afschrift number
-
-			if (date('m', strtotime($date)) == 12 AND $number == 1) {
-				$year++;
-			}
-			$afs = str_pad($year, 9, 0, STR_PAD_RIGHT);
-			$length_number = strlen($number);
-			$identifier = substr($afs, 0, (9 - $length_number)) . $number;
-
 			try {
-				$bank_account_statement = Bank_Account_Statement::get_by_bank_account_identifier($bank_account, $identifier);
+				$bank_account_statement = Bank_Account_Statement::get_by_bank_account_sequence($bank_account, $number);
 			} catch (Exception $e) {
 				$bank_account_statement = new Bank_Account_Statement();
 				$bank_account_statement->bank_account_id = $bank_account->id;
-				$bank_account_statement->identifier = $identifier;
+				$bank_account_statement->sequence = $number;
+				$bank_account_statement->date = $date;
 				$bank_account_statement->save();
 			}
 
 			try {
-				$bank_account_statement_transaction = Bank_Account_Statement_Transaction::get_by_bank_account_statement_sequence_number($bank_account_statement, $transaction['Transactienummer']);
+				$bank_account_statement_transaction = Bank_Account_Statement_Transaction::get_by_bank_account_statement_sequence($bank_account_statement, $transaction['Transactienummer']);
 			} catch (Exception $e) {
 				$bank_account_statement_transaction = new Bank_Account_Statement_Transaction();
 				$bank_account_statement_transaction->bank_account_statement_id = $bank_account_statement->id;

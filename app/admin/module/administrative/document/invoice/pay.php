@@ -33,9 +33,15 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 		$pager->add_condition('classname', 'Document_Incoming_Invoice');
 		$pager->add_join('document_incoming_invoice', 'document_id', 'document.id');
 		$pager->add_condition('document_incoming_invoice.paid', 0);
+
+		$pager->add_sort_permission('date');
+		$pager->add_sort_permission('document_incoming_invoice.expiration_date');
+		$pager->add_sort_permission('supplier.company');
+		$pager->add_sort_permission('supplier.iban');
+
 		$pager->page(true);
 
-		$template->assign('unpaid_invoices', $pager->items);
+		$template->assign('pager', $pager);
 	}
 
 	public function display_download() {
@@ -68,6 +74,13 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 
 		Session::redirect('/export?action=created');
 	}
-
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.document';
+	}
 
 }

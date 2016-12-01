@@ -28,14 +28,14 @@ class Bank_Account {
 	 * Get by identifier
 	 *
 	 * @access public
-	 * @param string $identifier
+	 * @param string $number
 	 * @return Bank_Account $bank_account
 	 */
-	public static function get_by_identifier($identifier) {
+	public static function get_by_number($number) {
 		$db = Database::get();
-		$id = $db->get_one('SELECT id FROM bank_account WHERE identifier=?', [ $identifier ]);
+		$id = $db->get_one('SELECT id FROM bank_account WHERE number=?', [ $number ]);
 		if ($id === null) {
-			throw new Exception('Bank account with identifier ' . $identifier . ' not found');
+			throw new Exception('Bank account with number ' . $number . ' not found');
 		}
 		return self::get_by_id($id);
 	}

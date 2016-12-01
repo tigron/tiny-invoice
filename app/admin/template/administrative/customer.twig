@@ -80,7 +80,7 @@
 					<div class="form-group{% if 'country_id' in errors|keys %} has-error{% endif %}">
 						<label for="country_id" class="col-xs-3 control-label">{% trans "Country" %}</label>
 						<div class="col-xs-5">
-							<select name="supplier[country_id]" class="form-control" onchange="change_country();">
+							<select name="customer[country_id]" class="form-control" onchange="change_country();">
 							{% for group in countries|keys  %}
 								{% if group == 'european' %}
 									<optgroup label="{% trans "European" %}">
@@ -134,7 +134,7 @@
 						<label for="vat" class="col-xs-3 control-label">{% trans "Vat" %}</label>
 						<div class="col-xs-1"><input type="text" class="form-control" id="vat_prefix" readonly value="AT" /></div>
 						<div class="col-xs-4">
-							<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ supplier.vat }}">
+							<input type="text" name="customer[vat]" id="vat" class="form-control" value="{{ customer.vat }}">
 							{{ form.invalid_input('vat', errors) }}
 						</div>
 					</div>
@@ -166,12 +166,45 @@
 		</form>
 		<script type="text/javascript">
 			function change_country() {
-				iso2 = $('select[name="supplier[country_id]"] option:selected').attr('data-iso2');
+				iso2 = $('select[name="customer[country_id]"] option:selected').attr('data-iso2');
 				$('#vat_prefix').val(iso2);
 			}
 			change_country();
 		</script>
+	{% elseif action == 'export' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative_customer">{% trans "Customers" %}</a></li>
+			<li class="active">{% trans "Export customers" %}</li>
+		</ol>
 
+		<form class="form-horizontal" method="post" action="/administrative/customer?action=export">
+		<div class="well">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Total number of customers" %}</label>
+				<div class="col-xs-9">
+					<p class="form-control-static" id="total_amount">{{ pager.item_count }}</p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export format" %}</label>
+				<div class="col-xs-4">
+					<select name="export_format" class="form-control">
+						<option value="Export_Expertm_User">Expert/M</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">
+						{% trans "Download" %}
+					</button>
+				</div>
+			</div>
+		</div>
+		</form>
 	{% elseif env.module.get_name() != 'administrative_customer' %}
 
 		<ol class="breadcrumb">
@@ -198,7 +231,6 @@
 		<div class="tab-content">
 			{% block tab %}{% endblock tab %}
 		</div>
-
 	{% else %}
 
 		<ol class="breadcrumb">
@@ -240,6 +272,11 @@
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						{% trans "Add customer" %}
 					</a>
+					-
+					<a href="/administrative/customer?action=export" title="{% trans "Export customers" %}">
+						<i class="fa fa-file"></i> {% trans "Export customers" %}
+					</a>
+
 				</div>
 				{{ base.pager_count(pager.item_count) }}
 			</div>
@@ -261,7 +298,7 @@
 				{% endif %}
 
 				<tr>
-					<td>{{ customer.id }}</td>
+					<td>{{ customer.get_identifier() }}</td>
 					<td>{{ customer.firstname }}</td>
 					<td>{{ customer.lastname }}</td>
 					<td>{{ customer.company }}</td>

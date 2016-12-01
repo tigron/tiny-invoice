@@ -19,13 +19,13 @@
 			</div>
 		{% endif %}
 
-		<form class="form-horizontal form-condensed" method="post" action="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				{% trans "Edit recurring invoice queue" %}
-			</div>
-			<div class="panel-body">
-				<div class="col-md-6">
+		<div class="row">
+		<div class="col-md-6">
+			<form class="form-horizontal form-condensed" method="post" action="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}">
+
+			<div class="panel panel-default">
+				<div class="panel-heading">{% trans "Edit recurring invoice queue" %}</div>
+				<div class="panel-body">
 					<div class="form-group {% if errors.name is defined %}has-error{% endif %}">
 						<label class="col-xs-3 control-label">{% trans "Name" %}</label>
 						<div class="col-xs-5">
@@ -39,7 +39,9 @@
 								<option value="+1 day"{% if invoice_queue_recurring_group.repeat_every == '+1 day' %} selected="selected"{% endif %}>{% trans "Every day" %}</option>
 								<option value="+1 week"{% if invoice_queue_recurring_group.repeat_every == '+1 week' %} selected="selected"{% endif %}>{% trans "Every week" %}</option>
 								<option value="+1 month"{% if invoice_queue_recurring_group.repeat_every == '+1 month' %} selected="selected"{% endif %}>{% trans "Every month" %}</option>
+								<option value="+2 months"{% if invoice_queue_recurring_group.repeat_every == '+2 months' %} selected="selected"{% endif %}>{% trans "Every 2 months" %}</option>
 								<option value="+3 months"{% if invoice_queue_recurring_group.repeat_every == '+3 months' %} selected="selected"{% endif %}>{% trans "Every 3 months" %}</option>
+								<option value="+6 months"{% if invoice_queue_recurring_group.repeat_every == '+6 months' %} selected="selected"{% endif %}>{% trans "Every 6 months" %}</option>
 								<option value="+1 year"{% if invoice_queue_recurring_group.repeat_every == '+1 year' %} selected="selected"{% endif %}>{% trans "Every year" %}</option>
 							</select>
 						</div>
@@ -74,6 +76,16 @@
 						toggle_run_forever();
 					</script>
 
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+						<div class="col-xs-5">
+							<p class="form-control-static">
+								<a href="/administrative/customer/detail?id={{ invoice_queue_recurring_group.customer_id }}">
+									{{ invoice_queue_recurring_group.customer.get_display_name() }}
+								</a>
+							</p>
+						</div>
+					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Created" %}</label>
@@ -87,61 +99,49 @@
 							<p class="form-control-static">&euro;{{ invoice_queue_recurring_group.get_total_price()|number_format }}</p>
 						</div>
 					</div>
-				</div>
 
-				{% set customer_contacts = invoice_queue_recurring_group.customer.get_customer_contacts() %}
-
-				<div class="col-md-6">
 					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
-						<div class="col-xs-5">
-							<p class="form-control-static">{{ invoice_queue_recurring_group.customer.firstname }} {{ invoice_queue_recurring_group.customer.lastname }}</p>
+						<div class="col-xs-9 col-xs-offset-3">
+							<button class="btn btn-primary" type="submit">{% trans "Save" %}</button>
 						</div>
 					</div>
+
+				</div>
+			</div>
+			</form>
+		</div>
+
+		{% include 'sales/invoice/queue/recurring/modal.customer_contacts.twig' with {'id': 'change_customer_contact', 'modal_size': 'lg', 'invoice_queue_recurring_group': invoice_queue_recurring_group } %}
+
+		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue/recurring?action=edit&id=' ~ invoice_queue_recurring_group.id, 'modal_size': 'lg'} %}
+
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{% trans "Invoice contact" %}
+					<div class="pull-right">
+						<a href="#change_customer_contact" data-toggle="modal">{% trans "Change customer contact" %}</a> /
+						<a href="#manage-customer-contact" data-toggle="modal" data-customer-contact-id="{{ invoice_queue_recurring_group.customer_contact_id }}">{% trans "Modify customer contact" %}</a>
+					</div>
+				</div>
+				<div class="panel-body">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Invoice contact" %}</label>
 						<div class="col-xs-5">
-							<select class="form-control" name="invoice_queue_recurring_group[customer_contact_id]" id="invoice_contact" onchange="javascript:update_invoice_contact()">
-								{% for customer_contact in customer_contacts %}
-									<option value="{{ customer_contact.id }}" {% if customer_contact.id == invoice_queue_recurring_group.customer_contact_id %}selected="selected"{% endif %}>
-										{{ customer_contact.firstname }} {{ customer_contact.lastname }}{% if not customer_contact.active %} [{% trans "inactive" %}]{% endif %}
-									</option>
-								{% endfor %}
-							</select>
+							{% set customer_contact = invoice_queue_recurring_group.customer_contact %}
+							<div class="form-control-static">
+								{{ base.customer_contact(customer_contact, settings) }}
+							</div>
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="col-xs-5 col-xs-offset-3">
 
-
-						{% for customer_contact in customer_contacts %}
-						<address {% if customer_contact.id != invoice_queue_recurring_group.customer_contact_id %}class="hide"{% endif %} id="customer_contact_{{ customer_contact.id }}">
-							{% if customer_contact.company == '' %}
-								<strong>{{ customer_contact.firstname }} {{ customer_coontact.lastname }}</strong>
-							{% elseif customer_contact.firstname == '' and customer_contact.lastname == '' %}
-								<strong>{{ customer_contact.company }}</strong>
-							{% else %}
-								<strong>{{ customer_contact.firstname }} {{ customer_contact.lastname }} ({{ customer_contact.company }})</strong>
-							{% endif %}
-							<br />
-							{{ customer_contact.street }} {{ customer_contact.housenumber }}<br />
-							{{ customer_contact.zipcode }} {{ customer_contact.city }}<br />
-							{% if customer_contact.vat != '' %}
-								{{ customer_contact.country.iso2 }} {{ customer_contact.vat }} <br />
-							{% endif %}
-							{{ customer_contact.email }}
-						</address>
-						{% endfor %}
-
-
-
-						</div>
-					</div>
 				</div>
-
 			</div>
 		</div>
+		</div>
+
+
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				{% trans "Queue content" %}
@@ -152,7 +152,7 @@
 				</div>
 			</div>
 			<div class="panel-body">
-
+			<form class="form-horizontal form-condensed" method="post" action="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}">
 				<table id="queue_items_table" class="table table-striped table-hover">
 					<thead>
 						<tr>
@@ -162,41 +162,93 @@
 							<th width="150">{% trans "Quantity" %}</th>
 							<th width="150">{% trans "Price" %}</th>
 							<th width="30">&nbsp;</th>
+							<th width="30">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for invoice_queue_recurring in invoice_queue_recurring_group.get_invoice_queue_recurring() %}
-						<tr>
+						<tr class="edit hidden invoice_queue_recurring_{{ invoice_queue_recurring.id }}">
+							<td>
+								<select name="existing_queue_item[{{ invoice_queue_recurring.id }}][product_type_id]" class="form-control">
+								{% for product_type in product_types %}
+									<option value="{{ product_type.id }}" {% if invoice_queue_recurring.product_type_id == product_type.id %}selected{% endif %}>{{ product_type.name }}</option>
+								{% endfor %}
+								</select>
+							</td>
+							<td>
+								<textarea name="existing_queue_item[{{ invoice_queue_recurring.id }}][description]" class="form-control autogrow">{{ invoice_queue_recurring.description }}</textarea>
+							</td>
+
+
+							<td>
+								<select name="existing_queue_item[{{ invoice_queue_recurring.id }}][vat]" class="form-control">
+									<option value="6" {% if invoice_queue_recurring.vat == 6 %}selected{% endif %}>6%</option>
+									<option value="12" {% if invoice_queue_recurring.vat == 12 %}selected{% endif %}>12%</option>
+									<option value="21" {% if invoice_queue_recurring.vat == 21 %}selected{% endif %}>21%</option>
+								</select>
+							</td>
+							<td>
+								<input type="text" class="form-control" name="existing_queue_item[{{ invoice_queue_recurring.id }}][qty]" value="{{ invoice_queue_recurring.qty }}" />
+							</td>
+							<td>
+								<input type="text" name="existing_queue_item[{{ invoice_queue_recurring.id }}][price]" class="form-control" value="{{ invoice_queue_recurring.price }}" />
+							</td>
+							<td>
+								<a href="javascript: void(0);" onclick="toggle_row({{ invoice_queue_recurring.id }});">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+							</td>
+
+
+							<td>
+								<a href="/sales/invoice/queue/recurring?action=delete_queue_element&id={{ invoice_queue_recurring.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this item" %}">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+							</td>
+						</tr>
+
+
+						<tr class="view invoice_queue_recurring_{{ invoice_queue_recurring.id }}">
 							<td>{{ invoice_queue_recurring.product_type.name }}</td>
 							<td>{{ invoice_queue_recurring.description|nl2br }}</td>
 							<td>{{ invoice_queue_recurring.vat }}%</td>
 							<td>{{ invoice_queue_recurring.qty }}</td>
 							<td>&euro;{{ invoice_queue_recurring.price|number_format }}</td>
 							<td>
+								<a href="javascript: void(0);" onclick="toggle_row({{ invoice_queue_recurring.id }});">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+							</td>
+
+							<td>
 								<a href="/sales/invoice/queue/recurring?action=delete_queue_element&id={{ invoice_queue_recurring.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this item" %}">
-									<span class="glyphicon glyphicon-trash"></span>
+									<span class="glyphicon glyphicon-remove"></span>
 								</a>
 							</td>
 						</tr>
 						{% endfor %}
 					</tbody>
 				</table>
-			</div>
-		</div>
 
-		<div class="col-xs-12">
-			<div class="form-group">
-				<div class="pull-right">
-					<button type="submit" class="btn btn-primary">
-						{% trans "Save" %}
-					</button>
+				<div class="col-xs-12">
+					<div class="form-group">
+						<div class="pull-right">
+							<button type="submit" class="btn btn-primary">
+								{% trans "Save" %}
+							</button>
+						</div>
+					</div>
 				</div>
+			</form>
 			</div>
 		</div>
-
-		</form>
 
 		<script>
+			function toggle_row(id) {
+				$('.invoice_queue_recurring_' + id).toggleClass('hidden');
+				$('.autogrow').autoGrow();
+			}
+
 			function update_invoice_contact() {
 				contact_id = $('#invoice_contact').val()
 				$('address').addClass('hide');
@@ -212,7 +264,12 @@
 				var html = template(context);
 				$("#queue_items_table tbody").append(html);
 			}
+
+			function remove_queue_item(element) {
+				$(element).parents('tr').remove();
+			}
 		</script>
+
 		<script id="cloneable" type="text/x-handlebars-template">
 			<tr>
 				<td>
@@ -238,9 +295,10 @@
 				<td>
 					<input type="text" name="queue_item[price][]" class="form-control"/>
 				</td>
+				<td>&nbsp;</td>
 				<td>
 					<div class="form-control-static">
-						<a href="javascript:void(0);" onclick="remove_queue_item($(this));" title="{% trans "Delete" %}"><span class="glyphicon glyphicon-trash"></span></a>
+						<a href="javascript:void(0);" onclick="remove_queue_item($(this));" title="{% trans "Delete" %}"><span class="glyphicon glyphicon-remove"></span></a>
 					</div>
 				</td>
 			</tr>
@@ -275,7 +333,9 @@
 								<option value="+1 day">{% trans "Every day" %}</option>
 								<option value="+1 week">{% trans "Every week" %}</option>
 								<option value="+1 month">{% trans "Every month" %}</option>
+								<option value="+2 months">{% trans "Every 2 months" %}</option>
 								<option value="+3 months">{% trans "Every 3 months" %}</option>
+								<option value="+6 months">{% trans "Every 6 months" %}</option>
 								<option value="+1 year">{% trans "Every year" %}</option>
 							</select>
 						</div>
@@ -299,7 +359,7 @@
 			<li class="active">{% trans "Add invoice queue step 2" %}</li>
 		</ol>
 
-		{% include 'sales/invoice/modal.manage_customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue/recurring?action=add_step2'} %}
+		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue/recurring?action=add_step2', 'modal_size': 'lg'} %}
 
 		{% if errors is defined %}
 		<div class="alert alert-danger">
@@ -322,38 +382,44 @@
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a>
 									<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
-										<span class="glyphicon glyphicon-trash"></span>
+										<span class="glyphicon glyphicon-remove"></span>
 									</a>
-
 								</div>
 
-								{% if customer_contact.company != '' %}{{ customer_contact.company }}<br>{% endif %}
-								{{ customer_contact.firstname }} {{ customer_contact.lastname }}<br>
-								{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
-								{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
-								{{ customer_contact.country.name }}
-								{% if customer_contact.vat != '' %}<br>{{ customer_contact.get_vat_formatted() }}{% endif %}
+								<div class="pull-left">
+									<input type="radio" name="customer_contact" />
+								</div>
+
+								{{ base.customer_contact(customer_contact, settings) }}
 							</div>
 						</div>
 					</div>
 				{% endfor %}
-					<div class="col-xs-3">
-						<div class="panel panel-default">
-							<div class="panel-body text-center">
-								<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
-									{% trans "Create new" %}
-								</a>
-							</div>
+				<div class="col-xs-3 customer_contact">
+					<div class="panel panel-default">
+						<div class="panel-body text-center">
+							<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
+								{% trans "Create new" %}
+							</a>
 						</div>
 					</div>
+				</div>
 				</div>
 
 				<form method="post" action="/sales/invoice/queue/recurring?action=add_step2">
 					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
-					<button class="btn btn-primary">
-						{% trans "Next" %}
-					</button>
+					<div class="pull-left">
+						<button class="btn btn-default">
+							&laquo; {% trans "Previous" %}
+						</button>
+					</div>
+					<div class="pull-right">
+						<button class="btn btn-primary">
+							{% trans "Next" %} &raquo;
+						</button>
+					</div>
 				</form>
+
 			</div>
 		</div>
 
@@ -367,9 +433,11 @@
 					$(this).find('.actions').toggleClass('hide');
 				},
 				click: function() {
+					$('.customer_contact').find('input[type=radio]').prop('checked', false);
 					$('.customer_contact').find('.panel-body').removeClass('bg-info');
 					$(this).find('.panel-body').first().addClass('bg-info');
-					$('#invoice-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
+					$('input[name=customer_contact_id]').val($(this).prop('id').replace('customer-contact-', ''));
+					$(this).find('input[type=radio]').prop('checked', true);
 				}
 			});
 

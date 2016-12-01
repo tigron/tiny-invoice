@@ -68,6 +68,21 @@ class Customer {
 	}
 
 	/**
+	 * Get customer indentifier
+	 *
+	 * @access public
+	 * @return string $identifier
+	 */
+	public function get_identifier() {
+		try {
+			$setting = Setting::get_by_name('customer_identifier')->value;
+		} catch (Exception $e) {
+			$setting = '%d';
+		}
+		return sprintf($setting, $this->id);
+	}
+
+	/**
 	 * Get active invoice contacts
 	 *
 	 * @access public
