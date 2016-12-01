@@ -52,6 +52,14 @@ class Web_Module_Setting_Mailscanner extends Module {
 		}
 
 		$template->assign('settings', Setting::get_as_array());
+	}
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.setting';
 	}
 }

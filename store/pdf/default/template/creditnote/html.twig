@@ -1,0 +1,203 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block head %}
+
+	<style type="text/css">
+
+		#main_info {
+			margin-bottom: 5mm;
+			width: 100%;
+		}
+
+			#main_info td {
+				padding: 1.5mm 2mm
+			}
+
+			#main_info th {
+				border-bottom: solid 1px #ccc;
+			}
+
+		#creditnote_items {
+			margin-bottom: 10mm;
+			width: 100%
+		}
+
+			#creditnote_items td {
+				padding: 1mm 2mm
+			}
+
+		#payment_info {
+			page-break-inside: avoid;
+		}
+
+		#payment_info .right_col table {
+			border-collapse: collapse;
+			margin-bottom: 4mm;
+			border-top: solid 1px #ccc;
+			background-color: #fff;
+			width: 70mm;
+		}
+
+		#payment_info tbody td {
+			padding: 1mm 2mm;
+		}
+
+		.item_price {
+			vertical-align: top;
+			background: #f6f6f6;
+			text-align: right
+		}
+
+		#creditnote_items th {
+			border-bottom: solid 1px #ccc;
+		}
+
+		#creditnote_items .even td {
+			background-color: #f6f6f6
+		}
+
+	</style>
+
+{% endblock head %}
+
+
+{% block php_script %}
+
+	{{ parent() }}
+
+	if ( isset($pdf) ) {
+		$pdf->page_script('
+			if ($PAGE_NUM == 1) {
+				$x = 64;
+				$y = 210;
+			} else {
+				$x = 64;
+				$y = 50;
+			}
+
+			$font = $fontMetrics->get_font("calibri", "bold");
+			$size = 14;
+			$creditnote_label = "{% trans "Invoice" %} {{ creditnote.number }} ";
+			$pdf->text($x, $y, $creditnote_label, $font, $size);
+
+		');
+	}
+
+{% endblock php_script %}
+
+{% set recipient_info = creditnote.customer_contact %}
+
+{% block content %}
+
+	<table cellpadding="0" cellspacing="10" border="0" id="main_info">
+	<thead>
+		<tr>
+			<th style="width: 25mm">
+			{% if recipient_info.vat != '' %}
+				{% trans "VAT customer" %}
+			{% else %}
+				{% trans "Customer" %}
+				&nbsp;
+			{% endif %}
+			</th>
+			<th style="width: 25mm">{% trans "Date" %}</th>
+			<th style="width: 50mm">{% trans "Reference" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+			{% if recipient_info.vat != '' %}
+				{{ recipient_info.get_vat_formatted() }}
+			{% else %}
+				{% if recipient_info.company != '' %}
+					{{ recipient_info.company }}
+				{% else %}
+					{{ recipient_info.firstname }} {{ recipient_info.lastname }}
+				{% endif %}
+			{% endif %}
+			</td>
+			<td>{{ creditnote.created|date('d/m/Y') }}</td>
+			<td>{{ creditnote.reference }}</td>
+		</tr>
+	</tbody>
+	</table>
+
+	{% set creditnote_items = creditnote.get_creditnote_items() %}
+	<table cellpadding="0" cellspacing="10" border="0" id="creditnote_items">
+	<thead>
+		<tr>
+
+			<th style="width: 100mm">{% trans "Description" %}</th>
+			<th style="width: 15mm">{% trans "Qty" %}</th>
+			<th style="width: 15mm">{% trans "Unit price" %}</th>
+			<th style="width: 20mm">{% trans "Price" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+
+	{% for key_ii, creditnote_item in creditnote_items %}
+		{% set name = creditnote_item.description|split("\n") %}
+		{% for paragraph in name %}
+		<tr class="{{ cycle(['odd', 'even'], key_ii) }}">
+			<td>{{ paragraph }}</td>
+		{% if loop.first %}
+			<td>{{ creditnote_item.qty }}</td>
+			<td style="text-align: right">&euro;{{ creditnote_item.price }}</td>
+			<td style="text-align: right">&euro;{{ creditnote_item.get_price_excl()|number_format }}</td>
+		{% else %}
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		{% endif %}
+		</tr>
+		{% endfor %}
+		<tr>
+			<td colspan="4" style="padding: 0; line-height: 0; height:3px">&nbsp;</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+
+	<div id="payment_info">
+		<table cellpadding="0" cellspacing="10" border="0">
+		<tr>
+			<td style="width: 100mm; vertical-align">&nbsp;</td>
+			<td  style="width: 50mm; border-top: solid 2px #ccc">
+				{% set vat_array = creditnote.get_vat_array() %}
+				<table cellpadding="0" cellspacing="0" border="0">
+				<tbody>
+					<tr>
+						<td style="width: 35mm; text-align: left; padding-top: 2mm">
+							{% trans "Subtotal" %}
+						</td>
+						<td style="width: 20mm; padding-top: 2mm; text-align: right">&euro;{{ "%.2f"|format(creditnote.get_price_excl()) }}</td>
+					</tr>
+					{% for key, vat_subtotal in vat_array %}
+					<tr>
+						<td style="text-align: left; padding-bottom: 6px">
+							{% trans "VAT" %} ({{ key }}%)
+						</td>
+						<td style="padding-bottom: 6px; text-align: right">
+							&euro;{{ "%.2f"|format(vat_subtotal) }}
+						</td>
+					</tr>
+					{% endfor %}
+					<tr>
+						<td height="5mm" colspan="2"></td>
+					</tr>
+					<tr>
+						<td style="border-top: solid 1px #ccc; font-weight: bold; text-align: left; background-color: #333; color: #fff">{% trans "Total to pay" %}</td>
+						<td style="border-top: solid 1px #ccc; font-weight: bold; background-color: #000; color: #fff; text-align: center; font-size: 14pt">&euro;{{ creditnote.get_price_incl()|number_format }}</td>
+					</tr>
+				</tbody>
+				</table>
+			</td>
+		</tr>
+		</table>
+
+
+
+	</div>
+
+{% endblock content %}

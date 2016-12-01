@@ -104,4 +104,13 @@ class Web_Module_Sales_Product_Type extends Module {
 		Session::set_sticky('message', 'deleted');
 		Session::redirect('/sales/product/type');
 	}
+
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.product_type';
+	}
 }

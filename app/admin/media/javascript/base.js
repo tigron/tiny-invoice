@@ -32,7 +32,9 @@ $(document).ready(function(){
 	/**
 	 * Initialize multiselect
 	 */
-	$('.multiselect').multiselect();
+	$('.multiselect').multiselect({
+		maxHeight: 300
+	});
 
 	/**
 	 * Initialize autogrow
@@ -116,4 +118,20 @@ var parseQueryString = function( queryString ) {
     }
 
     return params;
+};
+
+$.fn.equaliseHeights = function(options) {
+
+	var settings = $.extend({
+	    offset: 0 // add amount of pixels to the maxHeight
+	}, options );
+
+	var maxHeight = 0, $this = $(this);
+
+	$this.each( function() {
+		var height = $(this).innerHeight();
+		if ( height > maxHeight ) { maxHeight = height; }
+    });
+
+	return $this.css('height', maxHeight + settings.offset);
 };

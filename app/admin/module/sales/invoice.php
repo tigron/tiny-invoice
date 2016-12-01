@@ -56,10 +56,6 @@ class Web_Module_Sales_Invoice extends Module {
 			$pager->add_condition('created', 'BETWEEN', date('Y-m-d H:i:s', strtotime($_POST['date_start'] . ' 00:00:00')), date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59')));
 		}
 
-		if (isset($_POST['customer_id']) AND $_POST['customer_id'] != '') {
-			$pager->add_condition('customer_id', $_POST['customer_id']);
-		}
-
 		if (isset($_POST['paid']) AND $_POST['paid'] != '') {
 			$pager->add_condition('paid', $_POST['paid']);
 		}
@@ -177,6 +173,10 @@ class Web_Module_Sales_Invoice extends Module {
 					}
 				}
 
+				if (isset($_POST['send_invoice'])) {
+					$invoice->schedule_send();
+				}
+
 				unset($_SESSION['invoice']);
 				Log::create('add', $invoice);
 
@@ -234,9 +234,7 @@ class Web_Module_Sales_Invoice extends Module {
 		$transfer = new Transfer();
 		$transfer->type = TRANSFER_TYPE_PAYMENT_MANUAL;
 		$transfer->amount = $_POST['transfer']['amount'];
-		$transfer->invoice_id = $invoice->id;
-		$transfer->save();
-
+		
 		$invoice->add_transfer($transfer);
 
 		Session::redirect('/sales/invoice?action=edit&id=' . $invoice->id);
@@ -252,6 +250,24 @@ class Web_Module_Sales_Invoice extends Module {
 		$invoice->send_reminder_mail = $_POST['send_reminder_mail'];
 		$invoice->save();
 		$this->template = false;
+	}
+
+	/**
+	 * Export invoices
+	 *
+	 * @access public
+	 */
+	public function display_export() {
+		$template = Template::Get();
+
+		if (isset($_POST['export_format'])) {
+			$export = new $_POST['export_format']();
+			$export->data = json_encode( $_POST['months'] );
+			$export->save();
+			$export->run();
+
+			Session::redirect('/export?action=created');
+		}
 	}
 
 	/**
@@ -277,4 +293,12 @@ class Web_Module_Sales_Invoice extends Module {
 		Session::redirect('/sales/invoice?action=edit&id=' . $_GET['id']);
 	}
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.invoice';
+	}
 }

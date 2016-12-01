@@ -39,6 +39,14 @@ body {
 	color: #8bc512
 }
 
+.customer_contact .panel-body {
+	min-height: 190px;
+}
+
+.customer_contact address {
+	margin-left: 30px;
+}
+
 .glyphicon-remove {
 	color: #db2e1b
 }

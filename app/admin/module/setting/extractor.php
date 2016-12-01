@@ -75,4 +75,12 @@ class Web_Module_Setting_Extractor extends Crud {
     	return false;
     }
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.setting';
+	}
 }

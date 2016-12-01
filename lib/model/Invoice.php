@@ -41,15 +41,13 @@ class Invoice {
 		$invoice_item->invoice_id = $this->id;
 		$invoice_item->save();
 
-		$price_incl = 0;
 		$price_excl = 0;
 
 		foreach ($this->get_invoice_items() as $invoice_item) {
-			$price_incl += $invoice_item->get_price_incl();
 			$price_excl += $invoice_item->get_price_excl();
 		}
 		$this->price_excl = $price_excl;
-		$this->price_incl = $price_incl;
+		$this->price_incl = $this->get_price_incl();
 		$this->save();
 
 		if (!is_null($invoice_item->invoice_queue_id)) {
@@ -110,8 +108,6 @@ class Invoice {
 		}
 
 		ksort($vat_array);
-
-
 		return $vat_array;
 	}
 
@@ -141,15 +137,40 @@ class Invoice {
 	 * @param Transfer
 	 */
 	public function add_transfer(Transfer $transfer) {
+		if (bccomp(bcsub($this->get_price_incl(), $this->get_transfer_amount()), $transfer->amount) == -1) {
+			throw new Exception('Cannot add transfer with amount ' . $transfer->amount);
+		}
+
 		$transfer->invoice_id = $this->id;
 		$transfer->save();
 
-		Object_Log::create('add', $transfer);
-
-		if ($this->get_amount_paid() >= $this->get_price_incl()) {
+		if (bcsub($this->get_price_incl(), $this->get_amount_paid(), 2) <= 0) {
 			$this->mark_paid();
 		}
 		Log::create('Transfer added', $this);
+	}
+
+	/**
+	 * Get transfer amount
+	 *
+	 * @access public
+	 * @return double $amount
+	 */
+	public function get_transfer_amount() {
+		$amount = 0;
+		foreach ($this->get_transfers() as $transfer) {
+			$amount += $transfer->amount;
+		}
+		return $amount;
+	}
+
+	/**
+	 * Get balance
+	 *
+	 * @access public
+	 */
+	public function get_balance() {
+		return $this->get_price_incl() - $this->get_transfer_amount();
 	}
 
 	/**
@@ -166,10 +187,10 @@ class Invoice {
 	 * Get all logs for this invoice
 	 *
 	 * @access public
-	 * @return array Object_Log $items
+	 * @return array Log $items
 	 */
 	public function get_logs() {
-		return Object_Log::get_by_object($this);
+		return Log::get_by_object($this);
 	}
 
 	/**
@@ -189,6 +210,10 @@ class Invoice {
 	 * @return double $amount
 	 */
 	public function get_ogm($raw = false){
+		if (!empty($this->ogm)) {
+			return $this->ogm;
+		}
+
 		$number = $this->number;
 		$modulo = $number - ((int)($number/97)*97);
 		if($modulo == 0) {
@@ -196,11 +221,15 @@ class Invoice {
 		}
 
 		$ogm = str_pad($number, 10, '0', STR_PAD_LEFT).str_pad($modulo, 2, '0', STR_PAD_LEFT);
+
+		$this->ogm = '+++' . substr($ogm,0,3).'/'.substr($ogm,3,4).'/'.substr($ogm,7) . '+++';
+		$this->save();
+
 		if($raw) {
 			return $ogm;
 		}
 
-		return '+++' . substr($ogm,0,3).'/'.substr($ogm,3,4).'/'.substr($ogm,7) . '+++';
+		return $this->ogm;
 	}
 
 	/**
@@ -211,8 +240,7 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-			//return $this->file;
-			$this->file->delete();
+			return $this->file;
 		}
 
 		$pdf = new Pdf('invoice', $this->customer->language);
@@ -237,8 +265,27 @@ class Invoice {
 	 * @access public
 	 * @param Invoice_Method $invoice_method
 	 */
-	public function send(Invoice_Method $invoice_method) {
+	public function send(Invoice_Method $invoice_method = null) {
+		if ($invoice_method === null) {
+			$invoice_method = $this->customer_contact->invoice_method;
+		}
+
 		$invoice_method->send($this);
+	}
+
+	/**
+	 * schedule Send
+	 *
+	 * @access public
+	 * @param Invoice_Method $invoice_method
+	 */
+	public function schedule_send() {
+		$transaction = new Transaction_Invoice_Send();
+		$data = [
+			'id' => $this->id
+		];
+		$transaction->data = json_encode($data);
+		$transaction->save();
 	}
 
 	/**

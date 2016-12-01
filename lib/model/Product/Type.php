@@ -36,4 +36,20 @@ class Product_Type {
 		}
 	}
 
+	/**
+	 * Get by identifier
+	 *
+	 * @access public
+	 * @param string $identifier
+	 * @return Product_Type $product_type
+	 */
+	public static function get_by_identifier($identifier) {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM product_type WHERE identifier=?', [ $identifier ]);
+		if ($id === null) {
+			throw new Exception('No product type found');
+		}
+		return self::get_by_id($id);
+	}
+
 }

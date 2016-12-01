@@ -8,6 +8,7 @@
  */
 
 define('TRANSFER_TYPE_PAYMENT_MANUAL',       1);
+define('TRANSFER_TYPE_PAYMENT_CREDITNOTE',   2);
 define('TRANSFER_TYPE_PAYMENT_WIRETRANSFER', 10);
 
 use \Skeleton\Database\Database;

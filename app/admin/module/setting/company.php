@@ -55,4 +55,13 @@ class Web_Module_Setting_Company extends Module {
 		$template->assign('settings', Setting::get_as_array());
 		$template->assign('countries', Country::get_grouped());
 	}
+
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.setting';
+	}
 }

@@ -64,7 +64,9 @@
 		<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
 			<label for="country_id" class="control-label col-xs-3">{% trans "Country" %}</label>
 			<div class="col-xs-9">
-				{{ form.select_country(countries, 'customer_contact[country_id]', 'country_id', 0) }}
+				<select id="country_id" name="customer_contact[country_id]" class="form-control">
+
+				</select>
 			</div>
 		</div>
 
@@ -109,21 +111,44 @@
 				{{ form.select_language(languages, 'customer_contact[language_id]', 'language_id', 0) }}
 			</div>
 		</div>
+
+		{% if settings.enable_click_post %}
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Invoice method" %}</label>
+				<div class="col-xs-9">
+					<select name="customer_contact[invoice_method_id]" class="form-control" id="invoice_method_id">
+						<option value="1">{% trans "Mail" %}</option>
+						<option value="2">{% trans "Click & Post" %}</option>
+					</select>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="form-group">
+			<label class="col-xs-3 control-label">{% trans "VAT Bound" %}</label>
+			<div class="col-xs-9">
+				<select name="customer_contact[vat_bound]" class="form-control" id="vat_bound">
+					<option value="-1">{% trans "Automatic" %}</option>
+					<option value="0">{% trans "No" %}</option>
+					<option value="1">{% trans "Yes" %}</option>
+				</select>
+			</div>
+		</div>
 	</form>
 
 	<script type="text/javascript">
+		load_countries();
+		load_languages();
 
 		$('#manage-customer-contact').on('show.bs.modal', function (e) {
 
 			$('#invoice-contact-form input, select').val('');
 			$('.form-group').removeClass('has-error');
-
 			current_customer_contact_id = 0;
 
 			var $invoker = $(e.relatedTarget);
-
+console.log($invoker);
 			if($invoker.data('customer-contacts') == 0) {
-
 				load_customer_data($invoker.data('customer-id'));
 			} else if($invoker.data('customer-contact-id')) {
 				load_customer_contact_data($invoker.data('customer-contact-id'));
@@ -131,6 +156,34 @@
 
 			$('#invoice-contact-form #customer_id').val($invoker.data('customer-id'));
 		});
+
+		function load_countries() {
+			$.get('/administrative/customer/contact?action=load_countries', function(data) {
+				$.each(data, function(key, value) {
+					var optgroup = $('<optgroup />');
+					optgroup.attr('label', key);
+
+					$.each(value, function(key, country) {
+						var option = $('<option></option>');
+						option.val(country.id);
+						option.text(country.name);
+						optgroup.append(option);
+					});
+					optgroup.appendTo($('#country_id'));
+				});
+			}, 'json');
+		}
+
+		function load_languages() {
+			$.get('/administrative/customer/contact?action=load_languages', function(data) {
+				$.each(data, function(key, language) {
+					var option = $('<option></option>');
+					option.val(language.id);
+					option.text(language.name);
+					option.appendTo($('#language_id'));
+				});
+			}, 'json');
+		}
 
 		function load_customer_data(id) {
 			$.get('/administrative/customer?action=load_customer&id=' + id, function(data) {
@@ -144,7 +197,7 @@
 		}
 
 		function load_customer_contact_data(id) {
-			$.get('/sales/customer/contact?action=load_customer_contact&id=' + id, function(data) {
+			$.get('/administrative/customer/contact?action=load_customer_contact&id=' + id, function(data) {
 				$.each(data, function(key, value) {
 					if($('#invoice-contact-form #' + key).length == 1) {
 						$('#invoice-contact-form #' + key).val(value);
@@ -160,9 +213,9 @@
 
 			$('.form-group').removeClass('has-error');
 
-			$.post('/sales/customer/contact?action=manage&id=' + current_customer_contact_id, data, function(data) {
+			$.post('/administrative/customer/contact?action=manage&id=' + current_customer_contact_id, data, function(data) {
 				if ("id" in data) {
-					window.location = '{{ redirect }}';
+					window.location = '{{ redirect|raw }}';
 				} else {
 					$('.alert').removeClass('hide');
 					$.each(data, function(key, value) {

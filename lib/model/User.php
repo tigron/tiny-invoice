@@ -23,6 +23,13 @@ class User {
 	private static $user = null;
 
 	/**
+	 * Permissions
+	 *
+	 * @access public
+	 */
+	private $permissions = null;
+
+	/**
 	 * Class configuration
 	 *
 	 * @var array
@@ -31,6 +38,15 @@ class User {
 	private static $class_configuration = [
 		'disallow_set' => ['password'],
 	];
+
+	/**
+	 * Load permissions
+	 *
+	 * @access public
+	 */
+	public function load_permissions() {
+		$this->permissions = $this->role->get_permissions();
+	}
 
 	/**
 	 * Validate user data
@@ -80,6 +96,25 @@ class User {
 	 */
 	public function set_password($password) {
 		$this->details['password'] = password_hash($password, PASSWORD_DEFAULT);
+	}
+
+	/**
+	 * Has permission
+	 *
+	 * @access public
+	 * @param string $identifier
+	 */
+	public function has_permission($identifier) {
+		if ($this->permissions === null) {
+			$this->load_permissions();
+		}
+
+		foreach ($this->permissions as $permission) {
+			if ($permission->identifier == $identifier) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -142,6 +177,7 @@ class User {
 			$user->set_password($password);
 			$user->save();
 		}
+		$user->load_permissions();
 
 		return $user;
 	}

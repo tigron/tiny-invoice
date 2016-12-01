@@ -61,6 +61,7 @@ class Export_Payment_Belfius extends Export {
 		];
 
 		$iban = Setting::get_by_name('iban')->value;
+		$company = Setting::get_by_name('company')->value;
 
 		foreach ($documents as $document) {
 			if ($document->payment_structured_message != '') {
@@ -75,8 +76,8 @@ class Export_Payment_Belfius extends Export {
 				$expiration_date = strtotime($document->expiration_date);
 			}
 			$output[] = [
-				'A' => $iban,
-				'B' => 'Tigron BVBA',
+				'A' => str_replace(' ', '', $iban),
+				'B' => $company,
 				'C' => date('d/m/Y', $expiration_date),
 				'D' => str_replace('.', ',', $document->price_incl),
 				'E' => $document->supplier->iban,

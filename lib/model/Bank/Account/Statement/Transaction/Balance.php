@@ -15,6 +15,17 @@ class Bank_Account_Statement_Transaction_Balance {
 	use \Skeleton\Pager\Page;
 
 	/**
+	 * Set linked object
+	 *
+	 * @access public
+	 * @param Object $object
+	 */
+	public function set_linked_object($object) {
+		$this->linked_object_classname = get_class($object);
+		$this->linked_object_id = $object->id;
+	}
+
+	/**
 	 * Get by bank_account_statement sequence_number
 	 *
 	 * @access public

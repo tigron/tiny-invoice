@@ -1,6 +1,6 @@
 <?php
 /**
- * Customer module
+ * Web Module Administrative Invoice Contact
  *
  * @author David Vandemaele <david@tigron.be>
  */
@@ -8,110 +8,152 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager;
 
 class Web_Module_Administrative_Customer_Contact extends Module {
-
 	/**
-	 * Login required
+	 * Login required ?
+	 * Default = yes
 	 *
-	 * @var $login_required
+	 * @access public
+	 * @var bool $login_required
 	 */
-	protected $login_required = true;
+	public $login_required = true;
 
 	/**
-	 * Template
+	 * Template to use
 	 *
-	 * @access protected
+	 * @access public
 	 * @var string $template
 	 */
-	protected $template = 'administrative/customer/contact.twig';
+	public $template = null;
 
 	/**
-	 * Display
-	 * This is the default method for a module.
+	 * Display method
 	 *
 	 * @access public
 	 */
 	public function display() {
-		$template = Template::Get();
 		$customer = Customer::get_by_id($_GET['id']);
+		$template = Template::get();
 		$template->assign('customer', $customer);
-		$template->assign('countries', Country::get_grouped('all'));
+		$this->template = 'administrative/customer/contact.twig';
+
 	}
 
 	/**
-	 * Edit contacts
+	 * Add/update invoice contact
 	 *
 	 * @access public
 	 */
-	public function display_edit() {
-		$customer = Customer::get_by_id($_GET['id']);
+	public function display_manage() {
+		if (isset($_GET['id']) AND $_GET['id'] > 0) {
+			$customer_contact = Customer_Contact::get_by_id($_GET['id']);
+		} else {
+			$customer_contact = new Customer_Contact();
+		}
 
-		$updated = false;
-		if (isset($_POST['customer_contact_id']) AND $_POST['customer_contact_id'] != 0) {
+		$customer_contact->load_array($_POST['customer_contact']);
+		if ($customer_contact->validate($errors) === false) {
+			echo json_encode($errors);
+		} else {
+			$dirty_fields = $customer_contact->get_dirty_fields();
+			unset($dirty_fields['invoice_method_id']);
+			unset($dirty_fields['email']);
+			unset($dirty_fields['phone']);
+			unset($dirty_fields['fax']);
+			unset($dirty_fields['mobile']);
+			unset($dirty_fields['language_id']);
 
-			$customer_contact = Customer_Contact::get_by_id($_POST['customer_contact_id']);
+			if ($customer_contact->id !== null AND count($dirty_fields) > 0) {
+				$customer_contact->active = false;
+				$customer_contact->save();
 
-			if (isset($_POST['delete_contact'])) {
-				$customer_contact->archive();
-				Session::set_sticky('message', 'contact_removed');
-				Session::redirect('/administrative/customer/contact?id=' . $customer->id);
-			}
+				$new_customer_contact = new Customer_Contact();
+				$new_customer_contact->load_array($_POST['customer_contact']);
+				$new_customer_contact->active = true;
+				$new_customer_contact->save();
 
-			foreach ($_POST['customer_contact'] as $key => $value) {
-				if ($customer_contact->$key != $value) {
-					$updated = true;
+				$invoice_queue_recurring_groups = Invoice_Queue_Recurring_Group::get_by_customer_contact($customer_contact);
+				foreach ($invoice_queue_recurring_groups as $invoice_queue_recurring_group) {
+					$invoice_queue_recurring_group->customer_contact_id = $new_customer_contact->id;
+					$invoice_queue_recurring_group->save();
 				}
+
+				$invoice_queue = Invoice_Queue::get_unprocessed_by_customer_contact($customer_contact);
+				foreach ($invoice_queue as $invoice_queue_item) {
+					$invoice_queue_item->customer_contact_id = $new_customer_contact->id;
+					$invoice_queue_item->save();
+				}
+
+				echo json_encode($new_customer_contact->get_info());
+			} else {
+				$customer_contact->load_array($_POST['customer_contact']);
+				$customer_contact->active = true;
+				$customer_contact->save();
+
+				echo json_encode($customer_contact->get_info());
 			}
 
-		} else {
-			$updated = true;
 		}
+	}
 
-		if (!$updated) {
-			Session::set_sticky('message', 'contact_no_update');
-			Session::set_sticky('updated_customer_contact_id', $customer_contact->id);
-			Session::redirect('/administrative/customer/contact?id=' . $customer->id);
-		}
+	/**
+	 * Load customer_contact (Ajax)
+	 *
+	 * @access public
+	 */
+	public function display_load_customer_contact() {
+		$this->template = null;
 
-		if ($updated AND isset($_POST['customer_contact_id']) AND $_POST['customer_contact_id'] != 0) {
-			$customer_contact->active = false;
-			$customer_contact->save(false);
-		}
+		$customer_contact = Customer_Contact::get_by_id($_GET['id']);
+		echo json_encode($customer_contact->get_info());
+	}
 
-		$new_customer_contact = new Customer_Contact();
-		$new_customer_contact->load_array($_POST['customer_contact']);
-		$new_customer_contact->customer_id = $customer->id;
-		$new_customer_contact->active = true;
-		$new_customer_contact->validate($errors);
-
-		if ($new_customer_contact->validate($errors)) {
-			$new_customer_contact->save();
-
-			$invoice_queue_recurring_groups = Invoice_Queue_Recurring_Group::get_by_customer_contact($customer_contact);
-			foreach ($invoice_queue_recurring_groups as $invoice_queue_recurring_group) {
-				$invoice_queue_recurring_group->customer_contact_id = $new_customer_contact->id;
-				$invoice_queue_recurring_group->save();
+	/**
+	 * Load the countries (AJAX)
+	 *
+	 * @access public
+	 */
+	public function display_load_countries() {
+		$countries = Country::get_grouped();
+		$result = [];
+		foreach ($countries as $group => $country_list) {
+			foreach ($country_list as $country) {
+				if (!isset($result[$group])) {
+					$result[$group] = [];
+				}
+				$result[$group][] = $country->get_info();
 			}
-
-			$invoice_queue = Invoice_Queue::get_unprocessed_by_customer_contact($customer_contact);
-			foreach ($invoice_queue as $invoice_queue_item) {
-				$invoice_queue_item->customer_contact_id = $new_customer_contact->id;
-				$invoice_queue_item->save();
-			}
-
-			Session::set_sticky('message', 'customer_contact_updated');
-			Session::set_sticky('updated_customer_contact_id', $new_customer_contact->id);
-			Session::redirect('/administrative/customer/contact?id=' . $customer->id);
-		} else {
-			$template = Template::Get();
-			$template->assign('customer_contact_errors', $errors);
-			print_r($errors);
-			print_r($new_customer_contact);
-			$template->assign('action', 'edit');
-
-			$this->display();
 		}
+		echo json_encode($result);
+	}
+
+	/**
+	 * Load the languages
+	 *
+	 * @access public
+	 */
+	public function display_load_languages() {
+		$languages = Language::get_all();
+		$result = [];
+		foreach ($languages as $language) {
+			$result[] = $language->get_info();
+		}
+		echo json_encode($result);
+	}
+
+	/**
+	 * Delete customer_contact (Ajax)
+	 *
+	 * @access public
+	 */
+	public function display_delete() {
+		$this->template = null;
+
+		$customer_contact = Customer_Contact::get_by_id($_GET['id']);
+		$customer_contact->active = false;
+		$customer_contact->save();
+
+		echo json_encode([ 'status' => 1]);
 	}
 }

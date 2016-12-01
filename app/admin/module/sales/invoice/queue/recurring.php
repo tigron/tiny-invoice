@@ -93,6 +93,7 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 	 */
 	public function display_add_step2() {
 		$template = Template::get();
+
 		if (isset($_POST['customer_contact_id'])) {
 			if ($_POST['customer_contact_id'] == '') {
 				$template->assign('errors', 'select_customer_contact');
@@ -179,6 +180,17 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 			$updated = true;
 		}
 
+		if (isset($_POST['existing_queue_item'])) {
+			foreach ($_POST['existing_queue_item'] as $invoice_queue_recurring_id => $data) {
+				$invoice_queue_recurring = Invoice_Queue_recurring::get_by_id($invoice_queue_recurring_id);
+				$invoice_queue_recurring->load_array($data);
+				if ($invoice_queue_recurring->is_dirty()) {
+					$updated = true;
+				}
+				$invoice_queue_recurring->save();
+			}
+		}
+
 		if ($updated) {
 			Session::set_sticky('message', 'updated');
 			Session::redirect('/sales/invoice/queue/recurring?action=edit&id=' . $invoice_queue_recurring_group->id);
@@ -186,5 +198,14 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 
 		$template->assign('invoice_queue_recurring_group', $invoice_queue_recurring_group);
 		$template->assign('product_types', Product_Type::get_all('name'));
+	}
+
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.invoice_queue_recurring';
 	}
 }

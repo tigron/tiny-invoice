@@ -18,10 +18,19 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Administration" %} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li {% if env.module.get_name() == 'user' %}class="active"{% endif %}><a href="/user">{% trans "Users" %}</a></li>
-						<li {% if env.module.get_name() == 'administrative_customer' %}class="active"{% endif %}><a href="/administrative/customer">{% trans "Customers" %}</a></li>
-						<li {% if env.module.get_name() == 'administrative_supplier' %}class="active"{% endif %}><a href="/administrative/supplier">{% trans "Suppliers" %}</a></li>
-						<li {% if env.module.get_name() == 'export' %}class="active"{% endif %}><a href="/export">{% trans "Exports" %}</a></li>
+						{% if env.session.user.has_permission('admin.user') %}
+							<li {% if env.module.get_name() == 'user' %}class="active"{% endif %}><a href="/user">{% trans "Users" %}</a></li>
+							<li {% if env.module.get_name() == 'adminsitrative_role' %}class="active"{% endif %}><a href="/administrative/role">{% trans "Roles" %}</a></li>
+						{% endif %}
+						{% if env.session.user.has_permission('admin.customer') %}
+							<li {% if env.module.get_name() == 'administrative_customer' %}class="active"{% endif %}><a href="/administrative/customer">{% trans "Customers" %}</a></li>
+						{% endif %}
+						{% if env.session.user.has_permission('admin.supplier') %}
+							<li {% if env.module.get_name() == 'administrative_supplier' %}class="active"{% endif %}><a href="/administrative/supplier">{% trans "Suppliers" %}</a></li>
+						{% endif %}
+						{% if env.session.user.has_permission('admin.export') %}
+							<li {% if env.module.get_name() == 'export' %}class="active"{% endif %}><a href="/export">{% trans "Exports" %}</a></li>
+						{% endif %}
 					</ul>
 				</li>
 			</ul>
@@ -30,15 +39,26 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Sales" %} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li {% if env.module.get_name() == 'sales_invoice' %}class="active"{% endif %}><a href="/sales/invoice">{% trans "Invoices" %}</a></li>
-						<li {% if env.module.get_name() == 'sales_invoice_queue' %}class="active"{% endif %}><a href="/sales/invoice/queue">{% trans "Invoice queue" %}</a></li>
-						<li {% if env.module.get_name() == 'sales_invoice_queue_recurring' %}class="active"{% endif %}><a href="/sales/invoice/queue/recurring">{% trans "Recurring Invoice queue" %}</a></li>
-						<li {% if env.module.get_name() == 'sales_product_type' %}class="active"{% endif %}><a href="/sales/product/type">{% trans "Product Definitions" %}</a></li>
+						{% if env.session.user.has_permission('admin.invoice') %}
+							<li {% if env.module.get_name() == 'sales_invoice' %}class="active"{% endif %}><a href="/sales/invoice">{% trans "Invoices" %}</a></li>
+						{% endif %}
+						{% if env.session.user.has_permission('admin.creditnote') %}
+							<li {% if env.module.get_name() == 'sales_creditnote' %}class="active"{% endif %}><a href="/sales/creditnote">{% trans "Credit notes" %}</a></li>
+						{% endif %}
+						{% if env.session.user.has_permission('admin.invoice_queue') %}
+							<li {% if env.module.get_name() == 'sales_invoice_queue' %}class="active"{% endif %}><a href="/sales/invoice/queue">{% trans "Invoice queue" %}</a></li>
+						{% endif %}
+						{% if env.session.user.has_permission('admin.invoice_queue_recurring') %}
+							<li {% if env.module.get_name() == 'sales_invoice_queue_recurring' %}class="active"{% endif %}><a href="/sales/invoice/queue/recurring">{% trans "Recurring Invoice queue" %}</a></li>
+						{% endif %}
+						{% if env.session.user.has_permission('admin.product_type') %}
+							<li {% if env.module.get_name() == 'sales_product_type' %}class="active"{% endif %}><a href="/sales/product/type">{% trans "Product Definitions" %}</a></li>
+						{% endif %}
 
 					</ul>
 				</li>
 			</ul>
-
+			{% if env.session.user.has_permission('admin.document') %}
 			<ul class="nav navbar-nav">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Document Management" %} <b class="caret"></b></a>
@@ -53,7 +73,9 @@
 					</ul>
 				</li>
 			</ul>
+			{% endif %}
 
+			{% if env.session.user.has_permission('admin.financial') %}
 			<ul class="nav navbar-nav">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Financial" %} <b class="caret"></b></a>
@@ -62,7 +84,9 @@
 					</ul>
 				</li>
 			</ul>
+			{% endif %}
 
+			{% if env.session.user.has_permission('admin.setting') %}
 			<ul class="nav navbar-nav">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Settings" %} <b class="caret"></b></a>
@@ -77,6 +101,7 @@
 					</ul>
 				</li>
 			</ul>
+			{% endif %}
 
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown">

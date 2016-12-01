@@ -139,4 +139,13 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		}
 	}
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.document';
+	}
+
 }

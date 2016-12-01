@@ -10,9 +10,22 @@ use \Skeleton\Database\Database;
 class Customer_Contact {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
-	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Save {
+		save as trait_save;
+	}
 	use \Skeleton\Object\Delete;
 	use \Skeleton\Pager\Page;
+
+	/**
+	 * Save
+	 *
+	 * @access public
+	 * @param boolean $validate
+	 */
+	public function save($validate = true) {
+		$this->trait_save($validate);
+		$this->export();
+	}
 
 	/**
 	 * Get VAT formatted
@@ -177,6 +190,59 @@ class Customer_Contact {
 		}
 
 		return $this->details['firstname'] . ' ' . $this->details['lastname'];
+	}
+
+	/**
+	 * Get customer indentifier
+	 *
+	 * @access public
+	 * @return string $identifier
+	 */
+	public function get_identifier() {
+		try {
+			$setting = Setting::get_by_name('customer_contact_identifier')->value;
+		} catch (Exception $e) {
+			$setting = '%d';
+		}
+		return sprintf($setting, $this->id);
+	}
+
+	/**
+	 * Export
+	 *
+	 * @access private
+	 */
+	private function export() {
+		if ($this->customer_contact_export_id == 0) {
+			if ($this->vat != '') {
+				try {
+					$customer_contact_export = Customer_Contact_Export::get_by_country_vat($this->country, $this->vat);
+				} catch (Exception $e) {
+					$customer_contact_export = new Customer_Contact_Export();
+				}
+			} else {
+				try {
+					$customer_contact_export = Customer_Contact_Export::search('', $this->street, $this->housenumber, $this->zipcode, $this->city);
+				} catch (Exception $e) {
+					$customer_contact_export = new Customer_Contact_Export();
+				}
+			}
+		} else {
+			$customer_contact_export = Customer_Contact_Export::get_by_id($this->customer_contact_export_id);
+			if ($this->vat == '') {
+				return;
+			}
+		}
+
+		$info = $this->get_info();
+		unset($info['id']);
+		$customer_contact_export->load_array($info);
+		$customer_contact_export->save();
+
+		if (empty($this->customer_contact_export_id) or $this->customer_contact_export_id != $customer_contact_export->id) {
+			$this->customer_contact_export_id = $customer_contact_export->id;
+			$this->save(false);
+		}
 	}
 
 	/**

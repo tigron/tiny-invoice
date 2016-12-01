@@ -46,6 +46,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 		} else {
 			$pager->add_condition('processed_to_invoice_item_id', 'IS', NULL);
 		}
+		$pager->add_condition('deleted', 'IS', NULL);
 
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('price');
@@ -55,7 +56,12 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 		$pager->add_sort_permission('processed_to_invoice_item_id');
 
 		if (isset($_POST['search'])) {
-			$pager->set_search($_POST['search'], [ 'customer_contact.firstname', 'customer_contact.lastname', 'customer_contact.company', 'invoice_queue.description']);
+			$search_fields = [
+				'invoice_queue.description',
+				'customer.company',
+				'customer.lastname'
+			];
+			$pager->set_search($_POST['search'], $search_fields);
 		}
 
 		$pager->set_direction('desc');
@@ -253,6 +259,7 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 
 		$pager = new Pager('invoice_queue');
 		$pager->add_condition('processed_to_invoice_item_id', 'IS', NULL);
+		$pager->add_condition('deleted', 'IS', NULL);
 		$pager->set_direction('asc');
 		$pager->page(true);
 		$invoice_queues = $pager->items;
@@ -304,6 +311,8 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 			foreach ($invoice_queue as $invoice_queue_item) {
 				$invoice_item = new Invoice_Item();
 				$invoice_item->description = $invoice_queue_item->description;
+				$invoice_item->product_type_id = $invoice_queue_item->product_type_id;
+				$invoice_item->invoice_queue_id = $invoice_queue_item->id;
 				$invoice_item->qty = $invoice_queue_item->qty;
 				$invoice_item->price = $invoice_queue_item->price;
 				$invoice_item->vat = $invoice_queue_item->vat;
@@ -313,10 +322,21 @@ class Web_Module_Sales_Invoice_Queue extends Module {
 				$invoice_queue_item->processed_to_invoice_item_id = $invoice_item->id;
 				$invoice_queue_item->save();
 			}
+			if (isset($_POST['send_invoice'])) {
+				$invoice->schedule_send();
+			}
 			Log::create('add', $invoice);
 		}
 		Session::redirect('/sales/invoice/queue');
+	}
 
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.invoice_queue';
 	}
 
 }

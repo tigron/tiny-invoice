@@ -117,5 +117,12 @@ class Web_Module_Administrative_Tag extends Module {
 		}
 		echo json_encode($data);
 	}
-
+	/**
+	 * Secure
+	 *
+	 * @access public
+	 */
+	public function secure() {
+		return 'admin.document';
+	}
 }
