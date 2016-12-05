@@ -74,8 +74,9 @@ class Mailscanner {
 			$incoming->file_id = $file->id;
 			$incoming->save();
 
+			$pages = [];
 			try {
-				$pages = $file->extract_pages();
+				$pages = @$file->extract_pages();
 			} catch (\Exception $e) {
 				$pages = [];
 			}
