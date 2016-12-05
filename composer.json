@@ -30,6 +30,7 @@
 		"bower-asset/codemirror": "@stable",
 		"bower-asset/purl": "@stable",
         "phpdocumentor/reflection-docblock": "^3.0",
+        "phpoffice/phpexcel": "~1.8",
 		"ext-imap": "*",
         "bower-asset/highcharts": "^4.2",
         "tigron/sepa-payments": "0.0.2"
