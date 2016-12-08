@@ -39,10 +39,12 @@ class Bank_Account_Statement_Transaction {
 	public function get_balance() {
 		$balances = Bank_Account_Statement_Transaction_Balance::get_by_bank_account_statement_transaction($this);
 		$sum = $this->amount;
+		$sum = bcadd($sum, 0, 2);
+
 		foreach ($balances as $balance) {
-			$sum = bcsub($sum, $balance->amount);
+			$sum = bcsub($sum, $balance->amount, 2);
 		}
-		$sum = bcadd($sum, 0);
+		$sum = bcadd($sum, 0, 2);
 		return $sum;
 	}
 
