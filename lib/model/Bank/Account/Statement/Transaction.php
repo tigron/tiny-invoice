@@ -40,8 +40,9 @@ class Bank_Account_Statement_Transaction {
 		$balances = Bank_Account_Statement_Transaction_Balance::get_by_bank_account_statement_transaction($this);
 		$sum = $this->amount;
 		foreach ($balances as $balance) {
-			$sum -= $balance->amount;
+			$sum = bcsub($sum, $balance->amount);
 		}
+		$sum = bcadd($sum, 0);
 		return $sum;
 	}
 
