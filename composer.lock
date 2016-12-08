@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1067fb3b164b04172adca9df8dad6246",
-    "content-hash": "5efd5e0fa21f1ed0add33bbcd0232226",
+    "hash": "f92a30cc4519c0fb60844c8fec9ed61a",
+    "content-hash": "f0e147d99742bbb9d9bdaef735e5f7d9",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -1383,16 +1383,16 @@
         },
         {
             "name": "tigron/sepa-payments",
-            "version": "0.0.2",
+            "version": "0.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/sepa-payments.git",
-                "reference": "f4af2c71d445e23fa8a94c8295b4b15877a044c3"
+                "reference": "40103196f4d8e0d544b353bd704c794eb2aeaf07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/sepa-payments/zipball/f4af2c71d445e23fa8a94c8295b4b15877a044c3",
-                "reference": "f4af2c71d445e23fa8a94c8295b4b15877a044c3",
+                "url": "https://api.github.com/repos/tigron/sepa-payments/zipball/40103196f4d8e0d544b353bd704c794eb2aeaf07",
+                "reference": "40103196f4d8e0d544b353bd704c794eb2aeaf07",
                 "shasum": ""
             },
             "require": {
@@ -1416,7 +1416,7 @@
                 }
             ],
             "description": "A package to create SEPA 001.001.03 payment files",
-            "time": "2016-10-13 20:01:21"
+            "time": "2016-12-05 13:12:24"
         },
         {
             "name": "tigron/skeleton-template",
