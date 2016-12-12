@@ -636,6 +636,7 @@
 				<div class="col-xs-4">
 					<select name="export_format" class="form-control">
 						<option value="Export_Expertm_Invoice">Expert/M</option>
+						<option value="Export_Excel_Invoice">Excel</option>
 					</select>
 				</div>
 			</div>
@@ -676,20 +677,22 @@
 					        <select name="paid" class="form-control">
 								<option value=""> - - </option>
 								<option value="0"{% if pager.has_condition('paid', 0) %} selected{% endif %}>{% trans "Unpaid" %}</option>
-								<option value="1"{% if pager.has_condition('paid', 01) %} selected{% endif %}>{% trans "Paid" %}</option>
+								<option value="1"{% if pager.has_condition('paid', 1) %} selected{% endif %}>{% trans "Paid" %}</option>
 							</select>
 					    </div>
 					</div>
+
 					{% set conditions = pager.get_conditions() %}
+
 					<div class="form-group">
 						<label class="control-label col-xs-3">{% trans "Date" %}</label>
 						<div class="col-xs-9">
 							<div class="form-inline">
 								<div class="form-group" style="position: relative">
-									<input type="text" class="form-control datepicker" name="date_start" id="date_start" value="" placeholder="{% trans "From" %}">
+									<input type="text" class="form-control datepicker" name="date_start" id="date_start" value="{{ conditions['invoice.created'].0.get_value().0 }}" placeholder="{% trans "From" %}">
 								</div>
 								<div class="form-group" style="position: relative">
-									<input type="text" class="form-control datepicker" name="date_end" id="date_end" value="" placeholder="{% trans "To" %}">
+									<input type="text" class="form-control datepicker" name="date_end" id="date_end" value="{{ conditions['invoice.created'].0.get_value().1 }}" placeholder="{% trans "To" %}">
 								</div>
 							</div>
 						</div>
