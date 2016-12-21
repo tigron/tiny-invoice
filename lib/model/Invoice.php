@@ -137,10 +137,6 @@ class Invoice {
 	 * @param Transfer
 	 */
 	public function add_transfer(Transfer $transfer) {
-		if (bccomp(bcsub($this->get_price_incl(), $this->get_transfer_amount()), $transfer->amount) == -1) {
-			throw new Exception('Cannot add transfer with amount ' . $transfer->amount);
-		}
-
 		$transfer->invoice_id = $this->id;
 		$transfer->save();
 
