@@ -29,6 +29,28 @@ class Export_Payment_Sepa extends Export {
 			$total_price += $document->price_incl;
 		}
 
+		/**
+		 * Sort the documents
+		 */
+		$sorted = [];
+		foreach ($documents as $document) {
+			$document_date = new DateTime($document->expiration_date);
+			if ($document_date < new Datetime()) {
+				$document_date = new DateTime();
+			}
+
+			if ($data['pay_on_expiration_date']) {
+				$expiration_date = $document_date->format('Y-m-d');
+			} else {
+				$expiration_date = new DateTime();
+			}
+
+			if (!isset($sorted[$expiration_date])) {
+				$sorted[$expiration_date] = [];
+			}
+			$sorted[$expiration_date][] = $document;
+		}
+		ksort($sorted);
 
 		$organization = new \Tigron\Sepa\Organization();
 		$organization->name = Setting::get_by_name('company')->value;
@@ -51,50 +73,46 @@ class Export_Payment_Sepa extends Export {
 		$debtor->street = Setting::get_by_name('street')->value;
 		$debtor->housenumber = Setting::get_by_name('housenumber')->value;
 
-		// Create a payment
-		$payment = new \Tigron\Sepa\Payment();
-		$payment->paymentInformationIdentification = 'export_' . $this->id;
+		foreach ($sorted as $key => $documents) {
+			// Create a payment
+			$payment = new \Tigron\Sepa\Payment();
+			$payment->paymentInformationIdentification = 'export_' . $this->id;
 
-		$document_date = new DateTime($document->date);
-		$now = new DateTime();
+			$document_date = DateTime::createFromFormat('Y-m-d', $key);
 
-		if ($document_date < $now) {
-			$document_date = $now;
-		}
+			$payment->requestedExecutionDate = $document_date;
+			$payment->debtorAccount = Setting::get_by_name('iban')->value;
+			$payment->debtorAgent = Setting::get_by_name('bic')->value;
+			$payment->debtor = $debtor;
 
-		$payment->requestedExecutionDate = $document_date;
-		$payment->debtorAccount = Setting::get_by_name('iban')->value;
-		$payment->debtorAgent = Setting::get_by_name('bic')->value;
-		$payment->debtor = $debtor;
+			foreach ($documents as $document) {
 
-		foreach ($documents as $document) {
+				// Create a transaction
+				$supplier = $document->supplier;
+				$creditor = new \Tigron\Sepa\Creditor();
+				$creditor->name = $supplier->company;
+				$creditor->country = $supplier->country->iso2;
+				$creditor->zipcode = $supplier->zipcode;
+				$creditor->city = $supplier->city;
+				$creditor->street = $supplier->street;
+				$creditor->housenumber = $supplier->housenumber;
 
-			// Create a transaction
-			$supplier = $document->supplier;
-			$creditor = new \Tigron\Sepa\Creditor();
-			$creditor->name = $supplier->company;
-			$creditor->country = $supplier->country->iso2;
-			$creditor->zipcode = $supplier->zipcode;
-			$creditor->city = $supplier->city;
-			$creditor->street = $supplier->street;
-			$creditor->housenumber = $supplier->housenumber;
+				$transaction = new \Tigron\Sepa\Transaction();
+				$transaction->paymentIdentification = 'document_' . $document->id;
+				$transaction->amount = $document->price_incl;
+				$transaction->creditorAgent = $supplier->bic;
+				$transaction->creditorAccount = $supplier->iban;
+				$transaction->creditor = $creditor;
+				if ($document->payment_message != '') {
+					$transaction->unstructured_message = $document->payment_message;
+				} else {
+					$transaction->structured_message = $document->payment_structured_message;
+				}
 
-			$transaction = new \Tigron\Sepa\Transaction();
-			$transaction->paymentIdentification = 'document_' . $document->id;
-			$transaction->amount = $document->price_incl;
-			$transaction->creditorAgent = $supplier->bic;
-			$transaction->creditorAccount = $supplier->iban;
-			$transaction->creditor = $creditor;
-			if ($document->payment_message != '') {
-				$transaction->unstructured_message = $document->payment_message;
-			} else {
-				$transaction->structured_message = $document->payment_structured_message;
+				$payment->transactions[] = $transaction;
 			}
-
-			$payment->transactions[] = $transaction;
+			$credit->payments[] = $payment;
 		}
-
-		$credit->payments[] = $payment;
 
 		if ($data['mark_paid']) {
 			foreach ($documents as $document) {
