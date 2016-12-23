@@ -70,6 +70,11 @@ class Export_Payment_Belfius extends Export {
 				$message = $document->payment_message;
 			}
 
+			if (!$data['pay_on_expiration_date']) {
+				$document->expiration_date = date('Y-m-d');
+			}
+
+
 			if (strtotime($document->expiration_date) < time()) {
 				$expiration_date = time();
 			} else {

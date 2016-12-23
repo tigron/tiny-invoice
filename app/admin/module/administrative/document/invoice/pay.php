@@ -44,6 +44,11 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 		$template->assign('pager', $pager);
 	}
 
+	/**
+	 * Create a payment file
+	 *
+	 * @access public
+	 */
 	public function display_download() {
 		if (!isset($_POST['invoice'])) {
 			Session::redirect('/administrative/document/invoice/pay');
@@ -65,6 +70,12 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 			$data['mark_paid'] = true;
 		} else {
 			$data['mark_paid'] = false;
+		}
+
+		if (isset($_POST['pay_on_expiration_date'])) {
+			$data['pay_on_expiration_date'] = true;
+		} else {
+			$data['pay_on_expiration_date'] = false;
 		}
 
 		$export = new $_POST['export_format']();
