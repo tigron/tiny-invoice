@@ -159,7 +159,6 @@ class Web_Module_Administrative_Document extends Module {
 					$document->file_id = NULL;
 				} catch (Exception $e) { }
 			}
-
 			if (isset($_POST['tag_ids'])) {
 				$selected_tags = [];
 				$tag_ids = array_filter(explode(',', $_POST['tag_ids']));
@@ -168,6 +167,9 @@ class Web_Module_Administrative_Document extends Module {
 				}
 			}
 
+			/**
+			 * Incoming invoices
+			 */
 			if (isset($_POST['payment_message_type'])) {
 				if ($_POST['payment_message_type'] == 'payment_message_type_structured') {
 					$_POST['document']['payment_message'] = '';
@@ -181,10 +183,35 @@ class Web_Module_Administrative_Document extends Module {
 			}  else {
 				$_POST['document']['paid'] = true;
 			}
+print_r($_POST);
+			/**
+			 * Contract
+			 */
+			if (isset($_POST['contract_for'])) {
+
+				if ($_POST['contract_for'] == 'supplier') {
+					$_POST['document']['customer_id'] = 0;
+				} else {
+					$_POST['document']['supplier_id'] = 0;
+				}
+			}
+
+			/**
+			 * Documentation
+			 */
+			if (isset($_POST['documentation_for'])) {
+
+				if ($_POST['documentation_for'] == 'supplier') {
+					$_POST['document']['customer_id'] = 0;
+				} else {
+					$_POST['document']['supplier_id'] = 0;
+				}
+			}
 
 			$document = $document->change_classname($_POST['document']['classname']);
 			unset($_POST['document']['classname']);
 			$document->load_array($_POST['document']);
+
 			if ($document->validate($errors) === false) {
 				$template->assign('errors', $errors);
 			} else {

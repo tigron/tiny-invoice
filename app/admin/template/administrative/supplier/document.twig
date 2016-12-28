@@ -1,0 +1,61 @@
+{% extends "administrative/supplier.twig" %}
+
+{% block tab %}
+
+	{% for document in documents %}
+		{% if loop.first %}
+			<table class="table table-hover table-striped table-condensed table-responsive">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>{% trans "Date" %}</th>
+					<th>{% trans "Type" %}
+					<th>{% trans "Title" %}</th>
+					<th>{% trans "Tags" %}</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+		{% endif %}
+
+		<tr>
+			<td>{{ document.id }}</td>
+			<td>{{ document.date|date }}</td>
+			<td>
+				{% if document.classname == 'Document_Contract' %}{% trans "Contract" %}{% elseif document.classname == 'Document_Documentation' %}{% trans "Documentation" %}{% endif %}
+			</td>
+			<td>{{ document.title }}</td>
+			<td>
+				{% set document_tags = [] %}
+				{% for tag in tags if document.has_tag(tag)%}
+					{% set document_tags = document_tags|merge([tag]) %}
+				{% endfor %}
+
+				{% for document_tag in document_tags %}
+					{{ document_tag.name }}{% if not loop.last %}, {% endif %}
+				{% endfor %}
+
+			</td>
+			<td width="20">
+				<a href="/administrative/document?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
+					<span class="glyphicon glyphicon-pencil"></span>
+				</a>
+			</td>
+		</tr>
+
+		{% if loop.last %}
+			</tbody>
+			</table>
+
+			{{ pager.links|raw }}
+		{% endif %}
+
+	{% else %}
+
+		<p><em>{% trans "No documents found." %}</em></p>
+
+	{% endfor %}
+
+
+
+{% endblock tab %}

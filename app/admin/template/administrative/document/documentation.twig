@@ -1,0 +1,126 @@
+{% extends "/administrative/document.twig" %}
+
+
+{% block pager %}
+	{% if action == 'edit' %}
+
+		{% block breadcrumb %}
+		<ul class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</li></a>
+			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
+			<li><a href="/administrative/document/documentation">{% trans "Documentation" %}</a></li>
+			<li class="active">{% trans "Edit documentation" %}</li>
+		</ul>
+		{% endblock breadcrumb %}
+	{% endif %}
+	<ol class="breadcrumb">
+		<li><a href="/">{% trans "Home" %}</a></li>
+		<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
+		<li class="active">{% trans "Documentation" %}</li>
+	</ol>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			{% trans "Filter" %}
+		</div>
+		<div class="panel-body">
+			<form method="post" action="{{ env.module.get_path() }}" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Search" %}</label>
+					<div class="col-xs-9">
+						<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-3 col-xs-offset-3">
+						<button class="btn btn-primary">
+							{% trans "Search" %}
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	{% if env.sticky_session.message is defined %}
+		{{ base.display_flash_message(env.sticky_session.message, 'document') }}
+	{% endif %}
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			{{ base.pager_count(pager.item_count) }}
+		</div>
+		<div class="panel-body">
+		{% for document in pager.items %}
+		{% if loop.first %}
+			<table class="table table-hover table-striped table-condensed table-responsive">
+			<thead>
+				<tr>
+					<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
+					<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
+					<th>{% trans "Documentation for" %}</th>
+					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
+					<th>{% trans "Tags" %}</th>
+					<th colspan="2">&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+		{% endif %}
+
+		<tr {% if date(document.expiration_date) < date() and not document.paid%}class="danger"{% endif %}>
+			<td>{{ document.id }}</td>
+			<td>{{ document.date|date }}</td>
+			<td>
+				{% if document.customer_id > 0 %}
+					{% trans "Customer" %} {{ document.customer.get_display_name() }}
+				{% else %}
+					{% trans "Supplier" %} {{ document.supplier.get_display_name() }}
+				{% endif %}
+			</td>
+			<td>{{ document.title }}</td>
+			<td>
+				{% set document_tags = [] %}
+				{% for tag in tags if document.has_tag(tag)%}
+					{% set document_tags = document_tags|merge([tag]) %}
+				{% endfor %}
+
+				{% for document_tag in document_tags %}
+					{{ document_tag.name }}{% if not loop.last %}, {% endif %}
+				{% endfor %}
+
+			</td>
+			<td width="20">
+				<a href="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
+					<span class="glyphicon glyphicon-pencil"></span>
+				</a>
+			</td>
+			<td width="20">
+				<a href="{{ env.module.get_module_path() }}?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
+					<span class="glyphicon glyphicon-remove"></span>
+				</a>
+			</td>
+		</tr>
+
+		{% if loop.last %}
+			</tbody>
+			</table>
+
+			{{ pager.links|raw }}
+		{% endif %}
+
+		{% else %}
+
+			<p><em>{% trans "No documents found." %}</em></p>
+
+		{% endfor %}
+		</div>
+	</div>
+{% endblock pager %}

@@ -226,6 +226,9 @@
 			<li {% if env.module.get_name() == 'administrative_customer_recurring' %}class="active"{% endif %}>
 				<a href="/administrative/customer/recurring?id={{ customer.id }}">{% trans "Recurring invoice queue" %}</a>
 			</li>
+			<li {% if env.module.get_name() == 'administrative_customer_document' %}class="active"{% endif %}>
+				<a href="/administrative/customer/document?id={{ customer.id }}">{% trans "Documents" %}</a>
+			</li>
 		</ul>
 
 		<div class="tab-content">
@@ -291,7 +294,7 @@
 							<th>{{ pager.create_header('Last name'|trans, 'lastname')|raw }}</th>
 							<th>{{ pager.create_header('Company'|trans, 'company')|raw }}</th>
 							<th>{{ pager.create_header('Email'|trans, 'email')|raw }}</th>
-							<th>&nbsp;</th>
+							<th width="20">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
