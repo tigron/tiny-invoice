@@ -44,9 +44,21 @@
 								<label class="col-xs-3 control-label">{% trans "Document type" %}</label>
 								<div class="col-xs-9">
 									<select name="document[classname]" class="form-control" onchange="show_classname_fields()" id="slc_classname">
-										<option value="Document" {% if document.classname == 'Document' %}selected{% endif %}>{% trans "Standard document" %}</option>
-										<option value="Document_Incoming_Invoice" {% if document.classname == 'Document_Incoming_Invoice' %}selected{% endif %}>{% trans "Incoming invoice" %}</option>
-										<option value="Document_Incoming_Creditnote" {% if document.classname == 'Document_Incoming_Creditnote' %}selected{% endif %}>{% trans "Incoming creditnote" %}</option>
+										<option value="Document" {% if document.classname == 'Document' %}selected{% endif %}>
+											{% trans "Standard document" %}
+										</option>
+										<option value="Document_Contract" {% if document.classname == 'Document_Contract' %}selected{% endif %}>
+											{% trans "Contract" %}
+										</option>
+										<option value="Document_Documentation" {% if document.classname == 'Document_Documentation' %}selected{% endif %}>
+											{% trans "Documentation" %}
+										</option>
+										<option value="Document_Incoming_Invoice" {% if document.classname == 'Document_Incoming_Invoice' %}selected{% endif %}>
+											{% trans "Incoming invoice" %}
+										</option>
+										<option value="Document_Incoming_Creditnote" {% if document.classname == 'Document_Incoming_Creditnote' %}selected{% endif %}>
+											{% trans "Incoming creditnote" %}
+										</option>
 									</select>
 								</div>
 							</div>
@@ -109,7 +121,7 @@
 							<div class="form-group">
 								<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
 								<div class="col-xs-9">
-									<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
+									<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 								</div>
 							</div>
 
@@ -120,7 +132,124 @@
 								</div>
 							</div>
 
-							<div class="classname_document">
+							<div class="classname_document_documentation">
+								<hr>
+								<div class="form-group">
+									<label class="col-xs-3 control-label">{% trans "Documentation for" %}</label>
+
+									<div class="col-xs-9">
+										<label class="radio-inline">
+											<input type="radio" name="documentation_for" value="customer" {% if document.customer_id > 0 %}checked{% endif %}>{% trans "Customer" %}
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="documentation_for" value="supplier" {% if document.supplier_id > 0 %}checked{% endif %}>{% trans "Supplier" %}
+										</label>
+									</div>
+								</div>
+
+								<script type="text/javascript">
+									$('input[name=documentation_for]').on('change', function() {
+										set_documentation_for();
+									});
+
+									function set_documentation_for() {
+										value = $('input[name=documentation_for]:checked').val();
+										console.log(value);
+										if (value == 'supplier') {
+											$('.documentation_for_customer').hide();
+											$('.documentation_for_supplier').show();
+										} else {
+											$('.documentation_for_customer').show();
+											$('.documentation_for_supplier').hide();
+										}
+									}
+								</script>
+
+								<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %} documentation_for_supplier">
+									<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
+									<div class="col-xs-9">
+										<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
+										<input type="hidden" class="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
+
+									</div>
+								</div>
+
+								<div class="form-group{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_customer">
+									<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+									<div class="col-xs-9">
+										<input type="text" name="customer" class="form-control typeahead autocomplete_customer" value="{% if document.customer_id > 0 %}{{ document.customer.get_display_name() }}{% endif %}" placeholder="{% trans "Search customer" %}...">
+										<input type="hidden" class="customer_id" name="document[customer_id]" value="{{ document.customer_id }}">
+
+									</div>
+								</div>
+							</div>
+
+							<div class="classname_document_contract">
+								<hr>
+								<div class="form-group">
+									<label class="col-xs-3 control-label">{% trans "Contract for" %}</label>
+
+									<div class="col-xs-9">
+										<label class="radio-inline">
+											<input type="radio" name="contract_for" value="customer" {% if document.customer_id > 0 %}checked{% endif %}>{% trans "Customer" %}
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="contract_for" value="supplier" {% if document.supplier_id > 0 %}checked{% endif %}>{% trans "Supplier" %}
+										</label>
+									</div>
+								</div>
+
+								<script type="text/javascript">
+									$('input[name=contract_for]').on('change', function() {
+										set_contract_for();
+									});
+
+									function set_contract_for() {
+										value = $('input[name=contract_for]:checked').val();
+										console.log(value);
+										if (value == 'supplier') {
+											$('.contract_for_customer').hide();
+											$('.contract_for_supplier').show();
+										} else {
+											$('.contract_for_customer').show();
+											$('.contract_for_supplier').hide();
+										}
+									}
+								</script>
+
+								<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %} contract_for_supplier">
+									<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
+									<div class="col-xs-9">
+										<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
+										<input type="hidden" class="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
+
+									</div>
+								</div>
+
+								<div class="form-group{% if 'customer_id' in errors|keys %} has-error{% endif %} contract_for_customer">
+									<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+									<div class="col-xs-9">
+										<input type="text" name="customer" class="form-control typeahead autocomplete_customer" value="{% if document.customer_id > 0 %}{{ document.customer.get_display_name() }}{% endif %}" placeholder="{% trans "Search customer" %}...">
+										<input type="hidden" class="customer_id" name="document[customer_id]" value="{{ document.customer_id }}">
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-xs-3 control-label">{% trans "From" %}</label>
+									<div class="col-xs-9">
+										<input type="text" class="form-control datepicker" name="document[from_date]" value="{{ document.from_date|date }}" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-xs-3 control-label">{% trans "Until" %}</label>
+									<div class="col-xs-9">
+										<input type="text" class="form-control datepicker" name="document[to_date]" value="{{ document.to_date|date }}" />
+									</div>
+								</div>
 
 							</div>
 
@@ -131,7 +260,7 @@
 								<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %}">
 									<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
 									<div class="col-xs-9">
-										<input type="text" id="autocomplete_supplier" name="supplier" class="form-control typeahead" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
+										<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
 										<input type="hidden" class="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
 
 									</div>
@@ -219,7 +348,7 @@
 
 								</script>
 
-								<div class="form-group classname_document_incoming_invoice">
+								<div class="form-group">
 									<label class="col-xs-3 control-label">{% trans "Payment message" %}</label>
 									<div class="col-xs-9">
 										<div class="radio">
@@ -244,10 +373,16 @@
 									</div>
 								</div>
 
-								<div class="form-group classname_document_incoming_invoice">
+								<div class="form-group">
 									<label class="col-xs-3 control-label">{% trans "IBAN" %}</label>
 									<div class="col-xs-9">
-										<p class="form-control-static" id="iban">{% if document.supplier_id == '' or document.supplier.iban == '' %}<em>{% trans "Unknown IBAN" %}</em>{% else %}{{ document.supplier.iban }}{% endif %}</p>
+										<p class="form-control-static" id="iban">
+											{% if document.supplier_id == '' or document.supplier_id == 0 or document.supplier.iban == '' %}
+												<em>{% trans "Unknown IBAN" %}</em>
+											{% else %}
+												{{ document.supplier.iban }}
+											{% endif %}
+										</p>
 									</div>
 								</div>
 
@@ -331,6 +466,8 @@
 				$('[class*="classname_"]').hide();
 				$('.classname_' + classname.toLowerCase()).show();
 				select_payment_message_type();
+				set_contract_for();
+				set_documentation_for();
 			}
 
 			$('#btn_extractor').on('click', function() {
@@ -382,7 +519,7 @@
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
 						<div class="col-xs-9">
-							<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
+							<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 						</div>
 					</div>
 
@@ -459,9 +596,21 @@
 						<div class="col-xs-9">
 							<select name="type" class="form-control">
 								<option value=""> - - - </option>
-								<option value="Document" {% if pager.has_condition('classname', 'Document') %}selected{% endif %}>{% trans "Standard document" %}</option>
-								<option value="Document_Incoming_Invoice" {% if pager.has_condition('classname', 'Document_Incoming_Invoice') %}selected{% endif %}>{% trans "Incoming invoice" %}</option>
-								<option value="Document_Incoming_Creditnote" {% if pager.has_condition('classname', 'Document_Incoming_Creditnote') %}selected{% endif %}>{% trans "Incoming creditnote" %}</option>
+								<option value="Document" {% if pager.has_condition('classname', 'Document') %}selected{% endif %}>
+									{% trans "Standard document" %}
+								</option>
+								<option value="Document_Contract" {% if pager.has_condition('classname', 'Document_Contract') %}selected{% endif %}>
+									{% trans "Contract" %}
+								</option>
+								<option value="Document_Documentation" {% if pager.has_condition('classname', 'Document_Documentation') %}selected{% endif %}>
+									{% trans "Documentation" %}
+								</option>
+								<option value="Document_Incoming_Invoice" {% if pager.has_condition('classname', 'Document_Incoming_Invoice') %}selected{% endif %}>
+									{% trans "Incoming invoice" %}
+								</option>
+								<option value="Document_Incoming_Creditnote" {% if pager.has_condition('classname', 'Document_Incoming_Creditnote') %}selected{% endif %}>
+									{% trans "Incoming creditnote" %}
+								</option>
 							</select>
 						</div>
 					</div>
@@ -469,7 +618,7 @@
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
 						<div class="col-xs-9">
-							<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
+							<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 						</div>
 					</div>
 
@@ -576,13 +725,13 @@
 
 		tags.initialize();
 
-		$('#autocomplete-tag').tokenfield({
+		$('.autocomplete-tag').tokenfield({
 			typeahead: [null, { source: tags.ttAdapter(), displayKey: 'label' }]
 		});
 
-		$('#autocomplete-tag').tokenfield('setTokens', [{% for selected_tag in selected_tags %}{ value: "{{ selected_tag.id }}", label: "{{ selected_tag.name }}" }{% if not loop.last %},{% endif %}{% endfor %}]);
+		$('.autocomplete-tag').tokenfield('setTokens', [{% for selected_tag in selected_tags %}{ value: "{{ selected_tag.id }}", label: "{{ selected_tag.name }}" }{% if not loop.last %},{% endif %}{% endfor %}]);
 
-		$('#autocomplete-tag').on('tokenfield:createtoken', function(e) {
+		$('.autocomplete-tag').on('tokenfield:createtoken', function(e) {
 			if (e.attrs['value'] == e.attrs['label']) {
 				return false;
 			}
@@ -685,7 +834,7 @@
 
 			suppliers.initialize();
 
-			$('#autocomplete_supplier').typeahead({
+			$('.autocomplete_supplier').typeahead({
 				hint: true,
 				highlight: true,
 				minLength: 2
@@ -694,13 +843,34 @@
 				displayKey: 'value',
 				source:	suppliers.ttAdapter()
 			});
-			$('#autocomplete_supplier').on('typeahead:selected typeahead:autocompleted', function(e,data) {
+			$('.autocomplete_supplier').on('typeahead:selected typeahead:autocompleted', function(e,data) {
 				$('.supplier_id').val(data.id);
 				if (data.iban != "") {
 					$('#iban').html(data.iban);
 				} else {
 					$('#iban').html('<em>{% trans "Unknown IBAN" %}</em>');
 				}
+			});
+
+			var customers = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				remote: '/administrative/customer?action=ajax_search&search=%QUERY'
+			});
+
+			customers.initialize();
+
+			$('.autocomplete_customer').typeahead({
+				hint: true,
+				highlight: true,
+				minLength: 2
+			},{
+				name:	'customer',
+				displayKey: 'value',
+				source:	customers.ttAdapter()
+			});
+			$('.autocomplete_customer').on('typeahead:selected typeahead:autocompleted', function(e,data) {
+				$('.customer_id').val(data.id);
 			});
 		</script>
 	{% endif %}

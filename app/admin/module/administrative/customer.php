@@ -91,13 +91,9 @@ class Web_Module_Administrative_Customer extends Module {
 
 		$data = [];
 		foreach ($pager->items as $customer) {
-			$name = $customer->firstname . ' ' . $customer->lastname;
-			if ($customer->company != '') {
-				$name .= ' (' . $customer->company . ')';
-			}
 			$data[] = [
 				'id' => $customer->id,
-				'value' => $name
+				'value' => $customer->get_display_name(),
 			];
 		}
 		echo json_encode($data);

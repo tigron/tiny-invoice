@@ -64,12 +64,28 @@
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Document Management" %} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li class="dropdown-header">{% trans "Documents" %}</li>
-						<li {% if env.module.get_name() == 'administrative_document' %}class="active"{% endif %}><a href="/administrative/document">{% trans "All Documents" %}</a></li>
-						<li {% if env.module.get_name() == 'administrative_document_invoice' %}class="active"{% endif %}><a href="/administrative/document/invoice">&#8627; {% trans "Incoming Invoices" %}</a></li>
-						<li {% if env.module.get_name() == 'administrative_document_creditnote' %}class="active"{% endif %}><a href="/administrative/document/creditnote">&#8627; {% trans "Incoming Creditnotes" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_document' %}class="active"{% endif %}>
+							<a href="/administrative/document">{% trans "All Documents" %}</a>
+						</li>
+						<li {% if env.module.get_name() == 'administrative_document_contract' %}class="active"{% endif %}>
+							<a href="/administrative/document/contract">&#8627; {% trans "Contracts" %}</a>
+						</li>
+						<li {% if env.module.get_name() == 'administrative_document_documentation' %}class="active"{% endif %}>
+							<a href="/administrative/document/documentation">&#8627; {% trans "Documentation" %}</a>
+						</li>
+						<li {% if env.module.get_name() == 'administrative_document_invoice' %}class="active"{% endif %}>
+							<a href="/administrative/document/invoice">&#8627; {% trans "Incoming Invoices" %}</a>
+						</li>
+						<li {% if env.module.get_name() == 'administrative_document_creditnote' %}class="active"{% endif %}>
+							<a href="/administrative/document/creditnote">&#8627; {% trans "Incoming Creditnotes" %}</a>
+						</li>
 						<li role="separator" class="divider"></li>
-						<li {% if env.module.get_name() == 'administrative_incoming' %}class="active"{% endif %}><a href="/administrative/incoming">{% trans "Incoming" %}</a></li>
-						<li {% if env.module.get_name() == 'administrative_tag' %}class="active"{% endif %}><a href="/administrative/tag">{% trans "Tags" %}</a></li>
+						<li {% if env.module.get_name() == 'administrative_incoming' %}class="active"{% endif %}>
+							<a href="/administrative/incoming">{% trans "Incoming" %}</a>
+						</li>
+						<li {% if env.module.get_name() == 'administrative_tag' %}class="active"{% endif %}>
+							<a href="/administrative/tag">{% trans "Tags" %}</a>
+						</li>
 					</ul>
 				</li>
 			</ul>
