@@ -61,20 +61,27 @@
 		</div>
 		</form>
 		{% include "financial/account/transaction/modal.outgoing_invoice.twig" with {id: 'modal_outgoing_invoice', modal_size: 'lg'} %}
+		{% include "financial/account/transaction/modal.incoming_invoice.twig" with {id: 'modal_incoming_invoice', modal_size: 'lg'} %}
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				{% trans "Bookings" %}
-
-
 				<div class="pull-right dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Add booking" %} <b class="caret"></b></a>
 					<ul class="dropdown-menu multi-level">
 						<li>
 							<a href="#modal_outgoing_invoice" data-toggle="modal">
-								<i class="fa fa-location-arrow"></i> {% trans "Outgoing invoice" %}
+								<i class="fa fa-arrow-up"></i> {% trans "Outgoing invoice" %}
 							</a>
 						</li>
+
+						<li>
+							<a href="#modal_incoming_invoice" data-toggle="modal">
+								<i class="fa fa-arrow-down"></i> {% trans "Incoming invoice" %}
+							</a>
+						</li>
+
+
 					</ul>
 				</div>
 			</div>
@@ -108,7 +115,17 @@
 
 					<tr>
 						<td>
-							{{ balance.linked_object_classname }} {{ balance.linked_object_id }}
+							{% if balance.linked_object_classname == 'Document_Incoming_Invoice' %}
+								<a href="/administrative/document/invoice?action=edit&id={{ balance.linked_object_id }}">
+									{% trans "Incoming invoice" %} {{ balance.linked_object_id }}
+								</a>
+							{% elseif balance.linked_object_classname == 'Invoice' %}
+								<a href="/sales/invoice?action=edit&id={{ balance.linked_object_id }}">
+									{% trans "Invoice" %} {{ balance.linked_object_id }}
+								</a>
+							{% else %}
+								{{ balance.linked_object_classname }} {{ balance.linked_object_id }}
+							{% endif %}
 						</td>
 						<td>
 							&euro;{{ balance.amount*-1 }}
@@ -223,7 +240,6 @@
 
 					}
 				});
-
 			}
 		</script>
 	{% else %}

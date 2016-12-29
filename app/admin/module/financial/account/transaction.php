@@ -101,6 +101,47 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$this->template = 'financial/account/transaction/search_invoices.twig';
 	}
 
+
+	/**
+	 * Search invoices
+	 *
+	 * @access public
+	 */
+	public function display_search_incoming_invoices() {
+		\Skeleton\Pager\Config::$items_per_page = 10;
+		$pager = new Pager('document');
+
+		if (isset($_GET['search'])) {
+			$pager->set_search($_GET['search']);
+		}
+
+		// Fix for pager
+		$pager->add_condition('document_incoming_invoice.document_id', '>', 0);
+		$pager->add_condition('classname', 'Document_Incoming_Invoice');
+		$pager->add_join('document_incoming_invoice', 'document_id', 'document.id');
+		$pager->add_join('supplier', 'id', 'document_incoming_invoice.supplier_id');
+
+		$pager->add_sort_permission('id');
+		$pager->add_sort_permission('date');
+		$pager->add_sort_permission('title');
+		$pager->add_sort_permission('paid');
+		$pager->add_sort_permission('document_incoming_invoice.accounting_identifier');
+		$pager->add_sort_permission('document_incoming_invoice.expiration_date');
+		$pager->add_sort_permission('supplier.company');
+		$pager->add_sort_permission('document_incoming_invoice.price_incl');
+
+		$pager->set_sort('date');
+		$pager->set_direction('DESC');
+		$pager->page();
+		$template = Template::get();
+		$template->assign('pager', $pager);
+
+		$transaction = Bank_Account_Statement_Transaction::get_by_id($_GET['transaction_id']);
+		$template->assign('transaction', $transaction);
+		$this->template = 'financial/account/transaction/search_incoming_invoices.twig';
+
+	}
+
 	/**
 	 * Batch link
 	 *
@@ -147,6 +188,18 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$transaction = Bank_Account_Statement_Transaction::get_by_id($_GET['id']);
 		$invoice = Invoice::get_by_id($_GET['invoice_id']);
 		$transaction->link_invoice($invoice);
+		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
+	}
+
+	/**
+	 * Link document
+	 *
+	 * @access public
+	 */
+	public function display_link_document() {
+		$transaction = Bank_Account_Statement_Transaction::get_by_id($_GET['id']);
+		$incoming_invoice = Document::get_by_id($_GET['document_id']);
+		$transaction->link_document($incoming_invoice);
 		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
 	}
 

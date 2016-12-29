@@ -61,6 +61,16 @@ class Document_Incoming_Invoice extends Document {
 	}
 
 	/**
+	 * Get all transfers for this invoice
+	 *
+	 * @access public
+	 * @return array $transfers
+	 */
+	public function get_transfers() {
+		return Transfer::get_by_object($this);
+	}
+
+	/**
 	 * Validate document data
 	 *
 	 * @access public
@@ -198,6 +208,39 @@ class Document_Incoming_Invoice extends Document {
 	}
 
 	/**
+	 * Get transfer amount
+	 *
+	 * @access public
+	 * @return double $amount
+	 */
+	public function get_transaction_amount() {
+		$amount = 0;
+		foreach ($this->get_bank_account_statement_transaction_balances() as $transaction) {
+			$amount += $transaction->amount;
+		}
+		return $amount;
+	}
+
+	/**
+	 * Get bank account statement transaction balances
+	 *
+	 * @access public
+	 * @return array $balances
+	 */
+	public function get_bank_account_statement_transaction_balances() {
+		return Bank_Account_Statement_Transaction_Balance::get_by_linked_object($this);
+	}
+
+	/**
+	 * Get balance
+	 *
+	 * @access public
+	 */
+	public function get_balance() {
+		return $this->price_incl + $this->get_transaction_amount();
+	}
+
+	/**
 	 * Save / Create user
 	 *
 	 * @access public
@@ -298,6 +341,37 @@ class Document_Incoming_Invoice extends Document {
 		}
 
 		return $items;
+	}
+
+	/**
+	 * Get for Bank_Account_Statement_Transaction
+	 *
+	 * @access public
+	 * @param Supplier $supplier
+	 * @param string $payment_message
+	 */
+	public static function get_for_bank_account_statement_transaction(Bank_Account_Statement_Transaction $transaction) {
+		$db = Database::get();
+		$suppliers = Supplier::get_by_iban($transaction->other_account_number);
+
+		if ($transaction->structured_message != '') {
+			$structured_message = $transaction->structured_message;
+			$structured_message = substr($structured_message, 0, 3) . '/' . substr($structured_message, 3, 4) . '/' . substr($structured_message, 7, 5);
+			foreach ($suppliers as $supplier) {
+				$id = $db->get_one('SELECT document_id FROM document_incoming_invoice WHERE payment_structured_message=? AND supplier_id=? AND balanced=0', [ $structured_message, $supplier->id ]);
+				if ($id !== null) {
+					return self::get_by_id($id);
+				}
+			}
+		} else {
+			foreach ($suppliers as $supplier) {
+				$id = $db->get_one('SELECT document_id FROM document_incoming_invoice WHERE payment_message=? AND supplier_id=? AND balanced=0', [ $transaction->message , $supplier->id ]);
+				if ($id !== null) {
+					return self::get_by_id($id);
+				}
+			}
+		}
+		throw new Exception('No incoming invoice found');
 	}
 
 	/**

@@ -42,4 +42,21 @@ class Bank_Account_Statement_Transaction_Balance {
 		}
 		return $balances;
 	}
+
+	/**
+	 * Get by linked object
+	 *
+	 * @access public
+	 * @param Object $linked_object
+	 * @return array $balances
+	 */
+	public static function get_by_linked_object($linked_object) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM bank_account_statement_transaction_balance WHERE linked_object_classname=? AND linked_object_id=?', [ get_class($linked_object), $linked_object->id ]);
+		$balances = [];
+		foreach ($ids as $id) {
+			$balances[] = self::get_by_id($id);
+		}
+		return $balances;
+	}
 }

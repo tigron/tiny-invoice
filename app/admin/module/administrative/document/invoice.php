@@ -88,12 +88,6 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 
 		$pager->set_sort('date');
 		$pager->set_direction('DESC');
-		if (isset($_GET['search'])) {
-			$pager->set_condition('%search%', $_GET['search']);
-		}
-		if (isset($_GET['tags'])) {
-			$pager->set_condition('tag_id', $_GET['tags']);
-		}
 		$pager->page();
 
 		$template = Template::get();

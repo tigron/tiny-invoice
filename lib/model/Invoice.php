@@ -205,7 +205,7 @@ class Invoice {
 	 * @access public
 	 * @return double $amount
 	 */
-	public function get_ogm($raw = false){
+	public function get_ogm($raw = false) {
 		if (!empty($this->ogm)) {
 			return $this->ogm;
 		}

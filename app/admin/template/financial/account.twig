@@ -1,7 +1,28 @@
 {% extends "_default/layout.base.twig" %}
 
 {% block content %}
-	{% if action == 'import' %}
+
+	{% if action == 'import_finish' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
+			<li>{% trans "Import" %}</li>
+		</ol>
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Import bank transactions" %}</div>
+			<div class="panel-body">
+				<div class="alert alert-success">
+					{% trans "Successfully imported the bank transactions" %}
+				</div>
+
+				<div class="pull-right">
+					<a href="/financial/account?action=import" class="btn btn-primary">
+						{% trans "New import" %}
+					</a>
+				</div>
+			</div>
+		</div>
+	{% elseif action == 'import' %}
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>

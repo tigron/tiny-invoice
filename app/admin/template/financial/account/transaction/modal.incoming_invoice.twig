@@ -1,9 +1,9 @@
 {% extends "_default/modal.base.twig" %}
-{% block header %}{% trans "Book outgoing invoice" %}{% endblock header %}
+{% block header %}{% trans "Book incoming invoice" %}{% endblock header %}
 
 {% block body %}
 
-<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_invoices">
+<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_incoming_invoices">
 <input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
 
 <div class="form-group">
@@ -35,31 +35,35 @@
 <hr />
 
 <div class="form-group">
-	<label class="col-xs-3 control-label">{% trans "Search invoice" %}</label>
+	<label class="col-xs-3 control-label">{% trans "Search incoming invoice" %}</label>
 	<div class="col-xs-6">
 		<div class="input-group">
-			<input type="text" name="search" id="txt_search_invoices" class="form-control" value="{{ transaction.get_message() }}" />
+			<input type="text" name="search" id="txt_search_incoming_invoices" class="form-control" value="{{ transaction.get_message() }}" />
 			<span class="input-group-btn">
-				<button class="btn btn-primary" type="button" onclick="search_invoices();">{% trans "Search" %}</button>
+				<button class="btn btn-primary" type="button" onclick="search_incoming_invoices();">{% trans "Search" %}</button>
 			</span>
 		</div>
 	</div>
 </div>
 
-<div class="search_results"></div>
+<div class="search_incoming_invoice_results"></div>
 
 </form>
 
 
 <script type="text/javascript">
-	$('#search_invoices').submit(function(event) {
-		search_invoices();
+	$('#search_incoming_invoices').submit(function(event) {
+		search_incoming_invoices();
 		event.preventDefault();
 	});
-	function search_invoices() {
-		$('.search_results').load('/financial/account/transaction?action=search_invoices&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_invoices').val()), function() {
-			pager_ajax();
-		});
+	function search_incoming_invoices() {
+		url = '/financial/account/transaction?action=search_incoming_invoices&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_incoming_invoices').val());
+
+		$.ajax({url: url, success: function(result){
+	   		$('.search_incoming_invoice_results').html(result);
+	   		pager_ajax();
+
+		}});
 	}
 
 	function pager_ajax() {
@@ -68,8 +72,7 @@
 
 			url = URI.parse($(this).attr('href'));
 			result = URI.parseQuery(url.query);
-
-			$('.search_results').load('/financial/account/transaction?action=search_invoices&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
+			$('.search_incoming_invoice_results').load('/financial/account/transaction?action=search_incoming_invoices&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
 				pager_ajax();
 			});
 		});
