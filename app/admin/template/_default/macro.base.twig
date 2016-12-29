@@ -34,14 +34,23 @@
 {% macro customer_contact(customer_contact, settings) %}
 	<address>
 		<strong>{{ customer_contact.get_display_name() }} - {{ customer_contact.get_identifier() }}</strong><br />
+		{% if customer_contact.alias != '' and customer_contact.get_display_name() != customer_contact.alias %}
+			(<i>{{ customer_contact.alias }}</i>) <br />
+		{% endif %}
+
 		{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
 		{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
 		{{ customer_contact.country.name }}<br />
 		{% if customer_contact.vat != '' %}{{ customer_contact.get_vat_formatted() }}<br />{% endif %}
-		<abbr title="{% trans "Phone" %}">P:</abbr> {{ customer_contact.phone }} {% if customer_contact.fax != '' %}<abbr title="{% trans "Fax" %}">F:</abbr> {{ customer_contact.fax }}{% endif %}<br />
+		<abbr title="{% trans "Phone" %}">P:</abbr> {{ customer_contact.phone }} {% if customer_contact.fax != '' %}<abbr title="{% trans "Fax" %}">F:</abbr> {{ customer_contact.fax }}{% endif %}		<br />
 		<abbr title="{% trans "Email" %}">E:</abbr> <a href="mailto:{{ customer_contact.email }}">{{ customer_contact.email }}</a>
 		{% if settings.enable_click_post %}
 			<br />{% trans "Invoice via" %}: <strong>{{ customer_contact.invoice_method.name }}</strong>
+		{% endif %}
+
+		{% if customer_contact.reference != '' %}
+			<br />
+			{% trans "Invoice reference:" %} {{ customer_contact.reference }}
 		{% endif %}
 	</address>
 {% endmacro %}

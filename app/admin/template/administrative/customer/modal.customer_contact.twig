@@ -8,8 +8,15 @@
 		{% trans "Some fields were not filled in correctly" %}. {% trans "Please correct them" %}.
 	</div>
 
-	<form class="form-horizontal form-condensed" method="post" id="invoice-contact-form" onsubmit="return validate_customer_contact();">
+	<form class="form-horizontal form-condensed" method="post" id="invoice-contact-form">
 		<input type="hidden" name="customer_contact[customer_id]" id="customer_id" value="">
+
+		<div class="form-group{% if 'alias' in errors|keys %} has-error{% endif %}">
+			<label for="alias" class="control-label col-xs-3">{% trans "Alias" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[alias]" id="alias" class="form-control" value="">
+			</div>
+		</div>
 
 		<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
 			<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
@@ -105,6 +112,13 @@
 			</div>
 		</div>
 
+		<div class="form-group{% if 'reference' in errors|keys %} has-error{% endif %}">
+			<label for="reference" class="control-label col-xs-3">{% trans "Reference" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="customer_contact[reference]" id="reference" class="form-control" value="">
+			</div>
+		</div>
+
 		<div class="form-group">
 			<label for="language_id" class="control-label col-xs-3">{% trans "Language" %}</label>
 			<div class="col-xs-9">
@@ -140,6 +154,16 @@
 		load_countries();
 		load_languages();
 
+		$('#invoice-contact-form').on('submit', function() {
+			return validate_customer_contact();
+		});
+		$('#invoice-contact-form input').keydown(function(e) {
+			var key = e.which;
+			if (key == 13) {
+				$('#invoice-contact-form').submit();
+			}
+		});
+
 		$('#manage-customer-contact').on('show.bs.modal', function (e) {
 
 			$('#invoice-contact-form input, select').val('');
@@ -147,7 +171,7 @@
 			current_customer_contact_id = 0;
 
 			var $invoker = $(e.relatedTarget);
-console.log($invoker);
+
 			if($invoker.data('customer-contacts') == 0) {
 				load_customer_data($invoker.data('customer-id'));
 			} else if($invoker.data('customer-contact-id')) {
@@ -209,6 +233,7 @@ console.log($invoker);
 		}
 
 		function validate_customer_contact() {
+			console.log('aze');
 			data = $('#invoice-contact-form').serialize();
 
 			$('.form-group').removeClass('has-error');

@@ -83,6 +83,7 @@ class Web_Module_Sales_Invoice extends Module {
 		if (isset($_GET['customer_id']) AND isset($_GET['customer_contact_id'])) {
 			$_SESSION['invoice']->customer_id = $_GET['customer_id'];
 			$_SESSION['invoice']->customer_contact_id = $_GET['customer_contact_id'];
+			$_SESSION['invoice']->reference = $_SESSION['invoice']->customer_contact->reference;
 			Session::redirect('/sales/invoice?action=create_step3');
 		}
 
@@ -94,7 +95,6 @@ class Web_Module_Sales_Invoice extends Module {
 				Session::redirect('/sales/invoice?action=create_step2');
 			}
 		}
-
 
 		$template->assign('action', 'create_step1');
 	}
@@ -111,6 +111,7 @@ class Web_Module_Sales_Invoice extends Module {
 				$template->assign('errors', 'select_customer_contact');
 			} else {
 				$_SESSION['invoice']->customer_contact_id = $_POST['customer_contact_id'];
+				$_SESSION['invoice']->reference = $_SESSION['invoice']->customer_contact->reference;
 				Session::redirect('/sales/invoice?action=create_step3');
 			}
 		}
@@ -234,7 +235,7 @@ class Web_Module_Sales_Invoice extends Module {
 		$transfer = new Transfer();
 		$transfer->type = TRANSFER_TYPE_PAYMENT_MANUAL;
 		$transfer->amount = $_POST['transfer']['amount'];
-		
+
 		$invoice->add_transfer($transfer);
 
 		Session::redirect('/sales/invoice?action=edit&id=' . $invoice->id);

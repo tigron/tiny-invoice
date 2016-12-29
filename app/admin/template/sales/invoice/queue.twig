@@ -133,8 +133,7 @@
 		{% endif %}
 
 		{% include 'sales/invoice/queue/modal.customer_contacts.twig' with {'id': 'change_customer_contact', 'modal_size': 'lg', 'invoice_queue_group': invoice_queue } %}
-
-		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue/recurring?action=edit&id=' ~ invoice_queue_recurring_group.id, 'modal_size': 'lg'} %}
+		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue?action=edit&id=' ~ invoice_queue.id, 'modal_size': 'lg'} %}
 
 
 		<div class="panel panel-default">
