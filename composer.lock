@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f92a30cc4519c0fb60844c8fec9ed61a",
-    "content-hash": "f0e147d99742bbb9d9bdaef735e5f7d9",
+    "hash": "7b572f7cb3e3eea1bf54e5ecda91fe3b",
+    "content-hash": "3132a77de9ccb9cf8f45d706a30b2f1c",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -438,16 +438,16 @@
         },
         {
             "name": "bower-asset/jquery-mask-plugin",
-            "version": "v1.14.3",
+            "version": "v1.14.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/igorescobar/jQuery-Mask-Plugin.git",
-                "reference": "bd9b1915452f403a3e5b1772c28054394a753c36"
+                "reference": "5f0b75b6d7e5e7579a483edb21057bb9d7dd3c1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/igorescobar/jQuery-Mask-Plugin/zipball/bd9b1915452f403a3e5b1772c28054394a753c36",
-                "reference": "bd9b1915452f403a3e5b1772c28054394a753c36",
+                "url": "https://api.github.com/repos/igorescobar/jQuery-Mask-Plugin/zipball/5f0b75b6d7e5e7579a483edb21057bb9d7dd3c1a",
+                "reference": "5f0b75b6d7e5e7579a483edb21057bb9d7dd3c1a",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -557,16 +557,16 @@
         },
         {
             "name": "bower-asset/moment-timezone",
-            "version": "0.5.10",
+            "version": "0.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/moment/moment-timezone.git",
-                "reference": "3e9abbf0e817134c6d03b4cb541f96471238d96c"
+                "reference": "2124976c909dd440bea4499c5fd9c8ca4da95fd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/3e9abbf0e817134c6d03b4cb541f96471238d96c",
-                "reference": "3e9abbf0e817134c6d03b4cb541f96471238d96c",
+                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/2124976c909dd440bea4499c5fd9c8ca4da95fd8",
+                "reference": "2124976c909dd440bea4499c5fd9c8ca4da95fd8",
                 "shasum": ""
             },
             "require": {
@@ -590,26 +590,6 @@
                 "MIT"
             ],
             "description": "Parse and display moments in any timezone."
-        },
-        {
-            "name": "bower-asset/purl",
-            "version": "v2.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/allmarkedup/purl.git",
-                "reference": "1771aec03be7f0ae31d83c7f2fca6149a4581821"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/allmarkedup/purl/zipball/1771aec03be7f0ae31d83c7f2fca6149a4581821",
-                "reference": "1771aec03be7f0ae31d83c7f2fca6149a4581821",
-                "shasum": ""
-            },
-            "type": "bower-asset-library",
-            "extra": {
-                "bower-asset-main": "purl.js"
-            },
-            "description": "An AMD compatible utility to parse urls and provide easy access to their attributes (such as the protocol, host, port etc), path segments, querystring parameters, fragment parameters and more."
         },
         {
             "name": "bower-asset/tigron-confirm-modal",
@@ -691,6 +671,38 @@
             ]
         },
         {
+            "name": "bower-asset/urijs",
+            "version": "v1.18.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/medialize/URI.js.git",
+                "reference": "b2ff01deeaef7bde62cee7539aad143a8df2a2be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/medialize/URI.js/zipball/b2ff01deeaef7bde62cee7539aad143a8df2a2be",
+                "reference": "b2ff01deeaef7bde62cee7539aad143a8df2a2be",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "src/URI.js",
+                "bower-asset-ignore": [
+                    ".*",
+                    "*.css",
+                    "/*.js",
+                    "/*.html",
+                    "/*.json",
+                    "utils",
+                    "test",
+                    "prettify"
+                ]
+            },
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "codelicious/php-coda-parser",
             "version": "v1.0",
             "source": {
@@ -746,12 +758,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dompdf/dompdf.git",
-                "reference": "e4b49285f8c7165f31b5cc6395a5ee1bbc35144a"
+                "reference": "2eaf8fe0f1c95ab76e7a428a39a54dd240e2b2ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/e4b49285f8c7165f31b5cc6395a5ee1bbc35144a",
-                "reference": "e4b49285f8c7165f31b5cc6395a5ee1bbc35144a",
+                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/2eaf8fe0f1c95ab76e7a428a39a54dd240e2b2ec",
+                "reference": "2eaf8fe0f1c95ab76e7a428a39a54dd240e2b2ec",
                 "shasum": ""
             },
             "require": {
@@ -763,7 +775,8 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "3.7.*",
+                "squizlabs/php_codesniffer": "2.*"
             },
             "type": "library",
             "extra": {
@@ -799,7 +812,7 @@
             ],
             "description": "DOMPDF is a CSS 2.1 compliant HTML to PDF converter",
             "homepage": "https://github.com/dompdf/dompdf",
-            "time": "2016-06-23 17:27:50"
+            "time": "2016-12-11 01:46:31"
         },
         {
             "name": "filp/whoops",
@@ -1539,16 +1552,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.28.2",
+            "version": "v1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "b22ce0eb070e41f7cba65d78fe216de29726459c"
+                "reference": "c6ff71094fde15d12398eaba029434b013dc5e59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/b22ce0eb070e41f7cba65d78fe216de29726459c",
-                "reference": "b22ce0eb070e41f7cba65d78fe216de29726459c",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/c6ff71094fde15d12398eaba029434b013dc5e59",
+                "reference": "c6ff71094fde15d12398eaba029434b013dc5e59",
                 "shasum": ""
             },
             "require": {
@@ -1561,7 +1574,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.28-dev"
+                    "dev-master": "1.30-dev"
                 }
             },
             "autoload": {
@@ -1596,7 +1609,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-11-23 18:41:40"
+            "time": "2016-12-23 11:06:22"
         },
         {
             "name": "webmozart/assert",
@@ -1858,16 +1871,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.2.0",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "09d0fd33560e3573185a2ea17614e37ba38716c5"
+                "reference": "d12aa9ca20f4db83ec58410978dab6afcb9d6aaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/09d0fd33560e3573185a2ea17614e37ba38716c5",
-                "reference": "09d0fd33560e3573185a2ea17614e37ba38716c5",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d12aa9ca20f4db83ec58410978dab6afcb9d6aaa",
+                "reference": "d12aa9ca20f4db83ec58410978dab6afcb9d6aaa",
                 "shasum": ""
             },
             "require": {
@@ -1917,11 +1930,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-16 22:18:16"
+            "time": "2016-12-11 14:34:22"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.2.0",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
@@ -2172,16 +2185,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v0.1.6",
+            "version": "v0.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "9c7bd27d8e998c6226aedcb38596ae211609c837"
+                "reference": "5fb1ddf9d76c2e6793ea373abafc5178a23e9329"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/9c7bd27d8e998c6226aedcb38596ae211609c837",
-                "reference": "9c7bd27d8e998c6226aedcb38596ae211609c837",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/5fb1ddf9d76c2e6793ea373abafc5178a23e9329",
+                "reference": "5fb1ddf9d76c2e6793ea373abafc5178a23e9329",
                 "shasum": ""
             },
             "type": "library",
@@ -2201,7 +2214,7 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2016-12-01 12:54:13"
+            "time": "2016-12-19 20:45:57"
         },
         {
             "name": "tigron/skeleton-database",
@@ -2536,7 +2549,7 @@
         },
         {
             "name": "tigron/skeleton-package-api",
-            "version": "v0.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-package-api.git",
@@ -2691,7 +2704,8 @@
         "bower-asset/bootstrap-multiselect": 20,
         "bower-asset/jquery-mask-plugin": 0,
         "bower-asset/codemirror": 0,
-        "bower-asset/purl": 0
+        "bower-asset/urijs": 0,
+        "tigron/skeleton-package-api": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

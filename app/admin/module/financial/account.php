@@ -74,7 +74,18 @@ class Web_Module_Financial_Account extends Module {
 			}
 
 			$valid_parser->parse($file);
+			Session::redirect('/financial/account?action=import_finish');
 		}
+	}
+
+	/**
+	 * Import finished
+	 *
+	 * @access public
+	 */
+	public function display_import_finish() {
+		$template = Template::get();
+
 	}
 
 	/**

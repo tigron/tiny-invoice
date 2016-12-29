@@ -68,5 +68,20 @@ class Supplier {
 		}
 	}
 
-
+	/**
+	 * Get by IBAN
+	 *
+	 * @access public
+	 * @param string $iban
+	 * @return array $suppliers
+	 */
+	public static function get_by_iban($iban) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM supplier WHERE iban=?', [ $iban ]);
+		$suppliers = [];
+		foreach ($ids as $id) {
+			$suppliers[] = self::get_by_id($id);
+		}
+		return $suppliers;
+	}
 }

@@ -95,6 +95,38 @@ class Bank_Account_Statement_Transaction {
 	}
 
 	/**
+	 * Link document
+	 *
+	 * @access public
+	 * @param Document $document
+	 * @param decimal $amount
+	 */
+	public function link_document(Document $document, $amount = null) {
+		if ($amount === null) {
+			$amount = $this->get_balance();
+		}
+		if ($amount > $document->get_balance()) {
+			$amount = $document->get_balance();
+		}
+
+		$balance = new Bank_Account_Statement_Transaction_Balance();
+		$balance->bank_account_statement_transaction_id = $this->id;
+		$balance->set_linked_object($document);
+		$balance->amount = $amount;
+		$balance->save();
+
+		if ($this->get_balance() == 0) {
+			$this->balanced = true;
+			$this->save();
+		}
+
+		if ($document->get_balance() == 0) {
+			$document->balanced = true;
+			$document->save();
+		}
+	}
+
+	/**
 	 * Automatic link
 	 *
 	 * @access public
@@ -103,14 +135,14 @@ class Bank_Account_Statement_Transaction {
 		if ($this->amount > 0) {
 			$this->automatic_link_invoice();
 		} else {
-			throw new Exception('Not implemented yet');
+			$this->automatic_link_incoming_invoice();
 		}
 	}
 
 	/**
 	 * Automatic link with invoice
 	 *
-	 * @access public
+	 * @access private
 	 */
 	private function automatic_link_invoice() {
 		preg_match("/\+\+\+(\d{3}\/\d{4}\/\d{5})\+\+\+/", $this->get_message(), $output_array);
@@ -124,6 +156,16 @@ class Bank_Account_Statement_Transaction {
 			}
 		}
 		throw new Exception('No invoice found for this message');
+	}
+
+	/**
+	 * Automic link with incoming invoice
+	 *
+	 * @access private
+	 */
+	private function automatic_link_incoming_invoice() {
+		$incoming_invoice = Document_Incoming_Invoice::get_for_bank_account_statement_transaction($this);
+		$this->link_document($incoming_invoice);
 	}
 
 	/**
