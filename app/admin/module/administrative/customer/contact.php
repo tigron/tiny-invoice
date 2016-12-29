@@ -63,6 +63,8 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 			unset($dirty_fields['fax']);
 			unset($dirty_fields['mobile']);
 			unset($dirty_fields['language_id']);
+			unset($dirty_fields['reference']);
+			unset($dirty_fields['alias']);
 
 			if ($customer_contact->id !== null AND count($dirty_fields) > 0) {
 				$customer_contact->active = false;
