@@ -37,10 +37,27 @@ class Mailscanner {
 	 * @access public
 	 */
 	public function run() {
+		$archive = false;
+		try {
+			$archive = Setting::get_by_name('mailscanner_archive')->value;
+		} catch (Exception $e) {}
+
 		$mails = $this->get_mails();
 
 		foreach ($mails as $mail) {
-			$this->process_mail($mail);
+			try {
+				$this->process_mail($mail);
+				if ($archive) {
+					$this->imap->move_mail('unprocessed', $mail);
+				}
+			} catch (Exception $e) {
+				if ($archive) {
+					$this->imap->move_mail('unprocessed', $mail);
+				}
+			}
+		}
+
+		if (!$archive) {
 			$this->imap->delete_mail($mail);
 		}
 
@@ -54,6 +71,10 @@ class Mailscanner {
 	 * @param Imap_Mail $mail
 	 */
 	private function process_mail($mail) {
+		if (count($mail->attachments) == 0) {
+			throw new Exception('No attachments for this mail');
+		}
+
 		foreach ($mail->attachments as $attachment) {
 
 			if (!$attachment['is_attachment']) {

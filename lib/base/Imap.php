@@ -17,7 +17,7 @@ class Imap {
 	 * @access private
 	 * @var resource mbox
 	 */
-	private $connection;
+	private $connection = false;
 
 	/**
 	 * Url
@@ -87,9 +87,13 @@ class Imap {
 	 * @access private
 	 */
 	private function connect($host, $login, $password) {
+		imap_timeout(IMAP_READTIMEOUT, 2);
+		imap_timeout(IMAP_WRITETIMEOUT, 2);
 		$url = '{' . $host . ':143/novalidate-cert}';
 		$this->connection = @imap_open($url, $login, $password);
 		if ($this->connection === false) {
+			// Flush the imap errors
+			imap_errors();
 			throw new Exception('Unable to connect to IMAP server');
 		}
 		$this->url = $url;
@@ -196,7 +200,7 @@ class Imap {
 	 * @access private
 	 */
 	public function move_mail($destination, Imap_Mail $mail = null) {
-		$mailboxexist = imap_list($this->connection, $this->url, '*');
+		$mailboxexist = @imap_list($this->connection, $this->url, '*');
 
 		if ($mailboxexist == false) {
 			imap_createmailbox($this->connection, $this->url.$destination);
@@ -237,4 +241,3 @@ class Imap {
 		}
 	}
 }
-?>
