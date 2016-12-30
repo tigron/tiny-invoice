@@ -37,6 +37,10 @@ class Web_Module_Setting_Mailscanner extends Module {
 		$template = Template::get();
 
 		if (isset($_POST['setting'])) {
+			if (!isset($_POST['setting']['mailscanner_archive'])) {
+				$_POST['setting']['mailscanner_archive'] = false;
+			}
+
 			foreach ($_POST['setting'] as $key => $value) {
 				try {
 					$setting = Setting::get_by_name($key);
@@ -49,6 +53,16 @@ class Web_Module_Setting_Mailscanner extends Module {
 			}
 			Session::set_sticky('message', 'updated');
 			Session::redirect('/setting/mailscanner');
+		}
+
+		try {
+			$mailscanner_host = Setting::get_by_name('mailscanner_host')->value;
+			$mailscanner_username = Setting::get_by_name('mailscanner_username')->value;
+			$mailscanner_password = Setting::get_by_name('mailscanner_password')->value;
+			$imap = new Imap(Setting::get_by_name('mailscanner_host')->value, Setting::get_by_name('mailscanner_username')->value, Setting::get_by_name('mailscanner_password')->value);
+			$template->assign('imap_status', 'ok');
+		} catch (Exception $e) {
+			$template->assign('imap_status', 'nok');
 		}
 
 		$template->assign('settings', Setting::get_as_array());

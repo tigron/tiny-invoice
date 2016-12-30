@@ -38,9 +38,31 @@
 				</div>
 
 				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Mailbox status" %}</label>
+					<div class="col-xs-9">
+						<p class="form-control-static">
+						{% if imap_status == 'ok' %}
+							<span class="label label-success">{% trans "Connected" %}</span>
+						{% else %}
+							<span class="label label-danger">{% trans "Not connected" %}</span>
+						{% endif %}
+						</p>
+					</div>
+				</div>
+
+				<div class="form-group">
 					<label class="control-label col-xs-3">{% trans "Last check" %}</label>
 					<div class="col-xs-9">
-						<p class="form-control-static">{% if settings.mailscanner_last_check is defined %}{{ settings.mailscanner_last_check|datetime }}{% else %}{% trans "Never" %}{% endif %}</p>
+						<p class="form-control-static">
+							{% if settings.mailscanner_last_check is defined %}{{ settings.mailscanner_last_check|datetime }}{% else %}{% trans "Never" %}{% endif %}
+						</p>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Keep mails in mailbox" %}</label>
+					<div class="col-xs-9">
+						<input type="checkbox" name="setting[mailscanner_archive]" {% if settings.mailscanner_archive %}checked{% endif %} data-group-cls="btn-group-xs">
 					</div>
 				</div>
 
