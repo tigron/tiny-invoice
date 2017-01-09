@@ -200,7 +200,7 @@ class Imap {
 	 * @access private
 	 */
 	public function move_mail($destination, Imap_Mail $mail = null) {
-		$mailboxexist = @imap_list($this->connection, $this->url, '*');
+		$mailboxexist = @imap_list($this->connection, $this->url.$destination, '*');
 
 		if ($mailboxexist == false) {
 			imap_createmailbox($this->connection, $this->url.$destination);
