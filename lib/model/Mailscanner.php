@@ -48,7 +48,7 @@ class Mailscanner {
 			try {
 				$this->process_mail($mail);
 				if ($archive) {
-					$this->imap->move_mail('unprocessed', $mail);
+					$this->imap->move_mail('processed', $mail);
 				}
 			} catch (Exception $e) {
 				if ($archive) {
