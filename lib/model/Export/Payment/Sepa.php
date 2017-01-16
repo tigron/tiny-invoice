@@ -110,15 +110,15 @@ class Export_Payment_Sepa extends Export {
 				}
 
 				$payment->transactions[] = $transaction;
+
+				if ($data['mark_paid']) {
+					$document->paid = true;
+					$document->save();
+				}
+
+
 			}
 			$credit->payments[] = $payment;
-		}
-
-		if ($data['mark_paid']) {
-			foreach ($documents as $document) {
-				$document->paid = true;
-				$document->save();
-			}
 		}
 
 		$xml = $credit->render();
