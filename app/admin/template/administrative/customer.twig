@@ -289,7 +289,7 @@
 					<table class="table table-hover table-striped table-condensed table-responsive">
 					<thead>
 						<tr>
-							<th>#</th>
+							<th>{{ pager.create_header('#', 'id')|raw }}</th>
 							<th>{{ pager.create_header('First name'|trans, 'firstname')|raw }}</th>
 							<th>{{ pager.create_header('Last name'|trans, 'lastname')|raw }}</th>
 							<th>{{ pager.create_header('Company'|trans, 'company')|raw }}</th>

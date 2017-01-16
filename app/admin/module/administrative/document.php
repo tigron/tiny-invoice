@@ -183,7 +183,7 @@ class Web_Module_Administrative_Document extends Module {
 			}  else {
 				$_POST['document']['paid'] = true;
 			}
-print_r($_POST);
+
 			/**
 			 * Contract
 			 */

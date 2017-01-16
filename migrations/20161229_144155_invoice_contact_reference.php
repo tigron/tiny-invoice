@@ -18,7 +18,7 @@ class Migration_20161229_144155_Invoice_contact_reference extends \Skeleton\Data
 	 */
 	public function up() {
 		$db = Database::get();
-/*		$db->query("
+		$db->query("
 			ALTER TABLE `customer_contact`
 			ADD `reference` varchar(64) COLLATE 'utf8_general_ci' NOT NULL AFTER `vat`;
 		", []);
@@ -26,7 +26,7 @@ class Migration_20161229_144155_Invoice_contact_reference extends \Skeleton\Data
 		$db->query("
 			ALTER TABLE `customer_contact`
 			ADD `alias` varchar(128) NOT NULL AFTER `language_id`;
-		", []);*/
+		", []);
 
 		$ids = $db->get_column('SELECT id FROM customer_contact', []);
 		foreach ($ids as $id) {
