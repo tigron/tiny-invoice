@@ -55,10 +55,10 @@ class Mailscanner {
 					$this->imap->move_mail('unprocessed', $mail);
 				}
 			}
-		}
 
-		if (!$archive) {
-			$this->imap->delete_mail($mail);
+			if (!$archive) {
+				$this->imap->delete_mail($mail);
+			}
 		}
 
 		$this->imap->close();
