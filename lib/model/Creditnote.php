@@ -145,17 +145,11 @@ class Creditnote {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-//			return $this->file;
+			return $this->file;
 		}
 
 		$pdf = new Pdf('creditnote', $this->customer->language);
 		$pdf->assign('creditnote', $this);
-		$settings = Setting::get_as_array();
-		if (isset($settings['country_id'])) {
-			$settings['country'] = Country::get_by_id($settings['country_id']);
-		}
-		$pdf->assign('settings', $settings);
-
 		$file = $pdf->render('file', 'creditnote_' . $this->number . '.pdf');
 		$file->save();
 		$this->file_id = $file->id;

@@ -241,12 +241,6 @@ class Invoice {
 
 		$pdf = new Pdf('invoice', $this->customer->language);
 		$pdf->assign('invoice', $this);
-		$settings = Setting::get_as_array();
-		if (isset($settings['country_id'])) {
-			$settings['country'] = Country::get_by_id($settings['country_id']);
-		}
-		$pdf->assign('settings', $settings);
-
 		$file = $pdf->render('file', 'invoice_' . $this->number . '.pdf');
 		$file->save();
 		$this->file_id = $file->id;
