@@ -27,6 +27,9 @@ class Email extends \Skeleton\Email\Email {
 		if (isset($settings['country_id'])) {
 			$settings['country'] = Country::get_by_id($settings['country_id']);
 		}
+		if (isset($settings['vat']) AND isset($settings['country'])) {
+			$settings['vat'] = Vat::format($settings['vat'], $settings['country']);
+		}
 		$this->assign('settings', $settings);
 
 		parent::__construct($type, $language);
