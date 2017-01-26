@@ -1,0 +1,118 @@
+# .po file for project "pdf" in Dutch
+
+msgid ""
+msgstr ""
+"Project-Id-Version: pdf-nl.1485274707\n"
+"PO-Revision-Date: 2017-01-24 17:18+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+
+msgid "Already paid"
+msgstr "Reeds betaald"
+
+msgid "An overview of the outstanding invoices can be found below."
+msgstr "Een overzicht van de openstaande facturen kan u hieronder vinden."
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Bank"
+msgstr "Bank"
+
+msgid "Credit note"
+msgstr "Kredietnota"
+
+msgid "Customer"
+msgstr "Klant"
+
+msgid "Customer number"
+msgstr "Klantnummer"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Dear"
+msgstr "Beste"
+
+msgid "Description"
+msgstr "Omschrijving"
+
+msgid "Expiration date"
+msgstr "Vervaldag"
+
+msgid "For your payments, please use the following information"
+msgstr "Om te betalen, gelieve de volgende informatie te gebruiken"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "If you have any questions about this letter, you can contact us by phone on"
+msgstr "Indien u vragen heeft over deze brief, kan u ons contacteren per telefoon"
+
+msgid "Invoice"
+msgstr "Factuur"
+
+msgid "Invoice is PAID"
+msgstr "Factuur is BETAALD"
+
+msgid "Invoice number"
+msgstr "Factuurnummer"
+
+msgid "Message"
+msgstr "Bericht"
+
+msgid "Our records indicate that one or more invoices are still unpaid."
+msgstr "Uit onze administratie blijkt dat één of meerdere facturen nog steeds onbetaald zijn."
+
+msgid "Outstanding"
+msgstr "Openstaande"
+
+msgid "Page"
+msgstr "Pagina"
+
+msgid "Price"
+msgstr "Prijs"
+
+msgid "Qty"
+msgstr "Hoeveelheid"
+
+msgid "Reference"
+msgstr "Referentie"
+
+msgid "Structured message"
+msgstr "Gestructureerde mededeling"
+
+msgid "Subtotal"
+msgstr "Subtotaal"
+
+msgid "T"
+msgstr ""
+
+msgid "This invoice is payable to account"
+msgstr ""
+
+msgid "Total to pay"
+msgstr "Totaal te betalen"
+
+msgid "Unit price"
+msgstr "Eenheidsprijs"
+
+msgid "VAT"
+msgstr "BTW"
+
+msgid "VAT customer"
+msgstr "BTW klant"
+
+msgid "We hereby ask for your attention for the following."
+msgstr "We vragen u uw aandacht voor het volgende."
+
+msgid "We kindly ask you to pay the total outstanding amount within 14 days."
+msgstr "We vragen u beleefd om het openstaande bedrag binnen 14 dagen te betalen."
+
+msgid "With kind regards"
+msgstr "Met vriendelijke groeten"
+
+msgid "or via email on"
+msgstr "of per email op"

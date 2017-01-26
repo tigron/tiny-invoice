@@ -1,0 +1,118 @@
+# .po file for project "pdf" in French
+
+msgid ""
+msgstr ""
+"Project-Id-Version: pdf-fr.1485276383\n"
+"PO-Revision-Date: 2017-01-24 17:46+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+
+msgid "Already paid"
+msgstr "Déjà payé"
+
+msgid "An overview of the outstanding invoices can be found below."
+msgstr "Un aperçu des factures en attente est présenté ci-dessous."
+
+msgid "Bank"
+msgstr "Banque"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Credit note"
+msgstr "Note de crédit"
+
+msgid "Customer"
+msgstr "Client"
+
+msgid "Customer number"
+msgstr "Numéro de client"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Dear"
+msgstr "Madame, Monsieur"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Expiration date"
+msgstr "Date d'expiration"
+
+msgid "For your payments, please use the following information"
+msgstr "Pour vos paiements, veuillez utiliser les informations suivantes"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "If you have any questions about this letter, you can contact us by phone on"
+msgstr "Si vous avez des questions à propos de cette lettre, n'hésitez pas à nous contacter au"
+
+msgid "Invoice"
+msgstr "Facture"
+
+msgid "Invoice is PAID"
+msgstr "Facture payée"
+
+msgid "Invoice number"
+msgstr "Numéro de facture"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "or via email on"
+msgstr "ou par courriel à"
+
+msgid "Our records indicate that one or more invoices are still unpaid."
+msgstr "Nos données montrent qu'une ou plusieurs factures restent impayées."
+
+msgid "Outstanding"
+msgstr "En suspens"
+
+msgid "Page"
+msgstr "Page"
+
+msgid "Price"
+msgstr "Prix"
+
+msgid "Qty"
+msgstr "Qté"
+
+msgid "Reference"
+msgstr "Référence"
+
+msgid "Structured message"
+msgstr "Message structuré"
+
+msgid "Subtotal"
+msgstr "Sous-total"
+
+msgid "T"
+msgstr "T"
+
+msgid "This invoice is payable to account"
+msgstr "Cette facture est payable au compte"
+
+msgid "Total to pay"
+msgstr "Total à payer"
+
+msgid "Unit price"
+msgstr "Prix unitaire"
+
+msgid "VAT"
+msgstr "TVA"
+
+msgid "VAT customer"
+msgstr "TVA client"
+
+msgid "We hereby ask for your attention for the following."
+msgstr "Nous attirons votre attention sur ce qui suit."
+
+msgid "We kindly ask you to pay the total outstanding amount within 14 days."
+msgstr "Nous vous saurions gré de payer le(s) montant(s) en suspens sous 14 jours."
+
+msgid "With kind regards"
+msgstr "Cordialement"
