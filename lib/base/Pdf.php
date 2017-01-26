@@ -139,7 +139,7 @@ class Pdf {
 					'tempDir' => realpath(dirname(__FILE__) . '/../../tmp/dompdf'),
 					'isRemoteEnabled' => true,
 					'logOutputFile' => false,
-					'isFontSubsettingEnabled' => true
+					'isFontSubsettingEnabled' => false
 				]);
 
 				$dompdf = new DOMPDF();

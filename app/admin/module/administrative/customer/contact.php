@@ -100,6 +100,16 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 	}
 
 	/**
+	 * Get the invoice expiration reminder in PDF
+	 *
+	 * @access public
+	 */
+	public function display_invoice_reminder() {
+		$customer_contact = Customer_Contact::get_by_id($_GET['id']);
+		$customer_contact->get_invoice_reminder_pdf()->client_download();
+	}
+
+	/**
 	 * Load customer_contact (Ajax)
 	 *
 	 * @access public

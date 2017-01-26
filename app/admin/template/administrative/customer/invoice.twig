@@ -1,6 +1,30 @@
 {% extends "administrative/customer.twig" %}
 
 {% block tab %}
+	{% if expired_invoices|length > 0 %}
+		<div class="alert alert-warning">
+			<p>{% trans "There are expired invoices for this customer" %}. {% trans "To download the expiration reminder, click on the invoice contact." %}</p>
+			<dl class="">
+				{% for invoice_contact in customer.get_customer_contacts() %}
+					<div class="col-xs-offset-1">
+						<strong>
+							<a href="/administrative/customer/contact?id={{ invoice_contact.id }}&action=invoice_reminder" class="alert-link">
+								{{ invoice_contact.get_display_name() }} ({{ invoice_contact.get_identifier() }})
+							</a>
+						</strong> -
+
+						{% set count = invoice_contact.get_expired_invoices|length %}
+						{% if count == 1 %}
+							1 {% trans "invoice" %}
+						{% else %}
+							{{ count }} {% trans "invoices" %}
+						{% endif %}
+					</div>
+
+				{% endfor %}
+			</dl>
+		</div>
+	{% endif %}
 
 	{% for invoice in pager.items %}
 		{% if loop.first %}
@@ -15,6 +39,7 @@
 							<th>{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
 							<th>{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
 							<th>{{ pager.create_header('Date'|trans, 'created')|raw }}</th>
+							<th>{{ pager.create_header('Expiration date'|trans, 'expiration_date')|raw }}</th>
 							<th>{% trans "Price" %}</th>
 							<th>{% trans "Download" %}</th>
 							<th width="20">&nbsp;</th>
@@ -23,10 +48,11 @@
 					<tbody>
 		{% endif %}
 
-		<tr>
+		<tr {% if invoice.is_expired() %}class="warning"{% endif %}>
 			<td>{{ invoice.id }}</td>
 			<td>{{ invoice.number }}</td>
 			<td>{{ invoice.created|date }}</td>
+			<td>{{ invoice.expiration_date|date }}</td>
 			<td>&euro;{{ invoice.get_price_incl()|number_format }}</td>
 			<td>
 					<a href="/sales/invoice?action=download&id={{ invoice.id }}">

@@ -13,6 +13,21 @@ abstract class Invoice_Method {
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
 
+	/**
+	 * Remind
+	 *
+	 * @access public
+	 * @param Customer_Contact $customer_contact
+	 */
+	abstract public function remind(Customer_Contact $customer_contact);
+
+
+	/**
+	 * Send an invoice
+	 *
+	 * @access public
+	 * @param Invoice $invoice
+	 */
 	abstract public function send(Invoice $invoice);
 
 	/**

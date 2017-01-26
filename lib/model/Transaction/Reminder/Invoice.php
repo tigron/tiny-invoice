@@ -17,13 +17,9 @@ class Transaction_Reminder_Invoice extends Transaction {
 	 * @access public
 	 */
 	public function run() {
-		$company_info = [
-			'company' => Setting::get('company'),
-			'email' => Setting::get('email')
-		];
-
 		$grouped = [];
 		$remindable_invoices = Invoice::get_remindable();
+
 		foreach ($remindable_invoices as $remindable_invoice) {
 			if (!isset($grouped[$remindable_invoice->customer_contact_id])) {
 				$grouped[$remindable_invoice->customer_contact_id] = [];
@@ -34,16 +30,20 @@ class Transaction_Reminder_Invoice extends Transaction {
 		foreach ($grouped as $customer_contact_id => $invoices) {
 			$customer_contact = Customer_Contact::get_by_id($customer_contact_id);
 
-			$email = new Email('invoice_reminder', $customer_contact->language);
-			$email->add_to($customer_contact->email, $customer_contact->firstname . ' ' . $customer_contact->lastname);
-			$email->set_sender($company_info['email'], $company_info['company']);
-			$email->assign('invoices', $invoices);
-			$email->assign('customer_contact', $customer_contact);
+			$ids = [];
 			foreach ($invoices as $invoice) {
-				$email->add_attachment($invoice->get_pdf());
-				Log::create('Sending reminder to ' . $customer_contact->firstname . ' ' . $customer_contact->lastname . ' (' . $customer_contact->email . ')', $invoice);
+				$ids[] = $invoice->id;
 			}
-			$email->send();
+
+			if (strtotime($customer_contact->last_invoice_reminder) > strtotime('7 days ago')) {
+				continue;
+			}
+
+			echo $customer_contact->get_identifier() . ';' . $customer_contact->customer_id . ';' . $customer_contact->invoice_method->name . ';' . implode(',', $ids) . "\n";
+
+			$customer_contact->invoice_method->remind($customer_contact);
+			$customer_contact->last_invoice_reminder = date('Y-m-d H:i:s');
+			$customer_contact->save(false);
 		}
 
 		$this->schedule('1 day');

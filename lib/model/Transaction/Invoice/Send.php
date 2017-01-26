@@ -28,8 +28,7 @@ class Transaction_Invoice_Send extends Transaction {
 	 * @access public
 	 */
 	public function run() {
-		$data = json_decode($this->data, true);
-		$invoice = Invoice::get_by_id($data['id']);
+		$invoice = Invoice::get_by_id($this->data['id']);
 		$invoice->send();
 	}
 }

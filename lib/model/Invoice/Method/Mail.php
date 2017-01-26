@@ -9,6 +9,27 @@
 class Invoice_Method_Mail extends Invoice_Method {
 
 	/**
+	 * Remind
+	 *
+	 * @access public
+	 * @param Customer_Contact $customer_contact
+	 */
+	public function remind(Customer_Contact $customer_contact) {
+		$email = new Email('invoice_reminder', $customer_contact->language);
+		$email->add_to($customer_contact->email, $customer_contact->firstname . ' ' . $customer_contact->lastname);
+		$email->set_sender(Setting::get('email'), Setting::get('company'));
+
+		$invoices = $customer_contact->get_expired_invoices();
+		$email->assign('invoices', $invoices);
+		$email->assign('customer_contact', $customer_contact);
+		foreach ($invoices as $invoice) {
+			$email->add_attachment($invoice->get_pdf());
+			Log::create('Sending reminder to ' . $customer_contact->firstname . ' ' . $customer_contact->lastname . ' (' . $customer_contact->email . ')', $invoice);
+		}
+		$email->send();
+	}
+
+	/**
 	 * Send the invoice via email
 	 *
 	 * @access public

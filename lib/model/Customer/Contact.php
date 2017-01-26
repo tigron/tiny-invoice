@@ -70,6 +70,32 @@ class Customer_Contact {
 	}
 
 	/**
+	 * Get expired_invoices
+	 *
+	 * @access public
+	 * @return array $invoices
+	 */
+	public function get_expired_invoices() {
+		return Invoice::get_expired_by_customer_contact($this);
+	}
+
+	/**
+	 * Get invoice reminder pdf
+	 *
+	 * @access public
+	 * @return File $pdf
+	 */
+	public function get_invoice_reminder_pdf() {
+		$pdf = new Pdf('invoice_reminder', $this->language);
+		$pdf->assign('customer_contact', $this);
+		$pdf->assign('invoices', $this->get_expired_invoices());
+		$file = $pdf->render('file', 'reminder_' . $this->get_identifier() . '_' . date('Ymd') . '.pdf');
+		$file->save();
+
+		return $file;
+	}
+
+	/**
 	 * Check if this contact is VAT bound
 	 *
 	 * @return bool
