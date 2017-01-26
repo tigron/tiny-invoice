@@ -153,6 +153,9 @@ class Invoice {
 	 * @return bool $expired
 	 */
 	public function is_expired() {
+		if ($this->paid) {
+			return false;
+		}
 		$expiration_date = strtotime($this->expiration_date);
 		if ($expiration_date < time()) {
 			return true;
