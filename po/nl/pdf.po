@@ -67,7 +67,7 @@ msgid "Our records indicate that one or more invoices are still unpaid."
 msgstr "Uit onze administratie blijkt dat één of meerdere facturen nog steeds onbetaald zijn."
 
 msgid "Outstanding"
-msgstr "Openstaande"
+msgstr "Openstaand"
 
 msgid "Page"
 msgstr "Pagina"
