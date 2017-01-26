@@ -33,9 +33,10 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 		$output2 = '';
 
 		foreach ($creditnotes as $creditnote) {
+			$customer_contact = $creditnote->customer_contact;
 			$output1 .= $this->num(9, 4000000);
 			$output1 .= $this->num(9, 2);
-			$output1 .= $this->num(9, $creditnote->customer_contact->customer_contact_export_id);
+			$output1 .= $this->num(9, $customer_contact->customer_contact_export_id);
 			$output1 .= $this->alf(3, 'EUR');
 			$output1 .= $this->alf(1, 'C');
 			$output1 .= $this->num(9, $creditnote->number);
@@ -75,7 +76,15 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 				if ($vat > 0) {
 					$output2 .= $this->num(3, 5);
 				} else {
-					$output2 .= $this->num(3, 57);
+					if ($customer_contact->vat_bound == 0) {
+						/**
+						 * Diplomatie:
+						 * http://diplomatie.belgium.be/sites/default/files/downloads/specimenEcert.pdf
+						 */
+						$output2 .= $this->num(3, 102);
+					} else {
+						$output2 .= $this->num(3, 57);
+					}
 				}
 				$output2 .= $this->num(9, $i);
 				$output2 .= "\r\n";
