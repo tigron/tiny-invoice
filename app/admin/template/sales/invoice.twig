@@ -755,7 +755,7 @@
 				<tbody>
 			{% endif %}
 
-			<tr>
+			<tr {% if invoice.is_expired() %}class="warning"{% endif %}>
 				<td>
 					<a href="/sales/invoice?action=edit&id={{ invoice.id }}" title="">
 						{{ invoice.number }}
