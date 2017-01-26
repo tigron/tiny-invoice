@@ -1,0 +1,119 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block head %}
+
+	<style type="text/css">
+
+		#main_info {
+			margin-bottom: 5mm;
+			width: 100%;
+		}
+
+			#main_info td {
+				padding: 1.5mm 2mm
+			}
+
+			#main_info th {
+				border-bottom: solid 1px #ccc;
+			}
+
+		#invoice_items {
+			margin-bottom: 10mm;
+			width: 100%
+		}
+
+			#invoice_items td {
+				padding: 1mm 2mm
+			}
+
+		#payment_info {
+			page-break-inside: avoid;
+		}
+
+		#payment_info .right_col table {
+			border-collapse: collapse;
+			margin-bottom: 4mm;
+			border-top: solid 1px #ccc;
+			background-color: #fff;
+			width: 70mm;
+		}
+
+		#payment_info tbody td {
+			padding: 1mm 1mm;
+		}
+
+		.item_price {
+			vertical-align: top;
+			background: #f6f6f6;
+			text-align: right
+		}
+
+		#invoice_items th {
+			border-bottom: solid 1px #ccc;
+		}
+
+		#invoice_items .even td {
+			background-color: #f6f6f6
+		}
+
+	</style>
+
+{% endblock head %}
+
+{% set recipient_info = customer_contact %}
+
+{% block content %}
+
+	{% trans "Dear" %}, <br />
+	{% trans "We hereby ask for your attention for the following." %}<br .>{% trans "Our records indicate that one or more invoices are still unpaid." %}
+	{% trans "We kindly ask you to pay the total outstanding amount within 14 days." %}<br />
+	{% trans "An overview of the outstanding invoices can be found below." %}<br /><br />
+
+
+	<table cellpadding="0" cellspacing="10" border="0" id="invoice_items">
+	<thead>
+		<tr>
+
+			<th width="20mm">{% trans "Invoice number" %}</th>
+			<th>{% trans "Date" %}</th>
+			<th>{% trans "Message" %}</th>
+			<th>{% trans "Price" %}</th>
+			<th>{% trans "Already paid" %}</th>
+			<th>{% trans "Outstanding" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+
+	{% for invoice in invoices %}
+		<tr>
+			<td>{{ invoice.number }}</td>
+			<td>{{ invoice.created|date }}</td>
+			<td>{{ invoice.get_ogm() }}</td>
+			<td>&euro;{{ invoice.get_price_incl() }}</td>
+			<td>&euro;{{ invoice.get_transfer_amount() }}</td>
+			<td>&euro;{{ invoice.get_balance() }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+
+	<div id="payment_info">
+		<table cellpadding="0" cellspacing="10" border="0">
+		<tr>
+			<td style="width: 100mm; vertical-align">
+				{% trans "For your payments, please use the following information" %}: <br />
+				{% trans "Bank" %}: <strong>{{ settings.bank }}</strong><br />
+				{% trans "IBAN" %}: <strong>{{ settings.iban }}</strong><br />
+				{% trans "BIC" %}: <strong>{{ settings.bic }}</strong><br />
+			</td>
+		</tr>
+		</table>
+	</div>
+
+	{% trans "If you have any questions about this letter, you can contact us by phone on" %} {{ settings.phone }} {% trans "or via email on" %} {{ settings.email }}.<br />
+	<br />
+	<br />
+	{% trans "With kind regards" %}, <br />
+	{{ settings.company }}
+
+{% endblock content %}
