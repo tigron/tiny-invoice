@@ -1,0 +1,86 @@
+# .po file for project "email" in French
+
+msgid ""
+msgstr ""
+"Project-Id-Version: email-fr.1475852058\n"
+"PO-Revision-Date: 2016-10-07 16:54+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+
+msgid "A new invoice has been created, please print this immediately. To open the invoice, you will need a PDF reader, such as Adobe Acrobat."
+msgstr ""
+
+msgid "Adobe Acrobat can be downloaded from the following URL:"
+msgstr ""
+
+msgid "BIC"
+msgstr ""
+
+msgid "Bank"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "E"
+msgstr ""
+
+msgid "Hello"
+msgstr ""
+
+msgid "IBAN"
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "New invoice"
+msgstr ""
+
+msgid "P"
+msgstr ""
+
+msgid "Payment details"
+msgstr ""
+
+msgid "Please keep in mind that we did not yet receive a payment for this order. You can find all the necessary payment information below, as well as on the invoice."
+msgstr ""
+
+msgid "Price excl."
+msgstr ""
+
+msgid "Product"
+msgstr ""
+
+msgid "Products"
+msgstr ""
+
+msgid "Qty"
+msgstr ""
+
+msgid "Services"
+msgstr ""
+
+msgid "Structured message"
+msgstr ""
+
+msgid "Subtotal"
+msgstr ""
+
+msgid "Total to pay"
+msgstr ""
+
+msgid "Unit price"
+msgstr ""
+
+msgid "VAT"
+msgstr ""
+
+msgid "W"
+msgstr ""
+

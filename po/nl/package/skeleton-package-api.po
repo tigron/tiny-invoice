@@ -1,0 +1,32 @@
+# .po file for project "skeleton-package-api" in Dutch
+
+msgid ""
+msgstr ""
+"Project-Id-Version: skeleton-package-api-nl.1485276131\n"
+"PO-Revision-Date: 2017-01-24 17:42+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+
+msgid "API Key"
+msgstr ""
+
+msgid "Execute"
+msgstr ""
+
+msgid "Output"
+msgstr ""
+
+msgid "RESTful API"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Web client settings"
+msgstr ""
+

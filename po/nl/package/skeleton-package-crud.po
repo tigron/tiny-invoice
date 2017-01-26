@@ -1,0 +1,65 @@
+# .po file for project "skeleton-package-crud" in Dutch
+
+msgid ""
+msgstr ""
+"Project-Id-Version: skeleton-package-crud-nl.1485276131\n"
+"PO-Revision-Date: 2017-01-24 17:42+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+
+msgid "Add"
+msgstr "Toevoegen"
+
+msgid "Are you sure you want to delete this object?"
+msgstr "Bent u zeker dat u dit object wilt verwijderen?"
+
+msgid "Create"
+msgstr "Aanmaken"
+
+msgid "Edit"
+msgstr "Bewerken"
+
+msgid "Edit object"
+msgstr "Object bewerken"
+
+msgid "Home"
+msgstr ""
+
+msgid "Please confirm"
+msgstr "Gelieve te bevestigen"
+
+msgid "Please review the input fields below."
+msgstr ""
+
+msgid "result"
+msgstr ""
+
+msgid "results"
+msgstr ""
+
+msgid "Save"
+msgstr "Opslaan"
+
+msgid "Search"
+msgstr "Zoeken"
+
+msgid "The e-mail address has already been entered before."
+msgstr ""
+
+msgid "The e-mail address is invalid."
+msgstr ""
+
+msgid "The object has been updated successfully."
+msgstr "Het object werd geupdate."
+
+msgid "There are no objects that match your search criteria."
+msgstr ""
+
+msgid "There were errors in the information you filled in."
+msgstr ""
+
+msgid "This field is required."
+msgstr ""
+
