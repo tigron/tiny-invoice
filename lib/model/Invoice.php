@@ -147,6 +147,21 @@ class Invoice {
 	}
 
 	/**
+	 * Is expired
+	 *
+	 * @access public
+	 * @return bool $expired
+	 */
+	public function is_expired() {
+		$expiration_date = strtotime($this->expiration_date);
+		if ($expiration_date < time()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Get transfer amount
 	 *
 	 * @access public
@@ -166,7 +181,7 @@ class Invoice {
 	 * @access public
 	 */
 	public function get_balance() {
-		return $this->get_price_incl() - $this->get_transfer_amount();
+		return bcsub($this->get_price_incl(), $this->get_transfer_amount(), 2);
 	}
 
 	/**
@@ -286,35 +301,25 @@ class Invoice {
 	 */
 	public static function get_remindable() {
 		$db = Database::get();
-		$data = $db->get_all('
-			SELECT id,
-				(
-					TIMESTAMPDIFF(WEEK, expiration_date, NOW()) +
-					DATEDIFF(
-						NOW(),
-						expiration_date + INTERVAL TIMESTAMPDIFF(WEEK, expiration_date, NOW()) WEEK
-					)
-					/
-					DATEDIFF(
-						expiration_date + INTERVAL TIMESTAMPDIFF(WEEK, expiration_date, NOW()) + 1 WEEK,
-						expiration_date + INTERVAL TIMESTAMPDIFF(WEEK, expiration_date, NOW()) WEEK
-					)
-				) as weeks
-				FROM
-					invoice
-				WHERE
-					paid = 0 AND send_reminder_mail = 1 AND expiration_date < NOW()
-				HAVING CEIL(weeks) = weeks
+		$ids = $db->get_column('
+			SELECT id
+			FROM
+				invoice
+			WHERE
+				1
+				AND paid = 0
+				AND send_reminder_mail = 1
+				AND expiration_date < NOW()
+				AND DATEDIFF(now(), expiration_date) >= 7
 		');
 
 		$items = [];
-		foreach ($data as $row) {
-			$items[] = self::get_by_id($row['id']);
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
 		}
 
 		return $items;
 	}
-
 
 	/**
 	 * Mark paid
@@ -325,5 +330,39 @@ class Invoice {
 		$this->paid = true;
 		$this->save();
 		Log::create('Invoice marked as paid', $this);
+	}
+
+	/**
+	 * Get expired by Customer Contact
+	 *
+	 * @access public
+	 * @param Customer_Contact $customer_contact
+	 * @return array $invoices
+	 */
+	public static function get_expired_by_customer_contact(Customer_Contact $customer_contact) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM invoice WHERE customer_contact_id=? AND paid=0 AND expiration_date < NOW()', [ $customer_contact->id ]);
+		$invoices = [];
+		foreach ($ids as $id) {
+			$invoices[] = self::get_by_id($id);
+		}
+		return $invoices;
+	}
+
+	/**
+	 * Get expired by Customer
+	 *
+	 * @access public
+	 * @param customer $customer
+	 * @return array $invoices
+	 */
+	public static function get_expired_by_customer(Customer $customer) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM invoice WHERE customer_id=? AND paid=0 AND expiration_date < NOW()', [ $customer->id ]);
+		$invoices = [];
+		foreach ($ids as $id) {
+			$invoices[] = self::get_by_id($id);
+		}
+		return $invoices;
 	}
 }

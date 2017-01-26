@@ -8,7 +8,39 @@
 
 class Invoice_Method_Clickpost extends Invoice_Method {
 
+	/**
+	 * Remind
+	 *
+	 * @access public
+	 * @param Customer_Contact $customer_contact
+	 */
+	public function remind(Customer_Contact $customer_contact) {
+		$tracking = $this->send_pdf($customer_contact, $customer_contact->get_invoice_reminder_pdf(), 'Reminder ' . $customer_contact->get_identifier());
+		foreach ($customer_contact->get_expired_invoices() as $invoice) {
+			Log::create('Reminder sent via Click & Post, tracking: ' . $tracking, $invoice);
+		}
+	}
+
+	/**
+	 * Send an invoice
+	 *
+	 * @access public
+	 * @param Invoice $invoice
+	 */
 	public function send(Invoice $invoice) {
+		$tracking = $this->send_pdf($invoice->customer_contact, $invoice->get_pdf(), 'Invoice ' . $invoice->number);
+		Log::create('Invoice sent via Click & Post, tracking: ' . $tracking, $invoice);
+	}
+
+	/**
+	 * Send a document per post
+	 *
+	 * @access private
+	 * @param Customer_Contact $customer_contact
+	 * @param File $file
+	 * @param string $subject
+	 */
+	private function send_pdf(Customer_Contact $customer_contact, Skeleton\File\Pdf\Pdf $pdf, $subject) {
 		try {
 			$username_setting = Setting::get_by_name('click_post_username');
 		} catch (Exception $e) {
@@ -28,16 +60,15 @@ class Invoice_Method_Clickpost extends Invoice_Method {
 
 		$session = \Esker\Session::get($username_setting->value, $password_setting->value);
 
-
 		// Now allocate a transport with transportName = 'MODEsker'
 		$transport = new \Esker\Transport();
 		$transport->recipientType = "";
 		$transport->transportIndex = 0;
 		$transport->transportName = 'MODEsker';
 
-		$transport->add_variable('Subject', 'Invoice ' . $invoice->number);
+		$transport->add_variable('Subject', $subject);
 		$transport->add_variable('FromCompany', Setting::get_by_name('company')->value);
-		$customer_contact = $invoice->customer_contact;
+
 		$to = '';
 		if ($customer_contact->company == '') {
 			$to = $customer_contact->firstname . ' ' . $customer_contact->lastname;
@@ -52,12 +83,11 @@ class Invoice_Method_Clickpost extends Invoice_Method {
 		$transport->add_variable('MaxRetry', 3);
 		$transport->add_variable('NeedValidation', 0);
 
-		$transport->add_attachment($invoice->get_pdf());
+		$transport->add_attachment($pdf);
 
 		$submission = new \Esker\Submission($session);
 		$result = $submission->submit_transport($transport);
-		Log::create('Invoice sent via Click & Post, tracking: ' . $result->submissionID, $invoice);
-
 		$session->logout();
+		return $result->submissionID;
 	}
 }
