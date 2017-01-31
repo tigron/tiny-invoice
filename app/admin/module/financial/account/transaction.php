@@ -98,7 +98,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 
 		$transaction = Bank_Account_Statement_Transaction::get_by_id($_GET['transaction_id']);
 		$template->assign('transaction', $transaction);
-		$this->template = 'financial/account/transaction/search_invoices.twig';
+		$this->template = 'financial/account/transaction/search_outgoing_invoices.twig';
 	}
 
 
