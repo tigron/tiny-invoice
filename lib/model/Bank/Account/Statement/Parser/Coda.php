@@ -55,7 +55,7 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 				$bank_account_statement->sequence = $statement->original_situation->statement_sequence_number;
 			}
 			$bank_account_statement->date = $statement->original_situation->date;
-			$bank_account_statement->orinal_balance = $statement->original_situation->balance;
+			$bank_account_statement->original_balance = $statement->original_situation->balance;
 			$bank_account_statement->new_balance = $statement->new_situation->balance;
 			$bank_account_statement->save();
 

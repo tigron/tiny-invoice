@@ -29,10 +29,18 @@
 					    //minRange: 1,
 					    ordinal: false
 					},
+					yAxis: {
+						labels: {
+							formatter: function() {
+								return '€' + this.axis.defaultLabelFormatter.call(this);
+							}
+						}
+					},
 					rangeSelector : {
 					    selected : 1
 					},
 					series : [{
+						name: "{% trans "Balance" %}",
 					    data : data,
 						events: {
 							click: function(e) {
