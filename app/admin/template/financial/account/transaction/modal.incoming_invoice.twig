@@ -61,19 +61,19 @@
 
 		$.ajax({url: url, success: function(result){
 	   		$('.search_incoming_invoice_results').html(result);
-	   		pager_ajax();
+	   		pager_incoming_invoices_ajax();
 
 		}});
 	}
 
-	function pager_ajax() {
+	function pager_incoming_invoices_ajax() {
 		$('.skeleton-pager-link, .skeleton-pager-header-link').click(function(event) {
 			event.preventDefault();
 
 			url = URI.parse($(this).attr('href'));
 			result = URI.parseQuery(url.query);
 			$('.search_incoming_invoice_results').load('/financial/account/transaction?action=search_incoming_invoices&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
-				pager_ajax();
+				pager_incoming_invoices_ajax();
 			});
 		});
 	}

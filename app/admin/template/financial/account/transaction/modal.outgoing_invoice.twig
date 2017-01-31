@@ -3,7 +3,7 @@
 
 {% block body %}
 
-<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_invoices">
+<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_outgoing_invoices">
 <input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
 
 <div class="form-group">
@@ -52,17 +52,17 @@
 
 
 <script type="text/javascript">
-	$('#search_invoices').submit(function(event) {
-		search_invoices();
+	$('#search_outgoing_invoices').submit(function(event) {
+		search_outgoing_invoices();
 		event.preventDefault();
 	});
-	function search_invoices() {
+	function search_outgoing_invoices() {
 		$('.search_results').load('/financial/account/transaction?action=search_invoices&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_invoices').val()), function() {
-			pager_ajax();
+			pager_outgoing_invoices_ajax();
 		});
 	}
 
-	function pager_ajax() {
+	function pager_outgoing_invoices_ajax() {
 		$('.skeleton-pager-link, .skeleton-pager-header-link').click(function(event) {
 			event.preventDefault();
 
@@ -70,7 +70,7 @@
 			result = URI.parseQuery(url.query);
 
 			$('.search_results').load('/financial/account/transaction?action=search_invoices&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
-				pager_ajax();
+				pager_outgoing_invoices_ajax();
 			});
 		});
 	}
