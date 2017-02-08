@@ -622,7 +622,7 @@
 						<optgroup label="{{ year }}">
 							{% for month in 1..12 %}
 								{% if year < "now"|date("Y") or ( month <= "now"|date("m") and year >= "now"|date("Y") ) %}
-									<option value="{{ year }}-{{ month }}">{{ (year~'-'~month~'-01')|date("F Y") }}</option>
+									<option value="{{ year }}-{{ "%02d"|format(month) }}">{{ (year~'-'~month~'-01')|date("F Y") }}</option>
 								{% endif %}
 							{% endfor %}
 						</optgroup>
