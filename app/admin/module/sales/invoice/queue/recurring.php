@@ -41,7 +41,8 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 				'invoice_queue_recurring_group.id',
 				'invoice_queue_recurring_group.name',
 				'customer.company',
-				'customer.lastname'
+				'customer.lastname',
+				'customer.firstname'
 			];
 			$pager->set_search($_POST['search'], $search_fields);
 		}
