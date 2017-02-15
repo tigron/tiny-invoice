@@ -32,6 +32,7 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 		$pager = new Pager('document');
 		$pager->add_condition('classname', 'Document_Incoming_Invoice');
 		$pager->add_join('document_incoming_invoice', 'document_id', 'document.id');
+		$pager->add_join('supplier', 'id', 'document_incoming_invoice.supplier_id');
 		$pager->add_condition('document_incoming_invoice.paid', 0);
 
 		$pager->add_sort_permission('date');
