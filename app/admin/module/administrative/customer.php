@@ -121,7 +121,6 @@ class Web_Module_Administrative_Customer extends Module {
 
 			Session::redirect('/export?action=created');
 		}
-
 	}
 
 	/**

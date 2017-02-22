@@ -134,6 +134,20 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 	}
 
 	/**
+	 * Export cutomers
+	 *
+	 * @access public
+	 */
+	public function display_export() {
+		$export = new Export_Excel_Document_Invoice();
+		$export->data = json_encode($_REQUEST['hash']);
+		$export->save();
+		$export->run();
+
+		Session::redirect('/export?action=created');
+	}
+
+	/**
 	 * Secure
 	 *
 	 * @access public
