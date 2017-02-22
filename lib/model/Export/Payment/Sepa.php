@@ -42,7 +42,7 @@ class Export_Payment_Sepa extends Export {
 			if ($data['pay_on_expiration_date']) {
 				$expiration_date = $document_date->format('Y-m-d');
 			} else {
-				$expiration_date = new DateTime();
+				$expiration_date = (new DateTime())->format('Y-m-d');
 			}
 
 			if (!isset($sorted[$expiration_date])) {
@@ -81,7 +81,7 @@ class Export_Payment_Sepa extends Export {
 			$document_date = DateTime::createFromFormat('Y-m-d', $key);
 
 			$payment->requestedExecutionDate = $document_date;
-			$payment->debtorAccount = Setting::get_by_name('iban')->value;
+			$payment->debtorAccount = str_replace(' ', '', Setting::get_by_name('iban')->value);
 			$payment->debtorAgent = Setting::get_by_name('bic')->value;
 			$payment->debtor = $debtor;
 
