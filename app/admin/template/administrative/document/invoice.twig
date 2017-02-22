@@ -79,15 +79,25 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
+			<form action="/administrative/document/invoice?action=export" method="post" class="form-inline">
+			<input type="hidden" name="hash" value="{{ pager.create_options_hash() }}" />
+
 			{{ base.pager_count(pager.item_count) }}  - {% trans "Total:" %} &euro; {{ pager.get_sum('document_incoming_invoice.price_incl') }}
 
 			<div class="pull-right">
 				<a href="/administrative/document/invoice/pay" title="">
 					<span class="glyphicon glyphicon-plus-sign"></span>
 					{% trans "Pay invoices" %}
+				</a> -
+				<a href="#" onclick="$(this).closest('form').submit();">
+					<i class="fa fa-file"></i> {% trans "Export invoices" %}
 				</a>
 			</div>
+			</form>
 		</div>
+
+
+
 		<div class="panel-body">
 		{% for document in pager.items %}
 		{% if loop.first %}
