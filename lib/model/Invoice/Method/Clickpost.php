@@ -81,7 +81,12 @@ class Invoice_Method_Clickpost extends Invoice_Method {
 		$transport->add_variable('Cover', 'N');
 		$transport->add_variable('BothSided', 'N');
 		$transport->add_variable('MaxRetry', 3);
-		$transport->add_variable('NeedValidation', 0);
+		$config = Config::get();
+		if ($config->debug) {
+			$transport->add_variable('NeedValidation', 1);
+		} else {
+			$transport->add_variable('NeedValidation', 0);
+		}
 
 		$transport->add_attachment($pdf);
 
