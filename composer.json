@@ -33,7 +33,8 @@
         "phpoffice/phpexcel": "~1.8",
 		"ext-imap": "*",
         "bower-asset/highcharts": "^4.2",
-        "tigron/sepa-payments": "0.0.5"
+        "tigron/sepa-payments": "0.0.5",
+        "phpseclib/phpseclib": "^2.0"
     },
     "require-dev": {
         "tigron/skeleton-database": "~0",
