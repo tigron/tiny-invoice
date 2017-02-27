@@ -122,23 +122,31 @@ class Bootstrap {
 		/**
 		 * Get the email skin
 		 */
+		$skin_email_setting = null;
 		try {
-			$setting = Setting::get_by_name('skin_email_id');
+			$skin_email_setting = Setting::get_by_name('skin_email_id');
 		} catch (Exception $e) {
-			Skin_Email::synchronize();
-			$skin_emails = Skin_Email::get_all();
-			$setting = new Setting();
-			$setting->name = 'skin_email_id';
-			$setting->value = array_shift($skin_emails)->id;
-			$setting->save();
+			try {
+				Skin_Email::synchronize();
+				$skin_emails = Skin_Email::get_all();
+				$skin_email_setting = new Setting();
+				$skin_email_setting->name = 'skin_email_id';
+				$skin_email_setting->value = array_shift($skin_emails)->id;
+				$skin_email_setting->save();
+			} catch (Exception $e) {
+				// Database is not installed yet
+			}
 		}
 
-		$skin_email = Skin_Email::get_by_id($setting->value);
+		if ($skin_email_setting !== null) {
+			$skin_email = Skin_Email::get_by_id($skin_email_setting->value);
 
-		/**
-		 * Set the email path
-		 */
-		\Skeleton\Email\Config::$email_directory = $root_path . '/store/email/' . $skin_email->path . '/';
+			/**
+			 * Set the email path
+			 */
+			\Skeleton\Email\Config::$email_directory = $root_path . '/store/email/' . $skin_email->path . '/';
+		}
+
 
 		try {
 			\Skeleton\Email\Config::$archive_mailbox = Setting::get_by_name('archive_mailbox')->value;
