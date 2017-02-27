@@ -39,7 +39,7 @@ class Web_Module_Json_Bank_Account extends Module {
 		$data = [];
 		foreach ($statements as $statement) {
 			$row = [
-				'x' => floatval(strtotime($statement->date) . '000'),
+				'x' => floatval(strtotime($statement->date) . '000') + 86400000,
 				'y' => floatval($statement->original_balance),
 				'id' => $statement->id
 			];
