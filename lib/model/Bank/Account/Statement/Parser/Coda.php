@@ -47,12 +47,23 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 			$bank_account->name = $statement->original_situation->account_name;
 			$bank_account->save();
 
+			$statement_sequence_number = $statement->original_situation->statement_sequence_number;
+			$year = date('Y', strtotime($statement->original_situation->date));
+			$month = date('m', strtotime($statement->original_situation->date));
+			if ($month == 12 AND $statement_sequence_number < 20) {
+				$year++;
+			}
+			if ($month == 1 AND $statement_sequence_number > 300) {
+				$year--;
+			}
+			$statement_sequence_number = $year . str_pad($statement_sequence_number, 3, "0", STR_PAD_LEFT);
+
 			try {
-				$bank_account_statement = Bank_Account_Statement::get_by_bank_account_sequence($bank_account, $statement->original_situation->statement_sequence_number);
+				$bank_account_statement = Bank_Account_Statement::get_by_bank_account_sequence($bank_account, $statement_sequence_number);
 			} catch (Exception $e) {
 				$bank_account_statement = new Bank_Account_Statement();
 				$bank_account_statement->bank_account_id = $bank_account->id;
-				$bank_account_statement->sequence = $statement->original_situation->statement_sequence_number;
+				$bank_account_statement->sequence = $statement_sequence_number;
 			}
 			$bank_account_statement->date = $statement->original_situation->date;
 			$bank_account_statement->original_balance = $statement->original_situation->balance;
