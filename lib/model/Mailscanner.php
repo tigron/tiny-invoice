@@ -9,6 +9,8 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
+use Ddeboer\Imap\Server;
+
 class Mailscanner {
 
 	/**
@@ -28,7 +30,9 @@ class Mailscanner {
 	 * @param string $password
 	 */
 	public function __construct ($url, $username, $password) {
-		$this->imap = new Imap($url, $username, $password);
+		$server = new Server($url, 993, '/imap/ssl/novalidate-cert');
+		$this->imap = $server->authenticate($username, $password);
+
 	}
 
 	/**
@@ -37,31 +41,53 @@ class Mailscanner {
 	 * @access public
 	 */
 	public function run() {
+		$mailboxes = $this->imap->getMailboxes();
+		foreach ($mailboxes as $mailbox) {
+			if ($mailbox->getName() == 'INBOX') {
+				$inbox = $this->imap->getMailbox('INBOX');
+			}
+		}
+
+
 		$archive = false;
 		try {
 			$archive = Setting::get_by_name('mailscanner_archive')->value;
 		} catch (Exception $e) {}
 
-		$mails = $this->get_mails();
+
+		if ($archive) {
+			if (!$this->imap->hasMailbox('processed')) {
+				$this->imap->createMailbox('processed');
+			}
+			if (!$this->imap->hasMailbox('unprocessed')) {
+				$this->imap->createMailbox('unprocessed');
+			}
+
+			$processed_mailbox = $this->imap->getMailbox('processed');
+			$unprocessed_mailbox = $this->imap->getMailbox('unprocessed');
+		}
+
+		$mails = $inbox->getMessages();
+
+
 
 		foreach ($mails as $mail) {
 			try {
 				$this->process_mail($mail);
 				if ($archive) {
-					$this->imap->move_mail('processed', $mail);
+					$mail->move($processed_mailbox);
 				}
 			} catch (Exception $e) {
 				if ($archive) {
-					$this->imap->move_mail('unprocessed', $mail);
+					$mail->move_mail($unprocessed_mailbox);
 				}
 			}
 
 			if (!$archive) {
-				$this->imap->delete_mail($mail);
+				$mail->delete();
 			}
 		}
-
-		$this->imap->close();
+		$inbox->expunge();
 	}
 
 	/**
@@ -70,20 +96,15 @@ class Mailscanner {
 	 * @access private
 	 * @param Imap_Mail $mail
 	 */
-	private function process_mail($mail) {
-		if (count($mail->attachments) == 0) {
+	private function process_mail(Ddeboer\Imap\Message $mail) {
+		$attachments = $mail->getAttachments();
+		if (count($attachments) == 0) {
 			throw new Exception('No attachments for this mail');
 		}
 
-		foreach ($mail->attachments as $attachment) {
 
-			if (!$attachment['is_attachment']) {
-				continue;
-			}
-			if ($attachment['filename'] == '') {
-				$attachment['filename'] = 'document.pdf';
-			}
-			$file = \Skeleton\File\File::store($attachment['filename'], $attachment['attachment']);
+		foreach ($attachments as $attachment) {
+			$file = \Skeleton\File\File::store($attachment->getFilename(), $attachment->getDecodedContent());
 
 			if (!$file->is_pdf()) {
 				$file->delete();
@@ -91,7 +112,7 @@ class Mailscanner {
 			}
 
 			$incoming = new Incoming();
-			$incoming->subject = $mail->subject;
+			$incoming->subject = $mail->getSubject();
 			$incoming->file_id = $file->id;
 			$incoming->save();
 
@@ -111,19 +132,4 @@ class Mailscanner {
 			}
 		}
 	}
-
-	/**
-	 * Get all mails from mailbox
-	 *
-	 * @access private
-	 * @return array $mails
-	 */
-	private function get_mails() {
-		$mails = [];
-		while (($mail = $this->imap->fetchmail()) !== false) {
-			$mails[] = $mail;
-		}
-		return $mails;
-	}
-
 }
