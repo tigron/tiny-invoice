@@ -79,7 +79,7 @@ class Mailscanner {
 				}
 			} catch (Exception $e) {
 				if ($archive) {
-					$mail->move_mail($unprocessed_mailbox);
+					$mail->move($unprocessed_mailbox);
 				}
 			}
 
