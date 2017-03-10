@@ -50,8 +50,8 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 			$output1 .= $this->cur(20, $creditnote->get_price_incl());
 			$output1 .= $this->cur(20, $creditnote->get_price_incl());
 			$output1 .= $this->cur(20, 0);
-			$output1 .= $this->num(2, date('n', strtotime($creditnote->created)));
-			$output1 .= $this->num(6, date('Ym', strtotime($creditnote->created)));
+			$output1 .= $this->num(2, $this->boekhoudperiode( $creditnote->created ));
+			$output1 .= $this->num(6, $this->btwmaand( $creditnote->created ));
 			$output1 .= $this->num(1, 0);
 			$output1 .= "\r\n";
 
