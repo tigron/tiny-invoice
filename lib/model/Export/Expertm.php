@@ -105,29 +105,48 @@ abstract class Export_Expertm extends Export {
 			$bookkeeping_start_month = $setting->value;
 		}
 
-		$month = $bookkeeping_start_month;
-		$periode = 1;
-		$boekhoudperiodes = [];
-
-		for ($i = 1; $i <=12; $i++) {
-			$boekhoudperiodes[$month] = $periode;
-
-			$month++;
-			if ($i % 3 == 0) {
-				$periode ++;
-			}
+		try {
+			$bookkeeping_vat_period = Setting::get_by_name('bookkeeping_vat_period')->value;
+		} catch (Exception $e) {
+			$setting = new Setting();
+			$setting->name = 'bookkeeping_vat_period';
+			$setting->value= 'month';
+			$setting->save();
+			$bookkeeping_vat_period = $setting->value;
 		}
 
-		$cleaned = [];
-		foreach ($boekhoudperiodes as $month => $periode) {
-			if ($month > 12) {
-				$month -= 12;
+		if ($bookkeeping_vat_period == 'month') {
+			$month = date('n', strtotime($date));
+			$btw_month = $month - $bookkeeping_start_month + 1;
+			if ($btw_month < 0) {
+				$btw_month += 12;
 			}
-			$cleaned[$month] = $periode;
-		}
+			return $btw_month;
+		} else {
+			$month = $bookkeeping_start_month;
+			$periode = 1;
+			$boekhoudperiodes = [];
 
-		ksort($cleaned);
-		return $cleaned[ date('n', strtotime($date)) ];
+			for ($i = 1; $i <=12; $i++) {
+				$boekhoudperiodes[$month] = $periode;
+
+				$month++;
+				if ($i % 3 == 0) {
+					$periode ++;
+				}
+			}
+
+			$cleaned = [];
+			foreach ($boekhoudperiodes as $month => $periode) {
+				if ($month > 12) {
+					$month -= 12;
+				}
+				$cleaned[$month] = $periode;
+			}
+
+			ksort($cleaned);
+			return $cleaned[ date('n', strtotime($date)) ];
+		}
 	}
 
 	/**
