@@ -32,6 +32,10 @@ class Export_Expertm_Invoice extends Export_Expertm {
 		$output1 = '';
 		$output2 = '';
 
+
+
+
+
 		foreach ($invoices as $invoice) {
 			$customer_contact = $invoice->customer_contact;
 			$output1 .= $this->num(9, 4000000);
@@ -50,8 +54,8 @@ class Export_Expertm_Invoice extends Export_Expertm {
 			$output1 .= $this->cur(20, $invoice->get_price_incl());
 			$output1 .= $this->cur(20, $invoice->get_price_incl());
 			$output1 .= $this->cur(20, 0);
-			$output1 .= $this->num(2, date('n', strtotime($invoice->created)));
-			$output1 .= $this->num(6, date('Ym', strtotime($invoice->created)));
+			$output1 .= $this->num(2, $this->boekhoudperiode( $invoice->created ));
+			$output1 .= $this->num(6, $this->btwmaand( $invoice->created ));
 			$output1 .= $this->num(1, 0);
 			$output1 .= "\r\n";
 

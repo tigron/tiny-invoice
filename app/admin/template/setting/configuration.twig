@@ -125,6 +125,42 @@
 			</div>
 		</div>
 
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Bookkeeping" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Start fiscal year" %}</label>
+					<div class="col-xs-9">
+						<select name="setting[bookkeeping_start_month]" class="form-control">
+							{% for i in 1..12 %}
+								<option value="{{ i }}" {% if settings.bookkeeping_start_month == i %}selected{% endif %}>{{ ('01-' ~ i ~ '-1990')|date('F') }}</option>
+							{% endfor %}
+						</select>
+
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "VAT calculation" %}</label>
+					<div class="col-xs-9">
+						<select name="setting[bookkeeping_vat_period]" class="form-control">
+							<option value="month" {% if settings.bookkeeping_vat_period == 'month' %}selected{% endif %}>{% trans "Monthly" %}</option>
+							<option value="quarter" {% if settings.bookkeeping_vat_period == 'quarter' %}selected{% endif %}>{% trans "Quarterly" %}</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-9 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+
 
 	</form>
 
