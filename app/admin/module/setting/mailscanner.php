@@ -10,6 +10,7 @@
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
+use \Ddeboer\Imap\Server;
 
 class Web_Module_Setting_Mailscanner extends Module {
 	/**
@@ -59,7 +60,10 @@ class Web_Module_Setting_Mailscanner extends Module {
 			$mailscanner_host = Setting::get_by_name('mailscanner_host')->value;
 			$mailscanner_username = Setting::get_by_name('mailscanner_username')->value;
 			$mailscanner_password = Setting::get_by_name('mailscanner_password')->value;
-			$imap = new Imap(Setting::get_by_name('mailscanner_host')->value, Setting::get_by_name('mailscanner_username')->value, Setting::get_by_name('mailscanner_password')->value);
+
+			$server = new Server($mailscanner_host, 993, '/imap/ssl/novalidate-cert');
+			$server->authenticate($mailscanner_username, $mailscanner_password);
+
 			$template->assign('imap_status', 'ok');
 		} catch (Exception $e) {
 			$template->assign('imap_status', 'nok');
