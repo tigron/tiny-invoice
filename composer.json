@@ -34,7 +34,8 @@
 		"ext-imap": "*",
         "bower-asset/highcharts": "^4.2",
         "tigron/sepa-payments": "0.0.5",
-        "phpseclib/phpseclib": "^2.0"
+        "phpseclib/phpseclib": "^2.0",
+        "ddeboer/imap": "^0.5.2"
     },
     "require-dev": {
         "tigron/skeleton-database": "~0",
