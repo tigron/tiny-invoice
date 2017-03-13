@@ -83,7 +83,8 @@ class Invoice_Method_Clickpost extends Invoice_Method {
 		$transport->add_variable('MaxRetry', 3);
 		$config = Config::get();
 		if ($config->debug) {
-			$transport->add_variable('NeedValidation', 1);
+			// Don't send if we are in debug mode
+			return;
 		} else {
 			$transport->add_variable('NeedValidation', 0);
 		}
