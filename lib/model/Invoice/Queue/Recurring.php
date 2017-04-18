@@ -75,6 +75,8 @@ class Invoice_Queue_Recurring {
 		$history->invoice_queue_recurring_id = $this->id;
 		$history->invoice_queue_id = $invoice_queue->id;
 		$history->save();
+
+		return $invoice_queue;
 	}
 
 	/**
