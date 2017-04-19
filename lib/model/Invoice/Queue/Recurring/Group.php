@@ -84,7 +84,7 @@ class Invoice_Queue_Recurring_Group {
 		if ($this->direct_invoice) {
 			$invoice = new Invoice();
 			$invoice->customer_id = $this->customer_id;
-			$invoice->customer_contact_id = $this->id;
+			$invoice->customer_contact_id = $this->customer_contact_id;
 			$invoice->expiration_date = date('YmdHis', strtotime($this->direct_invoice_expiration_period));
 			$invoice->reference = $this->customer_contact->reference;
 			$invoice->generate_number();
@@ -108,7 +108,6 @@ class Invoice_Queue_Recurring_Group {
 				$invoice->schedule_send();
 			}
 			Log::create('add', $invoice);
-			print_r($invoice);
 		}
 
 	}
