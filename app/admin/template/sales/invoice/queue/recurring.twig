@@ -27,14 +27,14 @@
 				<div class="panel-heading">{% trans "Edit recurring invoice queue" %}</div>
 				<div class="panel-body">
 					<div class="form-group {% if errors.name is defined %}has-error{% endif %}">
-						<label class="col-xs-3 control-label">{% trans "Name" %}</label>
-						<div class="col-xs-5">
+						<label class="col-xs-4 control-label">{% trans "Name" %}</label>
+						<div class="col-xs-8">
 							<input type="text" class="form-control" id="alias" name="invoice_queue_recurring_group[name]" value="{{ invoice_queue_recurring_group.name }}">
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Repeat" %}</label>
-						<div class="col-xs-5">
+						<label class="col-xs-4 control-label">{% trans "Repeat" %}</label>
+						<div class="col-xs-8">
 							<select class="form-control" name="invoice_queue_recurring_group[repeat_every]">
 								<option value="+1 day"{% if invoice_queue_recurring_group.repeat_every == '+1 day' %} selected="selected"{% endif %}>{% trans "Every day" %}</option>
 								<option value="+1 week"{% if invoice_queue_recurring_group.repeat_every == '+1 week' %} selected="selected"{% endif %}>{% trans "Every week" %}</option>
@@ -46,21 +46,22 @@
 							</select>
 						</div>
 					</div>
+
 					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Next run" %}</label>
-						<div class="col-xs-5">
+						<label class="col-xs-4 control-label">{% trans "Next run" %}</label>
+						<div class="col-xs-8">
 							<input type="text" class="form-control datepicker" name="invoice_queue_recurring_group[next_run]" id="date_start" value="{{ invoice_queue_recurring_group.next_run }}">
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Run forever" %}</label>
-						<div class="col-xs-9"><input type="checkbox" id="run_forever" name="invoice_queue_recurring_group[run_forever]" data-group-cls="btn-group-xs" {% if invoice_queue_recurring_group.stop_after == '0000-00-00 00:00:00' %}checked{% endif %} onchange="toggle_run_forever();"></div>
+						<label class="col-xs-4 control-label">{% trans "Run forever" %}</label>
+						<div class="col-xs-8"><input type="checkbox" id="run_forever" name="invoice_queue_recurring_group[run_forever]" data-group-cls="btn-group-xs" {% if invoice_queue_recurring_group.stop_after == '0000-00-00 00:00:00' %}checked{% endif %} onchange="toggle_run_forever();"></div>
 					</div>
 
 					<div class="form-group" id="stop_after">
-						<label class="col-xs-3 control-label">{% trans "Stop after" %}</label>
-						<div class="col-xs-9">
+						<label class="col-xs-4 control-label">{% trans "Stop after" %}</label>
+						<div class="col-xs-8">
 							<input type="text" class="form-control datepicker" name="invoice_queue_recurring_group[stop_after]" value="{{ invoice_queue_recurring_group.stop_after }}">
 						</div>
 					</div>
@@ -77,28 +78,57 @@
 					</script>
 
 					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
-						<div class="col-xs-5">
-							<p class="form-control-static">
-								<a href="/administrative/customer/detail?id={{ invoice_queue_recurring_group.customer_id }}">
-									{{ invoice_queue_recurring_group.customer.get_display_name() }}
-								</a>
-							</p>
+						<label class="col-xs-4 control-label">{% trans "Direct invoice" %} ({% trans "Not via invoice queue" %})</label>
+						<div class="col-xs-8">
+							<input type="checkbox" id="direct_invoice" name="invoice_queue_recurring_group[direct_invoice]" data-group-cls="btn-group-xs" {% if invoice_queue_recurring_group.direct_invoice %}checked{% endif %} onchange="toggle_direct_invoice();">
 						</div>
 					</div>
 
+					<div class="form-group direct_invoice">
+						<label class="col-xs-4 control-label">{% trans "Invoice expiration" %}</label>
+						<div class="col-xs-8">
+							<select class="form-control" name="invoice_queue_recurring_group[direct_invoice_expiration_period]">
+								<option value="+2 weeks"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+2 weeks' %} selected="selected"{% endif %}>
+									2 {% trans "weeks" %}
+								</option>
+								<option value="+1 month"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+1 month' or invoice_queue_recurring_group.direct_invoice_expiration_period == '' %} selected="selected"{% endif %}>
+									1 {% trans "month" %}
+								</option>
+								<option value="+60 days"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+60 days' %} selected="selected"{% endif %}>
+									60 {% trans "days" %}
+								</option>
+								<option value="+90 days"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+90 days' %} selected="selected"{% endif %}>
+									90 {% trans "days" %}
+								</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group direct_invoice">
+						<label class="col-xs-4 control-label">{% trans "Send invoice after creation" %}</label>
+						<div class="col-xs-8">
+							<input type="checkbox" name="invoice_queue_recurring_group[direct_invoice_send_invoice]" data-group-cls="btn-group-xs" {% if invoice_queue_recurring_group.direct_invoice_send_invoice %}checked{% endif %}>
+						</div>
+					</div>
+
+					<script type="text/javascript">
+						function toggle_direct_invoice() {
+							if ($('#direct_invoice').is(':checked')) {
+								$('.direct_invoice').removeClass('hide');
+							} else {
+								$('.direct_invoice').addClass('hide');
+							}
+						}
+						toggle_direct_invoice();
+					</script>
+
 					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Created" %}</label>
-						<div class="col-xs-5">
+						<label class="col-xs-4 control-label">{% trans "Created" %}</label>
+						<div class="col-xs-8">
 							<p class="form-control-static">{{ invoice_queue_recurring_group.created|date }}</p>
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Total" %}</label>
-						<div class="col-xs-5">
-							<p class="form-control-static">&euro;{{ invoice_queue_recurring_group.get_total_price()|number_format }}</p>
-						</div>
-					</div>
+
 
 					<div class="form-group">
 						<div class="col-xs-9 col-xs-offset-3">
@@ -125,6 +155,18 @@
 					</div>
 				</div>
 				<div class="panel-body">
+					<form class="form-horizontal form-condensed" method="post" action="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+						<div class="col-xs-5">
+							<p class="form-control-static">
+								<a href="/administrative/customer/detail?id={{ invoice_queue_recurring_group.customer_id }}">
+									{{ invoice_queue_recurring_group.customer.get_display_name() }}
+								</a>
+							</p>
+						</div>
+					</div>
+
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Invoice contact" %}</label>
 						<div class="col-xs-5">
@@ -134,10 +176,10 @@
 							</div>
 						</div>
 					</div>
-
-
+					</form>
 				</div>
 			</div>
+
 		</div>
 		</div>
 
@@ -226,6 +268,17 @@
 								</a>
 							</td>
 						</tr>
+
+						{% if loop.last %}
+							<thead>
+							<tr>
+								<th colspan="4">&nbsp;</th>
+								<th>&euro;{{ invoice_queue_recurring_group.get_total_price()|number_format }}</th>
+								<th colspan="2">&nbsp</th>
+							</tr>
+							</thead>
+						{% endif %}
+
 						{% endfor %}
 					</tbody>
 				</table>
