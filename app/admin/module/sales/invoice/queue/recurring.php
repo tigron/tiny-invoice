@@ -163,6 +163,21 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 				$_POST['invoice_queue_recurring_group']['stop_after'] = null;
 			}
 			$invoice_queue_recurring_group->load_array($_POST['invoice_queue_recurring_group']);
+
+			if (isset($_POST['invoice_queue_recurring_group']['direct_invoice'])) {
+				$invoice_queue_recurring_group->direct_invoice = true;
+				$invoice_queue_recurring_group->direct_invoice_expiration_period = $_POST['invoice_queue_recurring_group']['direct_invoice_expiration_period'];
+				if (isset($_POST['invoice_queue_recurring_group']['direct_invoice_send_invoice'])) {
+					$invoice_queue_recurring_group->direct_invoice_send_invoice = true;
+				} else {
+					$invoice_queue_recurring_group->direct_invoice_send_invoice = false;
+				}
+			} else {
+				$invoice_queue_recurring_group->direct_invoice = false;
+				$invoice_queue_recurring_group->direct_invoice_expiration_period = '';
+				$invoice_queue_recurring_group->direct_invoice_send_invoice = false;
+			}
+
 			$invoice_queue_recurring_group->save();
 			$updated = true;
 		}

@@ -80,7 +80,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('date');
 		$pager->add_sort_permission('title');
-		$pager->add_sort_permission('paid');
+		$pager->add_sort_permission('document_incoming_invoice.paid');
 		$pager->add_sort_permission('document_incoming_invoice.accounting_identifier');
 		$pager->add_sort_permission('document_incoming_invoice.expiration_date');
 		$pager->add_sort_permission('supplier.company');
