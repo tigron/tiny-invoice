@@ -509,9 +509,10 @@
 								</td>
 								<td>
 									<select name="invoice_item[{{ loop.index }}][vat]" class="form-control">
-									{% for vat_rate in vat_rates %}
-										<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
-									{% endfor %}
+										<option value="0">0%</option>
+										{% for vat_rate in vat_rates %}
+											<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
+										{% endfor %}
 									</select>
 								</td>
 								<td>
@@ -564,9 +565,10 @@
 				</td>
 				<td>
 					<select name="invoice_item[((nr))][vat]" class="form-control">
-					{% for vat_rate in vat_rates %}
-						<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
-					{% endfor %}
+						<option value="0">0%</option>
+						{% for vat_rate in vat_rates %}
+							<option {% if vat_rate.vat_rate_id == 1 %}selected{% endif %} value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
+						{% endfor %}
 					</select>
 				</td>
 				<td>
