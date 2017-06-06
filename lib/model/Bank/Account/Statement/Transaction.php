@@ -150,7 +150,7 @@ class Bank_Account_Statement_Transaction {
 			$ogm = str_replace('/', '', $output_array[1]);
 			$id = substr($ogm, 0, -2);
 			$invoice = Invoice::get_by_id($id);
-			if (bccomp($invoice->get_price_incl(), $this->amount, 3) == 0) {
+			if (bccomp($invoice->get_balance(), $this->amount, 3) == 0) {
 				$this->link_invoice($invoice);
 				return;
 			}
