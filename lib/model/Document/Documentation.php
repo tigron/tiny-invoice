@@ -161,9 +161,9 @@ class Document_Documentation extends Document {
 	 *
 	 * @access public
 	 */
-	public function save() {
+	public function save($validate = true) {
 		if (!isset($this->id)) {
-			parent::save();
+			parent::save($validate);
 		}
 		$this->local_details['document_id'] = $this->id;
 
@@ -176,7 +176,7 @@ class Document_Documentation extends Document {
 			$db->update('document_documentation', $this->local_details, $where);
 		}
 
-		parent::save();
+		parent::save($validate);
 	}
 
 	/**
