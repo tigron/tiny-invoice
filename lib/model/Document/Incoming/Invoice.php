@@ -245,9 +245,9 @@ class Document_Incoming_Invoice extends Document {
 	 *
 	 * @access public
 	 */
-	public function save() {
+	public function save($validate = true) {
 		if (!isset($this->id)) {
-			parent::save();
+			parent::save($validate);
 		}
 		$this->local_details['document_id'] = $this->id;
 
@@ -260,7 +260,7 @@ class Document_Incoming_Invoice extends Document {
 			$db->update('document_incoming_invoice', $this->local_details, $where);
 		}
 
-		parent::save();
+		parent::save($validate);
 	}
 
 	/**
