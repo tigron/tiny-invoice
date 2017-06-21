@@ -215,7 +215,7 @@
 							<td>{{ transaction.get_message() }}</td>
 							<td>{{ transaction.other_account_name }}</td>
 							<td>{{ transaction.other_account_number }}</td>
-							<td>&euro;{{ transaction.amount|number_format }}</td>
+							<td>&euro;{{ balance.amount|number_format }}</td>
 						</tr>
 						{% if loop.last %}
 							</tbody>
