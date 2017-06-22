@@ -58,7 +58,7 @@ class Bank_Account_Statement {
 	 */
 	public function get_previous() {
 		$db = Database::get();
-		$id = $db->get_one('SELECT id FROM bank_account_statement WHERE bank_account_id=? AND date < ? ORDER BY date DESC LIMIT 1', [ $this->bank_account_id, $this->date ]);
+		$id = $db->get_one('SELECT id FROM bank_account_statement WHERE bank_account_id=? AND sequence < ? ORDER BY sequence DESC LIMIT 1', [ $this->bank_account_id, $this->sequence ]);
 		if ($id === null) {
 			throw new Exception('No previous statement found');
 		}
