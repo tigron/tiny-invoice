@@ -70,12 +70,12 @@ class Web_Module_Administrative_Document_Creditnote extends Web_Module_Administr
 		$pager->add_join('document_incoming_creditnote', 'document_id', 'document.id');
 
 		$pager->add_sort_permission('id');
-		$pager->add_sort_permission('date');
+		$pager->add_sort_permission('document.date');
 		$pager->add_sort_permission('title');
 		$pager->add_sort_permission('paid');
 		$pager->add_sort_permission('document_incoming_creditnote.price_incl');
 
-		$pager->set_sort('date');
+		$pager->set_sort('document.date');
 		$pager->set_direction('DESC');
 		if (isset($_GET['search'])) {
 			$pager->set_condition('%search%', $_GET['search']);
