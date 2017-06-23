@@ -149,7 +149,10 @@ class Bootstrap {
 
 
 		try {
-			\Skeleton\Email\Config::$archive_mailbox = Setting::get_by_name('archive_mailbox')->value;
+			$archive_mailbox = Setting::get_by_name('archive_mailbox')->value;
+			if (trim($archive_mailbox) != '') {
+				\Skeleton\Email\Config::$archive_mailbox = $archive_mailbox;
+			}
 		} catch (Exception $e) { }
 
 		/**

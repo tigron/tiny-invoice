@@ -220,7 +220,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 	 * @access public
 	 */
 	public function secure() {
-		return 'admin.financial';
+		return 'admin.bookkeeping';
 	}
 
 }

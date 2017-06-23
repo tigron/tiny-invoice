@@ -247,9 +247,6 @@ class Customer_Contact {
 			}
 		} else {
 			$customer_contact_export = Customer_Contact_Export::get_by_id($this->customer_contact_export_id);
-			if ($this->vat == '') {
-				return;
-			}
 		}
 
 		$info = $this->get_info();

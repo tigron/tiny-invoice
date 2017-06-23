@@ -69,9 +69,6 @@ class Bank_Account_Statement_Transaction {
 		if ($amount === null) {
 			$amount = $this->get_balance();
 		}
-		if ($amount > $invoice->get_balance()) {
-			$amount = $invoice->get_balance();
-		}
 
 		$balance = new Bank_Account_Statement_Transaction_Balance();
 		$balance->bank_account_statement_transaction_id = $this->id;
@@ -95,6 +92,52 @@ class Bank_Account_Statement_Transaction {
 	}
 
 	/**
+	 * Link to supplier
+	 *
+	 * @access public
+	 * @param Supplier $supplier
+	 */
+	public function link_supplier(Supplier $supplier, $amount = null) {
+		if ($amount === null) {
+			$amount = $this->get_balance();
+		}
+
+		$balance = new Bank_Account_Statement_Transaction_Balance();
+		$balance->bank_account_statement_transaction_id = $this->id;
+		$balance->set_linked_object($supplier);
+		$balance->amount = $amount;
+		$balance->save();
+
+		if ($this->get_balance() == 0) {
+			$this->balanced = true;
+			$this->save(false);
+		}
+	}
+
+	/**
+	 * Link to customer_contact
+	 *
+	 * @access public
+	 * @param Supplier $supplier
+	 */
+	public function link_customer_contact(Customer_Contact $customer_customer_contact, $amount = null) {
+		if ($amount === null) {
+			$amount = $this->get_balance();
+		}
+
+		$balance = new Bank_Account_Statement_Transaction_Balance();
+		$balance->bank_account_statement_transaction_id = $this->id;
+		$balance->set_linked_object($customer_customer_contact);
+		$balance->amount = $amount;
+		$balance->save();
+
+		if ($this->get_balance() == 0) {
+			$this->balanced = true;
+			$this->save(false);
+		}
+	}
+
+	/**
 	 * Link document
 	 *
 	 * @access public
@@ -104,9 +147,6 @@ class Bank_Account_Statement_Transaction {
 	public function link_document(Document $document, $amount = null) {
 		if ($amount === null) {
 			$amount = $this->get_balance();
-		}
-		if ($amount > $document->get_balance()) {
-			$amount = $document->get_balance();
 		}
 
 		$balance = new Bank_Account_Statement_Transaction_Balance();
@@ -122,7 +162,30 @@ class Bank_Account_Statement_Transaction {
 
 		if ($document->get_balance() == 0) {
 			$document->balanced = true;
-			$document->save();
+			$document->save(false);
+		}
+	}
+
+	/**
+	 * Link bookkeeping_account
+	 *
+	 * @access public
+	 * @param Bookkeeping_Account $bookkeeping_account
+	 */
+	public function link_bookkeeping_account(Bookkeeping_Account $bookkeeping_account, $amount = null) {
+		if ($amount === null) {
+			$amount = $this->get_balance();
+		}
+
+		$balance = new Bank_Account_Statement_Transaction_Balance();
+		$balance->bank_account_statement_transaction_id = $this->id;
+		$balance->set_linked_object($bookkeeping_account);
+		$balance->amount = $amount;
+		$balance->save();
+
+		if ($this->get_balance() == 0) {
+			$this->balanced = true;
+			$this->save();
 		}
 	}
 
@@ -150,7 +213,7 @@ class Bank_Account_Statement_Transaction {
 			$ogm = str_replace('/', '', $output_array[1]);
 			$id = substr($ogm, 0, -2);
 			$invoice = Invoice::get_by_id($id);
-			if (bccomp($invoice->get_price_incl(), $this->amount, 3) == 0) {
+			if (bccomp($invoice->get_balance(), $this->amount, 3) == 0) {
 				$this->link_invoice($invoice);
 				return;
 			}

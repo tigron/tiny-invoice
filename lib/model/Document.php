@@ -87,7 +87,7 @@ class Document {
 		// If we have a validate() method, execute it
 		if (method_exists($this, 'validate') AND is_callable([$this, 'validate']) and $validate) {
 			if ($this->validate($errors) === false) {
-				throw new Exception_Validation($errors);
+				throw new Exception('Not validated. Errored fields: ' . implode(', ', array_keys($errors)));
 			}
 		}
 
@@ -270,6 +270,9 @@ class Document {
 	 * @access public
 	 */
 	public function create_preview() {
+		if ($this->file_id == 0) {
+			return;
+		}
 		if (!is_null($this->preview_file_id)) {
 			$file = File::get_by_id($this->preview_file_id);
 			$file->delete();
@@ -303,6 +306,9 @@ class Document {
 	public static function get_by_id($id) {
 		$db = Database::get();
 		$classname = $db->get_one('SELECT classname FROM document WHERE id=?', [ $id ]);
+		if ($classname === null) {
+			throw new Exception('Unknown document ' . $id);
+		}
 		if (!class_exists($classname)) {
 			throw new Exception('This document has an incorrect classname');
 		}

@@ -491,8 +491,8 @@
 						</a>
 					</td>
 
-					<td class="text-right">€{{ creditnote.price_excl|number_format }}</td>
-					<td class="text-right">€{{ creditnote.price_incl|number_format }}</td>
+					<td class="text-right">€{{ creditnote.get_price_excl|number_format }}</td>
+					<td class="text-right">€{{ creditnote.get_price_incl|number_format }}</td>
 					<td>
 						<a href="/sales/creditnote?action=download&id={{ creditnote.id }}">
 							<span class="glyphicon glyphicon-download"></span>

@@ -14,7 +14,7 @@ class Web_Module_Document_Incoming_Creditnote extends \Skeleton\Package\Api\Web\
 	/**
 	 * Get by id
 	 *
-	 * Get an incoming invoice by his ID
+	 * Get an incoming credit note by his ID
 	 *
 	 * @access public
 	 * @param int $id
@@ -34,11 +34,11 @@ class Web_Module_Document_Incoming_Creditnote extends \Skeleton\Package\Api\Web\
 	/**
 	 * Get by tag_ids
 	 *
-	 * Get incoming invoices by their tag ids
+	 * Get incoming credit notes by their tag ids
 	 *
 	 * @access public
 	 * @param string $tag_ids Comma seperated ids
-	 * @return array $ids ids of incoming_invoices
+	 * @return array $ids ids of incoming_credit notes
 	 */
 	public function call_getByTagIds() {
 		$pager = new Pager('document');
@@ -59,10 +59,10 @@ class Web_Module_Document_Incoming_Creditnote extends \Skeleton\Package\Api\Web\
 	/**
 	 * Get all
 	 *
-	 * Get the ids of all the incoming invoices
+	 * Get the ids of all the incoming credit notes
 	 *
 	 * @access public
-	 * @return array $ids ids of incoming_invoices
+	 * @return array $ids ids of incoming_credit notes
 	 */
 	public function call_getAll() {
 		return Document_Incoming_Creditnote::get_all_ids();
