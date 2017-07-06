@@ -291,7 +291,7 @@ class Web_Module_Administrative_Document extends Module {
 	public function display_ajax_extractor() {
 		$this->template = false;
 		$document = Document::get_by_id($_GET['id']);
-		$extractors = Extractor::get_all();
+		$extractors = Extractor_Pdf::get_all();
 		foreach ($extractors as $extractor) {
 			if ($extractor->match($document)) {
 				echo json_encode($extractor->get_info());
@@ -309,11 +309,12 @@ class Web_Module_Administrative_Document extends Module {
 	public function display_ajax_extract_content() {
 		$this->template = 'administrative/document/extractor/extract_content.twig';
 		$document = Document::get_by_id($_GET['id']);
-		$extractor = Extractor::get_by_id($_GET['extractor_id']);
+		$extractor = Extractor_Pdf::get_by_id($_GET['extractor_id']);
 
 		try {
-			$fields = $extractor->parse_content($document);
-		} catch (Exception $e) {
+			$extract = $extractor->extract_data($document);
+			$fields = $extract['data'];
+		} catch (Eval_Exception $e) {
 			$fields = [];
 		}
 

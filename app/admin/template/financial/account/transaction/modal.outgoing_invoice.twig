@@ -3,52 +3,92 @@
 
 {% block body %}
 
-<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_outgoing_invoices">
-<input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
 
-<div class="form-group">
-	<label class="col-xs-3 control-label">{% trans "Transaction amount" %}</label>
-	<div class="col-xs-9">
-		<p class="form-control-static">
-			&euro;{{ transaction.amount }}
-		</p>
-	</div>
-</div>
+<h5>1. {% trans "Transaction information" %}</h5>
+	<dl class="dl-horizontal">
+		<dt>{% trans "Transaction amount" %}</dt>
+		<dd>&euro;{{ transaction.amount }}</dd>
 
-<div class="form-group">
-	<label class="col-xs-3 control-label">{% trans "To/from" %}</label>
-	<div class="col-xs-9">
-		<p class="form-control-static">
-			{{ transaction.other_account_name }}
-		</p>
-	</div>
-</div>
+		<dt>{% trans "To/from" %}</dt>
+		<dd>{{ transaction.other_account_name }}</dd>
 
-<div class="form-group">
-	<label class="col-xs-3 control-label">{% trans "Balance" %}</label>
-	<div class="col-xs-9">
-		<p class="form-control-static">
-			&euro;{{ transaction.get_balance() }}
-		</p>
-	</div>
-</div>
+		<dt>{% trans "Message" %}</dt>
+		<dd>{{ transaction.message }}</dd>
+
+		<dt>{% trans "Transaction Balance" %}</dt>
+		<dd>&euro;{{ transaction.get_balance() }}</dd>
+
+		<dt>{% trans "Date" %}</dt>
+		<dd>{{ transaction.date|date }}</dd>
+	</dl>
+
 <hr />
 
-<div class="form-group">
-	<label class="col-xs-3 control-label">{% trans "Search invoice" %}</label>
-	<div class="col-xs-6">
-		<div class="input-group">
-			<input type="text" name="search" id="txt_search_invoices" class="form-control" value="{{ transaction.get_message() }}" />
-			<span class="input-group-btn">
-				<button class="btn btn-primary" type="button" onclick="search_invoices();">{% trans "Search" %}</button>
-			</span>
+<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_outgoing_invoices">
+<h5>2. {% trans "Search invoices" %}</h5>
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Search invoice" %}</label>
+		<div class="col-xs-6">
+			<div class="input-group">
+				<input type="text" name="search" id="txt_search_outgoing_invoices" class="form-control" value="{{ transaction.get_message() }}" />
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="button" onclick="search_outgoing_invoices();">{% trans "Search" %}</button>
+				</span>
+			</div>
 		</div>
 	</div>
-</div>
 
-<div class="search_results"></div>
+	<div class="search_results"></div>
+
+<hr />
+</form>
+
+<form action="{{ env.module.get_module_path() }}?action=link_outgoing_invoice" method="post" class="form-horizontal form-condensed" id="link_outgoing_invoice">
+<h5>3. {% trans "Confirm link" %}</h5>
+	<input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
+	<input type="hidden" name="invoice_id" id="invoice_id" value="" />
+
+	<div id="confirm_link_outgoing_invoices">
+		<div class="alert alert-info">{% trans "Please select an invoice in the search result" %}</div>
+	</div>
 
 </form>
+
+
+<script type="text/x-handlebars-template" id="selected-outgoing-invoice">
+	<div class="alert alert-danger hide">
+		{% trans "There is a problem with the amounts you have entered." %} {% trans "The total amount cannot exceed the amount of the transaction" %}.
+	</div>
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Link with invoice" %}</label>
+		<div class="col-xs-3">
+			<div class="input-group">
+				<span class="input-group-addon">&euro;</span>
+				<input type="text" class="form-control" id="link_invoice_amount" style="width: 143px;" name="link_invoice_amount" value="">
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Link with customer" %}</label>
+		<div class="col-xs-4">
+			<div class="input-group">
+				<span class="input-group-addon">&euro;</span>
+				<input type="text" class="form-control" id="link_customer_amount" style="width: 143px;" name="link_customer_amount" value="">
+				<span class="input-group-btn">
+					<button class="btn btn-default" id="customer_amount_0" type="button">€0</button>
+					<button class="btn btn-default" id="customer_amount_max" type="button">{% trans "Max" %}</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-xs-9 col-xs-offset-3">
+			<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+		</div>
+	</div>
+</script>
 
 
 <script type="text/javascript">
@@ -56,8 +96,27 @@
 		search_outgoing_invoices();
 		event.preventDefault();
 	});
+
+	$('#modal_outgoing_invoice').on('shown.bs.modal', function () {
+		search_outgoing_invoices();
+	});
+
+	$('#link_outgoing_invoice').submit(function(event) {
+		invoice_amount = $('#link_invoice_amount').val()
+		customer_amount = $('#link_customer_amount').val()
+		if ({{ transaction.get_balance() }} < invoice_amount + customer_amount) {
+			$('#confirm_link_outgoing_invoices .alert').removeClass('hide');
+			event.preventDefault();
+			return false;
+		} else {
+			$('#confirm_link_outgoing_invoices .alert').addClass('hide');
+			return true;
+		}
+	})
+
 	function search_outgoing_invoices() {
-		$('.search_results').load('/financial/account/transaction?action=search_invoices&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_invoices').val()), function() {
+		url = '/financial/account/transaction?action=search_outgoing_invoices&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_outgoing_invoices').val());
+		$('.search_results').load(url, function() {
 			pager_outgoing_invoices_ajax();
 		});
 	}
@@ -69,10 +128,39 @@
 			url = URI.parse($(this).attr('href'));
 			result = URI.parseQuery(url.query);
 
-			$('.search_results').load('/financial/account/transaction?action=search_invoices&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
+			$('.search_results').load('/financial/account/transaction?action=search_outgoing_invoices&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
 				pager_outgoing_invoices_ajax();
 			});
 		});
+	}
+
+	function table_outgoing_invoices_tr_click(row) {
+		var source = $("#selected-outgoing-invoice").html();
+		$('#confirm_link_outgoing_invoices').html(source)
+		transaction_amount = {{ transaction.get_balance() }};
+		invoice_amount = row.data('amount');
+
+		$('#invoice_id').val(row.data('id'));
+
+		if (transaction_amount <= invoice_amount) {
+			$('#confirm_link_outgoing_invoices #link_invoice_amount').val(transaction_amount);
+			$('#confirm_link_outgoing_invoices #link_customer_amount').val(0);
+		} else {
+			$('#confirm_link_outgoing_invoices #link_invoice_amount').val(invoice_amount);
+			$('#confirm_link_outgoing_invoices #link_customer_amount').val(Math.round( (transaction_amount-invoice_amount) * 100) / 100);
+		}
+
+		$('#customer_amount_0').on('click', function() {
+			console.log('click');
+			$('#confirm_link_outgoing_invoices #link_customer_amount').val(0);
+		})
+
+		$('#customer_amount_max').on('click', function() {
+			$('#confirm_link_outgoing_invoices #link_customer_amount').val(0);
+			transaction_amount = {{ transaction.get_balance() }};
+			max_amount = transaction_amount - $('#confirm_link_outgoing_invoices #link_invoice_amount').val();
+			$('#confirm_link_outgoing_invoices #link_customer_amount').val(max_amount);
+		})
 	}
 </script>
 

@@ -1,0 +1,150 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block header_js %}
+    {% embed "@skeleton-package-crud/javascript.twig" %}{% endembed %}
+{% endblock header_js %}
+
+{% block header_css %}
+    {% embed "@skeleton-package-crud/css.twig" %}{% endembed %}
+{% endblock header_css %}
+
+{% block content %}
+	{% if action == 'setasign_disabled' %}
+		<div class="alert alert-danger">
+			{% trans "SetaSign PDF extractor is not installed." %}
+		</div>
+
+
+		<div class="well">
+			<p class="lead">{% trans "The PDF extractor module will automate the document management." %} {% trans "It can indetify your documents based on predefined fingerprints and uses PHP code to extract data from it." %}</p>
+
+			<p>
+			{% trans "In order to enable this feature, you have to install the SetaPDF-Extractor component." %} {% trans "This component can be purchases from their website:" %} <a href="https://www.setasign.com/products/setapdf-extractor/details/" target="new">https://www.setasign.com/products/setapdf-extractor/details/</a>
+			</p>
+			<p>{% trans "Once obtained, the component needs to be copied into the 'lib/component' directory of this application." %} {% trans "The component will automatically be detected and this module becomes active." %}
+		</div>
+	{% elseif action == 'setasign_enabled' %}
+		<div class="alert alert-success">
+			{% trans "The PDF Extractor has now been enabled." %} {% trans "Please refresh the page to start creating extractors." %}
+		</div>
+	{% else %}
+		{% embed "@skeleton-package-crud/content.twig" with {'object_name': 'Extractor'|trans} %}
+			{% block form_edit %}
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Name" %}</label>
+					<div class="col-xs-9"><input type="text" class="form-control" name="object[name]" value="{{ object.name }}" /></div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Document" %}</label>
+					<div class="col-xs-9">
+						<p class="form-control-static">
+							<span>{{ object.document.file.name }}</span> [ {{ object.document.file.get_human_size() }} ]
+
+							<a href="/administrative/document?action=download&id={{ object.document.id }}">
+								<span class="glyphicon glyphicon-download"></span>
+							</a>
+						</p>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Fingerprints" %}</label>
+					<div class="col-xs-9">
+						<p class="form-control-static">
+						{% set count = object.get_extractor_pdf_fingerprints()|length %}
+						{% if count == 1 %}
+							{% trans "1 fingerprint defined" %}
+						{% else %}
+							{{ count }} {% trans "fingerprints defined" %}
+						{% endif %}
+						( <a href="/setting/extractor/pdf/fingerprint?id={{ object.id }}">{% trans "Manage fingerprints" %}</a> )
+						</p>
+					</div>
+				</div>
+			{% endblock form_edit %}
+
+			{% block page_edit_footer %}
+				<div class="row">
+					<div class="col-xs-6">
+						<pre>
+						{{ object.extract_content() }}
+						</pre>
+					</div>
+
+					<div class="col-xs-6">
+						<div class="alert alert-danger hide" id="eval_error"></div>
+						<div class="form-group">
+							<textarea class="form-control autogrow code" id="eval">{{ object.eval }}</textarea>
+						</div>
+						<div class="form-group">
+							<button type="button" class="btn btn-primary" onclick="run_eval();">{% trans "Run" %}</button>
+						</div>
+
+						<div class="form-group hide" id="parsed_content">
+							<div class="panel panel-default">
+								<div class="panel-heading">{% trans "Data" %}</div>
+								<div class="panel-body" id="data"></div>
+							</div>
+
+							<div class="panel panel-default">
+								<div class="panel-heading">{% trans "Output" %}</div>
+								<div class="panel-body" id="output"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<script type="text/javascript">
+					function run_eval() {
+						data = {
+							'eval': editor.getValue()
+						}
+						$.post('/setting/extractor/pdf?action=eval&id={{ object.id }}', data, function(response) {
+							$("#eval_error").addClass('hide');
+							$('#data').html('');
+							$('#output').html('');
+							if (response.error) {
+								$("#eval_error").html(response.message);
+								$("#eval_error").removeClass('hide');
+								$('#output').html('');
+							} else {
+								$('#output').html('<pre>' + response.message + '</pre>');
+								var table = $('<table/>').addClass('table').addClass('table-alternate');
+
+								$.each(response.data, function(key, value) {
+									table.append('<tr><th>' + key + '</th><td>' + value + '</td></tr>');
+								})
+
+								$('#data').append(table);
+
+							}
+							$('#parsed_content').removeClass('hide');
+						}, 'json');
+					}
+
+
+
+					editor = CodeMirror.fromTextArea(document.getElementById("eval"), {
+						lineNumbers: true,
+						mode: "application/x-httpd-php-open",
+						indentUnit: 4,
+						indentWithTabs: true
+					});
+				</script>
+
+			{% endblock  %}
+
+			{% block  pager_table_head%}
+				<th width="40">{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
+				<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
+			{% endblock pager_table_head %}
+
+			{% block pager_table_row %}
+				<td>{{ object.id }}</td>
+				<td>{{ object.name }}</td>
+			{% endblock pager_table_row %}
+
+		{% endembed %}
+	{% endif %}
+{% endblock content %}

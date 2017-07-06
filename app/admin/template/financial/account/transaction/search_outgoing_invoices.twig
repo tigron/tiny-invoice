@@ -9,13 +9,13 @@
 				<th width="10%" class="text-right">{{ pager.create_header('Price excl'|trans, 'price_excl')|raw }}</th>
 				<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
 				<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
-				<th width="30"></th>
+				<th width="10%">{{ pager.create_header('Balanced'|trans, 'balanced')|raw }}</th>
 			</tr>
 		</thead>
 		<tbody>
 	{% endif %}
 
-	<tr>
+	<tr data-amount="{{ invoice.get_balance() }}" data-id="{{ invoice.id }}">
 		<td>
 			{{ invoice.number }}
 		</td>
@@ -33,10 +33,10 @@
 		{% endif %}
 		</td>
 		<td>
-			{% if transaction.get_balance() > 0 and invoice.get_balance() > 0 %}
-				<a href="/financial/account/transaction?action=link_invoice&id={{ transaction.id }}&invoice_id={{ invoice.id }}">
-					<i class="fa fa-link"></i>
-				</a>
+			{% if invoice.balanced %}
+				<span class="glyphicon glyphicon-ok"></span>
+			{% else %}
+				<span class="glyphicon glyphicon-remove"></span>
 			{% endif %}
 		</td>
 	</tr>
@@ -52,3 +52,17 @@
 {% else %}
 	<div class="alert alert-warning">{% trans "No invoices found" %}</div>
 {% endfor %}
+
+
+<script type="text/javascript">
+	$('#invoice-list tbody tr').on('click', function() {
+		$('#invoice-list tbody tr').removeClass('info');
+		$(this).addClass('info');
+		table_outgoing_invoices_tr_click($(this));
+	});
+</script>
+<style>
+	#invoice-list tr {
+		cursor: pointer;
+	}
+</style>

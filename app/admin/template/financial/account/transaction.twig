@@ -11,7 +11,15 @@
 
 		<form class="form-horizontal form-condensed">
 		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Transaction details" %}</div>
+			<div class="panel-heading">
+				{% trans "Transaction details" %}
+
+				<span class="pull-right">
+					<a href="/setting/extractor/transaction?action=add&transaction_id={{ transaction.id }}">
+						<i class="fa fa-file-text" aria-hidden="true"></i> {% trans "Create extractor" %}
+					</a>
+				</span>
+			</div>
 			<div class="panel-body">
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Transaction ID" %}</label>
@@ -62,6 +70,7 @@
 		</form>
 		{% include "financial/account/transaction/modal.outgoing_invoice.twig" with {id: 'modal_outgoing_invoice', modal_size: 'lg'} %}
 		{% include "financial/account/transaction/modal.incoming_invoice.twig" with {id: 'modal_incoming_invoice', modal_size: 'lg'} %}
+		{% include "financial/account/transaction/modal.bookkeeping_account.twig" with {id: 'modal_bookkeeping_account', modal_size: 'lg'} %}
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -80,6 +89,13 @@
 								<i class="fa fa-arrow-down"></i> {% trans "Incoming invoice" %}
 							</a>
 						</li>
+
+						<li>
+							<a href="#modal_bookkeeping_account" data-toggle="modal">
+								<i class="fa fa-book"></i> {% trans "Bookkeeping account" %}
+							</a>
+						</li>
+
 
 
 					</ul>
@@ -117,11 +133,15 @@
 						<td>
 							{% if balance.linked_object_classname == 'Document_Incoming_Invoice' %}
 								<a href="/administrative/document/invoice?action=edit&id={{ balance.linked_object_id }}">
-									{% trans "Incoming invoice" %} {{ balance.linked_object_id }}
+									{% trans "Incoming invoice" %} {{ balance.linked_object_id }} ({{ balance.get_linked_object().supplier.company }})
 								</a>
 							{% elseif balance.linked_object_classname == 'Invoice' %}
 								<a href="/sales/invoice?action=edit&id={{ balance.linked_object_id }}">
 									{% trans "Invoice" %} {{ balance.linked_object_id }}
+								</a>
+							{% elseif balance.linked_object_classname == 'Bookkeeping_Account' %}
+								<a href="/bookkeeping/account?action=edit&id={{ balance.linked_object_id }}">
+									{% trans "Bookkeeping account" %} {{ balance.get_linked_object().number }} - {{ balance.get_linked_object().name }}
 								</a>
 							{% else %}
 								{{ balance.linked_object_classname }} {{ balance.linked_object_id }}
@@ -147,10 +167,220 @@
 			</div>
 		</div>
 	{% elseif action == 'batch_link' %}
+
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
 			<li class="active">{% trans "Batch link" %}</li>
+		</ol>
+
+		<div class="row">
+			<div class="col-xs-4">
+				<h4>{% trans "Unbalanced transaction" %}</h4>
+				<form class="form-horizontal form-condensed">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						{% trans "Transaction details" %}
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Transaction ID" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">{{ transaction.id }}</p></div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Date" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">{{ transaction.date|date }}</p></div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Bank account" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">{{ transaction.bank_account_statement.bank_account.number }}</p></div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Bank Account Statement" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">{{ transaction.bank_account_statement.sequence }}</p></div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "To" %}/{% trans "From" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">{{ transaction.other_account_name }}</p></div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "To" %}/{% trans "From" %} {% trans "Account" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">{{ transaction.other_account_number }}</p></div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Amount" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">&euro;{{ transaction.amount }}</p></div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Balance" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">&euro;{{ transaction.get_balance() }}</p></div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Message" %}</label>
+							<div class="col-xs-8"><p class="form-control-static">{{ transaction.get_message() }}</p></div>
+						</div>
+					</div>
+				</div>
+				</form>
+
+
+
+			</div>
+
+			<div class="col-xs-8">
+				<h4>{% trans "Possible matches" %}</h4>
+				<div class="row">
+				{% set possible_matches = transaction.get_possible_matches %}
+				{% for match in possible_matches.document_incoming_invoice %}
+					<div class="col-xs-6">
+						<form action="/financial/account/transaction?action=batch_link&transaction_id={{ transaction.id }}" method="post">
+						<input type="hidden" name="classname" value="document_incoming_invoice" />
+						<input type="hidden" name="object_id" value="{{ match.id }}" />
+						<input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
+						<div class="panel panel-default match">
+							<div class="panel-heading">
+								{% trans "Incoming invoice" %} {{ match.id }}
+
+								<div class="pull-right hide">
+									<button class="btn btn-xs btn-primary pull-right" type="submit">{% trans "Link transaction" %}</button>
+								</div>
+							</div>
+							<div class="panel-body">
+								<dl class="dl-horizontal">
+									<dt>{% trans "Name" %}</dt>
+									<dd>{{ match.title }}</dd>
+
+									<dt>{% trans "Date" %}</dt>
+									<dd>{{ match.date|date }}</dd>
+
+									<dt>{% trans "Supplier" %}</dt>
+									<dd>{{ match.supplier.company }}</dd>
+
+									<dt>{% trans "Price" %}</dt>
+									<dd>&euro;{{ match.price_incl }}</dd>
+
+									<dt>{% trans "Message" %}</dt>
+									<dd>
+									{% if match.payment_message != '' %}{{ match.payment_message }}{% else %}{{ match.payment_structured_message }}{% endif %}
+									</dd>
+
+									<dt>{% trans "Paid" %}</dt>
+									<dd>{% if match.paid %}<span class="label label-success">{% trans "Yes" %}</span>{% else %}<span class="label label-danger">{% trans "No" %}</span>{% endif %}</dd>
+								</dl>
+
+								<button class="btn btn-primary hide" type="submit">{% trans "Link transaction" %}</button>
+							</div>
+						</div>
+						</form>
+					</div>
+				{% endfor %}
+
+				{% for match in possible_matches.supplier %}
+					<div class="col-xs-6">
+						<form action="/financial/account/transaction?action=batch_link&transaction_id={{ transaction.id }}" method="post">
+						<input type="hidden" name="classname" value="supplier" />
+						<input type="hidden" name="object_id" value="{{ match.id }}" />
+						<input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
+						<div class="panel panel-default match">
+							<div class="panel-heading">
+								{% trans "Supplier" %} {{ match.id }}
+								<div class="pull-right hide">
+									<button class="btn btn-xs btn-primary pull-right" type="submit">{% trans "Link transaction" %}</button>
+								</div>
+							</div>
+							<div class="panel-body">
+								<dl class="dl-horizontal">
+									<dt>{% trans "Name" %}</dt>
+									<dd>{{ match.company }}</dd>
+
+									<dt>{% trans "IBAN" %}</dt>
+									<dd>{{ match.iban }}</dd>
+								</dl>
+
+
+							</div>
+						</div>
+						</form>
+					</div>
+				{% endfor %}
+
+				{% for match in possible_matches.bookkeeping_account %}
+					<div class="col-xs-6">
+						<form action="/financial/account/transaction?action=batch_link&transaction_id={{ transaction.id }}" method="post">
+						<input type="hidden" name="classname" value="bookkeeping_account" />
+						<input type="hidden" name="object_id" value="{{ match.id }}" />
+						<input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
+						<div class="panel panel-default match">
+							<div class="panel-heading">
+								{% trans "Bookkeeping Account" %} {{ match.id }}
+								<div class="pull-right hide">
+									<button class="btn btn-xs btn-primary pull-right" type="submit">{% trans "Link transaction" %}</button>
+								</div>
+							</div>
+							<div class="panel-body">
+								<dl class="dl-horizontal">
+									<dt>{% trans "Number" %}</dt>
+									<dd>{{ match.number }}</dd>
+
+									<dt>{% trans "Name" %}</dt>
+									<dd>{{ match.name }}</dd>
+								</dl>
+
+
+							</div>
+						</div>
+						</form>
+					</div>
+				{% endfor %}
+
+				<div class="col-xs-6">
+					<form action="/financial/account/transaction?action=batch_link&transaction_id={{ transaction.id }}&start={{ transaction.id }}" method="post">
+					<div class="panel panel-default match">
+						<div class="panel-heading">
+							{% trans "Skip transaction" %}
+							<div class="pull-right hide">
+								<button class="btn btn-xs btn-primary pull-right" type="submit">{% trans "Skip" %}</button>
+							</div>
+						</div>
+						<div class="panel-body">
+							<p><strong>{% trans "Skip this transaction and proceed." %}</strong></p>
+							<p>{% trans "Please use this option if no possible matches can be found or if the available options are incorrect." %}</p>
+
+
+						</div>
+					</div>
+					</form>
+				</div>
+
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			$('.match').on('click', function() {
+				$('.match .pull-right').addClass('hide');
+				$('.match').removeClass('panel-primary');
+				$(this).find('.pull-right').removeClass('hide');
+				$(this).addClass('panel-primary');
+			});
+
+
+		</script>
+
+
+	{% elseif action == 'automatic_link' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
+			<li class="active">{% trans "Automatic link" %}</li>
 		</ol>
 		<div class="form-horizontal">
 		{% for transaction in transactions %}
@@ -191,7 +421,7 @@
 
 					<div class="form-group">
 						<div class="col-xs-9 col-xs-offset-3">
-							<button type="submit" class="btn btn-primary" id="btn_batch_link" onclick="batch_link();">
+							<button type="submit" class="btn btn-primary" id="btn_automatic_link" onclick="automatic_link();">
 								{% trans "Link transactions" %}
 							</button>
 						</div>
@@ -220,8 +450,8 @@
 				$('#total_amount').html('&euro;' + Math.round(total*100)/100 );
 			}
 
-			function batch_link() {
-				$("#btn_batch_link").attr("disabled", true);
+			function automatic_link() {
+				$("#btn_automatic_link").attr("disabled", true);
 				$('tbody tr').each(function() {
 					if ( $(this).find('input[type=checkbox]').is(':checked') ){
 						id = $(this).data('id');
@@ -230,7 +460,7 @@
 							id: id
 						};
 
-						$.post('/financial/account/transaction?action=link_transaction', data, function(data) {
+						$.post('/financial/account/transaction?action=automatic_link_transaction', data, function(data) {
 							if (data.success) {
 								$('tr[data-id=' + data.id + ']').find('.status').html('<i class="fa fa-check"></i>');
 							} else {
@@ -305,6 +535,10 @@
 			<div class="panel-heading">
 				{{ base.pager_count(pager.item_count) }}
 				<div class="pull-right">
+					<a href="/financial/account/transaction?action=automatic_link">
+						<i class="fa fa-magic"></i> {% trans "Automatic link" %}
+					</a>
+					-
 					<a href="/financial/account/transaction?action=batch_link">
 						<i class="fa fa-link"></i> {% trans "Batch link" %}
 					</a>
@@ -317,7 +551,7 @@
 					<thead>
 						<tr>
 							<th>#</th>
-							<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
+							<th>{{ pager.create_header('Date'|trans, 'bank_account_statement_transaction.date')|raw }}</th>
 							<th width="180">{{ pager.create_header('Bank Account Statement'|trans, 'bank_account_statement.id')|raw }}</th>
 							<th>{{ pager.create_header('Amount'|trans, 'amount')|raw }}</th>
 							<th width="40%">{{ pager.create_header('Message'|trans, 'message')|raw }}</th>

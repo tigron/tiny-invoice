@@ -26,6 +26,17 @@ class Bank_Account_Statement_Transaction_Balance {
 	}
 
 	/**
+	 * Get linked object
+	 *
+	 * @access public
+	 * @return Object $object
+	 */
+	public function get_linked_object() {
+		$classname = $this->linked_object_classname;
+		return $classname::get_by_id($this->linked_object_id);
+	}
+
+	/**
 	 * Get by bank_account_statement sequence_number
 	 *
 	 * @access public

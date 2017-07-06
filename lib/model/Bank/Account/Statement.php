@@ -91,7 +91,7 @@ class Bank_Account_Statement {
 	 */
 	public static function get_by_bank_account(Bank_Account $bank_account) {
 		$db = Database::get();
-		$ids = $db->get_column('SELECT id FROM bank_account_statement WHERE bank_account_id=? ORDER BY date ASC', [ $bank_account->id ]);
+		$ids = $db->get_column('SELECT id FROM bank_account_statement WHERE bank_account_id=? ORDER BY original_situation_date ASC', [ $bank_account->id ]);
 
 		$statements = [];
 		foreach ($ids as $id) {

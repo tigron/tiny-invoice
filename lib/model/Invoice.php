@@ -368,4 +368,24 @@ class Invoice {
 		}
 		return $invoices;
 	}
+
+	/**
+	 * Get by OGM
+	 *
+	 * @access public
+	 * @param string $ogm
+	 * @return Invoice $invoice
+	 */
+	public static function get_by_ogm($ogm) {
+		preg_match("/\+\+\+(\d{3}\/\d{4}\/\d{5})\+\+\+/", $ogm, $output_array);
+		if (count($output_array) == 0) {
+			throw new Exception('This is an incorrect ogm');
+		}
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM invoice WHERE ogm=?', [ $ogm ]);
+		if ($id === null) {
+			throw new Exception('No invoice found with ogm "' . $ogm . '"');
+		}
+		return self::get_by_id($id);
+	}
 }
