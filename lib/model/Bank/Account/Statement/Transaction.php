@@ -130,7 +130,7 @@ class Bank_Account_Statement_Transaction {
 				$this->link_supplier($link_information['link_to'], $link_information['amount']);
 			} elseif ($classname == 'customer_contact') {
 				$this->link_customer_contact($link_information['link_to'], $link_information['amount']);
-			} elseif ($classname == 'document') {
+			} elseif ($classname == 'document_incoming_invoice') {
 				$this->link_document($link_information['link_to'], $link_information['amount']);
 			} elseif ($classname == 'bookkeeping_account') {
 				$this->link_bookkeeping_account($link_information['link_to'], $link_information['amount']);
