@@ -187,7 +187,7 @@ class Web_Module_Administrative_Document extends Module {
 			/**
 			 * Contract
 			 */
-			if (isset($_POST['contract_for'])) {
+			if (isset($_POST['contract_for']) and $_POST['document']['classname'] == 'Document_Contract') {
 
 				if ($_POST['contract_for'] == 'supplier') {
 					$_POST['document']['customer_id'] = 0;
@@ -199,7 +199,7 @@ class Web_Module_Administrative_Document extends Module {
 			/**
 			 * Documentation
 			 */
-			if (isset($_POST['documentation_for'])) {
+			if (isset($_POST['documentation_for']) and $_POST['document']['classname'] == 'Document_Documentation') {
 
 				if ($_POST['documentation_for'] == 'supplier') {
 					$_POST['document']['customer_id'] = 0;
