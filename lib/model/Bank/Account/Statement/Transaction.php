@@ -88,14 +88,15 @@ class Bank_Account_Statement_Transaction {
 	 */
 	public function check_links() {
 		$total_amount = 0;
+
 		foreach ($this->link_information as $link_information) {
 			$total_amount += $link_information['amount'];
 		}
 
-		if (bccomp($total_amount, $this->get_balance(), 3) == 1) {
-			return false;
+		if (bccomp($total_amount, $this->get_balance(), 3) == 0) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -312,7 +313,6 @@ class Bank_Account_Statement_Transaction {
 			}
 		}
 
-
 		$extractors = Extractor_Bank_Account_Statement_Transaction::get_all();
 		foreach ($extractors as $extractor) {
 			if (!$extractor->match($this)) {
@@ -347,10 +347,12 @@ class Bank_Account_Statement_Transaction {
 	 */
 	private function automatic_link_extractor() {
 		$extractors = Extractor_Bank_Account_Statement_Transaction::get_all();
+
 		foreach ($extractors as $extractor) {
 			if (!$extractor->match($this)) {
 				continue;
 			}
+
 			try {
 				$data = $extractor->extract_data($this);
 				if (!$this->check_links()) {
