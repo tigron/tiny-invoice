@@ -102,8 +102,8 @@
 	});
 
 	$('#link_outgoing_invoice').submit(function(event) {
-		invoice_amount = $('#link_invoice_amount').val()
-		customer_amount = $('#link_customer_amount').val()
+		invoice_amount = parseFloat($('#link_invoice_amount').val());
+		customer_amount = parseFloat($('#link_customer_amount').val());
 		if ({{ transaction.get_balance() }} < invoice_amount + customer_amount) {
 			$('#confirm_link_outgoing_invoices .alert').removeClass('hide');
 			event.preventDefault();
