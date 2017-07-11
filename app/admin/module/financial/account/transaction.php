@@ -259,7 +259,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 	public function display_link_incoming_invoice() {
 		$transaction = Bank_Account_Statement_Transaction::get_by_id($_POST['transaction_id']);
 		$document = Document::get_by_id($_POST['document_id']);
-		$transaction->link_document($document, $_POST['link_incoming_invoice_amount']);
+		$transaction->link_document($document, $_POST['link_incoming_invoice_amount']*-1);
 
 		if (isset($_POST['link_supplier_amount']) and $_POST['link_supplier_amount'] != 0) {
 			$transaction->link_supplier($document->supplier, $_POST['link_supplier_amount']);
