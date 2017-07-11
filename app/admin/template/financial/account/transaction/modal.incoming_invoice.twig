@@ -142,8 +142,8 @@
 
 		$('#document_id').val(row.data('id'));
 
-		if (transaction_amount*-1 <= invoice_amount && transaction_amount < 0) {
-			$('#confirm_link_incoming_invoices #link_incoming_invoice_amount').val(transaction_amount);
+		if (transaction_amount >= invoice_amount*-1 && transaction_amount < 0) {
+			$('#confirm_link_incoming_invoices #link_incoming_invoice_amount').val(transaction_amount*-1);
 			$('#confirm_link_incoming_invoices #link_supplier_amount').val(0);
 		} else {
 			$('#confirm_link_incoming_invoices #link_incoming_invoice_amount').val(invoice_amount);
