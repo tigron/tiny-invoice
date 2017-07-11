@@ -38,7 +38,7 @@
 		</div>
 	</div>
 
-	<div class="search_results"></div>
+	<div class="incoming_invoice_search_results"></div>
 
 <hr />
 </form>
@@ -115,7 +115,7 @@
 
 	function search_incoming_invoices() {
 		url = '/financial/account/transaction?action=search_incoming_invoices&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_incoming_invoices').val());
-		$('.search_results').load(url, function() {
+		$('.incoming_invoice_search_results').load(url, function() {
 			pager_incoming_invoices_ajax();
 		});
 	}
@@ -127,7 +127,7 @@
 			url = URI.parse($(this).attr('href'));
 			result = URI.parseQuery(url.query);
 
-			$('.search_results').load('/financial/account/transaction?action=search_incoming_invoices&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
+			$('.incoming_invoice_search_results').load('/financial/account/transaction?action=search_incoming_invoices&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
 				pager_incoming_invoices_ajax();
 			});
 		});

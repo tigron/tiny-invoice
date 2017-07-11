@@ -25,6 +25,16 @@ class Bank_Account {
 	}
 
 	/**
+	 * Get last bank_account_statement
+	 *
+	 * @access public
+	 * @return Bank_Account_Statement $bank_account_statement
+	 */
+	public function get_last_bank_account_statement() {
+		return Bank_Account_Statement::get_last_by_bank_account($this);
+	}
+
+	/**
 	 * Get by identifier
 	 *
 	 * @access public

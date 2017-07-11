@@ -1,5 +1,5 @@
 {% extends "_default/modal.base.twig" %}
-{% block header %}{% trans "Book incoming invoice" %}{% endblock header %}
+{% block header %}{% trans "Book bookkeeping account" %}{% endblock header %}
 
 {% block body %}
 
@@ -27,7 +27,7 @@
 <form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_bookkeeping_accounts">
 <h5>2. {% trans "Search bookkeeping accounts" %}</h5>
 	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Search invoice" %}</label>
+		<label class="col-xs-3 control-label">{% trans "Search bookkeeping account" %}</label>
 		<div class="col-xs-6">
 			<div class="input-group">
 				<input type="text" name="search" id="txt_search_bookkeeping_accounts" class="form-control" value="{{ transaction.get_message() }}" />
@@ -38,7 +38,7 @@
 		</div>
 	</div>
 
-	<div class="search_results"></div>
+	<div class="bookkeeping_account_search_results"></div>
 
 <hr />
 </form>
@@ -49,7 +49,7 @@
 	<input type="hidden" name="bookkeeping_account_id" id="bookkeeping_account_id" value="" />
 
 	<div id="confirm_link_bookkeeping_accounts">
-		<div class="alert alert-info">{% trans "Please select an invoice in the search result" %}</div>
+		<div class="alert alert-info">{% trans "Please select a bookkeeping account in the search result" %}</div>
 	</div>
 
 </form>
@@ -108,7 +108,7 @@
 
 	function search_bookkeeping_accounts() {
 		url = '/financial/account/transaction?action=search_bookkeeping_accounts&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_bookkeeping_accounts').val());
-		$('.search_results').load(url, function() {
+		$('.bookkeeping_account_search_results').load(url, function() {
 			pager_bookkeeping_accounts_ajax();
 		});
 	}
@@ -120,7 +120,7 @@
 			url = URI.parse($(this).attr('href'));
 			result = URI.parseQuery(url.query);
 
-			$('.search_results').load('/financial/account/transaction?action=search_bookkeeping_accounts&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
+			$('.bookkeeping_account_search_results').load('/financial/account/transaction?action=search_bookkeeping_accounts&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
 				pager_bookkeeping_accounts_ajax();
 			});
 		});

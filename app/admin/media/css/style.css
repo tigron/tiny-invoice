@@ -187,3 +187,10 @@ body {
 	height: 250px;
 	cursor: pointer;
 }
+
+/**
+ * Panels
+ */
+.panel-link {
+	cursor: pointer;
+}

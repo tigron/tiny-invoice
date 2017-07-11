@@ -37,20 +37,8 @@ class Web_Module_Financial_Account extends Module {
 	public function display() {
 		$template = Template::Get();
 
-		$pager = new Pager('bank_account');
-
-		$pager->add_sort_permission('number');
-		$pager->add_sort_permission('name');
-
-		if (isset($_POST['search'])) {
-			$pager->set_search($_POST['search']);
-		}
-		$pager->page();
-
-		$template = Template::Get();
-		$template->assign('pager', $pager);
-
-
+		$bank_accounts = Bank_Account::get_all();
+		$template->assign('bank_accounts', $bank_accounts);
 	}
 
 	/**
