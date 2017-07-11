@@ -101,9 +101,10 @@
 	});
 
 	$('#link_incoming_invoice').submit(function(event) {
-		invoice_amount = parseFloat($('#link_invoice_amount').val());
+		invoice_amount = parseFloat($('#link_incoming_invoice_amount').val());
 		supplier_amount = parseFloat($('#link_supplier_amount').val());
-		if ({{ transaction.get_balance() }} < invoice_amount + supplier_amount) {
+
+		if ({{ transaction.get_balance() }} > (invoice_amount*-1) + (supplier_amount*-1)) {
 			$('#confirm_link_incoming_invoices .alert').removeClass('hide');
 			event.preventDefault();
 			return false;
@@ -138,8 +139,6 @@
 		$('#confirm_link_incoming_invoices').html(source)
 		transaction_amount = {{ transaction.get_balance() }};
 		invoice_amount = row.data('amount');
-		console.log(transaction_amount);
-		console.log(invoice_amount);
 
 		$('#document_id').val(row.data('id'));
 
@@ -152,7 +151,6 @@
 		}
 
 		$('#supplier_amount_0').on('click', function() {
-			console.log('click');
 			$('#confirm_link_incoming_invoices #link_supplier_amount').val(0);
 		})
 

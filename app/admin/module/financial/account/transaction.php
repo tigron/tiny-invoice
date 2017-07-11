@@ -262,7 +262,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$transaction->link_document($document, $_POST['link_incoming_invoice_amount']*-1);
 
 		if (isset($_POST['link_supplier_amount']) and $_POST['link_supplier_amount'] != 0) {
-			$transaction->link_supplier($document->supplier, $_POST['link_supplier_amount']);
+			$transaction->link_supplier($document->supplier, $_POST['link_supplier_amount']*-1);
 		}
 		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
 	}
