@@ -73,7 +73,7 @@ class Document_Incoming_Creditnote extends Document {
 
 		$required_fields = [ 'supplier_id', 'expiration_date', 'price_incl', 'price_excl' ];
 		foreach ($required_fields as $required_field) {
-			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
+			if (!isset($this->local_details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
 			}
 		}

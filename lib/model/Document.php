@@ -291,7 +291,7 @@ class Document {
 		if (file_exists(\Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg')) {
 			$file = File::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(\Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg'));
 			$this->preview_file_id = $file->id;
-			$this->save();
+			$this->save(false);
 			unlink(\Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg');
 		}
 	}
