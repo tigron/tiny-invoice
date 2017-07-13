@@ -208,50 +208,73 @@
 
 		{% include 'sales/invoice/modal.transfer.twig' with {id: 'add_transfer', 'invoice': invoice}  %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				{% trans "Payments" %}
-				<div class="pull-right">
-					<a href="#add_transfer" data-toggle="modal">
-						<span class="glyphicon glyphicon-plus-sign"></span> {% trans "Add Payment" %}
-					</a>
-				</div>
-			</div>
-			<div class="panel-body">
-			{% for transfer in invoice.get_transfers() %}
-				{% if loop.first %}
-					<table class="table table-hover table-alternate">
-						<thead>
-							<tr>
-								<th width="15%">{% trans "Date" %}</th>
-								<th>{% trans "Type" %}</th>
-								<th>{% trans "Amount" %}</th>
-							</tr>
-						</thead>
-						<tbody>
-				{% endif %}
-				<tr>
-					<td>{{ transfer.created|date }}</td>
-					<td>
-						{% if transfer.type == 1 %}
-							{% trans "Manually added payment" %}
-						{% elseif transfer.type == 2 %}
-							{% trans "Paid via creditnote" %}
-						{% elseif transfer.type == 10 %}
-							{% trans "Paid with wiretransfer" %}
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						{% trans "Payments" %}
+						<div class="pull-right">
+							<a href="#add_transfer" data-toggle="modal">
+								<span class="glyphicon glyphicon-plus-sign"></span> {% trans "Add Payment" %}
+							</a>
+						</div>
+					</div>
+					<div class="panel-body">
+					{% for transfer in invoice.get_transfers() %}
+						{% if loop.first %}
+							<table class="table table-hover table-alternate">
+								<thead>
+									<tr>
+										<th width="5%">{% trans "Date" %}</th>
+										<th>&nbsp;</th>
+										<th>{% trans "Message" %}</th>
+										<th>{% trans "To" %}</th>
+										<th>{% trans "Account number" %}</th>
+										<th>{% trans "Amount" %}</th>
+									</tr>
+								</thead>
+								<tbody>
 						{% endif %}
-					</td>
 
-
-					<td>&euro;{{ transfer.amount|number_format }}</td>
-				</tr>
-				{% if loop.last %}
-					</tbody>
-					</table>
-				{% endif %}
-			{% else %}
-				<p>{% trans "No payments added yet" %}</p>
-			{% endfor %}
+						{% if transfer.bank_account_statement_transaction_balance_id > 0 %}
+							{% set transaction = transfer.bank_account_statement_transaction_balance.bank_account_statement_transaction %}
+							<tr>
+								<td>{{ transaction.date|date }}</td>
+								<td>
+									<a href="/financial/account/transaction?action=edit&id={{ transaction.id }}">
+										{% trans "Transaction" %} {{ transaction.id }}
+									</a>
+								</td>
+								<td>{{ transaction.get_message()|truncate(120) }}</td>
+								<td>{{ transaction.other_account_name }}</td>
+								<td>{{ transaction.other_account_number }}</td>
+								<td>&euro;{{ transfer.bank_account_statement_transaction_balance.amount|number_format }}</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td>{{ transfer.created|date }}</td>
+								<td colspan="4">
+									{% trans "Manual added payment" %}
+								</td>
+								<td>&euro;{{ transfer.amount|number_format }}</td>
+							</tr>
+						{% endif %}
+						{% if loop.last %}
+							</tbody>
+							<thead>
+								<tr>
+									<th colspan="5">{% trans "Total" %}</th>
+									<th>&euro;{{ invoice.get_transfer_amount()|number_format }}</th>
+								</tr>
+							</thead>
+							</table>
+						{% endif %}
+					{% else %}
+						<p>{% trans "No payments added yet" %}</p>
+					{% endfor %}
+					</div>
+				</div>
 			</div>
 		</div>
 

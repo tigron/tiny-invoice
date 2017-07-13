@@ -24,8 +24,8 @@
 
 <hr />
 
-<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_outgoing_invoices">
 <h5>2. {% trans "Search invoices" %}</h5>
+	<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_outgoing_invoices">
 	<div class="form-group">
 		<label class="col-xs-3 control-label">{% trans "Search invoice" %}</label>
 		<div class="col-xs-6">
@@ -37,11 +37,12 @@
 			</div>
 		</div>
 	</div>
+	</form>
 
 	<div class="outgoing_invoice_search_results"></div>
 
 <hr />
-</form>
+
 
 <form action="{{ env.module.get_module_path() }}?action=link_outgoing_invoice" method="post" class="form-horizontal form-condensed" id="link_outgoing_invoice">
 <h5>3. {% trans "Confirm link" %}</h5>
@@ -65,6 +66,7 @@
 			<div class="input-group">
 				<span class="input-group-addon">&euro;</span>
 				<input type="text" class="form-control" id="link_invoice_amount" style="width: 143px;" name="link_invoice_amount" value="">
+				<span class="input-group-addon" id="max_outgoing_invoice_amount"></span>
 			</div>
 		</div>
 	</div>
@@ -101,18 +103,6 @@
 		search_outgoing_invoices();
 	});
 
-	$('#link_outgoing_invoice').submit(function(event) {
-		invoice_amount = parseFloat($('#link_invoice_amount').val());
-		customer_amount = parseFloat($('#link_customer_amount').val());
-		if ({{ transaction.get_balance() }} < invoice_amount + customer_amount) {
-			$('#confirm_link_outgoing_invoices .alert').removeClass('hide');
-			event.preventDefault();
-			return false;
-		} else {
-			$('#confirm_link_outgoing_invoices .alert').addClass('hide');
-			return true;
-		}
-	})
 
 	function search_outgoing_invoices() {
 		url = '/financial/account/transaction?action=search_outgoing_invoices&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_outgoing_invoices').val());
@@ -134,34 +124,62 @@
 		});
 	}
 
+
+	var transaction_amount;
+	var invoice_amount;
+
+	function outgoing_invoice_fill_up() {
+		if (transaction_amount <= invoice_amount && transaction_amount > 0) {
+			$('#confirm_link_outgoing_invoices #link_invoice_amount').val(transaction_amount);
+			$('#confirm_link_outgoing_invoices #link_customer_amount').val(0);
+		} else {
+			$('#confirm_link_outgoing_invoices #link_invoice_amount').val(invoice_amount);
+			$('#confirm_link_outgoing_invoices #link_customer_amount').val( (Math.round( (transaction_amount-invoice_amount) * 100) / 100));
+		}
+	}
+
 	function table_outgoing_invoices_tr_click(row) {
 		var source = $("#selected-outgoing-invoice").html();
 		$('#confirm_link_outgoing_invoices').html(source)
 		transaction_amount = {{ transaction.get_balance() }};
 		invoice_amount = row.data('amount');
 
+		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').html('/ €' + invoice_amount);
 		$('#invoice_id').val(row.data('id'));
 
-		if (transaction_amount <= invoice_amount) {
-			$('#confirm_link_outgoing_invoices #link_invoice_amount').val(transaction_amount);
-			$('#confirm_link_outgoing_invoices #link_customer_amount').val(0);
-		} else {
-			$('#confirm_link_outgoing_invoices #link_invoice_amount').val(invoice_amount);
-			$('#confirm_link_outgoing_invoices #link_customer_amount').val(Math.round( (transaction_amount-invoice_amount) * 100) / 100);
-		}
-
 		$('#customer_amount_0').on('click', function() {
-			console.log('click');
+			$(this).addClass('active');
+			$('#customer_amount_max').removeClass('active');
+			outgoing_invoice_fill_up();
 			$('#confirm_link_outgoing_invoices #link_customer_amount').val(0);
 		})
 
 		$('#customer_amount_max').on('click', function() {
-			$('#confirm_link_outgoing_invoices #link_customer_amount').val(0);
-			transaction_amount = {{ transaction.get_balance() }};
-			max_amount = transaction_amount - $('#confirm_link_outgoing_invoices #link_invoice_amount').val();
-			$('#confirm_link_outgoing_invoices #link_customer_amount').val(max_amount);
+			outgoing_invoice_fill_up()
+			$(this).addClass('active');
+			$('#customer_amount_0').removeClass('active');
 		})
+
+		$('#customer_amount_0').click();
 	}
+
+	$('#link_outgoing_invoice').submit(function(event) {
+		for_invoice = parseFloat($('#confirm_link_outgoing_invoices #link_invoice_amount').val());
+		for_customer = parseFloat($('#confirm_link_outgoing_invoices #link_customer_amount').val());
+
+		if (transaction_amount < for_invoice + for_customer) {
+			$('#confirm_link_outgoing_invoices .alert').removeClass('hide');
+			event.preventDefault();
+			return false;
+		} else if (for_invoice > invoice_amount) {
+			$('#confirm_link_outgoing_invoices .alert').removeClass('hide');
+			event.preventDefault();
+			return false;
+		} else {
+			$('#confirm_link_outgoing_invoices .alert').addClass('hide');
+			return true;
+		}
+	})
 </script>
 
 {% endblock body %}

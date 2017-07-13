@@ -76,6 +76,18 @@ class Web_Module_Financial_Account_Transaction extends Module {
 	}
 
 	/**
+	 * Delete balance
+	 *
+	 * @access public
+	 */
+	public function display_delete_balance() {
+		$bank_account_statement_transaction_balance = Bank_Account_Statement_Transaction_Balance::get_by_id($_GET['id']);
+		$bank_account_statement_transaction_balance->delete();
+
+		Session::redirect('/financial/account/transaction?action=edit&id=' . $bank_account_statement_transaction_balance->bank_account_statement_transaction_id);
+	}
+
+	/**
 	 * Search invoices
 	 *
 	 * @access public
@@ -96,6 +108,8 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		if (isset($_GET['search'])) {
 			$pager->set_search($_GET['search']);
 		}
+		$pager->set_sort('created');
+		$pager->set_direction('desc');
 		$pager->page();
 		$template = Template::get();
 		$template->assign('pager', $pager);
@@ -125,7 +139,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$pager->add_join('supplier', 'id', 'document_incoming_invoice.supplier_id');
 
 		$pager->add_sort_permission('id');
-		$pager->add_sort_permission('date');
+		$pager->add_sort_permission('document.date');
 		$pager->add_sort_permission('title');
 		$pager->add_sort_permission('paid');
 		$pager->add_sort_permission('document_incoming_invoice.accounting_identifier');
@@ -133,7 +147,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$pager->add_sort_permission('supplier.company');
 		$pager->add_sort_permission('document_incoming_invoice.price_incl');
 
-		$pager->set_sort('date');
+		$pager->set_sort('document.date');
 		$pager->set_direction('DESC');
 		$pager->page();
 		$template = Template::get();
@@ -142,6 +156,44 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$transaction = Bank_Account_Statement_Transaction::get_by_id($_GET['transaction_id']);
 		$template->assign('transaction', $transaction);
 		$this->template = 'financial/account/transaction/search_incoming_invoices.twig';
+	}
+
+	/**
+	 * Search invoices
+	 *
+	 * @access public
+	 */
+	public function display_search_incoming_creditnotes() {
+		\Skeleton\Pager\Config::$items_per_page = 10;
+		$pager = new Pager('document');
+
+		if (isset($_GET['search'])) {
+			$pager->set_search($_GET['search']);
+		}
+
+		// Fix for pager
+		$pager->add_condition('document_incoming_creditnote.document_id', '>', 0);
+		$pager->add_condition('classname', 'Document_Incoming_Creditnote');
+		$pager->add_join('document_incoming_creditnote', 'document_id', 'document.id');
+		$pager->add_join('supplier', 'id', 'document_incoming_creditnote.supplier_id');
+
+		$pager->add_sort_permission('id');
+		$pager->add_sort_permission('date');
+		$pager->add_sort_permission('title');
+		$pager->add_sort_permission('paid');
+		$pager->add_sort_permission('document_incoming_creditnote.accounting_identifier');
+		$pager->add_sort_permission('supplier.company');
+		$pager->add_sort_permission('document_incoming_creditnote.price_incl');
+
+		$pager->set_sort('document.date');
+		$pager->set_direction('DESC');
+		$pager->page();
+		$template = Template::get();
+		$template->assign('pager', $pager);
+
+		$transaction = Bank_Account_Statement_Transaction::get_by_id($_GET['transaction_id']);
+		$template->assign('transaction', $transaction);
+		$this->template = 'financial/account/transaction/search_incoming_creditnotes.twig';
 	}
 
 	/**
@@ -162,7 +214,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$pager->add_sort_permission('name');
 
 		$pager->set_sort('number');
-		$pager->set_direction('DESC');
+		$pager->set_direction('ASC');
 		$pager->page();
 		$template = Template::get();
 		$template->assign('pager', $pager);
@@ -243,7 +295,9 @@ class Web_Module_Financial_Account_Transaction extends Module {
 	public function display_link_outgoing_invoice() {
 		$transaction = Bank_Account_Statement_Transaction::get_by_id($_POST['transaction_id']);
 		$invoice = Invoice::get_by_id($_POST['invoice_id']);
-		$transaction->link_invoice($invoice, $_POST['link_invoice_amount']);
+		if ($_POST['link_invoice_amount'] != 0) {
+			$transaction->link_invoice($invoice, $_POST['link_invoice_amount']);
+		}
 
 		if (isset($_POST['link_customer_amount']) and $_POST['link_customer_amount'] != 0) {
 			$transaction->link_customer_contact($invoice->customer_contact, $_POST['link_customer_amount']);
@@ -259,10 +313,30 @@ class Web_Module_Financial_Account_Transaction extends Module {
 	public function display_link_incoming_invoice() {
 		$transaction = Bank_Account_Statement_Transaction::get_by_id($_POST['transaction_id']);
 		$document = Document::get_by_id($_POST['document_id']);
-		$transaction->link_document($document, $_POST['link_incoming_invoice_amount']*-1);
+		if ($_POST['link_incoming_invoice_amount'] != 0) {
+			$transaction->link_document($document, $_POST['link_incoming_invoice_amount']*-1);
+		}
 
 		if (isset($_POST['link_supplier_amount']) and $_POST['link_supplier_amount'] != 0) {
 			$transaction->link_supplier($document->supplier, $_POST['link_supplier_amount']*-1);
+		}
+		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
+	}
+
+	/**
+	 * Link document
+	 *
+	 * @access public
+	 */
+	public function display_link_incoming_creditnote() {
+		$transaction = Bank_Account_Statement_Transaction::get_by_id($_POST['transaction_id']);
+		$document = Document::get_by_id($_POST['document_id']);
+		if ($_POST['link_incoming_creditnote_amount'] != 0) {
+			$transaction->link_document($document, $_POST['link_incoming_creditnote_amount']);
+		}
+
+		if (isset($_POST['link_supplier_amount']) and $_POST['link_supplier_amount'] != 0) {
+			$transaction->link_supplier($document->supplier, $_POST['link_supplier_amount']);
 		}
 		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
 	}
@@ -275,7 +349,9 @@ class Web_Module_Financial_Account_Transaction extends Module {
 	public function display_link_bookkeeping_account() {
 		$transaction = Bank_Account_Statement_Transaction::get_by_id($_POST['transaction_id']);
 		$bookkeeping_account = Bookkeeping_Account::get_by_id($_POST['bookkeeping_account_id']);
-		$transaction->link_bookkeeping_account($bookkeeping_account, $_POST['link_bookkeeping_account_amount']);
+		if ($_POST['link_bookkeeping_account_amount'] != 0) {
+			$transaction->link_bookkeeping_account($bookkeeping_account, $_POST['link_bookkeeping_account_amount']);
+		}
 
 		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
 	}

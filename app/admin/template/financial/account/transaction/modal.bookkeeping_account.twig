@@ -24,8 +24,8 @@
 <hr />
 
 
-<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_bookkeeping_accounts">
 <h5>2. {% trans "Search bookkeeping accounts" %}</h5>
+	<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_bookkeeping_accounts">
 	<div class="form-group">
 		<label class="col-xs-3 control-label">{% trans "Search bookkeeping account" %}</label>
 		<div class="col-xs-6">
@@ -37,11 +37,10 @@
 			</div>
 		</div>
 	</div>
-
+	</form>
 	<div class="bookkeeping_account_search_results"></div>
-
 <hr />
-</form>
+
 
 <form action="{{ env.module.get_module_path() }}?action=link_bookkeeping_account" method="post" class="form-horizontal form-condensed" id="link_bookkeeping_account">
 <h5>3. {% trans "Confirm link" %}</h5>
@@ -134,11 +133,12 @@
 
 		$('#bookkeeping_account_id').val(row.data('id'));
 
-		$('#confirm_link_bookkeeping_accounts #link_bookkeeping_account_amount').val(transaction_amount);
-
 		$('#link_bookkeeping_account_amount_max').on('click', function() {
 			$('#confirm_link_bookkeeping_accounts #link_bookkeeping_account_amount').val(transaction_amount);
+			$(this).addClass('active');
 		})
+
+		$('#link_bookkeeping_account_amount_max').click();
 	}
 </script>
 

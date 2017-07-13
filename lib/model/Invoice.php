@@ -139,11 +139,25 @@ class Invoice {
 	public function add_transfer(Transfer $transfer) {
 		$transfer->invoice_id = $this->id;
 		$transfer->save();
+		Log::create('Transfer added', $this);
+		$this->check_paid();
+	}
 
+	/**
+	 * Check paid
+	 *
+	 * @access public
+	 */
+	public function check_paid() {
 		if (bcsub($this->get_price_incl(), $this->get_amount_paid(), 2) <= 0) {
 			$this->mark_paid();
+		} else {
+			if ($this->paid) {
+				$this->paid = false;
+				$this->save();
+				Log::create('Invoice marked as unpaid', $this);
+			}
 		}
-		Log::create('Transfer added', $this);
 	}
 
 	/**

@@ -176,7 +176,7 @@ class Document_Incoming_Creditnote extends Document {
 	 * @access public
 	 */
 	public function get_balance() {
-		return $this->price_incl + $this->get_transaction_amount();
+		return $this->price_incl - $this->get_transaction_amount();
 	}
 
 	/**

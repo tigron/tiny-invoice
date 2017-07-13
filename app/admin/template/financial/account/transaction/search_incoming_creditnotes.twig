@@ -4,7 +4,7 @@
 		<thead>
 			<tr>
 				<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
-				<th>{{ pager.create_header('Date'|trans, 'document.date')|raw }}</th>
+				<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
 				<th>{{ pager.create_header('Accounting ID'|trans, 'document_incoming_invoice.accounting_identifier')|raw }}</th>
 				<th>{{ pager.create_header('Expiration date'|trans, 'document_incoming_invoice.expiration_date')|raw }}</th>
 				<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
@@ -18,7 +18,7 @@
 		<tbody>
 	{% endif %}
 
-	<tr {% if date(document.expiration_date) < date() and not document.paid%}class="danger"{% endif %} data-amount="{{ document.get_balance() }}" data-id="{{ document.id }}">
+	<tr data-amount="{{ document.get_balance() }}" data-id="{{ document.id }}">
 		<td>{{ document.id }}</td>
 		<td>{{ document.date|date }}</td>
 		<td>{{ document.accounting_identifier }}</td>
@@ -71,7 +71,7 @@
 	$('#document-list tbody tr').on('click', function() {
 		$('#document-list tbody tr').removeClass('info');
 		$(this).addClass('info');
-		table_incoming_invoices_tr_click($(this));
+		table_incoming_creditnotes_tr_click($(this));
 	});
 </script>
 <style>

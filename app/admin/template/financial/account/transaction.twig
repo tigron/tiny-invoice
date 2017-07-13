@@ -70,6 +70,7 @@
 		</form>
 		{% include "financial/account/transaction/modal.outgoing_invoice.twig" with {id: 'modal_outgoing_invoice', modal_size: 'lg'} %}
 		{% include "financial/account/transaction/modal.incoming_invoice.twig" with {id: 'modal_incoming_invoice', modal_size: 'lg'} %}
+		{% include "financial/account/transaction/modal.incoming_creditnote.twig" with {id: 'modal_incoming_creditnote', modal_size: 'lg'} %}
 		{% include "financial/account/transaction/modal.bookkeeping_account.twig" with {id: 'modal_bookkeeping_account', modal_size: 'lg'} %}
 
 		<div class="panel panel-default">
@@ -87,6 +88,12 @@
 						<li>
 							<a href="#modal_incoming_invoice" data-toggle="modal">
 								<i class="fa fa-arrow-down"></i> {% trans "Incoming invoice" %}
+							</a>
+						</li>
+
+						<li>
+							<a href="#modal_incoming_creditnote" data-toggle="modal">
+								<i class="fa fa-arrow-down"></i> {% trans "Incoming credit note" %}
 							</a>
 						</li>
 
@@ -120,12 +127,14 @@
 							<tr>
 								<th>{% trans "Type" %}</th>
 								<th>{% trans "Amount" %}</th>
+								<th width="20">&nbsp;</th>
 							</tr>
 						</thead>
 						<tbody>
 						<tr>
 							<td>{% trans "Payment" %} {{ transaction.id }}</td>
 							<td>&euro;{{ transaction.amount }}</td>
+							<td>&nbsp;</td>
 						</tr>
 					{% endif %}
 
@@ -134,6 +143,10 @@
 							{% if balance.linked_object_classname == 'Document_Incoming_Invoice' %}
 								<a href="/administrative/document/invoice?action=edit&id={{ balance.linked_object_id }}">
 									{% trans "Incoming invoice" %} {{ balance.linked_object_id }} ({{ balance.get_linked_object().supplier.company }})
+								</a>
+							{% elseif balance.linked_object_classname == 'Document_Incoming_Creditnote' %}
+								<a href="/administrative/document/creditnote?action=edit&id={{ balance.linked_object_id }}">
+									{% trans "Incoming credit note" %} {{ balance.linked_object_id }} ({{ balance.get_linked_object().supplier.company }})
 								</a>
 							{% elseif balance.linked_object_classname == 'Invoice' %}
 								<a href="/sales/invoice?action=edit&id={{ balance.linked_object_id }}">
@@ -147,8 +160,11 @@
 								{{ balance.linked_object_classname }} {{ balance.linked_object_id }}
 							{% endif %}
 						</td>
+						<td>&euro;{{ balance.amount*-1 }}</td>
 						<td>
-							&euro;{{ balance.amount*-1 }}
+							<a href="/financial/account/transaction?action=delete_balance&id={{ balance.id }}" title="{% trans "Delete booking" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to remove this booking" %}?">
+								<span class="glyphicon glyphicon-remove"></span>
+							</a>
 						</td>
 					</tr>
 
@@ -157,6 +173,7 @@
 							<tr>
 								<th>{% trans "Balance" %}</th>
 								<th>&euro;{{ transaction.get_balance() }}</th>
+								<th>&nbsp;</th>
 							</tr>
 						{% endif %}
 						</tbody>
@@ -304,8 +321,6 @@
 									<dt>{% trans "IBAN" %}</dt>
 									<dd>{{ match.iban }}</dd>
 								</dl>
-
-
 							</div>
 						</div>
 						</form>
@@ -333,8 +348,6 @@
 									<dt>{% trans "Name" %}</dt>
 									<dd>{{ match.name }}</dd>
 								</dl>
-
-
 							</div>
 						</div>
 						</form>
@@ -353,8 +366,6 @@
 						<div class="panel-body">
 							<p><strong>{% trans "Skip this transaction and proceed." %}</strong></p>
 							<p>{% trans "Please use this option if no possible matches can be found or if the available options are incorrect." %}</p>
-
-
 						</div>
 					</div>
 					</form>
@@ -371,11 +382,7 @@
 				$(this).find('.pull-right').removeClass('hide');
 				$(this).addClass('panel-primary');
 			});
-
-
 		</script>
-
-
 	{% elseif action == 'automatic_link' %}
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
