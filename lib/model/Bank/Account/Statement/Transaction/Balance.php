@@ -47,8 +47,8 @@ class Bank_Account_Statement_Transaction_Balance {
 		$this->trait_delete();
 
 		$object = $this->get_linked_object();
-		$balanceable = [ 'Document_Incoming_Invoice', 'Document_Incoming_Creditnote' ];
-		if (get_class($object) == 'InvDocument_Incoming_Invoiceoice' or get_class($object) == 'Document_Incoming_Creditnote') {
+
+		if (get_class($object) == 'Document_Incoming_Invoice' or get_class($object) == 'Document_Incoming_Creditnote') {
 			if ($object->get_balance() == 0) {
 				$object->balanced = true;
 			} else {

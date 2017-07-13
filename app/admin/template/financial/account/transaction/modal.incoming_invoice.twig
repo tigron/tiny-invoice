@@ -139,8 +139,8 @@
 	function table_incoming_invoices_tr_click(row) {
 		var source = $("#selected-incoming-invoice").html();
 		$('#confirm_link_incoming_invoices').html(source)
-		transaction_amount = {{ transaction.get_balance() }};
-		invoice_amount = row.data('amount');
+		transaction_amount = parseFloat({{ transaction.get_balance() }});
+		invoice_amount = parseFloat(row.data('amount'));
 
 		$('#confirm_link_incoming_invoices #max_incoming_invoice_amount').html('/ €' + invoice_amount);
 		$('#document_id').val(row.data('id'));
@@ -165,11 +165,11 @@
 		for_invoice = parseFloat($('#link_incoming_invoice_amount').val());
 		for_supplier = parseFloat($('#link_supplier_amount').val());
 
-		if (transaction_amount > (for_invoice*-1) + (for_supplier*-1)) {
+		if (transaction_amount*-1 < for_invoice + for_supplier) {
 			$('#confirm_link_incoming_invoices .alert').removeClass('hide');
 			event.preventDefault();
 			return false;
-		} else if (for_invoice > invoice_amount*-1) {
+		} else if (for_invoice > invoice_amount) {
 			$('#confirm_link_outgoing_invoices .alert').removeClass('hide');
 			event.preventDefault();
 			return false;
