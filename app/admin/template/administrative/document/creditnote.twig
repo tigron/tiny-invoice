@@ -83,6 +83,7 @@
 				<tr>
 					<th>{{ pager.create_header('#'|trans, 'id')|raw }}</th>
 					<th>{{ pager.create_header('Date'|trans, 'document.date')|raw }}</th>
+					<th>{{ pager.create_header('Accounting ID'|trans, 'document_incoming_invoice.accounting_identifier')|raw }}</th>
 					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
 					<th>{% trans "Tags" %}</th>
 					<th>{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
@@ -97,6 +98,7 @@
 		<tr>
 			<td>{{ document.id }}</td>
 			<td>{{ document.date|date }}</td>
+			<td>{{ document.accounting_identifier }}</td>
 			<td>{{ document.title }}</td>
 			<td>
 				{% set document_tags = [] %}
