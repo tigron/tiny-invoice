@@ -178,7 +178,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$pager->add_join('supplier', 'id', 'document_incoming_creditnote.supplier_id');
 
 		$pager->add_sort_permission('id');
-		$pager->add_sort_permission('date');
+		$pager->add_sort_permission('document.date');
 		$pager->add_sort_permission('title');
 		$pager->add_sort_permission('paid');
 		$pager->add_sort_permission('document_incoming_creditnote.accounting_identifier');

@@ -167,6 +167,7 @@ class Bank_Account_Statement_Transaction {
 		$transfer->type = TRANSFER_TYPE_PAYMENT_WIRETRANSFER;
 		$transfer->amount = $amount;
 		$transfer->bank_account_statement_transaction_id = $this->id;
+		$transfer->bank_account_statement_transaction_balance_id = $balance->id;
 		$transfer->save();
 
 		$invoice->add_transfer($transfer);
