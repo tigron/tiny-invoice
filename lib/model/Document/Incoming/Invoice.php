@@ -216,7 +216,7 @@ class Document_Incoming_Invoice extends Document {
 	public function get_transaction_amount() {
 		$amount = 0;
 		foreach ($this->get_bank_account_statement_transaction_balances() as $transaction) {
-			$amount += $transaction->amount;
+			$amount -= $transaction->amount;
 		}
 		return $amount;
 	}
@@ -237,7 +237,7 @@ class Document_Incoming_Invoice extends Document {
 	 * @access public
 	 */
 	public function get_balance() {
-		return $this->price_incl + $this->get_transaction_amount();
+		return $this->price_incl - $this->get_transaction_amount();
 	}
 
 	/**
@@ -389,6 +389,24 @@ class Document_Incoming_Invoice extends Document {
 			$items[] = self::get_by_id($id);
 		}
 
+		return $items;
+	}
+
+	/**
+	 * Get match by bank_account_statement_transaction
+	 *
+	 * @access public
+	 * @param Bank_Account_Statement_Transaction $transaction
+	 * @return array $documents
+	 */
+	public static function get_match_by_bank_account_statement_transaction(Bank_Account_Statement_Transaction $transaction) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT document_id FROM document_incoming_invoice WHERE price_incl=? AND balanced=0', [ $transaction->amount*-1 ]);
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
+		}
 		return $items;
 	}
 }

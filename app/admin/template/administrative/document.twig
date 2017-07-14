@@ -164,7 +164,7 @@
 
 						{% if settings.setasign_pdf_extractor %}
 						<span class="pull-right">
-							<a href="/setting/extractor?action=create&document_id={{ document.id }}">
+							<a href="/setting/extractor/pdf?action=create&document_id={{ document.id }}">
 								<i class="fa fa-file-text" aria-hidden="true"></i> {% trans "Create extractor" %}
 							</a>
 						</span>
@@ -178,7 +178,7 @@
 			{% endif %}
 		</div>
 
-		{% if document.classname == 'Document_Incoming_Invoice' %}
+		{% if document.classname == 'Document_Incoming_Invoice' or document.classname == 'Document_Incoming_Creditnote' %}
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="panel panel-default">

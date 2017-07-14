@@ -15,6 +15,14 @@ class Bank_Account_Statement_Transaction {
 	use \Skeleton\Pager\Page;
 
 	/**
+	 * Array with link information
+	 *
+	 * @access private
+	 * @var array $link_information
+	 */
+	private $link_information = [];
+
+	/**
 	 * Get message
 	 *
 	 * @access public
@@ -59,6 +67,79 @@ class Bank_Account_Statement_Transaction {
 	}
 
 	/**
+	 * Add Link
+	 *
+	 * @access public
+	 * @param Object $object
+	 * @param double $amount
+	 */
+	public function add_link($object, $amount) {
+		$this->link_information[] = [
+			'link_to' => $object,
+			'amount' => $amount
+		];
+	}
+
+	/**
+	 * Check links
+	 *
+	 * @access public
+	 * @return boolean $valid
+	 */
+	public function check_links() {
+		$total_amount = 0;
+
+		foreach ($this->link_information as $link_information) {
+			$total_amount += $link_information['amount'];
+		}
+
+		if (bccomp($total_amount, $this->get_balance(), 3) == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Reset links
+	 *
+	 * @access public
+	 */
+	public function reset_links() {
+		$this->link_information = [];
+	}
+
+	/**
+	 * Get links
+	 *
+	 * @access public
+	 */
+	public function get_links() {
+		return $this->link_information;
+	}
+
+	/**
+	 * Apply links
+	 *
+	 * @access public
+	 */
+	public function apply_links() {
+		foreach ($this->link_information as $link_information) {
+			$classname = strtolower(get_class($link_information['link_to']));
+			if ($classname == 'invoice') {
+				$this->link_invoice($link_information['link_to'], $link_information['amount']);
+			} elseif ($classname == 'supplier') {
+				$this->link_supplier($link_information['link_to'], $link_information['amount']);
+			} elseif ($classname == 'customer_contact') {
+				$this->link_customer_contact($link_information['link_to'], $link_information['amount']);
+			} elseif ($classname == 'document_incoming_invoice') {
+				$this->link_document($link_information['link_to'], $link_information['amount']);
+			} elseif ($classname == 'bookkeeping_account') {
+				$this->link_bookkeeping_account($link_information['link_to'], $link_information['amount']);
+			}
+		}
+	}
+
+	/**
 	 * Link invoice
 	 *
 	 * @access public
@@ -86,6 +167,7 @@ class Bank_Account_Statement_Transaction {
 		$transfer->type = TRANSFER_TYPE_PAYMENT_WIRETRANSFER;
 		$transfer->amount = $amount;
 		$transfer->bank_account_statement_transaction_id = $this->id;
+		$transfer->bank_account_statement_transaction_balance_id = $balance->id;
 		$transfer->save();
 
 		$invoice->add_transfer($transfer);
@@ -195,11 +277,98 @@ class Bank_Account_Statement_Transaction {
 	 * @access public
 	 */
 	public function automatic_link() {
+		$linked = false;
+
 		if ($this->amount > 0) {
-			$this->automatic_link_invoice();
-		} else {
-			$this->automatic_link_incoming_invoice();
+			try {
+				$this->automatic_link_invoice();
+				$linked = true;
+			} catch (Exception $e) { }
+
 		}
+		if ($this->amount < 0) {
+			try {
+				$this->automatic_link_incoming_invoice();
+				$linked = true;
+			} catch (Exception $e) {	}
+		}
+
+		if (!$linked) {
+			$this->automatic_link_extractor();
+		}
+	}
+
+	/**
+	 * Get possible matches
+	 *
+	 * @access public
+	 * @return array $matches
+	 */
+	public function get_possible_matches() {
+		$matches = [];
+
+		if ($this->amount < 0) {
+			$matches['document_incoming_invoice'] = Document_Incoming_Invoice::get_match_by_bank_account_statement_transaction($this);
+			if ($this->other_account_number != '') {
+				$matches['supplier'] = Supplier::get_by_iban($this->other_account_number);
+			}
+		}
+
+		$extractors = Extractor_Bank_Account_Statement_Transaction::get_all();
+		foreach ($extractors as $extractor) {
+			if (!$extractor->match($this)) {
+				continue;
+			}
+			try {
+				$data = $extractor->extract_data($this);
+				if (!$this->check_links()) {
+					$this->reset_links();
+				}
+
+				foreach ($this->link_information as $link) {
+					$classname = strtolower(get_class($link['link_to']));
+					if (!isset($matches[ $classname ])) {
+						$matches[$classname] = [];
+					}
+					$matches[$classname][] = $link['link_to'];
+				}
+
+			} catch (Extractor_Eval_Exception $e) {
+				continue;
+			}
+		}
+
+		return $matches;
+	}
+
+	/**
+	 * Try a link with an extractor
+	 *
+	 * @access private
+	 */
+	private function automatic_link_extractor() {
+		$extractors = Extractor_Bank_Account_Statement_Transaction::get_all();
+
+		foreach ($extractors as $extractor) {
+			if (!$extractor->match($this)) {
+				continue;
+			}
+
+			try {
+				$data = $extractor->extract_data($this);
+				if (!$this->check_links()) {
+					$this->reset_links();
+					continue;
+				}
+
+				$this->apply_links();
+				return true;
+			} catch (Extractor_Eval_Exception $e) {
+				continue;
+			}
+		}
+
+		throw new Exception('Automatic link with extractors not possible');
 	}
 
 	/**
@@ -210,15 +379,17 @@ class Bank_Account_Statement_Transaction {
 	private function automatic_link_invoice() {
 		preg_match("/\+\+\+(\d{3}\/\d{4}\/\d{5})\+\+\+/", $this->get_message(), $output_array);
 		if (isset($output_array[1])) {
-			$ogm = str_replace('/', '', $output_array[1]);
-			$id = substr($ogm, 0, -2);
-			$invoice = Invoice::get_by_id($id);
+			try {
+				$invoice = Invoice::get_by_ogm($output_array[0]);
+			} catch (Exception $e) {
+				throw new Exception('No invoice found for this message');
+			}
 			if (bccomp($invoice->get_balance(), $this->amount, 3) == 0) {
 				$this->link_invoice($invoice);
 				return;
 			}
 		}
-		throw new Exception('No invoice found for this message');
+		throw new Exception('No invoice found');
 	}
 
 	/**
@@ -264,6 +435,27 @@ class Bank_Account_Statement_Transaction {
 		}
 		return $transactions;
 	}
+
+
+	/**
+	 * get_oldest_unbalanced
+	 *
+	 * @access public
+	 * @return Bank_Account_Statement $bank_account_statement
+	 */
+	public static function get_oldest_unbalanced($start = null) {
+		$db = Database::get();
+		if ($start === null) {
+			$id = $db->get_one('SELECT id FROM bank_account_statement_transaction WHERE balanced=0 ORDER BY date ASC LIMIT 1', [ ]);
+		} else {
+			$id = $db->get_one('SELECT id FROM bank_account_statement_transaction WHERE balanced=0 AND id>? ORDER BY date ASC LIMIT 1', [ $start ]);
+		}
+		if ($id === null) {
+			throw new Exception('No transactions found');
+		}
+		return self::get_by_id($id);
+	}
+
 
 	/**
 	 * Get by bank_account_statement

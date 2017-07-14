@@ -56,7 +56,7 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 			if ($month == 1 AND $statement_sequence_number > 300) {
 				$year--;
 			}
-			$statement_sequence_number = $year . str_pad($statement_sequence_number, 3, "0", STR_PAD_LEFT);
+			$statement_sequence_number = $year . str_pad($statement_sequence_number, 5, "0", STR_PAD_LEFT);
 
 			try {
 				$bank_account_statement = Bank_Account_Statement::get_by_bank_account_sequence($bank_account, $statement_sequence_number);
@@ -65,9 +65,10 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 				$bank_account_statement->bank_account_id = $bank_account->id;
 				$bank_account_statement->sequence = $statement_sequence_number;
 			}
-			$bank_account_statement->date = $statement->original_situation->date;
-			$bank_account_statement->original_balance = $statement->original_situation->balance;
-			$bank_account_statement->new_balance = $statement->new_situation->balance;
+			$bank_account_statement->original_situation_date = $statement->original_situation->date;
+			$bank_account_statement->original_situation_balance = $statement->original_situation->balance;
+			$bank_account_statement->new_situation_date = $statement->new_situation->date;
+			$bank_account_statement->new_situation_balance = $statement->new_situation->balance;
 			$bank_account_statement->save();
 
 

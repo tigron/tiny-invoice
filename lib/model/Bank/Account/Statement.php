@@ -91,12 +91,30 @@ class Bank_Account_Statement {
 	 */
 	public static function get_by_bank_account(Bank_Account $bank_account) {
 		$db = Database::get();
-		$ids = $db->get_column('SELECT id FROM bank_account_statement WHERE bank_account_id=? ORDER BY date ASC', [ $bank_account->id ]);
+		$ids = $db->get_column('SELECT id FROM bank_account_statement WHERE bank_account_id=? ORDER BY original_situation_date ASC', [ $bank_account->id ]);
 
 		$statements = [];
 		foreach ($ids as $id) {
 			$statements[] = self::get_by_id($id);
 		}
 		return $statements;
+	}
+
+	/**
+	 * Get by bank_account identifier
+	 *
+	 * @access public
+	 * @param Bank_Account $bank_account
+	 * @return Bank_Account_Statement $bank_account_statement
+	 */
+	public static function get_last_by_bank_account(Bank_Account $bank_account) {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM bank_account_statement WHERE bank_account_id=? ORDER BY original_situation_date DESC LIMIT 1', [ $bank_account->id ]);
+
+		if ($id === null) {
+			throw new Exception('No statements available');
+		}
+
+		return self::get_by_id($id);
 	}
 }

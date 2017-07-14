@@ -1,0 +1,145 @@
+{% extends "_default/modal.base.twig" %}
+{% block header %}{% trans "Book bookkeeping account" %}{% endblock header %}
+
+{% block body %}
+
+<h5>1. {% trans "Transaction information" %}</h5>
+	<dl class="dl-horizontal">
+		<dt>{% trans "Transaction amount" %}</dt>
+		<dd>&euro;{{ transaction.amount }}</dd>
+
+		<dt>{% trans "To/from" %}</dt>
+		<dd>{{ transaction.other_account_name }}</dd>
+
+		<dt>{% trans "Message" %}</dt>
+		<dd>{{ transaction.message }}</dd>
+
+		<dt>{% trans "Transaction Balance" %}</dt>
+		<dd>&euro;{{ transaction.get_balance() }}</dd>
+
+		<dt>{% trans "Date" %}</dt>
+		<dd>{{ transaction.date|date }}</dd>
+	</dl>
+
+<hr />
+
+
+<h5>2. {% trans "Search bookkeeping accounts" %}</h5>
+	<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_bookkeeping_accounts">
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Search bookkeeping account" %}</label>
+		<div class="col-xs-6">
+			<div class="input-group">
+				<input type="text" name="search" id="txt_search_bookkeeping_accounts" class="form-control" value="{{ transaction.get_message() }}" />
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="button" onclick="search_bookkeeping_accounts();">{% trans "Search" %}</button>
+				</span>
+			</div>
+		</div>
+	</div>
+	</form>
+	<div class="bookkeeping_account_search_results"></div>
+<hr />
+
+
+<form action="{{ env.module.get_module_path() }}?action=link_bookkeeping_account" method="post" class="form-horizontal form-condensed" id="link_bookkeeping_account">
+<h5>3. {% trans "Confirm link" %}</h5>
+	<input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
+	<input type="hidden" name="bookkeeping_account_id" id="bookkeeping_account_id" value="" />
+
+	<div id="confirm_link_bookkeeping_accounts">
+		<div class="alert alert-info">{% trans "Please select a bookkeeping account in the search result" %}</div>
+	</div>
+
+</form>
+
+<script type="text/x-handlebars-template" id="selected-bookkeeping-account">
+	<div class="alert alert-danger hide">
+		{% trans "There is a problem with the amounts you have entered." %} {% trans "The total amount cannot exceed the amount of the transaction" %}.
+	</div>
+
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Link with bookkeeping account" %}</label>
+		<div class="col-xs-4">
+			<div class="input-group">
+				<span class="input-group-addon">&euro;</span>
+				<input type="text" class="form-control" id="link_bookkeeping_account_amount" style="width: 143px;" name="link_bookkeeping_account_amount" value="">
+				<span class="input-group-btn">
+					<button class="btn btn-default" id="link_bookkeeping_account_amount_max" type="button">{% trans "Max" %}</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-xs-9 col-xs-offset-3">
+			<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+		</div>
+	</div>
+</script>
+
+
+<script type="text/javascript">
+	$('#search_bookkeeping_accounts').submit(function(event) {
+		search_bookkeeping_accounts();
+		event.preventDefault();
+	});
+
+	$('#modal_bookkeeping_accounts').on('shown.bs.modal', function () {
+		search_bookkeeping_accounts();
+	});
+
+	$('#link_bookkeeping_account').submit(function(event) {
+		bookkeeping_account_amount = $('#link_bookkeeping_account_amount').val()
+		if ({{ transaction.get_balance }} > 0 && {{ transaction.get_balance() }} < bookkeeping_account_amount) {
+			$('#confirm_link_bookkeeping_accounts .alert').removeClass('hide');
+			event.preventDefault();
+			return false;
+		} else if ({{ transaction.get_balance }} < 0 && {{ transaction.get_balance }} > bookkeeping_account_amount) {
+			$('#confirm_link_bookkeeping_accounts .alert').removeClass('hide');
+			event.preventDefault();
+			return false;
+		} else {
+			$('#confirm_link_bookkeeping_accounts .alert').addClass('hide');
+			return true;
+		}
+	})
+
+	function search_bookkeeping_accounts() {
+		url = '/financial/account/transaction?action=search_bookkeeping_accounts&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_bookkeeping_accounts').val());
+		$('.bookkeeping_account_search_results').load(url, function() {
+			pager_bookkeeping_accounts_ajax();
+		});
+	}
+
+	function pager_bookkeeping_accounts_ajax() {
+		$('.skeleton-pager-link, .skeleton-pager-header-link').click(function(event) {
+			event.preventDefault();
+
+			url = URI.parse($(this).attr('href'));
+			result = URI.parseQuery(url.query);
+
+			$('.bookkeeping_account_search_results').load('/financial/account/transaction?action=search_bookkeeping_accounts&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
+				pager_bookkeeping_accounts_ajax();
+			});
+		});
+	}
+
+	function table_bookkeeping_accounts_tr_click(row) {
+		var source = $("#selected-bookkeeping-account").html();
+		$('#confirm_link_bookkeeping_accounts').html(source)
+		transaction_amount = {{ transaction.get_balance() }};
+		bookkeeping_account_amount = row.data('amount');
+
+		$('#bookkeeping_account_id').val(row.data('id'));
+
+		$('#link_bookkeeping_account_amount_max').on('click', function() {
+			$('#confirm_link_bookkeeping_accounts #link_bookkeeping_account_amount').val(transaction_amount);
+			$(this).addClass('active');
+		})
+
+		$('#link_bookkeeping_account_amount_max').click();
+	}
+</script>
+
+{% endblock body %}

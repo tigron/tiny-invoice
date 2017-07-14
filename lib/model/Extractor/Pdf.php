@@ -9,7 +9,7 @@
 
 use \Skeleton\Database\Database;
 
-class Extractor {
+class Extractor_Pdf {
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
 	use \Skeleton\Pager\Page;
@@ -23,8 +23,8 @@ class Extractor {
 	 */
 	public function delete() {
 		$db = Database::get();
-		$db->query('DELETE FROM extractor WHERE id=?', [ $this->id ]);
-		foreach ($this->get_extractor_fingerprints() as $fingerprint) {
+		$db->query('DELETE FROM extractor_pdf WHERE id=?', [ $this->id ]);
+		foreach ($this->get_extractor_pdf_fingerprints() as $fingerprint) {
 			$fingerprint->delete();
 		}
 	}
@@ -47,6 +47,7 @@ class Extractor {
 		// get access to its pages
 		$pages = $document->getCatalog()->getPages();
 
+		SetaPDF_Core_Canvas_GraphicState::setMaxGraphicStateNestingLevel(400);
 		$extractor = new SetaPDF_Extractor($document);
 
 		$result = '';
@@ -62,7 +63,7 @@ class Extractor {
 	 * @access public
 	 * @param Document $document (optional)
 	 */
-	public function parse_content(Document $document = null) {
+	public function extract_data(Document $document = null) {
 		if ($document === null) {
 			$content = $this->extract_content();
 		} else {
@@ -70,8 +71,27 @@ class Extractor {
 		}
 		$data = [];
 
-		eval($this->eval);
-		return $data;
+		ob_start();
+		set_error_handler(null);
+		$return = eval($this->eval);
+		$error = error_get_last();
+		restore_error_handler();
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		if ( $return === false && $error ) {
+			$exception = new Extractor_Eval_Exception();
+			$exception->line = $error['line'];
+			$exception->setMessage($error['message']);
+			throw $exception;
+		}
+
+		$return = [
+			'data' => $data,
+			'output' => $output
+		];
+
+		return $return;
 	}
 
 	/**
@@ -83,6 +103,7 @@ class Extractor {
 	 */
 	public function match(Document $document) {
 		// load the document
+		SetaPDF_Core_Canvas_GraphicState::setMaxGraphicStateNestingLevel(400);
 		$seta_document = SetaPDF_Core_Document::loadByFilename($document->file->get_path());
 		$preview_width = $document->get_preview()->width;
 		$preview_height = $document->get_preview()->height;
@@ -100,11 +121,11 @@ class Extractor {
 		// the interresting part: initiate an extractor instance
 		$extractor = new SetaPDF_Extractor($seta_document);
 
-		foreach ($this->get_extractor_fingerprints() as $extractor_fingerprint) {
-			$x1 = $extractor_fingerprint->x * $width_factor;
-			$x2 = ($extractor_fingerprint->x+$extractor_fingerprint->width) * $width_factor;
-			$y1 = ($preview_height-$extractor_fingerprint->y) * $height_factor;
-			$y2 = ($preview_height - ($extractor_fingerprint->y+$extractor_fingerprint->height)) * $height_factor;
+		foreach ($this->get_extractor_pdf_fingerprints() as $extractor_pdf_fingerprint) {
+			$x1 = $extractor_pdf_fingerprint->x * $width_factor;
+			$x2 = ($extractor_pdf_fingerprint->x+$extractor_pdf_fingerprint->width) * $width_factor;
+			$y1 = ($preview_height-$extractor_pdf_fingerprint->y) * $height_factor;
+			$y2 = ($preview_height - ($extractor_pdf_fingerprint->y+$extractor_pdf_fingerprint->height)) * $height_factor;
 
 			// create a word strategy instance
 			$strategy = new SetaPDF_Extractor_Strategy_Word();
@@ -124,7 +145,7 @@ class Extractor {
 				$content .= $word;
 			}
 
-			if ($content != $extractor_fingerprint->value) {
+			if ($content != $extractor_pdf_fingerprint->value) {
 				return false;
 			}
 		}
@@ -132,13 +153,13 @@ class Extractor {
 	}
 
 	/**
-	 * Get extractor_fingerprints
+	 * Get extractor_pdf_fingerprints
 	 *
 	 * @access public
-	 * @return array $extractor_fingerprints
+	 * @return array $extractor_pdf_fingerprints
 	 */
-	public function get_extractor_fingerprints() {
-		return Extractor_Fingerprint::get_by_extractor($this);
+	public function get_extractor_pdf_fingerprints() {
+		return Extractor_Pdf_Fingerprint::get_by_extractor_pdf($this);
 	}
 
 }

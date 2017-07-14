@@ -11,7 +11,9 @@ class Bank_Account_Statement_Transaction_Balance {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
-	use \Skeleton\Object\Delete;
+	use \Skeleton\Object\Delete {
+		delete as trait_delete;
+	}
 	use \Skeleton\Pager\Page;
 
 	/**
@@ -23,6 +25,52 @@ class Bank_Account_Statement_Transaction_Balance {
 	public function set_linked_object($object) {
 		$this->linked_object_classname = get_class($object);
 		$this->linked_object_id = $object->id;
+	}
+
+	/**
+	 * Get linked object
+	 *
+	 * @access public
+	 * @return Object $object
+	 */
+	public function get_linked_object() {
+		$classname = $this->linked_object_classname;
+		return $classname::get_by_id($this->linked_object_id);
+	}
+
+	/**
+	 * Delete
+	 *
+	 * @access public
+	 */
+	public function delete() {
+		$this->trait_delete();
+
+		$object = $this->get_linked_object();
+
+		if (get_class($object) == 'Document_Incoming_Invoice' or get_class($object) == 'Document_Incoming_Creditnote') {
+			if ($object->get_balance() == 0) {
+				$object->balanced = true;
+			} else {
+				$object->balanced =false;
+			}
+			$object->save();
+		} elseif (get_class($object) == 'Invoice') {
+			try {
+				$transfer = Transfer::get_by_bank_account_statement_transaction_balance($this);
+				$transfer->delete();
+			} catch (Exception $e) { }
+			$object->check_paid();
+		}
+
+		$transaction = $this->bank_account_statement_transaction;
+
+		if ($transaction->get_balance() == 0) {
+			$transaction->balanced = true;
+		} else {
+			$transaction->balanced = false;
+		}
+		$transaction->save();
 	}
 
 	/**

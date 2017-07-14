@@ -175,79 +175,40 @@ console.log(response);
 			<li class="active">{% trans "Bank accounts" %}</li>
 		</ol>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				{% trans "Filter" %}
-			</div>
-			<div class="panel-body">
-				<form method="post" action="/financial/account" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-9">
-							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
-							<button class="btn btn-primary">
-								{% trans "Search" %}
-							</button>
-						</div>
-					</div>
-				</form>
-			</div>
+		<div class="alert alert-info">
+			<p>
+			{% trans "Below you can find a list of all your bank accounts." %} {% trans "Click on your account to see the transactions." %} {% trans "If your account is not shown, it was not yet included in any CODA file." %} {% trans "Press import to start importing a new CODA file." %}
+			</p>
+			<br />
+			<a class="btn btn-info" href="/financial/account?action=import">{% trans "Import" %}</a>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="pull-right">
-					<a href="/financial/account?action=import" title="">
-						<span class="glyphicon glyphicon-plus-sign"></span>
-						{% trans "Import" %}
-					</a>
+		<div class="row">
+		{% for bank_account in bank_accounts %}
+			<div class="col-xs-3">
+				<div class="panel panel-default panel-link" data-id="{{ bank_account.id }}">
+					<div class="panel-body">
+						<h4>{{ bank_account.number }}</h4>
+
+						{{ bank_account.name }}<br />
+						{{ bank_account.description }}<br /><br />
+
+						{% set last_statement = bank_account.get_last_bank_account_statement() %}
+
+						<h3><i>&euro;{{ last_statement.new_situation_balance|number_format }}</i></h3> ({% trans "Last update:" %} {{ last_statement.new_situation_date|date }}
+
+					</div>
 				</div>
-				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="panel-body">
-			{% for account in pager.items %}
-				{% if loop.first %}
-					<table class="table table-hover table-striped table-condensed table-responsive">
-					<thead>
-						<tr>
-							<th>{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
-							<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
-							<th>{{ pager.create_header('Description'|trans, 'description')|raw }}</th>
-							<th width="20">&nbsp;</th>
-						</tr>
-					</thead>
-					<tbody>
-				{% endif %}
-
-				<tr>
-					<td>{{ account.number }}</td>
-					<td>{{ account.name }}</td>
-					<td>{{ account.description }}</td>
-					<td>
-						<a href="/financial/account?action=edit&id={{ account.id }}" title="">
-							<span class="glyphicon glyphicon-pencil"></span>
-						</a>
-					</td>
-				</tr>
-
-				{% if loop.last %}
-					</tbody>
-					</table>
-
-					{{ pager.links|raw }}
-				{% endif %}
-
-			{% else %}
-
-				<p><em>{% trans "No bank accounts found." %}</em></p>
-
-			{% endfor %}
-			</div>
+		{% endfor %}
 		</div>
+
 	{% endif %}
+
+	<script type="text/javascript">
+		$('.panel-link').on('click', function() {
+			window.location = '/financial/account?action=edit&id=' + $(this).data('id');
+		});
+	</script>
 
 {% endblock content %}
