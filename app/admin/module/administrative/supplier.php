@@ -40,6 +40,7 @@ class Web_Module_Administrative_Supplier extends Module {
 		$pager->add_sort_permission('company');
 		$pager->add_sort_permission('vat');
 		$pager->add_sort_permission('country.name');
+		$pager->add_sort_permission('accounting_identifier');
 		$pager->add_sort_permission('city');
 
 		if (isset($_POST['search'])) {
