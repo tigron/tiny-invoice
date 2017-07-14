@@ -47,6 +47,7 @@ class Extractor_Pdf {
 		// get access to its pages
 		$pages = $document->getCatalog()->getPages();
 
+		SetaPDF_Core_Canvas_GraphicState::setMaxGraphicStateNestingLevel(400);
 		$extractor = new SetaPDF_Extractor($document);
 
 		$result = '';
@@ -102,6 +103,7 @@ class Extractor_Pdf {
 	 */
 	public function match(Document $document) {
 		// load the document
+		SetaPDF_Core_Canvas_GraphicState::setMaxGraphicStateNestingLevel(400);
 		$seta_document = SetaPDF_Core_Document::loadByFilename($document->file->get_path());
 		$preview_width = $document->get_preview()->width;
 		$preview_height = $document->get_preview()->height;
