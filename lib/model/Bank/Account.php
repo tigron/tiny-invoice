@@ -35,6 +35,17 @@ class Bank_Account {
 	}
 
 	/**
+	 * Get statements by year
+	 *
+	 * @access public
+	 * @param string $year
+	 */
+	public function get_bank_account_statements_by_year($year) {
+		echo 'aze';
+		return Bank_Account_Statement::get_by_bank_account_year($this, $year);
+	}
+
+	/**
 	 * Get by identifier
 	 *
 	 * @access public

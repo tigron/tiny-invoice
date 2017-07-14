@@ -69,15 +69,18 @@
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/bookkeeping_account">{% trans "Bookkeeping Accounts" %}</a></li>
+			<li><a href="/bookkeeping/account">{% trans "Bookkeeping Accounts" %}</a></li>
 			<li class="active">{% trans "Edit bookkeeping account" %}</li>
 		</ol>
 
 		{% if errors is defined %}
-		<div class="alert alert-danger">
-			{% trans "The form contains mistakes. Please correct them." %}
-		</div>
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
+		{% elseif env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'bookkeeping account') }}
 		{% endif %}
+
 
 		<form class="form form-horizontal form-condensed" method="post" action="/bookkeeping/account?action=edit&id={{ bookkeeping_account.id }}">
 			<div class="panel panel-default">
@@ -158,7 +161,7 @@
 					<tr>
 						<th>{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
 						<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
-						<th>&nbsp;</th>
+						<th width="20">&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>

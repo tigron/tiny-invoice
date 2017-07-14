@@ -48,6 +48,10 @@ class Web_Module_Administrative_Customer extends Module {
 		}
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/administrative/customer?q=' . $pager->create_options_hash());
+		}
+
 		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}

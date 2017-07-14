@@ -22,6 +22,61 @@
 				</div>
 			</div>
 		</div>
+	{% elseif action == 'export' %}
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
+			<li>{% trans "Export" %}</li>
+		</ol>
+
+
+		<form class="form-horizontal" method="post" action="/financial/account?action=export&id={{ bank_account.id }}">
+		<div class="well">
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export bank account" %}</label>
+				<div class="col-xs-9">
+					<p class="form-control-static">
+						{{ bank_account.name }}, {{ bank_account.description }} ({{ bank_account.number }})
+					</p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export statements" %}</label>
+				<div class="col-xs-9">
+					<select name="bank_account_statement_ids[]" class="form-control multiselect" multiple="multiple">
+					{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
+						<optgroup label="{{ year }}">
+							{% for bank_account_statement in bank_account.get_bank_account_statements_by_year(year) %}
+								<option value="{{ bank_account_statement.id }}">{{ bank_account_statement.sequence }} ({{ bank_account_statement.original_situation_date|date }} - {{ bank_account_statement.new_situation_date|date }})</option>
+								{% endfor %}
+						</optgroup>
+					{% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Export format" %}</label>
+				<div class="col-xs-4">
+					<select name="export_format" class="form-control">
+						<option value="Export_Expertm_Financial">Expert/M</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">
+						{% trans "Download" %}
+					</button>
+				</div>
+			</div>
+		</div>
+		</form>
+
+
 	{% elseif action == 'import' %}
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
@@ -185,10 +240,25 @@ console.log(response);
 
 		<div class="row">
 		{% for bank_account in bank_accounts %}
+			{% include "financial/account/modal.account_settings.twig" with {id: 'modal_account_settings_' ~ bank_account.id, bank_account: bank_account} %}
 			<div class="col-xs-3">
 				<div class="panel panel-default panel-link" data-id="{{ bank_account.id }}">
 					<div class="panel-body">
-						<h4>{{ bank_account.number }}</h4>
+						<div class="pull-right">
+							<a href="#modal_account_settings_{{ bank_account.id }}" data-toggle="modal" alt="{% trans "Settings" %}">
+								<i class="fa fa-cog"></i> {% trans "Settings" %}
+							</a>&nbsp;
+
+							<a href="/financial/account?action=export&id={{ bank_account.id }}">
+								<i class="fa fa-file"></i>
+								{% trans "Export" %}
+							</a>
+
+						</div>
+
+						<h4>
+							{{ bank_account.number }}
+						</h4>
 
 						{{ bank_account.name }}<br />
 						{{ bank_account.description }}<br /><br />
@@ -196,7 +266,6 @@ console.log(response);
 						{% set last_statement = bank_account.get_last_bank_account_statement() %}
 
 						<h3><i>&euro;{{ last_statement.new_situation_balance|number_format }}</i></h3> ({% trans "Last update:" %} {{ last_statement.new_situation_date|date }}
-
 					</div>
 				</div>
 			</div>
@@ -207,8 +276,19 @@ console.log(response);
 
 	<script type="text/javascript">
 		$('.panel-link').on('click', function() {
-			window.location = '/financial/account?action=edit&id=' + $(this).data('id');
+			window.location = '/financial/account/transaction?id=' + $(this).data('id');
 		});
+
+		$('.panel-link a').on('click', function(e) {
+			e.preventDefault();
+			href = $(this).attr('href');
+			if ($(this).data('toggle') == 'modal') {
+				$(href).modal();
+			} else {
+				window.location = href;
+			}
+			return false;
+		})
 	</script>
 
 {% endblock content %}

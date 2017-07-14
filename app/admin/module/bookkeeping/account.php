@@ -85,7 +85,6 @@ class Web_Module_Bookkeeping_Account extends Module {
 		$bookkeeping_account = Bookkeeping_Account::get_by_id($_GET['id']);
 
 		if (isset($_POST['bookkeeping_account'])) {
-			$_POST['bookkeeping_account']['iban'] = str_replace(' ', '', $_POST['bookkeeping_account']['iban']);
 			$bookkeeping_account->load_array($_POST['bookkeeping_account']);
 			if ($bookkeeping_account->validate($errors) === false) {
 				$template->assign('errors', $errors);
