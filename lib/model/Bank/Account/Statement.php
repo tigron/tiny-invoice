@@ -50,12 +50,12 @@ class Bank_Account_Statement {
 
 		try {
 			$previous = $this->get_previous();
-			$this->original_balance = $previous->new_balance;
+			$this->original_situation_balance = $previous->new_situation_balance;
 		} catch (Exception $e) {
-			$this->orginal_balance = 0;
+			$this->original_situation_balance = 0;
 		}
 
-		$this->new_balance = $this->original_balance + $balance;
+		$this->new_situation_balance = $this->original_situation_balance + $balance;
 		$this->save();
 	}
 
