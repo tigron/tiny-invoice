@@ -22,6 +22,7 @@ class Extractor_Pdf_Fingerprint {
 	 * @access public
 	 */
 	public function extract_content() {
+		SetaPDF_Core_Canvas_GraphicState::setMaxGraphicStateNestingLevel(400);
 		// load the document
 		$document = SetaPDF_Core_Document::loadByFilename($this->extractor_pdf->document->file->get_path());
 
