@@ -92,11 +92,11 @@ class Export_Expertm_Financial extends Export_Expertm {
 
 					$output2 .= $this->num(1, 5);
 					$output2 .= $this->num(2, 0);
-					if (in_array($balance->linked_object_classname, [ 'Invoice' ])) {
+					if (in_array($balance->linked_object_classname, [ 'Invoice', 'Supplier' ])) {
 						$output2 .= $this->alf(1, 'F');
 					} elseif (in_array($balance->linked_object_classname, [ 'Creditnote' ])) {
 						$output2 .= $this->alf(1, 'C');
-					} elseif (in_array($balance->linked_object_classname, [ 'Document_Incoming_Invoice' ])) {
+					} elseif (in_array($balance->linked_object_classname, [ 'Document_Incoming_Invoice', 'Customer_contact' ])) {
 						$output2 .= $this->alf(1, 'F');
 					} elseif (in_array($balance->linked_object_classname, [ 'Document_Incoming_Creditnote' ])) {
 						$output2 .= $this->alf(1, 'C');
