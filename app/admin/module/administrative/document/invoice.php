@@ -91,7 +91,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		$pager->page();
 
 		if (isset($_POST) and count($_POST) > 0) {
-			Session::redirect('/administrative/document/invoice?q=' . $pager->create_options_hash());
+			Session::redirect('/administrative/document/invoice');
 		}
 
 		$template = Template::get();

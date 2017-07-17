@@ -44,7 +44,7 @@ class Web_Module_Sales_Product_Type extends Module {
 		$pager->page();
 
 		if (isset($_POST) and count($_POST) > 0) {
-			Session::redirect('/sales/product/type?q=' . $pager->create_options_hash());
+			Session::redirect('/sales/product/type');
 		}
 
 		$template = Template::Get();

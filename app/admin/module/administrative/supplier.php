@@ -48,6 +48,10 @@ class Web_Module_Administrative_Supplier extends Module {
 		}
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/administrative/supplier');
+		}
+
 		$template = Template::get();
 		$template->assign('pager', $pager);
 	}

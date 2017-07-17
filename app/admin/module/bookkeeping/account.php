@@ -45,6 +45,10 @@ class Web_Module_Bookkeeping_Account extends Module {
 		}
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/bookkeeping/account');
+		}
+
 		$template = Template::get();
 		$template->assign('pager', $pager);
 	}

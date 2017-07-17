@@ -43,6 +43,10 @@ class Web_Module_Administrative_Role extends Module {
 		$pager->add_sort_permission('name');
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/administrative/role');
+		}
+
 		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
