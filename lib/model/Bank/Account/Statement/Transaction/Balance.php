@@ -54,7 +54,7 @@ class Bank_Account_Statement_Transaction_Balance {
 			} else {
 				$object->balanced =false;
 			}
-			$object->save();
+			$object->save(false);
 		} elseif (get_class($object) == 'Invoice') {
 			try {
 				$transfer = Transfer::get_by_bank_account_statement_transaction_balance($this);
