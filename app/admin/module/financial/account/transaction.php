@@ -68,7 +68,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$pager->page();
 
 		if (isset($_POST) and count($_POST) > 0) {
-			Session::redirect('/financial/account/transaction');
+			Session::redirect('/financial/account/transaction?id=' . $bank_account->id);
 		}
 
 		$template = Template::Get();
