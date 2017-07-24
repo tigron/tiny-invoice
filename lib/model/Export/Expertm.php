@@ -19,7 +19,7 @@ abstract class Export_Expertm extends Export {
 	 * @param string $field
 	 */
 	protected function num($size, $field) {
-		return str_pad($field, $size, '0', STR_PAD_LEFT);
+		return substr(str_pad($field, $size, '0', STR_PAD_LEFT), 0, 9);
 	}
 
 	/**
