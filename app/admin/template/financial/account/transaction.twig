@@ -5,7 +5,8 @@
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
-			<li><a href="/financial/account/transaction?id={{ transaction.bank_account_statement.bank_account_id }}">{% trans "Edit Bank Account" %}</a></li>
+
+			<li><a href="/financial/account/transaction?bank_account_id={{ transaction.bank_account_statement.bank_account_id }}">{% trans "Bank Account" %} {{ transaction.bank_account_statement.bank_account.description }}</a></li>
 			<li class="active">{% trans "Edit transaction" %}</li>
 		</ol>
 
@@ -483,7 +484,7 @@
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
-			<li>{% trans "Edit Bank Account" %}</li>
+			<li>{% trans "Bank Account" %} {{ bank_account.description }}</li>
 		</ol>
 
 		{% include "financial/account/tabs.twig" %}
@@ -577,7 +578,7 @@
 					<td>{{ transaction.get_message|truncate(80) }}</td>
 					<td>{{ transaction.other_account_name }}</td>
 					<td>
-						<a href="/financial/account/transaction?action=edit&id={{ transaction.id }}" title="">
+						<a href="/financial/account/transaction?action=edit&bank_account_id={{ bank_account.id }}&id={{ transaction.id }}" title="">
 							<span class="glyphicon glyphicon-pencil"></span>
 						</a>
 					</td>

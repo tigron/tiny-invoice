@@ -25,6 +25,20 @@ class Bank_Account {
 	}
 
 	/**
+	 * Has bank_account_statements
+	 *
+	 * @access public
+	 * @return bool $has_bank_account_statements
+	 */
+	public function has_bank_account_statements() {
+		try {
+			$this->get_last_bank_account_statement();
+			return true;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	/**
 	 * Get last bank_account_statement
 	 *
 	 * @access public

@@ -242,7 +242,7 @@ console.log(response);
 		{% for bank_account in bank_accounts %}
 			{% include "financial/account/modal.account_settings.twig" with {id: 'modal_account_settings_' ~ bank_account.id, bank_account: bank_account} %}
 			<div class="col-xs-3">
-				<div class="panel panel-default panel-link" data-id="{{ bank_account.id }}">
+				<div class="panel panel-default panel-link" data-id="{{ bank_account.id }}" href="/financial/account/transaction?bank_account_id={{ bank_account.id }}">
 					<div class="panel-body">
 						<div class="pull-right">
 							<a href="#modal_account_settings_{{ bank_account.id }}" data-toggle="modal" alt="{% trans "Settings" %}">
@@ -263,9 +263,13 @@ console.log(response);
 						{{ bank_account.name }}<br />
 						{{ bank_account.description }}<br /><br />
 
-						{% set last_statement = bank_account.get_last_bank_account_statement() %}
+						{% if bank_account.has_bank_account_statements() %}
+							{% set last_statement = bank_account.get_last_bank_account_statement() %}
 
-						<h3><i>&euro;{{ last_statement.new_situation_balance|number_format }}</i></h3> ({% trans "Last update:" %} {{ last_statement.new_situation_date|date }}
+							<h3><i>&euro;{{ last_statement.new_situation_balance|number_format }}</i></h3> ({% trans "Last update:" %} {{ last_statement.new_situation_date|date }}
+						{% else %}
+							<h3><i>{% trans "Unknown" %}</i></h3> ({% trans "Last update:" %} {% trans "never" %}
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -276,7 +280,7 @@ console.log(response);
 
 	<script type="text/javascript">
 		$('.panel-link').on('click', function() {
-			window.location = '/financial/account/transaction?id=' + $(this).data('id');
+			window.location = $(this).attr('href');
 		});
 
 		$('.panel-link a').on('click', function(e) {

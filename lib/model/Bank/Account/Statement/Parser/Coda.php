@@ -88,7 +88,10 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 				} else {
 					$bank_account_statement_transaction->message = $transaction->line21->message;
 				}
-				$bank_account_statement_transaction->other_account_bic = $transaction->line22->other_account_bic;
+
+				if (isset($transaction->line22->other_account_bic)) {
+					$bank_account_statement_transaction->other_account_bic = $transaction->line22->other_account_bic;
+				}
 				if (isset($transaction->line23->other_account_number_and_currency)) {
 					$bank_account_statement_transaction->other_account_number = $transaction->line23->other_account_number_and_currency;
 				}
