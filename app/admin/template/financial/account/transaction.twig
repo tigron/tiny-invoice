@@ -494,7 +494,7 @@
 				{% trans "Filter" %}
 			</div>
 			<div class="panel-body">
-				<form method="post" action="/financial/account/transaction?id={{ bank_account.id }}" class="form-horizontal">
+				<form method="post" action="/financial/account/transaction?bank_account_id={{ bank_account.id }}" class="form-horizontal">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
 						<div class="col-xs-9">
