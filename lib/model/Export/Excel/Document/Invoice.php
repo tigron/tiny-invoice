@@ -31,7 +31,7 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 		$invoices = $pager->items;
 
 		$excel = new PHPExcel();
-		$headers = ['Document number', 'Created', 'Supplier', 'Title', 'Price excl', 'Price incl', 'Paid'];
+		$headers = ['Document number', 'Created', 'Expiration Date', 'Supplier', 'Title', 'Price excl', 'Price incl', 'Paid'];
 
 		$worksheet = $excel->getActiveSheet();
 
@@ -45,14 +45,15 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 
 			$worksheet->setCellValueByColumnAndRow(0, $row, $invoice->id);
 			$worksheet->setCellValueByColumnAndRow(1, $row, $invoice->created);
-			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->supplier->company);
-			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->title);
-			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->price_excl);
-			$worksheet->setCellValueByColumnAndRow(5, $row, $invoice->price_incl);
+			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->expiration_date);
+			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->supplier->company);
+			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->title);
+			$worksheet->setCellValueByColumnAndRow(5, $row, $invoice->price_excl);
+			$worksheet->setCellValueByColumnAndRow(6, $row, $invoice->price_incl);
 			if ($invoice->paid) {
-				$worksheet->setCellValueByColumnAndRow(6, $row, 'Yes');
+				$worksheet->setCellValueByColumnAndRow(7, $row, 'Yes');
 			} else {
-				$worksheet->setCellValueByColumnAndRow(6, $row, 'No');
+				$worksheet->setCellValueByColumnAndRow(7, $row, 'No');
 			}
 		}
 
