@@ -84,6 +84,10 @@ class Web_Module_Administrative_Document_Contract extends Web_Module_Administrat
 		}
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/administrative/document/contract');
+		}
+
 		$template = Template::get();
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());

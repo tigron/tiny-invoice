@@ -164,7 +164,7 @@
 
 						{% if settings.setasign_pdf_extractor %}
 						<span class="pull-right">
-							<a href="/setting/extractor?action=create&document_id={{ document.id }}">
+							<a href="/setting/extractor/pdf?action=create&document_id={{ document.id }}">
 								<i class="fa fa-file-text" aria-hidden="true"></i> {% trans "Create extractor" %}
 							</a>
 						</span>
@@ -178,7 +178,7 @@
 			{% endif %}
 		</div>
 
-		{% if document.classname == 'Document_Incoming_Invoice' %}
+		{% if document.classname == 'Document_Incoming_Invoice' or document.classname == 'Document_Incoming_Creditnote' %}
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="panel panel-default">
@@ -215,7 +215,7 @@
 							<td>{{ transaction.get_message() }}</td>
 							<td>{{ transaction.other_account_name }}</td>
 							<td>{{ transaction.other_account_number }}</td>
-							<td>&euro;{{ transaction.amount|number_format }}</td>
+							<td>&euro;{{ balance.amount|number_format }}</td>
 						</tr>
 						{% if loop.last %}
 							</tbody>
@@ -435,7 +435,7 @@
 				<thead>
 					<tr>
 						<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
-						<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
+						<th>{{ pager.create_header('Date'|trans, 'document.date')|raw }}</th>
 						<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
 						<th>{% trans "Tags" %}</th>
 						<th colspan="3">&nbsp;</th>

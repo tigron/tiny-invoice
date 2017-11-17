@@ -4,8 +4,8 @@
 
 <ol class="breadcrumb">
 	<li><a href="/">{% trans "Home" %}</a></li>
-	<li><a href="/setting/extractor">{% trans "Extractor" %}</a></li>
-	<li><a href="/setting/extractor?action=edit&id={{ extractor.id }}">{% trans "Edit Extractor" %} {{ extractor.id }}</a></li>
+	<li><a href="/setting/extractor/pdf">{% trans "Extractor" %}</a></li>
+	<li><a href="/setting/extractor/pdf?action=edit&id={{ extractor_pdf.id }}">{% trans "Edit Extractor" %} {{ extractor_pdf.id }}</a></li>
 	<li class="active">{% trans "Manage fingerprints" %}</li>
 </ol>
 
@@ -15,7 +15,7 @@
 		<div class="form-group">
 			<label class="col-xs-3 control-label">{% trans "Fingerprints" %}</label>
 			<div class="col-xs-5">
-				<img src="/picture?id={{ extractor.document.preview_file_id }}" />
+				<img src="/picture?id={{ extractor_pdf.document.preview_file_id }}" />
 			</div>
 			<div class="col-xs-4" id="fingerprints">
 
@@ -39,12 +39,12 @@
 			$('img').selectAreas({
 				minSize: [10, 10],
 				areas: [
-					{% for extractor_fingerprint in extractor.get_extractor_fingerprints() %}
+					{% for extractor_pdf_fingerprint in extractor_pdf.get_extractor_pdf_fingerprints() %}
 					{
-						x: {{ extractor_fingerprint.x }},
-						y: {{ extractor_fingerprint.y }},
-						width: {{ extractor_fingerprint.width }},
-						height: {{ extractor_fingerprint.height }}
+						x: {{ extractor_pdf_fingerprint.x }},
+						y: {{ extractor_pdf_fingerprint.y }},
+						width: {{ extractor_pdf_fingerprint.width }},
+						height: {{ extractor_pdf_fingerprint.height }}
 					}{% if not loop.last %},{% endif %}
 					{% endfor %}
 				],
@@ -59,13 +59,13 @@
 		function update_fingerprints() {
 			var areas = $('img').selectAreas('relativeAreas');
 			$('#fingerprints').html( $('#fingerprints_loading').html() );
-			$.post('/setting/extractor/fingerprint?action=clear_fingerprints&id={{ extractor.id }}', function() {
+			$.post('/setting/extractor/pdf/fingerprint?action=clear_fingerprints&id={{ extractor_pdf.id }}', function() {
 				$.each(areas, function() {
 					data = {
 						'coordinates': JSON.stringify($(this), null, 2)
 					};
 
-					$.post('/setting/extractor/fingerprint?action=add_fingerprint&id={{ extractor.id }}', data, function(response) {
+					$.post('/setting/extractor/pdf/fingerprint?action=add_fingerprint&id={{ extractor_pdf.id }}', data, function(response) {
 						$('#fingerprints #loading').remove();
 						$('#fingerprints').append(response + '<br />');
 					});

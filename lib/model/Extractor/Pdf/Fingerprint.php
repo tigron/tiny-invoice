@@ -1,6 +1,6 @@
 <?php
 /**
- * Extractor_Fingerprint class
+ * Extractor_Pdf_Fingerprint class
  *
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
@@ -9,7 +9,7 @@
 
 use \Skeleton\Database\Database;
 
-class Extractor_Fingerprint {
+class Extractor_Pdf_Fingerprint {
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
 	use \Skeleton\Pager\Page;
@@ -22,8 +22,9 @@ class Extractor_Fingerprint {
 	 * @access public
 	 */
 	public function extract_content() {
+		SetaPDF_Core_Canvas_GraphicState::setMaxGraphicStateNestingLevel(400);
 		// load the document
-		$document = SetaPDF_Core_Document::loadByFilename($this->extractor->document->file->get_path());
+		$document = SetaPDF_Core_Document::loadByFilename($this->extractor_pdf->document->file->get_path());
 
 		// get access to its pages
 		$pages = $document->getCatalog()->getPages();
@@ -32,8 +33,8 @@ class Extractor_Fingerprint {
 		$page_width = $first_page->getWidth();
 		$page_height = $first_page->getHeight();
 
-		$preview_height = $this->extractor->document->get_preview()->height;
-		$preview_width = $this->extractor->document->get_preview()->width;
+		$preview_height = $this->extractor_pdf->document->get_preview()->height;
+		$preview_width = $this->extractor_pdf->document->get_preview()->width;
 
 		$width_factor = $page_width / $preview_width;
 		$height_factor = $page_height / $preview_height;
@@ -71,15 +72,15 @@ class Extractor_Fingerprint {
 	}
 
 	/**
-	 * Get by Extractor
+	 * Get by Extractor_pdf
 	 *
 	 * @access public
-	 * @param Extractor $extractor
+	 * @param Extractor_Pdf $extractor_pdf
 	 * @return array $extractor_fingerprints
 	 */
-	public static function get_by_extractor(Extractor $extractor) {
+	public static function get_by_extractor_pdf(Extractor_Pdf $extractor_pdf) {
 		$db = Database::get();
-		$ids = $db->get_column('SELECT id FROM extractor_fingerprint WHERE extractor_id=? ORDER BY sort', [ $extractor->id ]);
+		$ids = $db->get_column('SELECT id FROM extractor_pdf_fingerprint WHERE extractor_pdf_id=? ORDER BY sort', [ $extractor_pdf->id ]);
 		$objects = [];
 		foreach ($ids as $id) {
 			$objects[] = self::get_by_id($id);

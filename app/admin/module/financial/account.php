@@ -37,20 +37,44 @@ class Web_Module_Financial_Account extends Module {
 	public function display() {
 		$template = Template::Get();
 
-		$pager = new Pager('bank_account');
+		$bank_accounts = Bank_Account::get_all();
+		$template->assign('bank_accounts', $bank_accounts);
 
-		$pager->add_sort_permission('number');
-		$pager->add_sort_permission('name');
+		$bookkeeping_accounts = Bookkeeping_Account::get_all();
+		$template->assign('bookkeeping_accounts', $bookkeeping_accounts);
+	}
 
-		if (isset($_POST['search'])) {
-			$pager->set_search($_POST['search']);
+	/**
+	 * Edit the bank account
+	 *
+	 * @access public
+	 */
+	public function display_edit() {
+		$bank_account = Bank_Account::get_by_id($_GET['id']);
+		$bank_account->load_array($_POST['bank_account']);
+		$bank_account->save();
+
+		Session::redirect('/financial/account');
+	}
+
+	/**
+	 * Export a bank account
+	 *
+	 * @access public
+	 */
+	public function display_export() {
+		$template = Template::get();
+
+		$bank_account = Bank_Account::get_by_id($_GET['id']);
+		$template->assign('bank_account', $bank_account);
+
+		if (isset($_POST['export_format'])) {
+			$export = new $_POST['export_format']();
+			$export->data = json_encode( $_POST['bank_account_statement_ids'] );
+			$export->save();
+			$export->run();
+			Session::redirect('/export?action=created');
 		}
-		$pager->page();
-
-		$template = Template::Get();
-		$template->assign('pager', $pager);
-
-
 	}
 
 	/**
@@ -129,15 +153,4 @@ class Web_Module_Financial_Account extends Module {
 			);
 		}
 	}
-
-	/**
-	 * Edit an account
-	 *
-	 * @access public
-	 */
-	public function display_edit() {
-		Session::redirect('/financial/account/transaction?id=' . $_GET['id']);
-	}
-
-
 }

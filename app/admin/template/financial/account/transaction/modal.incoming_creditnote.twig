@@ -1,0 +1,183 @@
+{% extends "_default/modal.base.twig" %}
+{% block header %}{% trans "Book incoming credit note" %}{% endblock header %}
+
+{% block body %}
+
+<h5>1. {% trans "Transaction information" %}</h5>
+	<dl class="dl-horizontal">
+		<dt>{% trans "Transaction amount" %}</dt>
+		<dd>&euro;{{ transaction.amount }}</dd>
+
+		<dt>{% trans "To/from" %}</dt>
+		<dd>{{ transaction.other_account_name }}</dd>
+
+		<dt>{% trans "Message" %}</dt>
+		<dd>{{ transaction.message }}</dd>
+
+		<dt>{% trans "Transaction Balance" %}</dt>
+		<dd>&euro;{{ transaction.get_balance() }}</dd>
+
+		<dt>{% trans "Date" %}</dt>
+		<dd>{{ transaction.date|date }}</dd>
+	</dl>
+
+<hr />
+
+
+
+<h5>2. {% trans "Search invoices" %}</h5>
+	<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_incoming_creditnotes">
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Search invoice" %}</label>
+		<div class="col-xs-6">
+			<div class="input-group">
+				<input type="text" name="search" id="txt_search_incoming_creditnotes" class="form-control" value="{{ transaction.get_message() }}" />
+				<span class="input-group-btn">
+					<button class="btn btn-primary" type="button" onclick="search_incoming_creditnotes();">{% trans "Search" %}</button>
+				</span>
+			</div>
+		</div>
+	</div>
+	</form>
+
+	<div class="incoming_creditnote_search_results"></div>
+<hr />
+
+
+<form action="{{ env.module.get_module_path() }}?action=link_incoming_creditnote" method="post" class="form-horizontal form-condensed" id="link_incoming_creditnote">
+<h5>3. {% trans "Confirm link" %}</h5>
+	<input type="hidden" name="transaction_id" value="{{ transaction.id }}" />
+	<input type="hidden" name="document_id" id="credit_document_id" value="" />
+
+	<div id="confirm_link_incoming_creditnotes">
+		<div class="alert alert-info">{% trans "Please select an invoice in the search result" %}</div>
+	</div>
+
+</form>
+
+<script type="text/x-handlebars-template" id="selected-incoming-creditnote">
+	<div class="alert alert-danger hide">
+		{% trans "There is a problem with the amounts you have entered." %} {% trans "The total amount cannot exceed the amount of the transaction" %}.
+	</div>
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Link with credit note" %}</label>
+		<div class="col-xs-3">
+			<div class="input-group">
+				<span class="input-group-addon">&euro;</span>
+				<input type="text" class="form-control" id="link_incoming_creditnote_amount" style="width: 143px;" name="link_incoming_creditnote_amount" value="">
+				<span class="input-group-addon" id="max_incoming_creditnote_amount"></span>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Link with supplier" %}</label>
+		<div class="col-xs-4">
+			<div class="input-group">
+				<span class="input-group-addon">&euro;</span>
+				<input type="text" class="form-control" id="link_supplier_amount" style="width: 143px;" name="link_supplier_amount" value="">
+				<span class="input-group-btn">
+					<button class="btn btn-default" id="supplier_amount_0" type="button">€0</button>
+					<button class="btn btn-default" id="supplier_credit_amount_max" type="button">{% trans "Max" %}</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-xs-9 col-xs-offset-3">
+			<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+		</div>
+	</div>
+</script>
+
+
+<script type="text/javascript">
+	$('#search_incoming_creditnotes').submit(function(event) {
+		search_incoming_creditnotes();
+		event.preventDefault();
+	});
+
+	$('#modal_incoming_creditnote').on('shown.bs.modal', function () {
+		search_incoming_creditnotes();
+	});
+
+	function search_incoming_creditnotes() {
+		url = '/financial/account/transaction?action=search_incoming_creditnotes&transaction_id={{ transaction.id }}&search=' + URI.encode($('#txt_search_incoming_creditnotes').val());
+		$('.incoming_creditnote_search_results').load(url, function() {
+			pager_incoming_creditnotes_ajax();
+		});
+	}
+
+	function pager_incoming_creditnotes_ajax() {
+		$('.skeleton-pager-link, .skeleton-pager-header-link').click(function(event) {
+			event.preventDefault();
+
+			url = URI.parse($(this).attr('href'));
+			result = URI.parseQuery(url.query);
+
+			$('.incoming_creditnote_search_results').load('/financial/account/transaction?action=search_incoming_creditnotes&transaction_id={{ transaction.id }}&q=' + URI.encode(result.q), function() {
+				pager_incoming_creditnotes_ajax();
+			});
+		});
+	}
+
+	var transaction_amount;
+	var credit_amount;
+
+	function incoming_creditnote_fill_up() {
+		if (transaction_amount <= credit_amount && transaction_amount > 0) {
+			$('#confirm_link_incoming_creditnotes #link_incoming_creditnote_amount').val(transaction_amount);
+			$('#confirm_link_incoming_creditnotes #link_supplier_amount').val(0);
+		} else {
+			$('#confirm_link_incoming_creditnotes #link_incoming_creditnote_amount').val(credit_amount);
+			$('#confirm_link_incoming_creditnotes #link_supplier_amount').val( (Math.round( (transaction_amount-credit_amount) * 100) / 100));
+		}
+	}
+
+
+	function table_incoming_creditnotes_tr_click(row) {
+		var source = $("#selected-incoming-creditnote").html();
+		$('#confirm_link_incoming_creditnotes').html(source)
+		transaction_amount = parseFloat({{ transaction.get_balance() }});
+		credit_amount = parseFloat(row.data('amount'));
+
+		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').html('/ €' + credit_amount);
+		$('#credit_document_id').val(row.data('id'));
+
+		$('#supplier_amount_0').on('click', function() {
+			incoming_creditnote_fill_up();
+			$('#confirm_link_incoming_creditnotes #link_supplier_amount').val(0);
+			$(this).addClass('active');
+			$('#supplier_credit_amount_max').removeClass('active');
+		})
+
+		$('#supplier_credit_amount_max').on('click', function() {
+			incoming_creditnote_fill_up();
+			$(this).addClass('active');
+			$('#supplier_amount_0').removeClass('active');
+		})
+
+		$('#supplier_amount_0').click();
+	}
+
+	$('#link_incoming_creditnote').submit(function(event) {
+		for_incoming_creditnote = parseFloat($('#confirm_link_incoming_creditnotes #link_incoming_creditnote_amount').val());
+		for_supplier = parseFloat($('#confirm_link_incoming_creditnotes #link_supplier_amount').val());
+
+		if (transaction_amount < for_incoming_creditnote + for_supplier) {
+			$('#confirm_link_incoming_creditnotes .alert').removeClass('hide');
+			event.preventDefault();
+			return false;
+		} else if (for_incoming_creditnote > credit_amount) {
+			$('#confirm_link_incoming_creditnotes .alert').removeClass('hide');
+			event.preventDefault();
+			return false;
+		} else {
+			$('#confirm_link_incoming_creditnotes .alert').addClass('hide');
+			return true;
+		}
+	})
+</script>
+
+{% endblock body %}

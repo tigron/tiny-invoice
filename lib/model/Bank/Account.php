@@ -25,6 +25,40 @@ class Bank_Account {
 	}
 
 	/**
+	 * Has bank_account_statements
+	 *
+	 * @access public
+	 * @return bool $has_bank_account_statements
+	 */
+	public function has_bank_account_statements() {
+		try {
+			$this->get_last_bank_account_statement();
+			return true;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+	/**
+	 * Get last bank_account_statement
+	 *
+	 * @access public
+	 * @return Bank_Account_Statement $bank_account_statement
+	 */
+	public function get_last_bank_account_statement() {
+		return Bank_Account_Statement::get_last_by_bank_account($this);
+	}
+
+	/**
+	 * Get statements by year
+	 *
+	 * @access public
+	 * @param string $year
+	 */
+	public function get_bank_account_statements_by_year($year) {
+		return Bank_Account_Statement::get_by_bank_account_year($this, $year);
+	}
+
+	/**
 	 * Get by identifier
 	 *
 	 * @access public

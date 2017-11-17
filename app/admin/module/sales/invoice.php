@@ -62,6 +62,10 @@ class Web_Module_Sales_Invoice extends Module {
 
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/sales/invoice');
+		}
+
 		$template = Template::get();
 		$template->assign('pager', $pager);
 		$template->assign('customers', Customer::get_all('lastname'));

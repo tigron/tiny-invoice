@@ -1,10 +1,10 @@
 {% for document in pager.items %}
 	{% if loop.first %}
-		<table class="table table-hover table-striped table-condensed table-responsive">
+		<table class="table table-hover table-striped table-condensed table-responsive" id="document-list">
 		<thead>
 			<tr>
 				<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
-				<th>{{ pager.create_header('Date'|trans, 'date')|raw }}</th>
+				<th>{{ pager.create_header('Date'|trans, 'document.date')|raw }}</th>
 				<th>{{ pager.create_header('Accounting ID'|trans, 'document_incoming_invoice.accounting_identifier')|raw }}</th>
 				<th>{{ pager.create_header('Expiration date'|trans, 'document_incoming_invoice.expiration_date')|raw }}</th>
 				<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
@@ -12,13 +12,13 @@
 				<th>{% trans "Tags" %}</th>
 				<th>{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
 				<th class="text-right">{{ pager.create_header('Price'|trans, 'document_incoming_invoice.price_incl')|raw }}</th>
-				<th width="20">&nbsp;</th>
+				<th width="10%">{{ pager.create_header('Balanced'|trans, 'balanced')|raw }}</th>
 			</tr>
 		</thead>
 		<tbody>
 	{% endif %}
 
-	<tr {% if date(document.expiration_date) < date() and not document.paid%}class="danger"{% endif %}>
+	<tr {% if date(document.expiration_date) < date() and not document.paid%}class="danger"{% endif %} data-amount="{{ document.get_balance() }}" data-id="{{ document.id }}">
 		<td>{{ document.id }}</td>
 		<td>{{ document.date|date }}</td>
 		<td>{{ document.accounting_identifier }}</td>
@@ -46,11 +46,11 @@
 		<td class="text-right">
 			&euro;{{ document.price_incl }}
 		</td>
-		<td width="20">
-			{% if transaction.get_balance() < 0 and document.get_balance() > 0 %}
-				<a href="/financial/account/transaction?action=link_document&id={{ transaction.id }}&document_id={{ document.id }}">
-					<i class="fa fa-link"></i>
-				</a>
+		<td>
+			{% if document.balanced %}
+				<span class="glyphicon glyphicon-ok"></span>
+			{% else %}
+				<span class="glyphicon glyphicon-remove"></span>
 			{% endif %}
 		</td>
 	</tr>
@@ -65,3 +65,17 @@
 {% else %}
 	<div class="alert alert-warning">{% trans "No documents found." %}</div>
 {% endfor %}
+
+
+<script type="text/javascript">
+	$('#document-list tbody tr').on('click', function() {
+		$('#document-list tbody tr').removeClass('info');
+		$(this).addClass('info');
+		table_incoming_invoices_tr_click($(this));
+	});
+</script>
+<style>
+	#document-list tr {
+		cursor: pointer;
+	}
+</style>

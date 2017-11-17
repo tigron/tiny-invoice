@@ -78,7 +78,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		$pager->add_join('supplier', 'id', 'document_incoming_invoice.supplier_id');
 
 		$pager->add_sort_permission('id');
-		$pager->add_sort_permission('date');
+		$pager->add_sort_permission('document.date');
 		$pager->add_sort_permission('title');
 		$pager->add_sort_permission('document_incoming_invoice.paid');
 		$pager->add_sort_permission('document_incoming_invoice.accounting_identifier');
@@ -86,15 +86,20 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		$pager->add_sort_permission('supplier.company');
 		$pager->add_sort_permission('document_incoming_invoice.price_incl');
 
-		$pager->set_sort('date');
+		$pager->set_sort('document.date');
 		$pager->set_direction('DESC');
 		$pager->page();
+
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/administrative/document/invoice');
+		}
 
 		$template = Template::get();
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
 		$template->assign('selected_tags', $selected_tags);
 		$template->assign('suppliers', Supplier::get_all('company'));
+
 	}
 
 	/**

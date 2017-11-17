@@ -29,7 +29,15 @@ class Config_Admin extends Config {
 		/**
 		 * Routes
 		 */
-		'routes' => []
+		'routes' => [
+
+			'web_module_financial_account_transaction' => [
+				'$language/financial/account/$bank_account_id/transaction',
+				'$language/financial/account/$bank_account_id/transaction/$id',
+				'$language/financial/account/$bank_account_id/transaction/$id/$action',
+			],
+
+		]
 
 	];
 

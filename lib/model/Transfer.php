@@ -17,6 +17,19 @@ class Transfer {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Delete {
+		delete as trait_delete;
+	}
+
+	/**
+	 * Delete
+	 *
+	 * @access public
+	 */
+	public function delete() {
+		$this->trait_delete();
+		Log::create('Transfer removed', $this->invoice);
+	}
 
 	/**
 	 * Get transfers by invoice
@@ -50,5 +63,22 @@ class Transfer {
 		$db = Database::get();
 		$amount = $db->get_one('SELECT SUM(amount) FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
 		return $amount;
+	}
+
+	/**
+	 * Get by Bank_Account_Statement_Transaction_Balance
+	 *
+	 * @access public
+	 * @param Bank_Account_Statement_Transaction_Balance $bank_account_statement_transaction_balance
+	 * @return array $balances
+	 */
+	public static function get_by_bank_account_statement_transaction_balance(Bank_Account_Statement_Transaction_Balance $bank_account_statement_transaction_balance) {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM transfer WHERE bank_account_statement_transaction_balance_id=?', [ $bank_account_statement_transaction_balance->id ]);
+		if ($id === null) {
+			throw new Exception('No transfers found for this balance');
+		}
+		return self::get_by_id($id);
+
 	}
 }

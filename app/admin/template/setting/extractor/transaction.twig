@@ -1,0 +1,298 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+
+	{% if action == 'edit' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/setting/extractor/transaction">{% trans "Transaction extractor" %}</a></li>
+			<li class="active">{% trans "Edit transaction extractor" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
+		{% elseif env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'extractor') }}
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Details" %}
+			</div>
+			<div class="panel-body">
+				<form class="form form-horizontal form-condensed" method="post" action="/setting/extractor/transaction?action=edit&id={{ extractor.id }}">
+
+					<div class="form-group{% if 'name' in errors|keys %} has-error{% endif %}">
+						<label for="name" class="col-xs-3 control-label">{% trans "Name" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="extractor[name]" id="name" class="form-control" value="{{ extractor.name }}">
+							{{ form.invalid_input('name', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'fingerprint_message' in errors|keys %} has-error{% endif %}">
+						<label for="fingerprint_message" class="col-xs-3 control-label">{% trans "Message contains" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="extractor[fingerprint_message]" id="fingerprint_message" class="form-control" value="{{ extractor.fingerprint_message }}">
+							{{ form.invalid_input('fingerprint_message', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'fingerprint_other_account_name' in errors|keys %} has-error{% endif %}">
+						<label for="fingerprint_other_account_name" class="col-xs-3 control-label">{% trans "Other name contains" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="extractor[fingerprint_other_account_name]" id="fingerprint_other_account_name" class="form-control" value="{{ extractor.fingerprint_other_account_name }}">
+							{{ form.invalid_input('fingerprint_other_account_name', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'fingerprint_other_account_number' in errors|keys %} has-error{% endif %}">
+						<label for="fingerprint_other_account_number" class="col-xs-3 control-label">{% trans "Other account number contains" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="extractor[fingerprint_other_account_number]" id="fingerprint_other_account_number" class="form-control" value="{{ extractor.fingerprint_other_account_number }}">
+							{{ form.invalid_input('fingerprint_other_account_number', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Save" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">{% trans "Transaction information" %}</div>
+					<div class="panel-body">
+						<pre>{{ extractor.bank_account_statement_transaction|print_r }}</pre>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-6">
+				<div class="alert alert-info">
+					<p>
+					{% trans "Variable $transaction is available." %} {% trans "Please use"%} <b>$transaction->add_link($object, $amount);</b> {% trans "to link the transaction amount to the object." %}
+					</p>
+					<p>{% trans "More than one link can be made." %} {% trans "Objects should be of type 'Invoice', 'Supplier', 'Bookkeeping_Account', 'Supplier' or 'Customer_Contact'." %}
+					</p>
+					{% trans "If no link is possible, return false" %}
+				</div>
+				<div class="alert alert-danger hide" id="eval_error"></div>
+				<div class="form-group">
+					<textarea class="form-control autogrow code" id="eval">{{ extractor.eval }}</textarea>
+				</div>
+				<div class="form-group">
+					<button type="button" class="btn btn-primary" onclick="run_eval();">{% trans "Run" %}</button>
+				</div>
+
+				<div class="form-group hide" id="parsed_content">
+					<div class="panel panel-default">
+						<div class="panel-heading">{% trans "Data" %}</div>
+						<div class="panel-body" id="data"></div>
+					</div>
+
+					<div class="panel panel-default">
+						<div class="panel-heading">{% trans "Output" %}</div>
+						<div class="panel-body" id="output"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			function run_eval() {
+				data = {
+					'eval': editor.getValue()
+				}
+				$.post('/setting/extractor/transaction?action=eval&id={{ extractor.id }}', data, function(response) {
+					$("#eval_error").addClass('hide');
+					$('#data').html('');
+					$('#output').html('');
+					if (response.error) {
+						$("#eval_error").html(response.message);
+						$("#eval_error").removeClass('hide');
+						$('#output').html('');
+					} else {
+						$('#output').html('<pre>' + response.message + '</pre>');
+						var table = $('<table/>').addClass('table').addClass('table-alternate');
+
+						$.each(response.data, function(key, value) {
+							table.append('<tr><th>' + value.classname + '</th><td>' + value.id + '</td><td>' + value.amount + '</td></tr>');
+						})
+
+						$('#data').append(table);
+
+					}
+					$('#parsed_content').removeClass('hide');
+				}, 'json');
+			}
+
+
+
+			editor = CodeMirror.fromTextArea(document.getElementById("eval"), {
+				lineNumbers: true,
+				mode: "application/x-httpd-php-open",
+				indentUnit: 4,
+				indentWithTabs: true
+			});
+		</script>
+
+	{% elseif action == 'add' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/setting/extractor/transaction">{% trans "Transaction extractor" %}</a></li>
+			<li class="active">{% trans "Add transaction extractor" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Details" %}
+			</div>
+			<div class="panel-body">
+				<form class="form form-horizontal form-condensed" method="post" action="/setting/extractor/transaction?action=add">
+					<input type="hidden" name="extractor[bank_account_statement_transaction_id]" value="{{ transaction.id }}" />
+					<div class="alert alert-info">
+						{% trans "You are about to create an extractor for the following bank account transaction" %}:
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Transaction to" %}</label>
+						<div class="col-xs-9"><p class="form-control-static">{{ transaction.other_account_name }}</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Account number" %}</label>
+						<div class="col-xs-9"><p class="form-control-static">{{ transaction.other_account_number }}</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Transaction message" %}</label>
+						<div class="col-xs-9"><p class="form-control-static">
+						{% if transaction.structured_message != '' %}{{ transaction.structured_message }}{% else %}{{ transaction.message }}{% endif %}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Amount" %}</label>
+						<div class="col-xs-9"><p class="form-control-static">&euro;{{ transaction.amount }}</div>
+					</div>
+
+					<hr />
+
+					<div class="form-group{% if 'name' in errors|keys %} has-error{% endif %}">
+						<label for="name" class="col-xs-3 control-label">{% trans "Name" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="extractor[name]" id="name" class="form-control" value="{{ env.post.extractor.name }}">
+							{{ form.invalid_input('name', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'fingerprint_message' in errors|keys %} has-error{% endif %}">
+						<label for="fingerprint_message" class="col-xs-3 control-label">{% trans "Message contains" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="extractor[fingerprint_message]" id="fingerprint_message" class="form-control" value="{{ env.post.extractor.fingerprint_message }}">
+							{{ form.invalid_input('fingerprint_message', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'fingerprint_other_account_name' in errors|keys %} has-error{% endif %}">
+						<label for="fingerprint_other_account_name" class="col-xs-3 control-label">{% trans "Other name contains" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="extractor[fingerprint_other_account_name]" id="fingerprint_other_account_name" class="form-control" value="{{ env.post.extractor.fingerprint_other_account_name }}">
+							{{ form.invalid_input('fingerprint_other_account_name', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'fingerprint_other_account_number' in errors|keys %} has-error{% endif %}">
+						<label for="fingerprint_other_account_number" class="col-xs-3 control-label">{% trans "Other account number contains" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="extractor[fingerprint_other_account_number]" id="fingerprint_other_account_number" class="form-control" value="{{ env.post.extractor.fingerprint_other_account_number }}">
+							{{ form.invalid_input('fingerprint_other_account_number', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Save" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+	{% else %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li class="active">{% trans "Extractors" %}</li>
+		</ol>
+
+		{% if env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'extractor') }}
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{{ base.pager_count(pager.item_count) }}
+			</div>
+			<div class="panel-body">
+			{% for extractor in pager.items %}
+				{% if loop.first %}
+					<table class="table table-hover table-striped table-condensed table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
+							<th width="30">&nbsp;</th>
+							<th width="30">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+				{% endif %}
+
+					<tr>
+						<td>{{ extractor.id }}</td>
+						<td>{{ extractor.name }}</td>
+						<td>
+							<a href="/setting/extractor/transaction?action=edit&id={{ extractor.id }}" title="">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a>
+						</td>
+						<td>
+							<a href="/setting/extractor/transaction?id={{ extractor.id }}&action=delete" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to remove this extractor?" %}">
+								<span class="glyphicon glyphicon-remove" />
+							</a>
+						</td>
+					</tr>
+
+				{% if loop.last %}
+					</tbody>
+					</table>
+				{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+
+	{% endif %}
+
+{% endblock content %}

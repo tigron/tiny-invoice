@@ -135,10 +135,9 @@ body {
  * Extractor code editor
  */
 .CodeMirror {
-	height: 500px;
+	height: 400px;
 	border: 1px solid #ccc;
 }
-
 
 
 
@@ -178,4 +177,20 @@ body {
 	position: absolute;
 	cursor: pointer;
 	padding: 5px;
+}
+
+
+/**
+ * Batch match
+ */
+.match {
+	height: 250px;
+	cursor: pointer;
+}
+
+/**
+ * Panels
+ */
+.panel-link {
+	cursor: pointer;
 }

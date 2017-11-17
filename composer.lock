@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6ea78b854e69cd12aa7b271ee7f3ac0b",
-    "content-hash": "3039088fcf62d621285ae87b0a1243f5",
+    "content-hash": "940dee9fe4864f5f1a57f751127bb8ee",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -62,7 +61,7 @@
                 "markdown",
                 "twig"
             ],
-            "time": "2015-10-23 20:27:08"
+            "time": "2015-10-23T20:27:08+00:00"
         },
         {
             "name": "bower-asset/autogrow-textarea",
@@ -230,16 +229,16 @@
         },
         {
             "name": "bower-asset/codemirror",
-            "version": "5.25.0",
+            "version": "5.27.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/codemirror.git",
-                "reference": "5d9db3e023fd81d564ffcec7b7ef5c3dbac09291"
+                "reference": "8e6aade9869a639fdffd8edd8faa36c0a42aaa87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/codemirror/zipball/5d9db3e023fd81d564ffcec7b7ef5c3dbac09291",
-                "reference": "5d9db3e023fd81d564ffcec7b7ef5c3dbac09291",
+                "url": "https://api.github.com/repos/components/codemirror/zipball/8e6aade9869a639fdffd8edd8faa36c0a42aaa87",
+                "reference": "8e6aade9869a639fdffd8edd8faa36c0a42aaa87",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -457,16 +456,16 @@
         },
         {
             "name": "bower-asset/jquery-mask-plugin",
-            "version": "v1.14.10",
+            "version": "v1.14.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/igorescobar/jQuery-Mask-Plugin.git",
-                "reference": "3eb5756db932f47349dc46312b217673bde9e920"
+                "reference": "85e8a0c6b713d876fc6c35e6bd5b5466465a1676"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/igorescobar/jQuery-Mask-Plugin/zipball/3eb5756db932f47349dc46312b217673bde9e920",
-                "reference": "3eb5756db932f47349dc46312b217673bde9e920",
+                "url": "https://api.github.com/repos/igorescobar/jQuery-Mask-Plugin/zipball/85e8a0c6b713d876fc6c35e6bd5b5466465a1676",
+                "reference": "85e8a0c6b713d876fc6c35e6bd5b5466465a1676",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -769,7 +768,7 @@
                 "coda",
                 "parsing"
             ],
-            "time": "2015-10-01 14:19:51"
+            "time": "2015-10-01T14:19:51+00:00"
         },
         {
             "name": "ddeboer/imap",
@@ -822,7 +821,7 @@
                 "imap",
                 "mail"
             ],
-            "time": "2015-12-03 13:23:36"
+            "time": "2015-12-03T13:23:36+00:00"
         },
         {
             "name": "ddeboer/transcoder",
@@ -884,7 +883,7 @@
                 "multibyte",
                 "utf-8"
             ],
-            "time": "2015-01-23 14:32:33"
+            "time": "2015-01-23T14:32:33+00:00"
         },
         {
             "name": "dompdf/dompdf",
@@ -892,12 +891,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dompdf/dompdf.git",
-                "reference": "0f418c6b58fdeafc2a0e80eb1fa5e644e185089c"
+                "reference": "13c8123b3aff4b223c8c96fa17d7c0c5e0717660"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/0f418c6b58fdeafc2a0e80eb1fa5e644e185089c",
-                "reference": "0f418c6b58fdeafc2a0e80eb1fa5e644e185089c",
+                "url": "https://api.github.com/repos/dompdf/dompdf/zipball/13c8123b3aff4b223c8c96fa17d7c0c5e0717660",
+                "reference": "13c8123b3aff4b223c8c96fa17d7c0c5e0717660",
                 "shasum": ""
             },
             "require": {
@@ -946,7 +945,7 @@
             ],
             "description": "DOMPDF is a CSS 2.1 compliant HTML to PDF converter",
             "homepage": "https://github.com/dompdf/dompdf",
-            "time": "2017-02-16 02:40:40"
+            "time": "2017-06-03 00:33:21"
         },
         {
             "name": "filp/whoops",
@@ -1004,7 +1003,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-06-29 05:42:04"
+            "time": "2015-06-29T05:42:04+00:00"
         },
         {
             "name": "fxp/composer-asset-plugin",
@@ -1063,7 +1062,7 @@
                 "npm",
                 "package"
             ],
-            "time": "2017-04-09 11:49:10"
+            "time": "2017-04-09T11:49:10+00:00"
         },
         {
             "name": "jschaedl/bav",
@@ -1107,7 +1106,7 @@
                 "bav",
                 "validation"
             ],
-            "time": "2014-11-01 12:04:56"
+            "time": "2014-11-01T12:04:56+00:00"
         },
         {
             "name": "jschaedl/iban",
@@ -1156,7 +1155,7 @@
                 "generate",
                 "validation"
             ],
-            "time": "2014-11-07 14:44:46"
+            "time": "2014-11-07T14:44:46+00:00"
         },
         {
             "name": "michelf/php-markdown",
@@ -1207,7 +1206,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2016-10-29 18:58:20"
+            "time": "2016-10-29T18:58:20+00:00"
         },
         {
             "name": "phenx/php-font-lib",
@@ -1244,7 +1243,7 @@
             ],
             "description": "A library to read, parse, export and make subsets of different types of font files.",
             "homepage": "https://github.com/PhenX/php-font-lib",
-            "time": "2017-02-11 10:58:43"
+            "time": "2017-02-11T10:58:43+00:00"
         },
         {
             "name": "phenx/php-svg-lib",
@@ -1281,7 +1280,7 @@
             ],
             "description": "A library to read, parse and export to PDF SVG files.",
             "homepage": "https://github.com/PhenX/php-svg-lib",
-            "time": "2016-12-13 20:25:45"
+            "time": "2016-12-13T20:25:45+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -1335,26 +1334,26 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2015-12-27 11:43:31"
+            "time": "2015-12-27T11:43:31+00:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "3.1.1",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e"
+                "reference": "46f7e8bb075036c92695b15a1ddb6971c751e585"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/8331b5efe816ae05461b7ca1e721c01b46bafb3e",
-                "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/46f7e8bb075036c92695b15a1ddb6971c751e585",
+                "reference": "46f7e8bb075036c92695b15a1ddb6971c751e585",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5",
                 "phpdocumentor/reflection-common": "^1.0@dev",
-                "phpdocumentor/type-resolver": "^0.2.0",
+                "phpdocumentor/type-resolver": "^0.4.0",
                 "webmozart/assert": "^1.0"
             },
             "require-dev": {
@@ -1380,24 +1379,24 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-09-30 07:12:33"
+            "time": "2017-07-15T11:38:20+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "0.2.1",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb"
+                "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb",
-                "reference": "e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/9c977708995954784726e25d0cd1dddf4e65b0f7",
+                "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
+                "php": "^5.5 || ^7.0",
                 "phpdocumentor/reflection-common": "^1.0"
             },
             "require-dev": {
@@ -1427,7 +1426,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2016-11-25 06:54:22"
+            "time": "2017-07-14T14:27:02+00:00"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -1484,20 +1483,20 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2015-05-01 07:00:55"
+            "time": "2015-05-01T07:00:55+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.4",
+            "version": "2.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "ab8028c93c03cc8d9c824efa75dc94f1db2369bf"
+                "reference": "34a7699e6f31b1ef4035ee36444407cecf9f56aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/ab8028c93c03cc8d9c824efa75dc94f1db2369bf",
-                "reference": "ab8028c93c03cc8d9c824efa75dc94f1db2369bf",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/34a7699e6f31b1ef4035ee36444407cecf9f56aa",
+                "reference": "34a7699e6f31b1ef4035ee36444407cecf9f56aa",
                 "shasum": ""
             },
             "require": {
@@ -1576,7 +1575,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2016-10-04 00:57:04"
+            "time": "2017-06-05T06:31:10+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -1617,7 +1616,7 @@
                 "parser",
                 "stylesheet"
             ],
-            "time": "2015-08-24 08:48:52"
+            "time": "2015-08-24T08:48:52+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1668,7 +1667,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2013-12-03 13:33:24"
+            "time": "2013-12-03T13:33:24+00:00"
         },
         {
             "name": "tigron/sepa-payments",
@@ -1705,7 +1704,7 @@
                 }
             ],
             "description": "A package to create SEPA 001.001.03 payment files",
-            "time": "2016-12-05 13:12:24"
+            "time": "2016-12-05T13:12:24+00:00"
         },
         {
             "name": "tigron/skeleton-template",
@@ -1738,7 +1737,7 @@
                 }
             ],
             "description": "Template library for skeleton",
-            "time": "2016-05-25 19:04:00"
+            "time": "2016-05-25T19:04:00+00:00"
         },
         {
             "name": "tigron/skeleton-template-twig",
@@ -1777,7 +1776,7 @@
                 }
             ],
             "description": " Twig templating for Skeleton",
-            "time": "2016-09-15 12:16:05"
+            "time": "2016-09-15T12:16:05+00:00"
         },
         {
             "name": "twig/extensions",
@@ -1824,24 +1823,24 @@
                 "i18n",
                 "text"
             ],
-            "time": "2013-10-18 19:37:15"
+            "time": "2013-10-18T19:37:15+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v1.33.0",
+            "version": "v1.34.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a"
+                "reference": "f878bab48edb66ad9c6ed626bf817f60c6c096ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a",
-                "reference": "05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/f878bab48edb66ad9c6ed626bf817f60c6c096ee",
+                "reference": "f878bab48edb66ad9c6ed626bf817f60c6c096ee",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.7"
+                "php": ">=5.3.3"
             },
             "require-dev": {
                 "psr/container": "^1.0",
@@ -1851,12 +1850,15 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.33-dev"
+                    "dev-master": "1.34-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
+                },
+                "psr-4": {
+                    "Twig\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1886,7 +1888,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-03-22 15:40:09"
+            "time": "2017-07-04T13:19:31+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -1936,7 +1938,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-11-23 20:04:58"
+            "time": "2016-11-23T20:04:58+00:00"
         }
     ],
     "packages-dev": [
@@ -2001,7 +2003,7 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2015-09-02 20:14:32"
+            "time": "2015-09-02T20:14:32+00:00"
         },
         {
             "name": "psr/log",
@@ -2048,20 +2050,20 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "setasign/fpdi",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDI.git",
-                "reference": "5b899b2b41463bf261aa69840fd30b50950a500c"
+                "reference": "a6ad58897a6d97cc2d2cd2adaeda343b25a368ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/5b899b2b41463bf261aa69840fd30b50950a500c",
-                "reference": "5b899b2b41463bf261aa69840fd30b50950a500c",
+                "url": "https://api.github.com/repos/Setasign/FPDI/zipball/a6ad58897a6d97cc2d2cd2adaeda343b25a368ea",
+                "reference": "a6ad58897a6d97cc2d2cd2adaeda343b25a368ea",
                 "shasum": ""
             },
             "suggest": {
@@ -2097,25 +2099,25 @@
                 "fpdi",
                 "pdf"
             ],
-            "time": "2015-11-30 10:53:14"
+            "time": "2017-05-11T14:25:49+00:00"
         },
         {
             "name": "setasign/fpdi-tcpdf",
-            "version": "1.6.1",
+            "version": "1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDI-TCPDF.git",
-                "reference": "871699d429fcbad6dc809d57c7c8026fd7f41e93"
+                "reference": "510e587718f632621d80f6b26dd0fa68c6ae2553"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDI-TCPDF/zipball/871699d429fcbad6dc809d57c7c8026fd7f41e93",
-                "reference": "871699d429fcbad6dc809d57c7c8026fd7f41e93",
+                "url": "https://api.github.com/repos/Setasign/FPDI-TCPDF/zipball/510e587718f632621d80f6b26dd0fa68c6ae2553",
+                "reference": "510e587718f632621d80f6b26dd0fa68c6ae2553",
                 "shasum": ""
             },
             "require": {
-                "setasign/fpdi": "1.6.*",
-                "tecnickcom/tcpdf": "6.2.*"
+                "setasign/fpdi": "1.6.2",
+                "tecnickcom/tcpdf": "6.2.13"
             },
             "conflict": {
                 "setasign/fpdf": "1.*"
@@ -2144,20 +2146,20 @@
                 "fpdi",
                 "pdf"
             ],
-            "time": "2015-11-30 11:09:50"
+            "time": "2017-05-11T15:01:24+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v3.2.7",
+            "version": "v3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "c30243cc51f726812be3551316b109a2f5deaf8d"
+                "reference": "a97e45d98c59510f085fa05225a1acb74dfe0546"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/c30243cc51f726812be3551316b109a2f5deaf8d",
-                "reference": "c30243cc51f726812be3551316b109a2f5deaf8d",
+                "url": "https://api.github.com/repos/symfony/console/zipball/a97e45d98c59510f085fa05225a1acb74dfe0546",
+                "reference": "a97e45d98c59510f085fa05225a1acb74dfe0546",
                 "shasum": ""
             },
             "require": {
@@ -2165,10 +2167,16 @@
                 "symfony/debug": "~2.8|~3.0",
                 "symfony/polyfill-mbstring": "~1.0"
             },
+            "conflict": {
+                "symfony/dependency-injection": "<3.3"
+            },
             "require-dev": {
                 "psr/log": "~1.0",
+                "symfony/config": "~3.3",
+                "symfony/dependency-injection": "~3.3",
                 "symfony/event-dispatcher": "~2.8|~3.0",
                 "symfony/filesystem": "~2.8|~3.0",
+                "symfony/http-kernel": "~2.8|~3.0",
                 "symfony/process": "~2.8|~3.0"
             },
             "suggest": {
@@ -2180,7 +2188,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -2207,20 +2215,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-04 14:33:42"
+            "time": "2017-07-03T13:19:36+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.2.7",
+            "version": "v3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "56f613406446a4a0a031475cfd0a01751de22659"
+                "reference": "63b85a968486d95ff9542228dc2e4247f16f9743"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/56f613406446a4a0a031475cfd0a01751de22659",
-                "reference": "56f613406446a4a0a031475cfd0a01751de22659",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/63b85a968486d95ff9542228dc2e4247f16f9743",
+                "reference": "63b85a968486d95ff9542228dc2e4247f16f9743",
                 "shasum": ""
             },
             "require": {
@@ -2231,13 +2239,12 @@
                 "symfony/http-kernel": ">=2.3,<2.3.24|~2.4.0|>=2.5,<2.5.9|>=2.6,<2.6.2"
             },
             "require-dev": {
-                "symfony/class-loader": "~2.8|~3.0",
                 "symfony/http-kernel": "~2.8|~3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -2264,20 +2271,20 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-28 21:38:24"
+            "time": "2017-07-05T13:02:37+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4"
+                "reference": "f29dca382a6485c3cbe6379f0c61230167681937"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/e79d363049d1c2128f133a2667e4f4190904f7f4",
-                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f29dca382a6485c3cbe6379f0c61230167681937",
+                "reference": "f29dca382a6485c3cbe6379f0c61230167681937",
                 "shasum": ""
             },
             "require": {
@@ -2289,7 +2296,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.3-dev"
+                    "dev-master": "1.4-dev"
                 }
             },
             "autoload": {
@@ -2323,20 +2330,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14 01:06:16"
+            "time": "2017-06-09T14:24:12+00:00"
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.2.12",
+            "version": "6.2.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "2f732eaa91b5665274689b1d40b285a7bacdc37f"
+                "reference": "95c5938aafe4b20df1454dbddb3e5005c0b26f64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/2f732eaa91b5665274689b1d40b285a7bacdc37f",
-                "reference": "2f732eaa91b5665274689b1d40b285a7bacdc37f",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/95c5938aafe4b20df1454dbddb3e5005c0b26f64",
+                "reference": "95c5938aafe4b20df1454dbddb3e5005c0b26f64",
                 "shasum": ""
             },
             "require": {
@@ -2345,7 +2352,6 @@
             "type": "library",
             "autoload": {
                 "classmap": [
-                    "fonts",
                     "config",
                     "include",
                     "tcpdf.php",
@@ -2386,7 +2392,7 @@
                 "pdf417",
                 "qrcode"
             ],
-            "time": "2015-09-12 10:08:34"
+            "time": "2017-04-26T08:14:48+00:00"
         },
         {
             "name": "tigron/click-post",
@@ -2419,7 +2425,7 @@
                 }
             ],
             "description": "An API client for Ricoh Click & Post service",
-            "time": "2016-10-12 20:40:31"
+            "time": "2016-10-12T20:40:31+00:00"
         },
         {
             "name": "tigron/skeleton-console",
@@ -2458,7 +2464,7 @@
                 }
             ],
             "description": "A console application to interact with Skeleton packages",
-            "time": "2016-05-03 16:07:00"
+            "time": "2016-05-03T16:07:00+00:00"
         },
         {
             "name": "tigron/skeleton-core",
@@ -2491,24 +2497,24 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2017-03-21 11:27:45"
+            "time": "2017-03-21T11:27:45+00:00"
         },
         {
             "name": "tigron/skeleton-database",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-database.git",
-                "reference": "39cbf5d37d428f7b30c48da93b18d4e840424e48"
+                "reference": "20141682d2800c12016d649df509fe1549fcde8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-database/zipball/39cbf5d37d428f7b30c48da93b18d4e840424e48",
-                "reference": "39cbf5d37d428f7b30c48da93b18d4e840424e48",
+                "url": "https://api.github.com/repos/tigron/skeleton-database/zipball/20141682d2800c12016d649df509fe1549fcde8a",
+                "reference": "20141682d2800c12016d649df509fe1549fcde8a",
                 "shasum": ""
             },
             "require": {
-                "ext-mysql": "*"
+                "ext-mysqli": "*"
             },
             "type": "library",
             "autoload": {
@@ -2527,7 +2533,7 @@
                 }
             ],
             "description": "Tigron Skeleton Mysql database layer",
-            "time": "2017-02-28 13:07:34"
+            "time": "2017-06-07T14:19:58+00:00"
         },
         {
             "name": "tigron/skeleton-email",
@@ -2564,20 +2570,20 @@
                 }
             ],
             "description": "Email infrastructure for skeleton",
-            "time": "2016-08-19 13:21:57"
+            "time": "2016-08-19T13:21:57+00:00"
         },
         {
             "name": "tigron/skeleton-error",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-error.git",
-                "reference": "224cef22ec0ca18364507716122aee2e17cb1660"
+                "reference": "c0671ad52a4386d95179f1c47bedfdf754ee3611"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-error/zipball/224cef22ec0ca18364507716122aee2e17cb1660",
-                "reference": "224cef22ec0ca18364507716122aee2e17cb1660",
+                "url": "https://api.github.com/repos/tigron/skeleton-error/zipball/c0671ad52a4386d95179f1c47bedfdf754ee3611",
+                "reference": "c0671ad52a4386d95179f1c47bedfdf754ee3611",
                 "shasum": ""
             },
             "require-dev": {
@@ -2601,7 +2607,7 @@
                 }
             ],
             "description": "Skeleton error handling",
-            "time": "2016-08-31 08:37:49"
+            "time": "2017-06-07T21:51:41+00:00"
         },
         {
             "name": "tigron/skeleton-file",
@@ -2638,7 +2644,7 @@
                 }
             ],
             "description": "Tigron File utilities",
-            "time": "2016-12-21 09:50:29"
+            "time": "2016-12-21T09:50:29+00:00"
         },
         {
             "name": "tigron/skeleton-file-pdf",
@@ -2677,7 +2683,7 @@
                 }
             ],
             "description": "Tigron PDF utilities",
-            "time": "2016-08-18 18:44:56"
+            "time": "2016-08-18T18:44:56+00:00"
         },
         {
             "name": "tigron/skeleton-file-picture",
@@ -2713,7 +2719,7 @@
                 }
             ],
             "description": "Tigron File utilities",
-            "time": "2016-11-28 09:10:28"
+            "time": "2016-11-28T09:10:28+00:00"
         },
         {
             "name": "tigron/skeleton-i18n",
@@ -2750,7 +2756,7 @@
                 }
             ],
             "description": "Translation and internationalization for Skeleton",
-            "time": "2016-12-14 15:58:59"
+            "time": "2016-12-14T15:58:59+00:00"
         },
         {
             "name": "tigron/skeleton-migrate",
@@ -2783,20 +2789,20 @@
                 }
             ],
             "description": "Database migration for Skeleton",
-            "time": "2016-10-05 14:28:42"
+            "time": "2016-10-05T14:28:42+00:00"
         },
         {
             "name": "tigron/skeleton-object",
-            "version": "v0.1.2",
+            "version": "v0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-object.git",
-                "reference": "d60c9bae3456aa7b32fe86c714a2d681fa670ac2"
+                "reference": "6b40fb10001fb89a57f8a49670b2ca09cc7f5e1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-object/zipball/d60c9bae3456aa7b32fe86c714a2d681fa670ac2",
-                "reference": "d60c9bae3456aa7b32fe86c714a2d681fa670ac2",
+                "url": "https://api.github.com/repos/tigron/skeleton-object/zipball/6b40fb10001fb89a57f8a49670b2ca09cc7f5e1f",
+                "reference": "6b40fb10001fb89a57f8a49670b2ca09cc7f5e1f",
                 "shasum": ""
             },
             "require": {
@@ -2822,7 +2828,7 @@
                 }
             ],
             "description": "Tigron Skeleton object traits",
-            "time": "2017-01-10 17:05:01"
+            "time": "2017-05-04T10:08:09+00:00"
         },
         {
             "name": "tigron/skeleton-package-api",
@@ -2858,7 +2864,7 @@
                 }
             ],
             "description": "Tigron Skeleton Restfull API functionality",
-            "time": "2016-06-03 10:24:50"
+            "time": "2016-06-03T10:24:50+00:00"
         },
         {
             "name": "tigron/skeleton-package-crud",
@@ -2895,11 +2901,11 @@
                 }
             ],
             "description": "Tigron Skeleton CRUD functionality",
-            "time": "2016-07-05 14:19:42"
+            "time": "2016-07-05T14:19:42+00:00"
         },
         {
             "name": "tigron/skeleton-pager",
-            "version": "v0.1.7",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-pager.git",
@@ -2931,20 +2937,20 @@
                 }
             ],
             "description": "Tigron Skeleton pager functionality",
-            "time": "2017-03-02 16:23:55"
+            "time": "2017-03-02T16:23:55+00:00"
         },
         {
             "name": "tigron/skeleton-transaction",
-            "version": "v0.2.3",
+            "version": "v0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-transaction.git",
-                "reference": "53b647eb368eaa34ad18e4290e2b1c3053125dbf"
+                "reference": "033cd414c3447dbfa4b26e001c41c381f66cd4d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/53b647eb368eaa34ad18e4290e2b1c3053125dbf",
-                "reference": "53b647eb368eaa34ad18e4290e2b1c3053125dbf",
+                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/033cd414c3447dbfa4b26e001c41c381f66cd4d0",
+                "reference": "033cd414c3447dbfa4b26e001c41c381f66cd4d0",
                 "shasum": ""
             },
             "require-dev": {
@@ -2968,7 +2974,7 @@
                 }
             ],
             "description": "Background tasks for skeleton",
-            "time": "2017-02-08 15:04:31"
+            "time": "2017-06-02T12:57:09+00:00"
         }
     ],
     "aliases": [],
@@ -2981,7 +2987,8 @@
         "bower-asset/bootstrap-multiselect": 20,
         "bower-asset/jquery-mask-plugin": 0,
         "bower-asset/codemirror": 0,
-        "bower-asset/urijs": 0
+        "bower-asset/urijs": 0,
+        "tigron/skeleton-pager": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

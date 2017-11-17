@@ -84,4 +84,21 @@ class Supplier {
 		}
 		return $suppliers;
 	}
+
+	/**
+	 * Get by accounting_identifier
+	 *
+	 * @access public
+	 * @param string $accounting_identifier
+	 * @return Supplier $supplier
+	 */
+	public static function get_by_accounting_identifier($accounting_identifier) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM supplier WHERE accounting_identifier=?', [ $accounting_identifier ]);
+		$suppliers = [];
+		foreach ($ids as $id) {
+			$suppliers[] = self::get_by_id($id);
+		}
+		return $suppliers;
+	}
 }

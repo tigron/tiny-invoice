@@ -73,7 +73,7 @@ class Document_Incoming_Creditnote extends Document {
 
 		$required_fields = [ 'supplier_id', 'expiration_date', 'price_incl', 'price_excl' ];
 		foreach ($required_fields as $required_field) {
-			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
+			if (!isset($this->local_details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
 			}
 		}
@@ -147,13 +147,46 @@ class Document_Incoming_Creditnote extends Document {
 	}
 
 	/**
+	 * Get transfer amount
+	 *
+	 * @access public
+	 * @return double $amount
+	 */
+	public function get_transaction_amount() {
+		$amount = 0;
+		foreach ($this->get_bank_account_statement_transaction_balances() as $transaction) {
+			$amount += $transaction->amount;
+		}
+		return $amount;
+	}
+
+	/**
+	 * Get bank account statement transaction balances
+	 *
+	 * @access public
+	 * @return array $balances
+	 */
+	public function get_bank_account_statement_transaction_balances() {
+		return Bank_Account_Statement_Transaction_Balance::get_by_linked_object($this);
+	}
+
+	/**
+	 * Get balance
+	 *
+	 * @access public
+	 */
+	public function get_balance() {
+		return $this->price_incl - $this->get_transaction_amount();
+	}
+
+	/**
 	 * Save / Create user
 	 *
 	 * @access public
 	 */
-	public function save() {
+	public function save($validate = true) {
 		if (!isset($this->id)) {
-			parent::save();
+			parent::save($validate);
 		}
 		$this->local_details['document_id'] = $this->id;
 
@@ -166,7 +199,7 @@ class Document_Incoming_Creditnote extends Document {
 			$db->update('document_incoming_creditnote', $this->local_details, $where);
 		}
 
-		parent::save();
+		parent::save($validate);
 	}
 
 	/**
@@ -209,5 +242,23 @@ class Document_Incoming_Creditnote extends Document {
 
 		$ids = $db->get_column($sql, []);
 		return $ids;
+	}
+
+	/**
+	 * Get by accounting_identifier
+	 *
+	 * @access public
+	 * @param string $accounting_identifier
+	 */
+	public static function get_by_accounting_identifier($accounting_identifier) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT document_id FROM document_incoming_creditnote WHERE accounting_identifier=?', [ $accounting_identifier]);
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
+		}
+
+		return $items;
 	}
 }

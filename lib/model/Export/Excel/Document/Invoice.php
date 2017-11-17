@@ -19,11 +19,19 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 	public function run() {
 		\Skeleton\Pager\Config::$items_per_page = 1000;
 		$pager = Pager::get_by_options_hash($this->get_data());
+		$pager->add_sort_permission('id');
+		$pager->add_sort_permission('document.date');
+		$pager->add_sort_permission('title');
+		$pager->add_sort_permission('document_incoming_invoice.paid');
+		$pager->add_sort_permission('document_incoming_invoice.accounting_identifier');
+		$pager->add_sort_permission('document_incoming_invoice.expiration_date');
+		$pager->add_sort_permission('supplier.company');
+		$pager->add_sort_permission('document_incoming_invoice.price_incl');
 		$pager->page();
 		$invoices = $pager->items;
 
 		$excel = new PHPExcel();
-		$headers = ['Document number', 'Created', 'Supplier', 'Price excl', 'Price incl', 'Paid'];
+		$headers = ['Document number', 'Created', 'Expiration Date', 'Supplier', 'Title', 'Price excl', 'Price incl', 'Paid'];
 
 		$worksheet = $excel->getActiveSheet();
 
@@ -31,24 +39,23 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 			$worksheet->setCellValueByColumnAndRow($key, 1, $header);
 		}
 
-
-
 		$row = 1;
 		foreach ($invoices as $invoice) {
 			$row++;
 
 			$worksheet->setCellValueByColumnAndRow(0, $row, $invoice->id);
 			$worksheet->setCellValueByColumnAndRow(1, $row, $invoice->created);
-			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->supplier->company);
-			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->price_excl);
-			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->price_incl);
+			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->expiration_date);
+			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->supplier->company);
+			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->title);
+			$worksheet->setCellValueByColumnAndRow(5, $row, $invoice->price_excl);
+			$worksheet->setCellValueByColumnAndRow(6, $row, $invoice->price_incl);
 			if ($invoice->paid) {
-				$worksheet->setCellValueByColumnAndRow(5, $row, 'Yes');
+				$worksheet->setCellValueByColumnAndRow(7, $row, 'Yes');
 			} else {
-				$worksheet->setCellValueByColumnAndRow(5, $row, 'No');
+				$worksheet->setCellValueByColumnAndRow(7, $row, 'No');
 			}
 		}
-
 
 		$writer = new PHPExcel_Writer_Excel2007($excel);
 		ob_start();

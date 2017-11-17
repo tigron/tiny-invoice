@@ -53,31 +53,16 @@ class Bootstrap {
 		$autoloader->register();
 
 		/**
+		 * Setasign
+		 */
+		if (file_exists($root_path . '/lib/component/SetaPDF/Autoload.php')) {
+			require_once $root_path . '/lib/component/SetaPDF/Autoload.php';
+		}
+
+		/**
 		 * Initialize the database
 		 */
 		$database = \Skeleton\Database\Database::Get($config->database, true);
-
-		/**
-		 * Check if Seta is loaded
-		 */
-		try {
-			$setting = Setting::get_by_name('setasign_pdf_extractor');
-		} catch (Exception $e) {
-			$setting = new Setting();
-			$setting->name = 'setasign_pdf_extractor';
-			$setting->value = 0;
-		}
-
-		if (file_exists($root_path . '/lib/component/SetaPDF/Autoload.php')) {
-			require_once $root_path . '/lib/component/SetaPDF/Autoload.php';
-			$setting->value = 1;
-		} else {
-			$setting->value = 0;
-		}
-
-		try {
-			$setting->save();
-		} catch (Exception $e) { }
 
 		/**
 		 * Initialize the file store
@@ -149,7 +134,10 @@ class Bootstrap {
 
 
 		try {
-			\Skeleton\Email\Config::$archive_mailbox = Setting::get_by_name('archive_mailbox')->value;
+			$archive_mailbox = Setting::get_by_name('archive_mailbox')->value;
+			if (trim($archive_mailbox) != '') {
+				\Skeleton\Email\Config::$archive_mailbox = $archive_mailbox;
+			}
 		} catch (Exception $e) { }
 
 		/**

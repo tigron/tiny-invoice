@@ -42,6 +42,10 @@ class Web_Module_Administrative_Incoming extends Module {
 		}
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/administrative/incoming');
+		}
+
 		$template = Template::get();
 		$template->assign('pager', $pager);
 	}
@@ -61,6 +65,11 @@ class Web_Module_Administrative_Incoming extends Module {
 		$template->assign('incoming', $incoming);
 	}
 
+	/**
+	 * Rotate a page
+	 *
+	 * @access public
+	 */
 	public function display_rotate_page() {
 		$page = Incoming_Page::get_by_id($_GET['id']);
 		$page->rotate();
@@ -97,7 +106,11 @@ class Web_Module_Administrative_Incoming extends Module {
 		}
 
 		$document = new Document();
-		$document->title = $incoming->subject;
+		if ($incoming->subject == '') {
+			$document->title = 'Untitled document';
+		} else {
+			$document->title = $incoming->subject;
+		}
 		$document->file_id = $pdf->id;
 		$document->classname = 'Document';
 		$document->save();
