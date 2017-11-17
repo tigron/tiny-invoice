@@ -118,7 +118,7 @@ abstract class Export_Expertm extends Export {
 		if ($bookkeeping_vat_period == 'month') {
 			$month = date('n', strtotime($date));
 			$btw_month = $month - $bookkeeping_start_month + 1;
-			if ($btw_month < 0) {
+			if ($btw_month <= 0) {
 				$btw_month += 12;
 			}
 			return $btw_month;
