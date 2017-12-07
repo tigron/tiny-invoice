@@ -534,7 +534,7 @@
 									<select name="invoice_item[{{ loop.index }}][vat]" class="form-control">
 										<option value="0">0%</option>
 										{% for vat_rate in vat_rates %}
-											<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
+											<option value="{{ vat_rate.vat }}" {% if vat_rate.vat == invoice_queue_item.vat %}selected{% endif %}>{{ vat_rate.vat }}%</option>
 										{% endfor %}
 									</select>
 								</td>
