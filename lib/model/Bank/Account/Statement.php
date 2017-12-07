@@ -15,6 +15,15 @@ class Bank_Account_Statement {
 	use \Skeleton\Pager\Page;
 
 	/**
+	 * Get bank_account_statement_transaction
+	 *
+	 * @access public
+	 */
+	public function get_bank_account_statement_transactions() {
+		return Bank_Account_Statement_Transaction::get_by_bank_account_statement($this);
+	}
+
+	/**
 	 * Populate
 	 *
 	 * @access public
@@ -41,12 +50,12 @@ class Bank_Account_Statement {
 
 		try {
 			$previous = $this->get_previous();
-			$this->original_balance = $previous->new_balance;
+			$this->original_situation_balance = $previous->new_situation_balance;
 		} catch (Exception $e) {
-			$this->orginal_balance = 0;
+			$this->original_situation_balance = 0;
 		}
 
-		$this->new_balance = $this->original_balance + $balance;
+		$this->new_situation_balance = $this->original_situation_balance + $balance;
 		$this->save();
 	}
 
@@ -92,6 +101,25 @@ class Bank_Account_Statement {
 	public static function get_by_bank_account(Bank_Account $bank_account) {
 		$db = Database::get();
 		$ids = $db->get_column('SELECT id FROM bank_account_statement WHERE bank_account_id=? ORDER BY original_situation_date ASC', [ $bank_account->id ]);
+
+		$statements = [];
+		foreach ($ids as $id) {
+			$statements[] = self::get_by_id($id);
+		}
+		return $statements;
+	}
+
+	/**
+	 * Get by bank_account identifier
+	 *
+	 * @access public
+	 * @param Bank_Account $bank_account
+	 * @param string $year
+	 * @return array $bank_account_statement
+	 */
+	public static function get_by_bank_account_year(Bank_Account $bank_account, $year) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM bank_account_statement WHERE bank_account_id=? AND YEAR(original_situation_date) = ? ORDER BY original_situation_date DESC', [ $bank_account->id, $year ]);
 
 		$statements = [];
 		foreach ($ids as $id) {

@@ -43,6 +43,10 @@ class Web_Module_Sales_Product_Type extends Module {
 		}
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/sales/product/type');
+		}
+
 		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}

@@ -72,6 +72,10 @@ class Web_Module_Administrative_Document_Documentation extends Web_Module_Admini
 		}
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/administrative/document/documentation');
+		}
+
 		$template = Template::get();
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());

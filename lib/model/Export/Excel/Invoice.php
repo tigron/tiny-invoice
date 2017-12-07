@@ -30,9 +30,8 @@ class Export_Excel_Invoice extends Export_Expertm {
 			$invoices[$id] = Invoice::get_by_id($id);
 		}
 
-
 		$excel = new PHPExcel();
-		$headers = ['Invoice number', 'Created', 'Customer', 'Price', 'Paid'];
+		$headers = ['Invoice number', 'Created', 'Expiration Date', 'Customer', 'Price', 'Paid'];
 
 		$worksheet = $excel->getActiveSheet();
 
@@ -40,22 +39,21 @@ class Export_Excel_Invoice extends Export_Expertm {
 			$worksheet->setCellValueByColumnAndRow($key, 1, $header);
 		}
 
-
 		$row = 1;
 		foreach ($invoices as $invoice) {
 			$row++;
 
 			$worksheet->setCellValueByColumnAndRow(0, $row, $invoice->id);
 			$worksheet->setCellValueByColumnAndRow(1, $row, $invoice->created);
-			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->customer->get_display_name());
-			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->price_incl);
+			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->expiration_date);
+			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->customer->get_display_name());
+			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->price_incl);
 			if ($invoice->paid) {
-				$worksheet->setCellValueByColumnAndRow(4, $row, 'Yes');
+				$worksheet->setCellValueByColumnAndRow(5, $row, 'Yes');
 			} else {
-				$worksheet->setCellValueByColumnAndRow(4, $row, 'No');
+				$worksheet->setCellValueByColumnAndRow(5, $row, 'No');
 			}
 		}
-
 
 		$writer = new PHPExcel_Writer_Excel2007($excel);
 		ob_start();

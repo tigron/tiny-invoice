@@ -37,7 +37,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 	public function display() {
 		$template = Template::get();
 
-		$bank_account = Bank_Account::get_by_id($_GET['id']);
+		$bank_account = Bank_Account::get_by_id($_GET['bank_account_id']);
 		$template->assign('bank_account', $bank_account);
 
 		$pager = new Pager('bank_account_statement_transaction');
@@ -51,6 +51,8 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		if (isset($_POST['bank_account_statement']) AND $_POST['bank_account_statement'] > 0) {
 			$pager->add_condition('bank_account_statement_id', $_POST['bank_account_statement']);
 		}
+
+		$pager->add_condition('bank_account_statement.bank_account_id', $bank_account->id);
 
 		if (isset($_POST['balanced']) and $_POST['balanced'] > -1) {
 			if ($_POST['balanced'] == 0) {
@@ -68,7 +70,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$pager->page();
 
 		if (isset($_POST) and count($_POST) > 0) {
-			Session::redirect('/financial/account/transaction?id=' . $bank_account->id . '&q=' . $pager->create_options_hash());
+			Session::redirect('/financial/account/transaction?bank_account_id=' . $bank_account->id);
 		}
 
 		$template = Template::Get();
@@ -84,7 +86,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		$bank_account_statement_transaction_balance = Bank_Account_Statement_Transaction_Balance::get_by_id($_GET['id']);
 		$bank_account_statement_transaction_balance->delete();
 
-		Session::redirect('/financial/account/transaction?action=edit&id=' . $bank_account_statement_transaction_balance->bank_account_statement_transaction_id);
+		Session::redirect('/financial/account/transaction?action=edit&bank_account_id=' . $bank_account_statement_transaction_balance->bank_account_statement_transaction->bank_account_statement->bank_account_id . '&id=' . $bank_account_statement_transaction_balance->bank_account_statement_transaction_id);
 	}
 
 	/**
@@ -302,7 +304,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		if (isset($_POST['link_customer_amount']) and $_POST['link_customer_amount'] != 0) {
 			$transaction->link_customer_contact($invoice->customer_contact, $_POST['link_customer_amount']);
 		}
-		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
+		Session::redirect('/financial/account/transaction?bank_account_id=' . $transaction->bank_account_statement->bank_account_id . '&action=edit&id=' . $transaction->id);
 	}
 
 	/**
@@ -320,7 +322,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		if (isset($_POST['link_supplier_amount']) and $_POST['link_supplier_amount'] != 0) {
 			$transaction->link_supplier($document->supplier, $_POST['link_supplier_amount']*-1);
 		}
-		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
+		Session::redirect('/financial/account/transaction?bank_account_id=' . $transaction->bank_account_statement->bank_account_id . '&action=edit&id=' . $transaction->id);
 	}
 
 	/**
@@ -338,7 +340,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		if (isset($_POST['link_supplier_amount']) and $_POST['link_supplier_amount'] != 0) {
 			$transaction->link_supplier($document->supplier, $_POST['link_supplier_amount']);
 		}
-		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
+		Session::redirect('/financial/account/transaction?bank_account_id=' . $transaction->bank_account_statement->bank_account_id . '&action=edit&id=' . $transaction->id);
 	}
 
 	/**
@@ -353,7 +355,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 			$transaction->link_bookkeeping_account($bookkeeping_account, $_POST['link_bookkeeping_account_amount']);
 		}
 
-		Session::redirect('/financial/account/transaction?action=edit&id=' . $transaction->id);
+		Session::redirect('/financial/account/transaction?bank_account_id=' . $transaction->bank_account_statement->bank_account_id . '&action=edit&id=' . $transaction->id);
 	}
 
 	/**

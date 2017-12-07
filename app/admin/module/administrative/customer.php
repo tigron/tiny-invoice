@@ -48,6 +48,10 @@ class Web_Module_Administrative_Customer extends Module {
 		}
 		$pager->page();
 
+		if (isset($_POST) and count($_POST) > 0) {
+			Session::redirect('/administrative/administrative/customer');
+		}
+
 		$template = Template::Get();
 		$template->assign('pager', $pager);
 	}
