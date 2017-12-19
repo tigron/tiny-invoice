@@ -254,6 +254,8 @@
 				{% if loop.last %}
 					</tbody>
 					</table>
+
+					{{ pager.links|raw }}
 				{% endif %}
 			{% endfor %}
 			</div>
