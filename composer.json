@@ -35,7 +35,8 @@
         "bower-asset/highcharts": "^4.2",
         "tigron/sepa-payments": "0.0.5",
         "phpseclib/phpseclib": "^2.0",
-        "ddeboer/imap": "^0.5.2"
+        "ddeboer/imap": "^0.5.2",
+        "tigron/skeleton-transaction": "^0.2.6"
     },
     "require-dev": {
         "tigron/skeleton-database": "~0",
@@ -52,7 +53,6 @@
         "tigron/skeleton-email": "~0",
 		"tigron/skeleton-console": "~0",
         "tigron/skeleton-migrate": "~0",
-        "tigron/skeleton-transaction": "~0",
         "tigron/skeleton-package-api": "~0",
         "tigron/skeleton-package-crud": "~0",
         "tigron/click-post": "~0"

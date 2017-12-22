@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "90876a5c47c8298e22abac22b41c7713",
+    "content-hash": "68a1d0f4d26fd0b4986e31511baabb43",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -1786,6 +1786,43 @@
             "time": "2016-09-15T12:16:05+00:00"
         },
         {
+            "name": "tigron/skeleton-transaction",
+            "version": "v0.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tigron/skeleton-transaction.git",
+                "reference": "9d133a7c9a3f51dba230a51a6d0c17c21caaa152"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/9d133a7c9a3f51dba230a51a6d0c17c21caaa152",
+                "reference": "9d133a7c9a3f51dba230a51a6d0c17c21caaa152",
+                "shasum": ""
+            },
+            "require-dev": {
+                "tigron/skeleton-database": "dev-master",
+                "tigron/skeleton-object": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Skeleton\\Transaction\\": "lib/Skeleton/Transaction/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tigron BVBA",
+                    "email": "support@tigron.be"
+                }
+            ],
+            "description": "Background tasks for skeleton",
+            "time": "2017-08-09T13:14:46+00:00"
+        },
+        {
             "name": "twig/extensions",
             "version": "v1.0.1",
             "source": {
@@ -2946,43 +2983,6 @@
             ],
             "description": "Tigron Skeleton pager functionality",
             "time": "2017-12-22T12:12:28+00:00"
-        },
-        {
-            "name": "tigron/skeleton-transaction",
-            "version": "v0.2.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tigron/skeleton-transaction.git",
-                "reference": "9d133a7c9a3f51dba230a51a6d0c17c21caaa152"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/9d133a7c9a3f51dba230a51a6d0c17c21caaa152",
-                "reference": "9d133a7c9a3f51dba230a51a6d0c17c21caaa152",
-                "shasum": ""
-            },
-            "require-dev": {
-                "tigron/skeleton-database": "dev-master",
-                "tigron/skeleton-object": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Skeleton\\Transaction\\": "lib/Skeleton/Transaction/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tigron BVBA",
-                    "email": "support@tigron.be"
-                }
-            ],
-            "description": "Background tasks for skeleton",
-            "time": "2017-08-09T13:14:46+00:00"
         }
     ],
     "aliases": [],
