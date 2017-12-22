@@ -73,7 +73,11 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Transaction information" %}</div>
 					<div class="panel-body">
-						<pre>{{ extractor.bank_account_statement_transaction|print_r }}</pre>
+						{% if extractor.bank_account_statement_transaction_id > 0 %}
+							<pre>{{ extractor.bank_account_statement_transaction|print_r }}</pre>
+						{% else %}
+							<pre>{% trans "No transaction given" %}</pre>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -288,6 +292,7 @@
 				{% if loop.last %}
 					</tbody>
 					</table>
+					{{ pager.links|raw }}
 				{% endif %}
 			{% endfor %}
 			</div>
