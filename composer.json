@@ -40,7 +40,7 @@
     "require-dev": {
         "tigron/skeleton-database": "~0",
         "tigron/skeleton-object": "~0",
-        "tigron/skeleton-file": "~0",
+        "tigron/skeleton-file": "dev-master",
         "tigron/skeleton-file-picture": "~0",
         "tigron/skeleton-file-pdf": "~0",
         "tigron/skeleton-i18n": "~0",
