@@ -87,7 +87,7 @@ class Mailscanner {
 				$mail->delete();
 			}
 		}
-		$inbox->expunge();
+		$this->imap->expunge();
 	}
 
 	/**
