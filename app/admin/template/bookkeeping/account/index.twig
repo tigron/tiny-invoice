@@ -1,0 +1,25 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/bookkeeping/account">{% trans "Bookkeeping Accounts" %}</a></li>
+			<li class="active">{% trans "Edit bookkeeping account" %}</li>
+		</ol>
+
+		<ul class="nav nav-tabs">
+			<li {% if env.module.get_name() == 'bookkeeping_account_detail' %}class="active"{% endif %}>
+				<a href="/bookkeeping/account/detail?id={{ bookkeeping_account.id }}">{% trans "Details" %}</a>
+			</li>
+
+			<li {% if env.module.get_name() == 'bookkeeping_account_transaction' %}class="active"{% endif %}>
+				<a href="/bookkeeping/account/transaction?id={{ bookkeeping_account.id }}">{% trans "Transactions" %}</a>
+			</li>
+		</ul>
+
+		<div class="tab-content">
+			{% block tab %}{% endblock tab %}
+		</div>
+
+{% endblock content %}
