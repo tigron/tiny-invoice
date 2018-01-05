@@ -67,6 +67,8 @@ class Web_Module_Financial_Account_Transaction extends Module {
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
 		}
+		$pager->set_direction('desc');
+		$pager->set_sort('bank_account_statement_transaction.date');
 		$pager->page();
 
 		if (isset($_POST) and count($_POST) > 0) {
