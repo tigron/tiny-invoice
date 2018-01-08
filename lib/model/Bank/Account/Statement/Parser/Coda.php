@@ -48,8 +48,8 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 			$bank_account->save();
 
 			$statement_sequence_number = $statement->original_situation->statement_sequence_number;
-			$year = date('Y', strtotime($statement->original_situation->date));
-			$month = date('m', strtotime($statement->original_situation->date));
+			$year = date('Y', strtotime($statement->identification->creation_date));
+			$month = date('m', strtotime($statement->identification->creation_date));
 			if ($month == 12 AND $statement_sequence_number < 20) {
 				$year++;
 			}
