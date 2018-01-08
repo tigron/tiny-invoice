@@ -97,6 +97,9 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 					if (isset($transaction->line22->message)) {
 						$bank_account_statement_transaction->message = $bank_account_statement_transaction->message . $transaction->line22->message;
 					}
+					if (isset($transaction->line23->message)) {
+						$bank_account_statement_transaction->message = $bank_account_statement_transaction->message . $transaction->line23->message;
+					}
 				}
 
 				if (isset($transaction->line22->other_account_bic)) {
