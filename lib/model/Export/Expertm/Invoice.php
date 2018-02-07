@@ -38,7 +38,7 @@ class Export_Expertm_Invoice extends Export_Expertm {
 
 		foreach ($invoices as $invoice) {
 			$customer_contact = $invoice->customer_contact;
-			$output1 .= $this->num(9, 4000000);
+			$output1 .= $this->num(9, Setting::get('expertm.centralization_account_customer'));
 			$output1 .= $this->num(9, 1);
 			$output1 .= $this->num(9, $customer_contact->customer_contact_export_id);
 			$output1 .= $this->alf(3, 'EUR');

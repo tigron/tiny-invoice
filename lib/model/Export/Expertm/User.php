@@ -52,7 +52,7 @@ class Export_Expertm_User extends Export_Expertm {
 			$output .= $this->alf(30, $this->export_vat($customer_contact_export->vat, $customer_contact_export->country));
 			$output .= '00' . $this->alf(90, '');
 			$output .= $this->alf(200, '');
-			$output .= $this->num(9, 7000000);
+			$output .= $this->num(9, Setting::get('expertm.centralization_account_sale'));
 			$output .= $this->num(8, 0);
 			$output .= $this->num(1, 0);
 			$output .= $this->num(1, 0);

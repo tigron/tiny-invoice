@@ -34,7 +34,7 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 
 		foreach ($creditnotes as $creditnote) {
 			$customer_contact = $creditnote->customer_contact;
-			$output1 .= $this->num(9, 4000000);
+			$output1 .= $this->num(9, Setting::get('expertm.centralization_account_customer'));
 			$output1 .= $this->num(9, 2);
 			$output1 .= $this->num(9, $customer_contact->customer_contact_export_id);
 			$output1 .= $this->alf(3, 'EUR');
