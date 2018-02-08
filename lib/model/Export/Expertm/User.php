@@ -74,24 +74,11 @@ class Export_Expertm_User extends Export_Expertm {
 	 * @return string $alfa
 	 */
 	private function generate_alfa($name) {
-		$alfa = $name;
-		$alfa = $this->clean_string($alfa);
-		$alfa = str_replace(' ', '', $alfa);
-		$alfa = str_replace('.', '', $alfa);
-		$alfa = str_replace('@', '', $alfa);
-		$alfa = str_replace('&', '', $alfa);
-		$alfa = str_replace('-', '', $alfa);
-		$alfa = str_replace('_', '', $alfa);
-		$alfa = str_replace('!', '', $alfa);
-		$alfa = str_replace(',', '', $alfa);
-		$alfa = str_replace('?', '', $alfa);
-		$alfa = str_replace("\"", '', $alfa);
-		$alfa = str_replace(';', '', $alfa);
-		$alfa = str_replace('*', '', $alfa);
-		$alfa = str_replace('\'', '', $alfa);
-		$alfa = strtoupper($alfa);
-		$alfa = trim($alfa);
-		return $alfa;
+		$slugify = new Slugify();
+		$slug = $slugify->slugify($name);
+		$slug = str_replace('-', '', $slug);
+		$slug = strtoupper($slug);
+		return $slug;
 	}
 
 	/**

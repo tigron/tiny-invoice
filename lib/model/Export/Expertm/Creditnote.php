@@ -68,11 +68,7 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 				$output2 .= $this->alf(50, '');
 				$output2 .= $this->cur(20, $creditnote_item->get_price_excl());
 				$output2 .= $this->cur(20, $creditnote_item->get_price_excl());
-				if ($creditnote_item->get_price_excl() > 0) {
-					$output2 .= $this->alf(1, 'D');
-				} else {
-					$output2 .= $this->alf(1, 'C');
-				}
+				$output2 .= $this->alf(1, 'D');
 				if ($vat > 0) {
 					$output2 .= $this->num(3, 5);
 				} else {
