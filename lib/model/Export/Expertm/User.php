@@ -8,7 +8,7 @@
  */
 
 use \Skeleton\Database\Database;
-use Cocur\Slugify\Slugify;
+use \Cocur\Slugify\Slugify;
 
 class Export_Expertm_User extends Export_Expertm {
 

@@ -41,15 +41,8 @@ class Creditnote {
 		$creditnote_item->creditnote_id = $this->id;
 		$creditnote_item->save();
 
-		$price_incl = 0;
-		$price_excl = 0;
-
-		foreach ($this->get_creditnote_items() as $creditnote_item) {
-			$price_incl += $creditnote_item->get_price_incl();
-			$price_excl += $creditnote_item->get_price_excl();
-		}
-		$this->price_excl = $price_excl;
-		$this->price_incl = $price_incl;
+		$this->price_excl = $this->get_price_excl();
+		$this->price_incl = $this->get_price_incl();
 		$this->save();
 	}
 
