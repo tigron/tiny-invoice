@@ -151,6 +151,20 @@
 				</div>
 
 				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Centralization account customer" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[expertm.centralization_account_customer]" value="{{ settings['expertm.centralization_account_customer'] }}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Centralization account sale" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[expertm.centralization_account_sale]" value="{{ settings['expertm.centralization_account_sale'] }}">
+					</div>
+				</div>
+
+				<div class="form-group">
 					<div class="col-xs-9 col-xs-offset-3">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>

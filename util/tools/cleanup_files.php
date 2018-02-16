@@ -13,7 +13,7 @@ $ids = $db->get_column('
 	AND id NOT IN (SELECT file_id FROM document WHERE preview_file_id IS NOT NULL)
 	AND id NOT IN (SELECT preview_file_id FROM document WHERE preview_file_id IS NOT NULL)
 	AND id NOT IN (SELECT file_id FROM creditnote)
-	AND id NOT IN (SELECT file_id FROM export)
+	AND id NOT IN (SELECT file_id FROM export WHERE file_id IS NOT NULL)
 	AND id NOT IN (SELECT file_id FROM incoming)
 	AND id NOT IN (SELECT file_id FROM incoming_page)
 	AND id NOT IN (SELECT preview_file_id FROM incoming_page)

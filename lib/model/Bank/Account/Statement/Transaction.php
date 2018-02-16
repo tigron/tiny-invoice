@@ -279,13 +279,6 @@ class Bank_Account_Statement_Transaction {
 	public function automatic_link() {
 		$linked = false;
 
-		if ($this->amount > 0) {
-			try {
-				$this->automatic_link_invoice();
-				$linked = true;
-			} catch (Exception $e) { }
-
-		}
 		if ($this->amount < 0) {
 			try {
 				$this->automatic_link_incoming_invoice();

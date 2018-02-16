@@ -8,6 +8,7 @@
  */
 
 use \Skeleton\Database\Database;
+use \Cocur\Slugify\Slugify;
 
 class Export_Expertm_User extends Export_Expertm {
 
@@ -52,7 +53,7 @@ class Export_Expertm_User extends Export_Expertm {
 			$output .= $this->alf(30, $this->export_vat($customer_contact_export->vat, $customer_contact_export->country));
 			$output .= '00' . $this->alf(90, '');
 			$output .= $this->alf(200, '');
-			$output .= $this->num(9, 7000000);
+			$output .= $this->num(9, Setting::get('expertm.centralization_account_sale'));
 			$output .= $this->num(8, 0);
 			$output .= $this->num(1, 0);
 			$output .= $this->num(1, 0);
@@ -74,24 +75,11 @@ class Export_Expertm_User extends Export_Expertm {
 	 * @return string $alfa
 	 */
 	private function generate_alfa($name) {
-		$alfa = $name;
-		$alfa = $this->clean_string($alfa);
-		$alfa = str_replace(' ', '', $alfa);
-		$alfa = str_replace('.', '', $alfa);
-		$alfa = str_replace('@', '', $alfa);
-		$alfa = str_replace('&', '', $alfa);
-		$alfa = str_replace('-', '', $alfa);
-		$alfa = str_replace('_', '', $alfa);
-		$alfa = str_replace('!', '', $alfa);
-		$alfa = str_replace(',', '', $alfa);
-		$alfa = str_replace('?', '', $alfa);
-		$alfa = str_replace("\"", '', $alfa);
-		$alfa = str_replace(';', '', $alfa);
-		$alfa = str_replace('*', '', $alfa);
-		$alfa = str_replace('\'', '', $alfa);
-		$alfa = strtoupper($alfa);
-		$alfa = trim($alfa);
-		return $alfa;
+		$slugify = new Slugify();
+		$slug = $slugify->slugify($name);
+		$slug = str_replace('-', '', $slug);
+		$slug = strtoupper($slug);
+		return $slug;
 	}
 
 	/**

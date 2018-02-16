@@ -99,7 +99,13 @@ class Document_Incoming_Invoice extends Document {
 				$number = str_replace('/', '', $number);
 				$modulus = substr($number, -2);
 				$number = substr($number, 0, 10);
-				if ($number % 97 != $modulus) {
+
+				$number_modulus = $number % 97;
+				if ($number_modulus == 0) {
+					$number_modulus = 97;
+				}
+
+				if ($number_modulus != $modulus) {
 					$errors['payment_structured_message'] = 'incorrect';
 				}
 			}

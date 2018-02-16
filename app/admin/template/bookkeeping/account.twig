@@ -2,28 +2,7 @@
 
 {% block content %}
 
-	{% if env.module.get_name() != 'bookkeeping_account' %}
-
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/bookkeeping_account">{% trans "Bookkeeping Accounts" %}</a></li>
-			<li class="active">{% trans "Edit bookkeeping_account" %}</li>
-		</ol>
-
-		<ul class="nav nav-tabs">
-			<li {% if env.module.get_name() == 'bookkeeping_account_detail' %}class="active"{% endif %}>
-				<a href="/administrative/bookkeeping_account/detail?id={{ bookkeeping_account.id }}">{% trans "Details" %}</a>
-			</li>
-			<li {% if env.module.get_name() == 'bookkeeping_account_document' %}class="active"{% endif %}>
-				<a href="/administrative/bookkeeping_account/document?id={{ bookkeeping_account.id }}">{% trans "Documents" %}</a>
-			</li>
-		</ul>
-
-		<div class="tab-content">
-			{% block tab %}{% endblock tab %}
-		</div>
-
-	{% elseif action == 'add' %}
+	{% if action == 'add' %}
 
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
@@ -65,50 +44,6 @@
 			</div>
 		</form>
 
-	{% elseif action == 'edit' %}
-
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/bookkeeping/account">{% trans "Bookkeeping Accounts" %}</a></li>
-			<li class="active">{% trans "Edit bookkeeping account" %}</li>
-		</ol>
-
-		{% if errors is defined %}
-			<div class="alert alert-danger">
-				{% trans "The form contains mistakes. Please correct them." %}
-			</div>
-		{% elseif env.sticky_session.message is defined %}
-			{{ base.display_flash_message(env.sticky_session.message, 'bookkeeping account') }}
-		{% endif %}
-
-
-		<form class="form form-horizontal form-condensed" method="post" action="/bookkeeping/account?action=edit&id={{ bookkeeping_account.id }}">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{% trans "Details" %}
-				</div>
-				<div class="panel-body">
-					<div class="form-group {% if 'number' in errors|keys %} has-error{% endif %}">
-						<label class="col-xs-3 control-label">{% trans "Number" %}</label>
-						<div class="col-xs-5"><input type="text" name="bookkeeping_account[number]" class="form-control" value="{{ bookkeeping_account.number }}"/></div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Name" %}</label>
-						<div class="col-xs-5"><input type="text" name="bookkeeping_account[name]" class="form-control" value="{{ bookkeeping_account.name }}"/></div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
-							<button class="btn btn-primary">
-								{% trans "Save" %}
-							</button>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</form>
 	{% else %}
 
 		<ol class="breadcrumb">
@@ -171,7 +106,7 @@
 				<td>{{ bookkeeping_account.number }}</td>
 				<td>{{ bookkeeping_account.name }}</td>
 				<td>
-					<a href="/bookkeeping/account?action=edit&id={{ bookkeeping_account.id }}" title="">
+					<a href="/bookkeeping/account/detail?id={{ bookkeeping_account.id }}" title="">
 						<span class="glyphicon glyphicon-pencil"></span>
 					</a>
 				</td>

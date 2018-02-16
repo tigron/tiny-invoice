@@ -34,7 +34,7 @@ class Web_Module_Financial_Account_Chart extends Module {
 	 * @access public
 	 */
 	public function display() {
-		$bank_account = Bank_Account::get_by_id($_GET['id']);
+		$bank_account = Bank_Account::get_by_id($_GET['bank_account_id']);
 		$template = Template::get();
 		$template->assign('bank_account', $bank_account);
 	}

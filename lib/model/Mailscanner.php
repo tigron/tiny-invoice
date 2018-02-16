@@ -9,7 +9,7 @@
  * @author David Vandemaele <david@tigron.be>
  */
 
-use Ddeboer\Imap\Server;
+use Ddeboer\Imap;
 
 class Mailscanner {
 
@@ -30,7 +30,7 @@ class Mailscanner {
 	 * @param string $password
 	 */
 	public function __construct ($url, $username, $password) {
-		$server = new Server($url, 993, '/imap/ssl/novalidate-cert');
+		$server = new Imap\Server($url, 993, '/imap/ssl/novalidate-cert');
 		$this->imap = $server->authenticate($username, $password);
 
 	}
