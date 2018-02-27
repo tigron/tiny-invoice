@@ -205,7 +205,8 @@ class Web_Module_Sales_Creditnote extends Module {
 
 		$pager = new Pager('invoice');
 		$pager->add_sort_permission('number');
-		$pager->set_search($_GET['search']);
+		$pager->set_direction('DESC');
+		$pager->set_search($_GET['search'], [ 'number', 'price_incl', 'customer.company', 'customer.firstname' ]);
 		$pager->page();
 
 		$data = [];
