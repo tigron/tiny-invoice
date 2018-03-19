@@ -11,7 +11,7 @@
 			{{ base.display_flash_message(env.sticky_session.message, 'supplier') }}
 		{% endif %}
 
-		<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier?action=edit&id={{ supplier.id }}">
+		<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier/detail?action=edit&id={{ supplier.id }}">
 
 
 			<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
