@@ -40,6 +40,7 @@ class Web_Module_Administrative_Document extends Module {
 
 		$selected_tags = [];
 		$tag_ids = [];
+
 		if (!empty($_POST['tag_ids'])) {
 			$tag_ids = explode(',', $_POST['tag_ids']);
 			if (count($tag_ids) > 0) {
@@ -78,14 +79,25 @@ class Web_Module_Administrative_Document extends Module {
 		}
 		$pager->page();
 
+		$template = Template::get();
+
 		if (isset($_POST) and count($_POST) > 0) {
 			Session::redirect('/administrative/document');
 		}
 
-		$template = Template::get();
+		$conditions = $pager->get_conditions();
+		if (isset($conditions['document_tag.tag_id'])) {
+			$tag_ids = $conditions['document_tag.tag_id'][0]->get_value();
+			$selected_tags = [];
+			foreach ($tag_ids as $tag_id) {
+				$selected_tags[] = Tag::get_by_id($tag_id);
+			}
+			$template->assign('selected_tags', $selected_tags);
+		}
+
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
-		$template->assign('selected_tags', $selected_tags);
+
 	}
 
 	/**

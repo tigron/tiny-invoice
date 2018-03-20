@@ -3,7 +3,6 @@
 
 {% block pager %}
 	{% if action == 'edit' %}
-
 		{% block breadcrumb %}
 		<ul class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</li></a>
@@ -35,7 +34,7 @@
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
 					<div class="col-xs-9">
-						<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
+						<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 					</div>
 				</div>
 
