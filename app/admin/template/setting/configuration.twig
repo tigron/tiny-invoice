@@ -24,6 +24,14 @@
 				</div>
 
 				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Invoice reminder email window" %}</label>
+					<div class="col-xs-9">
+						<input type="text" name="setting[invoice_reminder_email_window]" class="form-control" value="{{ settings.invoice_reminder_email_window }}">
+						<span class="help-block">{% trans "When to send an invoice reminder email (x days after the expiration date)" %}
+					</div>
+				</div>
+
+				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Enable Click & Post" %}</label>
 					<div class="col-xs-9">
 						<input type="checkbox" id="chk_enable_click_post" data-group-cls="btn-group-xs" name="setting[enable_click_post]" {% if settings.enable_click_post %}checked{% endif %} onchange="toggle_click_post();">

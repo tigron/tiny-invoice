@@ -109,6 +109,11 @@ body {
  	margin-right: 0
 }
 
+.help-block {
+	font-size: 90%;
+	font-style: italic
+}
+
  /**
   * Tabs
   */
