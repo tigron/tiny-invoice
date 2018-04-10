@@ -83,7 +83,9 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 				$bank_account_statement_transaction->date = $transaction->line21->transaction_date;
 				$bank_account_statement_transaction->valuta_date = $transaction->line21->valuta_date;
 				$bank_account_statement_transaction->amount = $transaction->line21->amount;
-				if ($transaction->line21->has_structured_message) {
+				if ($transaction->line21->transaction_code_family == 35 && $transaction->line21->transaction_code_category == '001') {
+					$bank_account_statement_transaction->message = 'Interest';
+				} elseif ($transaction->line21->has_structured_message) {
 					if ($transaction->line21->structured_message_type == 114) {
 						$bank_account_statement_transaction->message = $transaction->line21->structured_message_full;
 						if (isset($transaction->line22->message)) {
