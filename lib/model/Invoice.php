@@ -318,6 +318,11 @@ class Invoice {
 	 */
 	public static function get_remindable() {
 		$db = Database::get();
+		$window = Setting::get('invoice_reminder_email_window');
+		if (is_null($window)) {
+			$window = 7;
+		}
+
 		$ids = $db->get_column('
 			SELECT id
 			FROM
@@ -327,8 +332,8 @@ class Invoice {
 				AND paid = 0
 				AND send_reminder_mail = 1
 				AND expiration_date < NOW()
-				AND DATEDIFF(now(), expiration_date) >= 7
-		');
+				AND DATEDIFF(now(), expiration_date) >= ?
+		', [ $window ]);
 
 		$items = [];
 		foreach ($ids as $id) {

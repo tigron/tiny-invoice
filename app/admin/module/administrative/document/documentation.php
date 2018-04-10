@@ -55,7 +55,7 @@ class Web_Module_Administrative_Document_Documentation extends Web_Module_Admini
 
 		// Fix for pager
 		$pager->add_condition('document_documentation.document_id', '>', 0);
-//		$pager->add_condition('classname', 'Document_Documentation');
+		$pager->add_condition('classname', 'Document_Documentation');
 		$pager->add_join('document_documentation', 'document_id', 'document.id');
 
 		$pager->add_sort_permission('id');
@@ -77,6 +77,16 @@ class Web_Module_Administrative_Document_Documentation extends Web_Module_Admini
 		}
 
 		$template = Template::get();
+		$conditions = $pager->get_conditions();
+		if (isset($conditions['document_tag.tag_id'])) {
+			$tag_ids = $conditions['document_tag.tag_id'][0]->get_value();
+			$selected_tags = [];
+			foreach ($tag_ids as $tag_id) {
+				$selected_tags[] = Tag::get_by_id($tag_id);
+			}
+			$template->assign('selected_tags', $selected_tags);
+		}
+
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
 		$template->assign('selected_tags', $selected_tags);

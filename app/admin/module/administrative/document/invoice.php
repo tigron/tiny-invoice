@@ -95,9 +95,18 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		}
 
 		$template = Template::get();
+		$conditions = $pager->get_conditions();
+		if (isset($conditions['document_tag.tag_id'])) {
+			$tag_ids = $conditions['document_tag.tag_id'][0]->get_value();
+			$selected_tags = [];
+			foreach ($tag_ids as $tag_id) {
+				$selected_tags[] = Tag::get_by_id($tag_id);
+			}
+			$template->assign('selected_tags', $selected_tags);
+		}
+
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
-		$template->assign('selected_tags', $selected_tags);
 		$template->assign('suppliers', Supplier::get_all('company'));
 
 	}
