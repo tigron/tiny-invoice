@@ -53,7 +53,8 @@
         "phpseclib/phpseclib": "^2.0",
         "ddeboer/imap": "^0.5.2",
         "tigron/skeleton-transaction": "^0.2.6",
-        "bower-asset/font-awesome": "^4"
+        "bower-asset/font-awesome": "^4",
+        "tigron/codabox-gateway": "^0.0.1"
     },
     "suggest": {
         "ext-imap": "*"

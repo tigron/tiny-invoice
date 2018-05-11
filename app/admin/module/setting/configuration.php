@@ -41,6 +41,13 @@ class Web_Module_Setting_Configuration extends Module {
 			if (!isset($_POST['setting']['enable_click_post'])) {
 				$_POST['setting']['enable_click_post'] = false;
 			}
+			if (!isset($_POST['setting']['enable_invoice_reminder'])) {
+				$_POST['setting']['enable_invoice_reminder'] = false;
+			}
+			if (!isset($_POST['setting']['enable_codabox'])) {
+				$_POST['setting']['enable_codabox'] = false;
+			}
+
 			foreach ($_POST['setting'] as $key => $value) {
 				try {
 					$setting = Setting::get_by_name($key);

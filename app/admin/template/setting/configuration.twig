@@ -14,7 +14,7 @@
 
 	<form action="/setting/configuration" method="post" class="form-condensed form-horizontal">
 		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Mail settings" %}</div>
+			<div class="panel-heading">{% trans "Invoice delivery" %}</div>
 			<div class="panel-body">
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Archive mailbox" %}</label>
@@ -24,10 +24,21 @@
 				</div>
 
 				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Enable invoice reminders" %}</label>
+					<div class="col-xs-9">
+						<input type="checkbox" data-group-cls="btn-group-xs" name="setting[enable_invoice_reminder]" {% if settings.enable_invoice_reminder %}checked{% endif %}>
+					</div>
+				</div>
+
+				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Invoice reminder email window" %}</label>
 					<div class="col-xs-9">
-						<input type="text" name="setting[invoice_reminder_email_window]" class="form-control" value="{{ settings.invoice_reminder_email_window }}">
-						<span class="help-block">{% trans "When to send an invoice reminder email (x days after the expiration date)" %}
+						<div class="input-group">
+							<input type="number" name="setting[invoice_reminder_email_window]" class="form-control" value="{{ settings.invoice_reminder_email_window }}">
+							<div class="input-group-addon">
+								<span class="input-group-text">{% trans "Days after expiration day" %}</span>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -181,6 +192,44 @@
 			</div>
 		</div>
 
+
+		<div class="panel panel-default">
+			<div class="panel-heading">{% trans "Coda files" %}</div>
+			<div class="panel-body">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">{% trans "Fetch CODA files from" %} <a href="https://codabox.tigron.net" target="new">https://codabox.tigron.net</a></label>
+					<div class="col-xs-9">
+						<input type="checkbox" data-group-cls="btn-group-xs" id="chk_enable_codabox" name="setting[enable_codabox]" {% if settings.enable_codabox %}checked{% endif %} onchange="toggle_codabox();">
+					</div>
+				</div>
+
+				<div class="form-group codabox_option hidden">
+					<label class="col-xs-3 control-label">{% trans "API Key" %}</label>
+					<div class="col-xs-9">
+						<input type="text" class="form-control" name="setting[tigron_api_key]" value="{{ settings.tigron_api_key }}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-xs-9 col-xs-offset-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+		<script type="text/javascript">
+			function toggle_codabox() {
+				if ($('#chk_enable_codabox').is(':checked')) {
+					$('.codabox_option').removeClass('hidden');
+				} else {
+					$('.codabox_option').addClass('hidden');
+				}
+			}
+			toggle_codabox();
+		</script>
 
 
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4450fa5e363340eb48a1aa005fae54bf",
+    "content-hash": "e353931c5bbf2d345deabc8951eff9f8",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -377,8 +377,7 @@
                 "MIT",
                 "CC-BY-3.0"
             ],
-            "description": "Font Awesome",
-            "time": "2016-10-24T15:52:54+00:00"
+            "description": "Font Awesome"
         },
         {
             "name": "bower-asset/handlebars",
@@ -2162,6 +2161,39 @@
             ],
             "description": "An API client for Ricoh Click & Post service",
             "time": "2016-10-12T20:40:31+00:00"
+        },
+        {
+            "name": "tigron/codabox-gateway",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tigron/codabox-gateway.git",
+                "reference": "7e839c40f6b819a104679fda55743ae4076517ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tigron/codabox-gateway/zipball/7e839c40f6b819a104679fda55743ae4076517ab",
+                "reference": "7e839c40f6b819a104679fda55743ae4076517ab",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tigron\\Codabox\\": "lib/Codabox/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tigron BVBA",
+                    "email": "support@tigron.be"
+                }
+            ],
+            "description": "Fetch CODA files from Codabox via the Tigron Restfull API",
+            "time": "2018-05-07T14:23:12+00:00"
         },
         {
             "name": "tigron/sepa-payments",

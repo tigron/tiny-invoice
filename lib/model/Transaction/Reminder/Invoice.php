@@ -17,6 +17,17 @@ class Transaction_Reminder_Invoice extends Transaction {
 	 * @access public
 	 */
 	public function run() {
+		try {
+			$enable_invoice_reminder = Setting::get_by_name('enable_invoice_reminder');
+		} catch (Exception $e) {
+			return;
+		}
+
+		if (!$enable_invoice_reminder->value) {
+			$this->schedule('1 day');
+			return;
+		}
+
 		$grouped = [];
 		$remindable_invoices = Invoice::get_remindable();
 
