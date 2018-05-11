@@ -104,7 +104,11 @@ class Mailscanner {
 
 
 		foreach ($attachments as $attachment) {
-			$file = \Skeleton\File\File::store($attachment->getFilename(), $attachment->getDecodedContent());
+			$filename = $attachment->getFilename();
+			if ($filename == '') {
+				$filename = 'unnamed';
+			}
+			$file = \Skeleton\File\File::store($filename, $attachment->getDecodedContent());
 
 			if (!$file->is_pdf()) {
 				$file->delete();
@@ -112,13 +116,18 @@ class Mailscanner {
 			}
 
 			$incoming = new Incoming();
-			$incoming->subject = $mail->getSubject();
+			$subject = $mail->getSubject();
+			if ($subject == '') {
+				$incoming->subject = 'No subject';
+			} else {
+				$incoming->subject = $subject;
+			}
 			$incoming->file_id = $file->id;
 			$incoming->save();
 
 			$pages = [];
 			try {
-				$pages = @$file->extract_pages();
+				$pages = $file->extract_pages();
 			} catch (\Exception $e) {
 				$pages = [];
 			}
