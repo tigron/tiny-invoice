@@ -44,6 +44,17 @@ class Transaction_Tigron_Coda extends Transaction {
 			$parser->parse($coda);
 			$coda_file->mark_processed();
 		}
+
+		$transactions = Bank_Account_Statement_Transaction::get_unbalanced();
+		foreach ($transactions as $transaction) {
+			if ($transaction->id <= $latest_transaction->id) {
+				continue;
+			}
+			try {
+				$transaction->automatic_link();
+			} catch (Exception $e) { }
+		}
+
 		$this->schedule('1 hour');
 	}
 }
