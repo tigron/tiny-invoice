@@ -429,6 +429,20 @@ class Bank_Account_Statement_Transaction {
 		return $transactions;
 	}
 
+	/**
+	 * Get latest
+	 *
+	 * @access public
+	 * @return Bank_Account_Statement_Transaction $transaction
+	 */
+	public static function get_latest() {
+		$db = Database::get();
+		$latest_transaction_id = $db->get_one('SELECT id FROM bank_account_statement_transaction ORDER BY id DESC LIMIT 1', []);
+		if ($latest_transaction_id === null) {
+			throw new Exception('No transactions');
+		}
+		$latest_transaction = self::get_by_id($latest_transaction_id);
+	}
 
 	/**
 	 * get_oldest_unbalanced

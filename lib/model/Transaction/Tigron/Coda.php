@@ -46,8 +46,14 @@ class Transaction_Tigron_Coda extends Transaction {
 		}
 
 		$transactions = Bank_Account_Statement_Transaction::get_unbalanced();
+		try {
+			$latest_transaction = Bank_Account_Statement_Transaction::get_latest();
+		} catch (Exception $e) {
+			$latest_transaction = null;
+		}
+
 		foreach ($transactions as $transaction) {
-			if ($transaction->id <= $latest_transaction->id) {
+			if ($latest_transaction !== null && $transaction->id <= $latest_transaction->id) {
 				continue;
 			}
 			try {
