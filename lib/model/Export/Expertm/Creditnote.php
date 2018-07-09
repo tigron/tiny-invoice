@@ -72,14 +72,16 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 				if ($vat > 0) {
 					$output2 .= $this->num(3, 5);
 				} else {
-					if ($customer_contact->vat_bound == 0) {
+					if ($customer_contact->country->iso2 == 'BE') {
 						/**
 						 * Diplomatie:
 						 * http://diplomatie.belgium.be/sites/default/files/downloads/specimenEcert.pdf
 						 */
 						$output2 .= $this->num(3, 102);
-					} else {
+					} elseif ($customer_contact->country->european) {
 						$output2 .= $this->num(3, 57);
+					} else {
+						$output2 .= $this->num(3, 70);
 					}
 				}
 				$output2 .= $this->num(9, $i);
