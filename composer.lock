@@ -2459,12 +2459,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-file.git",
-                "reference": "5dd4f9b6f761b61b0decc4b0943883a729c9bb1e"
+                "reference": "97978d49f179f07c76380ddc8919b8a7d56dee61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-file/zipball/5dd4f9b6f761b61b0decc4b0943883a729c9bb1e",
-                "reference": "5dd4f9b6f761b61b0decc4b0943883a729c9bb1e",
+                "url": "https://api.github.com/repos/tigron/skeleton-file/zipball/97978d49f179f07c76380ddc8919b8a7d56dee61",
+                "reference": "97978d49f179f07c76380ddc8919b8a7d56dee61",
                 "shasum": ""
             },
             "require": {
@@ -2489,7 +2489,7 @@
                 }
             ],
             "description": "Tigron File utilities",
-            "time": "2018-07-16T15:01:10+00:00"
+            "time": "2018-10-02T12:33:44+00:00"
         },
         {
             "name": "tigron/skeleton-file-pdf",
