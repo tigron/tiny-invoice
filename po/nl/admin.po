@@ -2,8 +2,8 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: admin-nl.1485276131\n"
-"PO-Revision-Date: 2017-01-24 17:42+0100\n"
+"Project-Id-Version: admin-nl.1538427506\n"
+"PO-Revision-Date: 2018-10-01 22:58+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -45,6 +45,9 @@ msgstr ""
 msgid "Add booking"
 msgstr ""
 
+msgid "Add bookkeeping_account"
+msgstr ""
+
 msgid "Add credit note"
 msgstr ""
 
@@ -78,10 +81,10 @@ msgstr ""
 msgid "Add Payment"
 msgstr ""
 
-msgid "Add Product definition"
+msgid "Add product definition"
 msgstr ""
 
-msgid "Add product definition"
+msgid "Add Product definition"
 msgstr ""
 
 msgid "Add role"
@@ -180,10 +183,16 @@ msgstr ""
 msgid "Bank IBAN"
 msgstr ""
 
+msgid "Bank Transaction"
+msgstr ""
+
 msgid "Batch link"
 msgstr ""
 
 msgid "Batch process"
+msgstr ""
+
+msgid "Below you can find a list of all your bank accounts."
 msgstr ""
 
 msgid "BIC"
@@ -196,6 +205,15 @@ msgid "Book outgoing invoice"
 msgstr ""
 
 msgid "Bookings"
+msgstr ""
+
+msgid "Bookkeeping"
+msgstr ""
+
+msgid "Bookkeeping Accounts"
+msgstr ""
+
+msgid "Bookkeeping accounts"
 msgstr ""
 
 msgid "Cancel"
@@ -217,6 +235,9 @@ msgid "Click & Post password"
 msgstr ""
 
 msgid "Click & Post username"
+msgstr ""
+
+msgid "Click on your account to see the transactions."
 msgstr ""
 
 msgid "Close"
@@ -294,10 +315,10 @@ msgstr ""
 msgid "Credit note number"
 msgstr ""
 
-msgid "Credit notes"
+msgid "Credit Notes"
 msgstr ""
 
-msgid "Credit Notes"
+msgid "Credit notes"
 msgstr ""
 
 msgid "Current value"
@@ -348,10 +369,10 @@ msgstr ""
 msgid "Document details"
 msgstr ""
 
-msgid "Document management"
+msgid "Document Management"
 msgstr ""
 
-msgid "Document Management"
+msgid "Document management"
 msgstr ""
 
 msgid "Document type"
@@ -537,16 +558,19 @@ msgstr ""
 msgid "IBAN"
 msgstr ""
 
-msgid "Id"
+msgid "ID"
 msgstr ""
 
-msgid "ID"
+msgid "Id"
 msgstr ""
 
 msgid "Identifier"
 msgstr ""
 
 msgid "If you make any changes to this contact, existing invoices for this contact will retain the original contact-information"
+msgstr ""
+
+msgid "If your account is not shown, it was not yet included in any CODA file."
 msgstr ""
 
 msgid "IMAP password"
@@ -579,10 +603,10 @@ msgstr ""
 msgid "Incoming invoice"
 msgstr ""
 
-msgid "Incoming invoices"
+msgid "Incoming Invoices"
 msgstr ""
 
-msgid "Incoming Invoices"
+msgid "Incoming invoices"
 msgstr ""
 
 msgid "Invoice"
@@ -729,6 +753,9 @@ msgstr ""
 msgid "No bank accounts found."
 msgstr ""
 
+msgid "No bookkeeping_accounts found."
+msgstr ""
+
 msgid "No credit notes created."
 msgstr ""
 
@@ -828,6 +855,9 @@ msgstr ""
 msgid "Payments"
 msgstr ""
 
+msgid "PDF Documents"
+msgstr ""
+
 msgid "PDF Extractor"
 msgstr ""
 
@@ -862,6 +892,9 @@ msgid "Please select an invoice contact."
 msgstr ""
 
 msgid "Please select an invoice."
+msgstr ""
+
+msgid "Press import to start importing a new CODA file."
 msgstr ""
 
 msgid "Preview"
@@ -912,13 +945,13 @@ msgstr ""
 msgid "Queue content"
 msgstr ""
 
-msgid "Recurring Invoice queue"
+msgid "Recurring invoice queue"
 msgstr ""
 
 msgid "Recurring Invoice Queue"
 msgstr ""
 
-msgid "Recurring invoice queue"
+msgid "Recurring Invoice queue"
 msgstr ""
 
 msgid "Reference"
@@ -1122,10 +1155,10 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-msgid "To/from"
+msgid "To/From"
 msgstr ""
 
-msgid "To/From"
+msgid "To/from"
 msgstr ""
 
 msgid "toggle all"
@@ -1197,10 +1230,10 @@ msgstr ""
 msgid "Values fetched with extractor"
 msgstr ""
 
-msgid "Vat"
+msgid "VAT"
 msgstr ""
 
-msgid "VAT"
+msgid "Vat"
 msgstr ""
 
 msgid "VAT Bound"

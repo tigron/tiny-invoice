@@ -1,6 +1,12 @@
 {
     "config": {
-        "vendor-dir": "lib/external/packages"
+        "vendor-dir": "lib/external/packages",
+        "fxp-asset": {
+            "installer-paths": {
+                "npm-asset-library": "lib/external/assets",
+                "bower-asset-library": "lib/external/assets"
+            }
+        }
     },
     "name": "tigron/skeleton",
     "description": "Tigron Skeleton",
@@ -58,12 +64,6 @@
     },
     "suggest": {
         "ext-imap": "*"
-    },
-    "extra": {
-        "asset-installer-paths": {
-    		"npm-asset-library": "lib/external/assets",
-    		"bower-asset-library": "lib/external/assets"
-        }
     },
     "license": "MIT",
     "authors": [
