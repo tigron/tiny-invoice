@@ -19,7 +19,7 @@ class Migration_20181001_215144_Database_casesensitive extends \Skeleton\Databas
 			ALTER TABLE `country`
 			CHANGE `ISON` `ison` varchar(4) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `name`,
 			CHANGE `ISO2` `iso2` varchar(2) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `ison`,
-			CHANGE `ISO3` `iso3` varchar(3) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `iso`;
+			CHANGE `ISO3` `iso3` varchar(3) COLLATE 'utf8_unicode_ci' NOT NULL AFTER `iso2`;
 		", []);
 	}
 
