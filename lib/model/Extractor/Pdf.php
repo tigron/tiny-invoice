@@ -22,11 +22,11 @@ class Extractor_Pdf {
 	 * @access public
 	 */
 	public function delete() {
-		$db = Database::get();
-		$db->query('DELETE FROM extractor_pdf WHERE id=?', [ $this->id ]);
 		foreach ($this->get_extractor_pdf_fingerprints() as $fingerprint) {
 			$fingerprint->delete();
 		}
+		$db = Database::get();
+		$db->query('DELETE FROM extractor_pdf WHERE id=?', [ $this->id ]);
 	}
 
 	/**
@@ -51,6 +51,7 @@ class Extractor_Pdf {
 		$extractor = new SetaPDF_Extractor($document);
 
 		$result = '';
+
 		for ($i=1; $i<= $pages->count(); $i++) {
 			$result .= $extractor->getResultByPageNumber($i);
 		}
