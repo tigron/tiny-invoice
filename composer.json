@@ -14,7 +14,7 @@
     "require": {
 		"swiftmailer/swiftmailer": "5.*",
 		"dompdf/dompdf": "dev-master",
-		"filp/whoops": "1.*",
+        "filp/whoops": "^2.1",
 		"fxp/composer-asset-plugin": "~1.0",
 		"codelicious/php-coda-parser": "^1.0",
 		"jschaedl/iban": "1.1.6",
