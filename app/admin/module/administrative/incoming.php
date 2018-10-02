@@ -136,7 +136,15 @@ class Web_Module_Administrative_Incoming extends Module {
 		$this->template = false;
 
 		$page = Incoming_Page::get_by_id($_GET['id']);
+		$incoming = $page->incoming;
 		$page->delete();
+
+		$pages = $incoming->get_incoming_pages();
+		if (count($pages) > 0) {
+			Session::redirect('/administrative/incoming?action=edit&id=' . $incoming->id);
+		} else {
+			Session::redirect('/administrative/incoming');
+		}
 	}
 
 	/**
@@ -151,6 +159,7 @@ class Web_Module_Administrative_Incoming extends Module {
 		Session::set_sticky('message', 'deleted');
 		Session::redirect('/administrative/incoming');
 	}
+
 	/**
 	 * Secure
 	 *
