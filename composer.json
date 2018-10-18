@@ -38,7 +38,7 @@
 		"dompdf/dompdf": "dev-master",
 		"filp/whoops": "^2.1",
 		"codelicious/php-coda-parser": "^1.0",
-		"jschaedl/iban": "1.1.6",
+		"jschaedl/iban-validation": "^1.1",
 		"ext-imap": "*",
 		"phpdocumentor/reflection-docblock": "^3.0",
 		"phpoffice/phpspreadsheet": "~1.4",

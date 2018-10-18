@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72126f5d1a5b3f9138b052fc159ef480",
+    "content-hash": "2b1719a562648e039b643ccbd955020b",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -1221,76 +1221,40 @@
             "time": "2018-07-02T11:37:17+00:00"
         },
         {
-            "name": "jschaedl/bav",
-            "version": "1.5",
+            "name": "jschaedl/iban-validation",
+            "version": "v1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jschaedl/Bav.git",
-                "reference": "bf38cdf267f4225c674d50f3db94b61e65bf3039"
+                "url": "https://github.com/jschaedl/iban-validation.git",
+                "reference": "2fe6c2aa1a0b3b1d1d71ebf7f8e733f2969c4324"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jschaedl/Bav/zipball/bf38cdf267f4225c674d50f3db94b61e65bf3039",
-                "reference": "bf38cdf267f4225c674d50f3db94b61e65bf3039",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phploc/phploc": "*",
-                "phpunit/php-code-coverage": ">=1.2.10,<1.3.0",
-                "phpunit/phpunit": "3.7.*",
-                "sebastian/phpcpd": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Bav\\": [
-                        "library/",
-                        "tests/library/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GNU General Public License"
-            ],
-            "description": "bankaccount validation",
-            "homepage": "http://github.com/jschaedl/Bav",
-            "keywords": [
-                "Bank",
-                "account",
-                "bankaccount",
-                "bav",
-                "validation"
-            ],
-            "time": "2014-11-01T12:04:56+00:00"
-        },
-        {
-            "name": "jschaedl/iban",
-            "version": "1.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jschaedl/Iban.git",
-                "reference": "cc8cad138a49296694457ea4f5f80a1cb1061d37"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jschaedl/Iban/zipball/cc8cad138a49296694457ea4f5f80a1cb1061d37",
-                "reference": "cc8cad138a49296694457ea4f5f80a1cb1061d37",
+                "url": "https://api.github.com/repos/jschaedl/iban-validation/zipball/2fe6c2aa1a0b3b1d1d71ebf7f8e733f2969c4324",
+                "reference": "2fe6c2aa1a0b3b1d1d71ebf7f8e733f2969c4324",
                 "shasum": ""
             },
             "require": {
-                "jschaedl/bav": "*"
+                "php": "^7.1.3",
+                "symfony/options-resolver": "~4.0",
+                "symfony/yaml": "~4.0"
             },
             "require-dev": {
-                "phploc/phploc": "*",
-                "phpunit/php-code-coverage": ">=1.2.10,<1.3.0",
-                "phpunit/phpunit": "3.7.*",
-                "sebastian/phpcpd": "*"
+                "friendsofphp/php-cs-fixer": "~2.0",
+                "phpunit/phpunit": "~7.0"
+            },
+            "suggest": {
+                "ext-bcmath": "This library makes use of bcmod function, so an installed bcmath extension is recommended."
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "IBAN": "library"
+                "psr-4": {
+                    "Iban\\Validation\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1299,20 +1263,18 @@
             ],
             "authors": [
                 {
-                    "name": "Jan Schädlich",
+                    "name": "Jan Schaedlich",
                     "email": "mail@janschaedlich.com",
-                    "homepage": "https://github.com/jschaedl/"
+                    "homepage": "https://www.linkedin.com/in/janschaedlich"
                 }
             ],
-            "description": "validate and generate IBANs",
-            "homepage": "http://github.com/jschaedl/Iban",
+            "description": "A small library for validating International BankAccount Numbers (IBANs).",
+            "homepage": "https://github.com/jschaedl/iban-validation",
             "keywords": [
                 "IBAN",
-                "generate",
                 "validation"
             ],
-            "abandoned": "jschaedl/iban-validation",
-            "time": "2014-11-07T14:44:46+00:00"
+            "time": "2018-09-14T07:04:42+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -2216,6 +2178,60 @@
             "time": "2018-10-03T08:15:46+00:00"
         },
         {
+            "name": "symfony/options-resolver",
+            "version": "v4.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/options-resolver.git",
+                "reference": "40f0e40d37c1c8a762334618dea597d64bbb75ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/40f0e40d37c1c8a762334618dea597d64bbb75ff",
+                "reference": "40f0e40d37c1c8a762334618dea597d64bbb75ff",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\OptionsResolver\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony OptionsResolver Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "config",
+                "configuration",
+                "options"
+            ],
+            "time": "2018-09-18T12:45:12+00:00"
+        },
+        {
             "name": "symfony/polyfill-ctype",
             "version": "v1.9.0",
             "source": {
@@ -2331,6 +2347,65 @@
                 "shim"
             ],
             "time": "2018-08-06T14:22:27+00:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v4.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "367e689b2fdc19965be435337b50bc8adf2746c9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/367e689b2fdc19965be435337b50bc8adf2746c9",
+                "reference": "367e689b2fdc19965be435337b50bc8adf2746c9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/polyfill-ctype": "~1.8"
+            },
+            "conflict": {
+                "symfony/console": "<3.4"
+            },
+            "require-dev": {
+                "symfony/console": "~3.4|~4.0"
+            },
+            "suggest": {
+                "symfony/console": "For validating YAML files using the lint command"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-10-02T16:36:10+00:00"
         },
         {
             "name": "tecnickcom/tcpdf",
