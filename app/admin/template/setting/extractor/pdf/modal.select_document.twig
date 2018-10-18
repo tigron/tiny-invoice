@@ -1,0 +1,53 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Select document" %}{% endblock header %}
+
+{% block body %}
+
+	<form action="/setting/extractor/pdf?action=change_document&id={{ env.get.id }}" method="post" class="form-horizontal">
+
+
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Name" %}</label>
+		<div class="col-xs-8">
+			<input type="text" id="autocomplete_document" name="document_id" class="form-control"/>
+		</div>
+	</div>
+
+	</form>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			var documents = new Bloodhound({
+			  datumTokenizer: function(datum) {
+				return Bloodhound.tokenizers.whitespace(datum.value);
+			  },
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				remote: {
+					url: '/setting/extractor/pdf?action=search_document&query=%QUERY',
+					wildcard: '%QUERY'
+				}
+			});
+
+			$('#autocomplete_document').typeahead(null, {
+				display: 'result',
+				source: documents,
+				limit:100
+			}).on('typeahead:asyncrequest', function() {
+				$(this).addClass("loading");
+			}).on('typeahead:asynccancel typeahead:asyncreceive', function() {
+				$(this).removeClass("loading");
+			});
+			$('#autocomplete_document').bind('typeahead:select', function(ev, suggestion) {
+				$('#autocomplete_document').val(suggestion.id);
+			});
+		});
+	</script>
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+{% endblock footer %}
