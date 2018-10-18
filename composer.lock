@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac002088754928890fa6ebc74059f35b",
+    "content-hash": "72126f5d1a5b3f9138b052fc159ef480",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -3289,9 +3289,9 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "dompdf/dompdf": 20,
         "tigron/skeleton-file": 20,
         "tigron/skeleton-pager": 20,
+        "dompdf/dompdf": 20,
         "bower-asset/eonasdan-bootstrap-datetimepicker": 20,
         "bower-asset/autogrow-textarea": 20,
         "bower-asset/jquery-zoom": 20,
