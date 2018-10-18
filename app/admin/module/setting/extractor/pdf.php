@@ -136,6 +136,43 @@ class Web_Module_Setting_Extractor_Pdf extends Crud {
     }
 
     /**
+     * Search document (AJAX)
+     *
+     * @access public
+     */
+    public function display_search_document() {
+		$this->template = false;
+    	$query = $_GET['query'];
+
+    	$pager = new Pager('document');
+    	$pager->set_search($query);
+    	$pager->page();
+
+		$results = [];
+    	foreach ($pager->items as $item) {
+    		$result = $item->id . ' - ' . $item->title;
+    		if (isset($item->description) && $item->description != '') {
+    			$result .= ' (' . $item->description . ')';
+    		}
+    		$results[] = [ 'id' => $item->id, 'title' => $item->title, 'description' => $item->description, 'result' => $result ];
+    	}
+
+    	echo json_encode($results);
+    }
+
+    /**
+     * Change document
+     *
+     * @access public
+     */
+    public function display_change_document() {
+    	$extractor_pdf = Extractor_Pdf::get_by_id($_GET['id']);
+    	$extractor_pdf->document_id = $_POST['document_id'];
+    	$extractor_pdf->save();
+    	Session::redirect('/setting/extractor/pdf?action=edit&id=' . $_GET['id']);
+    }
+
+    /**
      * Is creatable
      *
      * @access public

@@ -44,6 +44,9 @@
 							<a href="/administrative/document?action=download&id={{ object.document.id }}">
 								<span class="glyphicon glyphicon-download"></span>
 							</a>
+							<a href="javascript:void(0);" data-toggle="modal" data-target="#select_document">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a>
 						</p>
 					</div>
 				</div>
@@ -146,5 +149,6 @@
 			{% endblock pager_table_row %}
 
 		{% endembed %}
+		{% include "setting/extractor/pdf/modal.select_document.twig" with {"id": "select_document" } %}
 	{% endif %}
 {% endblock content %}

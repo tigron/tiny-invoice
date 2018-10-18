@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab54ad66cb7c730442ebeaa267d8c0c7",
+    "content-hash": "3866d9969ad723c6422440a2cff4d728",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -88,6 +88,42 @@
                 }
             },
             "time": "2016-03-05T06:02:43+00:00"
+        },
+        {
+            "name": "bower-asset/bloodhound",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gburghardt/bloodhound.git",
+                "reference": "3eb6b44f158278efc669184599f2e5b58107991c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gburghardt/bloodhound/zipball/3eb6b44f158278efc669184599f2e5b58107991c",
+                "reference": "3eb6b44f158278efc669184599f2e5b58107991c",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/concrete-promise": "~1.0.0"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "src/bloodhound.js",
+                    "src/bloodhound/adapters/mustache_template.js",
+                    "src/bloodhound/view_providers/mustache_view_provider.js",
+                    "src/bloodhound/view_providers/simple_template_view_provider.js",
+                    "src/bloodhound/view_resolvers/dynamic_view_resolver.js",
+                    "src/bloodhound/view_resolvers/embedded_view_resolver.js",
+                    "src/bloodhound/rendering_engines/dynamic_rendering_engine.js",
+                    "src/bloodhound/rendering_engines/embedded_rendering_engine.js"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "The missing view resolver for JavaScript. Easily render embedded and dynamic views using any templating language you want.",
+            "time": "2015-02-28T13:26:42+00:00"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -240,6 +276,27 @@
             "time": "2018-09-24T10:17:06+00:00"
         },
         {
+            "name": "bower-asset/concrete-promise",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gburghardt/promise.git",
+                "reference": "f13114e3a336c04e39cd7a8fd4f6cb40bc5057a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gburghardt/promise/zipball/f13114e3a336c04e39cd7a8fd4f6cb40bc5057a3",
+                "reference": "f13114e3a336c04e39cd7a8fd4f6cb40bc5057a3",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "src/promise.js"
+            },
+            "description": "Roll your own custom promises with this dead simple base class allowing you to easily tame the Promise Programming Pattern.",
+            "time": "2014-02-06T21:40:44+00:00"
+        },
+        {
             "name": "bower-asset/dropzone",
             "version": "v4.3.0",
             "source": {
@@ -353,8 +410,7 @@
                 "MIT",
                 "CC-BY-3.0"
             ],
-            "description": "Font Awesome",
-            "time": "2016-10-24T15:52:54+00:00"
+            "description": "Font Awesome"
         },
         {
             "name": "bower-asset/handlebars",
@@ -668,6 +724,62 @@
                 "time"
             ],
             "time": "2018-01-30T13:40:54+00:00"
+        },
+        {
+            "name": "bower-asset/typeahead.js",
+            "version": "v0.11.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twitter/typeahead.js.git",
+                "reference": "588440f66559714280628a4f9799f0c4eb880a4a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twitter/typeahead.js/zipball/588440f66559714280628a4f9799f0c4eb880a4a",
+                "reference": "588440f66559714280628a4f9799f0c4eb880a4a",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.7"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "dist/typeahead.bundle.js"
+            },
+            "time": "2015-04-27T04:02:14+00:00"
+        },
+        {
+            "name": "bower-asset/typeahead.js-bootstrap-css",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bassjobsen/typeahead.js-bootstrap-css.git",
+                "reference": "f90a99e33cc1ec86944c12e71cca4d48d5ae9607"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bassjobsen/typeahead.js-bootstrap-css/zipball/f90a99e33cc1ec86944c12e71cca4d48d5ae9607",
+                "reference": "f90a99e33cc1ec86944c12e71cca4d48d5ae9607",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/bootstrap": "~3.3",
+                "bower-asset/typeahead.js": "~0.11"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "typeaheadjs.css",
+                    "typeaheadjs.less"
+                ],
+                "bower-asset-ignore": [
+                    ".gitignore",
+                    ".gitmodules",
+                    ".travis.yml",
+                    "package.json"
+                ]
+            },
+            "time": "2016-01-06T21:52:23+00:00"
         },
         {
             "name": "bower-asset/urijs",
@@ -1869,16 +1981,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.16",
+            "version": "v3.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "1cbaac35024c9dfc9612b7e2310e82677bf85709"
+                "reference": "3b2b415d4c48fbefca7dc742aa0a0171bfae4e0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/1cbaac35024c9dfc9612b7e2310e82677bf85709",
-                "reference": "1cbaac35024c9dfc9612b7e2310e82677bf85709",
+                "url": "https://api.github.com/repos/symfony/console/zipball/3b2b415d4c48fbefca7dc742aa0a0171bfae4e0b",
+                "reference": "3b2b415d4c48fbefca7dc742aa0a0171bfae4e0b",
                 "shasum": ""
             },
             "require": {
@@ -1934,20 +2046,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-30T03:37:36+00:00"
+            "time": "2018-10-02T16:33:53+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.16",
+            "version": "v3.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "b70cfaae39009ecde3164bb8cba4d029220d27b1"
+                "reference": "0a612e9dfbd2ccce03eb174365f31ecdca930ff6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/b70cfaae39009ecde3164bb8cba4d029220d27b1",
-                "reference": "b70cfaae39009ecde3164bb8cba4d029220d27b1",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/0a612e9dfbd2ccce03eb174365f31ecdca930ff6",
+                "reference": "0a612e9dfbd2ccce03eb174365f31ecdca930ff6",
                 "shasum": ""
             },
             "require": {
@@ -1990,7 +2102,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-22T18:25:03+00:00"
+            "time": "2018-10-02T16:33:53+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2111,16 +2223,16 @@
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "6.2.25",
+            "version": "6.2.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d"
+                "reference": "367241059ca166e3a76490f4448c284e0a161f15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d",
-                "reference": "a5135e2cf02f8c935b71e9e7d676f0f1d31b1b9d",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/367241059ca166e3a76490f4448c284e0a161f15",
+                "reference": "367241059ca166e3a76490f4448c284e0a161f15",
                 "shasum": ""
             },
             "require": {
@@ -2169,7 +2281,7 @@
                 "pdf417",
                 "qrcode"
             ],
-            "time": "2018-09-23T07:52:24+00:00"
+            "time": "2018-10-16T17:24:05+00:00"
         },
         {
             "name": "tigron/click-post",
@@ -2315,16 +2427,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v0.1.16",
+            "version": "v0.1.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "1459febd39c05c9a2aa44400a233a4e14aea412d"
+                "reference": "69b6c3dadcb70e6f65e7c57e8c84836c2698fe30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/1459febd39c05c9a2aa44400a233a4e14aea412d",
-                "reference": "1459febd39c05c9a2aa44400a233a4e14aea412d",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/69b6c3dadcb70e6f65e7c57e8c84836c2698fe30",
+                "reference": "69b6c3dadcb70e6f65e7c57e8c84836c2698fe30",
                 "shasum": ""
             },
             "type": "library",
@@ -2344,7 +2456,7 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2018-07-17T09:54:00+00:00"
+            "time": "2018-10-03T08:09:28+00:00"
         },
         {
             "name": "tigron/skeleton-database",
@@ -2759,12 +2871,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-pager.git",
-                "reference": "c71897763dca5eb4ed11aac450b78b034fdc7ff1"
+                "reference": "87375f0720839f30207753acf3a19e79ff67f86c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-pager/zipball/c71897763dca5eb4ed11aac450b78b034fdc7ff1",
-                "reference": "c71897763dca5eb4ed11aac450b78b034fdc7ff1",
+                "url": "https://api.github.com/repos/tigron/skeleton-pager/zipball/87375f0720839f30207753acf3a19e79ff67f86c",
+                "reference": "87375f0720839f30207753acf3a19e79ff67f86c",
                 "shasum": ""
             },
             "require-dev": {
@@ -2787,7 +2899,7 @@
                 }
             ],
             "description": "Tigron Skeleton pager functionality",
-            "time": "2018-09-25T14:37:54+00:00"
+            "time": "2018-10-17T08:15:17+00:00"
         },
         {
             "name": "tigron/skeleton-template",
