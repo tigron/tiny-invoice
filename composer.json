@@ -1,40 +1,50 @@
 {
-    "config": {
-        "vendor-dir": "lib/external/packages",
-        "fxp-asset": {
-            "installer-paths": {
-                "npm-asset-library": "lib/external/assets",
-                "bower-asset-library": "lib/external/assets"
-            }
-        }
-    },
-    "name": "tigron/skeleton",
-    "description": "Tigron Skeleton",
-    "type": "project",
-    "require": {
+	"config": {
+		"vendor-dir": "lib/external/packages",
+		"fxp-asset": {
+			"installer-paths": {
+				"npm-asset-library": "lib/external/assets",
+				"bower-asset-library": "lib/external/assets"
+			}
+		}
+	},
+	"name": "tigron/skeleton",
+	"description": "Tigron Skeleton",
+	"type": "project",
+	"require": {
+		"tigron/skeleton-database": "~0",
+		"tigron/skeleton-object": "~0",
+		"tigron/skeleton-file": "dev-master",
+		"tigron/skeleton-file-picture": "~0",
+		"tigron/skeleton-file-pdf": "~0",
+		"tigron/skeleton-i18n": "~0",
+		"tigron/skeleton-pager": "dev-master",
+		"tigron/skeleton-template-twig": "~0",
+		"tigron/skeleton-core": "~0",
+		"tigron/skeleton-error": "~0",
+		"tigron/skeleton-template": "~0",
+		"tigron/skeleton-email": "~0",
+		"tigron/skeleton-console": "~0",
+		"tigron/skeleton-migrate": "~0",
+		"tigron/skeleton-package-api": "~0",
+		"tigron/skeleton-package-crud": "~0",
+		"tigron/click-post": "~0",
+		"tigron/skeleton-transaction": "^0.2.6",
+		"tigron/codabox-gateway": "^0.0.1",
+		"tigron/sepa-payments": "0.0.5",
+
+		"fxp/composer-asset-plugin": "~1.0",
 		"swiftmailer/swiftmailer": "5.*",
 		"dompdf/dompdf": "dev-master",
-        "filp/whoops": "^2.1",
-		"fxp/composer-asset-plugin": "~1.0",
+		"filp/whoops": "^2.1",
 		"codelicious/php-coda-parser": "^1.0",
-		"jschaedl/iban": "1.1.6",
-        "tigron/skeleton-database": "~0",
-        "tigron/skeleton-object": "~0",
-        "tigron/skeleton-file": "dev-master",
-        "tigron/skeleton-file-picture": "~0",
-        "tigron/skeleton-file-pdf": "~0",
-        "tigron/skeleton-i18n": "~0",
-        "tigron/skeleton-pager": "dev-master",
-        "tigron/skeleton-template-twig": "~0",
-        "tigron/skeleton-core": "~0",
-        "tigron/skeleton-error": "~0",
-        "tigron/skeleton-template": "~0",
-        "tigron/skeleton-email": "~0",
-		"tigron/skeleton-console": "~0",
-        "tigron/skeleton-migrate": "~0",
-        "tigron/skeleton-package-api": "~0",
-        "tigron/skeleton-package-crud": "~0",
-        "tigron/click-post": "~0",
+		"jschaedl/iban-validation": "^1.1",
+		"ext-imap": "*",
+		"phpdocumentor/reflection-docblock": "^3.0",
+		"phpoffice/phpspreadsheet": "~1.4",
+		"phpseclib/phpseclib": "^2.0",
+		"ddeboer/imap": "^0.5.2",
+
 		"bower-asset/jquery": "~1.8",
 		"bower-asset/moment": "2.10.*",
 		"bower-asset/tigron-datetimepicker": "0.*",
@@ -54,25 +64,17 @@
 		"bower-asset/bloodhound": "^1.0",
 		"bower-asset/typeahead.js": "^0.11.1",
 		"bower-asset/typeahead.js-bootstrap-css": "^1.2",
-        "phpdocumentor/reflection-docblock": "^3.0",
-        "phpoffice/phpexcel": "~1.8",
-		"ext-imap": "*",
-        "bower-asset/highcharts": "^4.2",
-        "tigron/sepa-payments": "0.0.5",
-        "phpseclib/phpseclib": "^2.0",
-        "ddeboer/imap": "^0.5.2",
-        "tigron/skeleton-transaction": "^0.2.6",
-        "bower-asset/font-awesome": "^4",
-        "tigron/codabox-gateway": "^0.0.1"
-    },
-    "suggest": {
-        "ext-imap": "*"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Tigron BVBA",
-            "email": "support@tigron.be"
-        }
-    ]
+		"bower-asset/highcharts": "^4.2",
+		"bower-asset/font-awesome": "^4"
+	},
+	"suggest": {
+		"ext-imap": "*"
+	},
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Tigron BVBA",
+			"email": "support@tigron.be"
+		}
+	]
 }

@@ -6,7 +6,7 @@
  */
 
 use \Skeleton\Database\Database;
-use IBAN\Validation\IBANValidator;
+use \Iban\Validation\Validator;
 
 class Supplier {
 	use \Skeleton\Object\Model;
@@ -37,8 +37,8 @@ class Supplier {
 		}
 
 		if (!empty($this->details['iban'])) {
-			$ibanValidator = new IBANValidator();
-			if (!$ibanValidator->validate($this->details['iban'])) {
+			$iban_validator = new Validator();
+			if (!$iban_validator->validate($this->details['iban'])) {
 				$errors['iban'] = 'incorrect';
 			}
 		}
