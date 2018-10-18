@@ -63,6 +63,11 @@ class Web_Module_User extends Module {
 			$user = new User();
 			$user->set_password($_POST['user']['password']);
 			unset($_POST['user']['password']);
+			if (isset($_POST['user']['receive_expired_invoice_overview'])) {
+				$_POST['user']['receive_expired_invoice_overview'] = 1;
+			} else {
+				$_POST['user']['receive_expired_invoice_overview'] = 0;
+			}
 			$user->load_array($_POST['user']);
 			if ($user->validate($errors) === false) {
 				$template->assign('errors', $errors);
@@ -91,6 +96,11 @@ class Web_Module_User extends Module {
 				$user->set_password($_POST['user']['password']);
 			}
 			unset($_POST['user']['password']);
+			if (isset($_POST['user']['receive_expired_invoice_overview'])) {
+				$_POST['user']['receive_expired_invoice_overview'] = 1;
+			} else {
+				$_POST['user']['receive_expired_invoice_overview'] = 0;
+			}
 			$user->load_array($_POST['user']);
 			if ($user->validate($errors) === false) {
 				$template->assign('errors', $errors);

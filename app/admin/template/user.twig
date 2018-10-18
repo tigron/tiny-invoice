@@ -87,6 +87,13 @@
 					</div>
 
 					<div class="form-group">
+						<label for="language_id" class="col-xs-3 control-label">{% trans "Receive expired invoice overview" %}</label>
+						<div class="col-xs-4">
+							<input type="checkbox" data-group-cls="btn-group-xs" name="user[receive_expired_invoice_overview]"{% if user.receive_expired_invoice_overview == 1 %} checked{% endif %}>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<div class="col-xs-3 col-xs-offset-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
@@ -177,6 +184,13 @@
 									<option value="{{ role.id }}"{% if role.id == user.role_id %} selected{% endif %}>{{ role.name }}</option>
 								{% endfor %}
 							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="language_id" class="col-xs-3 control-label">{% trans "Receive expired invoice overview" %}</label>
+						<div class="col-xs-4">
+							<input type="checkbox" data-group-cls="btn-group-xs" name="user[receive_expired_invoice_overview]">
 						</div>
 					</div>
 
