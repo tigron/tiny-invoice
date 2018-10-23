@@ -257,11 +257,16 @@ console.log(response);
 						</div>
 
 						<h4>
-							{{ bank_account.number }}
+							{% if bank_account.alias != '' %}
+								{{ bank_account.alias }}
+							{% else %}
+								{{ bank_account.number }}
+							{% endif %}
 						</h4>
 
 						{{ bank_account.name }}<br />
-						{{ bank_account.description }}<br /><br />
+						{{ bank_account.description }}<br />
+						{{ bank_account.number }}<br /><br />
 
 						{% if bank_account.has_bank_account_statements() %}
 							{% set last_statement = bank_account.get_last_bank_account_statement() %}

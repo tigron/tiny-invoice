@@ -5,21 +5,28 @@
 
 <form class="form-horizontal" action="/financial/account?action=edit&id={{ bank_account.id }}" method="post">
 
-<div class="alert alert-info">{% trans "Your bank account needs to be linked to a bookkeeping account in order to make exports." %}</div>
+	<div class="alert alert-info">{% trans "Your bank account needs to be linked to a bookkeeping account in order to make exports." %}</div>
 
-<div class="form-group">
-	<label class="col-xs-4 control-label">{% trans "Bookkeeping account" %}</label>
-	<div class="col-xs-8">
-		<select name="bank_account[bookkeeping_account_id]" class="form-control">
-			<option value="0">{% trans "Please select an account" %}</option>
-			{% for bookkeeping_account in bookkeeping_accounts %}
-				<option value="{{ bookkeeping_account.id }}" {% if bank_account.bookkeeping_account_id == bookkeeping_account.id%}selected{% endif %}>
-					{{ bookkeeping_account.number }} - {{ bookkeeping_account.name }}
-				</option>
-			{% endfor %}
-		</select>
+	<div class="form-group">
+		<label class="col-xs-4 control-label">{% trans "Alias" %}</label>
+		<div class="col-xs-8">
+			<input type="text" class="form-control" name="bank_account[alias]" />
+		</div>
 	</div>
-</div>
+
+	<div class="form-group">
+		<label class="col-xs-4 control-label">{% trans "Bookkeeping account" %}</label>
+		<div class="col-xs-8">
+			<select name="bank_account[bookkeeping_account_id]" class="form-control">
+				<option value="0">{% trans "Please select an account" %}</option>
+				{% for bookkeeping_account in bookkeeping_accounts %}
+					<option value="{{ bookkeeping_account.id }}" {% if bank_account.bookkeeping_account_id == bookkeeping_account.id%}selected{% endif %}>
+						{{ bookkeeping_account.number }} - {{ bookkeeping_account.name }}
+					</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
 
 </form>
 
