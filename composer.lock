@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b1719a562648e039b643ccbd955020b",
+    "content-hash": "05f81ea984622e58d080061f361def17",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -1102,16 +1102,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.2.1",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "e79cd403fb77fc8963a99ecc30e80ddd885b3311"
+                "reference": "bc0fd11bc455cc20ee4b5edabc63ebbf859324c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/e79cd403fb77fc8963a99ecc30e80ddd885b3311",
-                "reference": "e79cd403fb77fc8963a99ecc30e80ddd885b3311",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/bc0fd11bc455cc20ee4b5edabc63ebbf859324c7",
+                "reference": "bc0fd11bc455cc20ee4b5edabc63ebbf859324c7",
                 "shasum": ""
             },
             "require": {
@@ -1159,7 +1159,7 @@
                 "throwable",
                 "whoops"
             ],
-            "time": "2018-06-30T13:14:06+00:00"
+            "time": "2018-10-23T09:00:00+00:00"
         },
         {
             "name": "fxp/composer-asset-plugin",
@@ -1221,40 +1221,35 @@
             "time": "2018-07-02T11:37:17+00:00"
         },
         {
-            "name": "jschaedl/iban-validation",
-            "version": "v1.1",
+            "name": "jschaedl/iban",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jschaedl/iban-validation.git",
-                "reference": "2fe6c2aa1a0b3b1d1d71ebf7f8e733f2969c4324"
+                "url": "https://github.com/jschaedl/Iban.git",
+                "reference": "9cbdf31e3e2c5cf20e9ed4743af860723da49a29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jschaedl/iban-validation/zipball/2fe6c2aa1a0b3b1d1d71ebf7f8e733f2969c4324",
-                "reference": "2fe6c2aa1a0b3b1d1d71ebf7f8e733f2969c4324",
+                "url": "https://api.github.com/repos/jschaedl/Iban/zipball/9cbdf31e3e2c5cf20e9ed4743af860723da49a29",
+                "reference": "9cbdf31e3e2c5cf20e9ed4743af860723da49a29",
                 "shasum": ""
             },
-            "require": {
-                "php": "^7.1.3",
-                "symfony/options-resolver": "~4.0",
-                "symfony/yaml": "~4.0"
-            },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "~2.0",
-                "phpunit/phpunit": "~7.0"
+                "phploc/phploc": "*",
+                "phpunit/php-code-coverage": ">=1.2.10,<1.3.0",
+                "phpunit/phpunit": "3.7.*",
+                "sebastian/phpcpd": "*"
             },
             "suggest": {
-                "ext-bcmath": "This library makes use of bcmod function, so an installed bcmath extension is recommended."
+                "ext-bcmath": "Because this library make use of bcmod function, an installed bcmath extension is required."
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
             "autoload": {
-                "psr-4": {
-                    "Iban\\Validation\\": "src"
+                "psr-0": {
+                    "IBAN": [
+                        "library",
+                        "tests/library"
+                    ]
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1263,18 +1258,20 @@
             ],
             "authors": [
                 {
-                    "name": "Jan Schaedlich",
+                    "name": "Jan Schädlich",
                     "email": "mail@janschaedlich.com",
-                    "homepage": "https://www.linkedin.com/in/janschaedlich"
+                    "homepage": "https://github.com/jschaedl/"
                 }
             ],
-            "description": "A small library for validating International BankAccount Numbers (IBANs).",
-            "homepage": "https://github.com/jschaedl/iban-validation",
+            "description": "validate and generate IBANs",
+            "homepage": "http://github.com/jschaedl/Iban",
             "keywords": [
                 "IBAN",
+                "generate",
                 "validation"
             ],
-            "time": "2018-09-14T07:04:42+00:00"
+            "abandoned": "jschaedl/iban-validation",
+            "time": "2017-04-07T16:02:27+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1642,16 +1639,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "57404f43742a8164b5eac3ab03b962d8740885c1"
+                "reference": "2dfd06c59825914a1a325f2a2ed13634b9d8c411"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/57404f43742a8164b5eac3ab03b962d8740885c1",
-                "reference": "57404f43742a8164b5eac3ab03b962d8740885c1",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/2dfd06c59825914a1a325f2a2ed13634b9d8c411",
+                "reference": "2dfd06c59825914a1a325f2a2ed13634b9d8c411",
                 "shasum": ""
             },
             "require": {
@@ -1725,7 +1722,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2018-09-30T03:57:24+00:00"
+            "time": "2018-10-21T10:04:54+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2111,20 +2108,21 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.1.6",
+            "version": "v3.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "dc7122fe5f6113cfaba3b3de575d31112c9aa60b"
+                "reference": "3b2b415d4c48fbefca7dc742aa0a0171bfae4e0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/dc7122fe5f6113cfaba3b3de575d31112c9aa60b",
-                "reference": "dc7122fe5f6113cfaba3b3de575d31112c9aa60b",
+                "url": "https://api.github.com/repos/symfony/console/zipball/3b2b415d4c48fbefca7dc742aa0a0171bfae4e0b",
+                "reference": "3b2b415d4c48fbefca7dc742aa0a0171bfae4e0b",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3",
+                "php": "^5.5.9|>=7.0.8",
+                "symfony/debug": "~2.8|~3.0|~4.0",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "conflict": {
@@ -2133,11 +2131,11 @@
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/config": "~3.4|~4.0",
+                "symfony/config": "~3.3|~4.0",
                 "symfony/dependency-injection": "~3.4|~4.0",
-                "symfony/event-dispatcher": "~3.4|~4.0",
+                "symfony/event-dispatcher": "~2.8|~3.0|~4.0",
                 "symfony/lock": "~3.4|~4.0",
-                "symfony/process": "~3.4|~4.0"
+                "symfony/process": "~3.3|~4.0"
             },
             "suggest": {
                 "psr/log-implementation": "For using the console logger",
@@ -2148,7 +2146,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -2175,24 +2173,31 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-03T08:15:46+00:00"
+            "time": "2018-10-02T16:33:53+00:00"
         },
         {
-            "name": "symfony/options-resolver",
+            "name": "symfony/debug",
             "version": "v4.1.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "40f0e40d37c1c8a762334618dea597d64bbb75ff"
+                "url": "https://github.com/symfony/debug.git",
+                "reference": "e3f76ce6198f81994e019bb2b4e533e9de1b9b90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/40f0e40d37c1c8a762334618dea597d64bbb75ff",
-                "reference": "40f0e40d37c1c8a762334618dea597d64bbb75ff",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/e3f76ce6198f81994e019bb2b4e533e9de1b9b90",
+                "reference": "e3f76ce6198f81994e019bb2b4e533e9de1b9b90",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3"
+                "php": "^7.1.3",
+                "psr/log": "~1.0"
+            },
+            "conflict": {
+                "symfony/http-kernel": "<3.4"
+            },
+            "require-dev": {
+                "symfony/http-kernel": "~3.4|~4.0"
             },
             "type": "library",
             "extra": {
@@ -2202,7 +2207,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Symfony\\Component\\OptionsResolver\\": ""
+                    "Symfony\\Component\\Debug\\": ""
                 },
                 "exclude-from-classmap": [
                     "/Tests/"
@@ -2222,14 +2227,9 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
-            "description": "Symfony OptionsResolver Component",
+            "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "keywords": [
-                "config",
-                "configuration",
-                "options"
-            ],
-            "time": "2018-09-18T12:45:12+00:00"
+            "time": "2018-10-02T16:36:10+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2347,65 +2347,6 @@
                 "shim"
             ],
             "time": "2018-08-06T14:22:27+00:00"
-        },
-        {
-            "name": "symfony/yaml",
-            "version": "v4.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "367e689b2fdc19965be435337b50bc8adf2746c9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/367e689b2fdc19965be435337b50bc8adf2746c9",
-                "reference": "367e689b2fdc19965be435337b50bc8adf2746c9",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "symfony/polyfill-ctype": "~1.8"
-            },
-            "conflict": {
-                "symfony/console": "<3.4"
-            },
-            "require-dev": {
-                "symfony/console": "~3.4|~4.0"
-            },
-            "suggest": {
-                "symfony/console": "For validating YAML files using the lint command"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Yaml\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Yaml Component",
-            "homepage": "https://symfony.com",
-            "time": "2018-10-02T16:36:10+00:00"
         },
         {
             "name": "tecnickcom/tcpdf",
@@ -2574,20 +2515,20 @@
         },
         {
             "name": "tigron/skeleton-console",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-console.git",
-                "reference": "258757c56fb165e8f202f8c9fd4d91828cc5e6c8"
+                "reference": "c5cc80f43063b080dc9d909ee49441d39c6efdc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-console/zipball/258757c56fb165e8f202f8c9fd4d91828cc5e6c8",
-                "reference": "258757c56fb165e8f202f8c9fd4d91828cc5e6c8",
+                "url": "https://api.github.com/repos/tigron/skeleton-console/zipball/c5cc80f43063b080dc9d909ee49441d39c6efdc6",
+                "reference": "c5cc80f43063b080dc9d909ee49441d39c6efdc6",
                 "shasum": ""
             },
             "require": {
-                "symfony/console": "*"
+                "symfony/console": "^3.4"
             },
             "bin": [
                 "bin/skeleton"
@@ -2609,7 +2550,7 @@
                 }
             ],
             "description": "A console application to interact with Skeleton packages",
-            "time": "2018-03-30T12:13:37+00:00"
+            "time": "2018-10-23T08:44:52+00:00"
         },
         {
             "name": "tigron/skeleton-core",
