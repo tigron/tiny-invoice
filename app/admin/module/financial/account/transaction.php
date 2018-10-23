@@ -230,33 +230,7 @@ class Web_Module_Financial_Account_Transaction extends Module {
 	}
 
 	/**
-	 * Batch link
-	 *
-	 * @access public
-	 */
-	public function display_batch_link() {
-		if (isset($_POST['classname']) and $_POST['classname'] != 'ignore') {
-			$transaction = Bank_Account_Statement_Transaction::get_by_id($_POST['transaction_id']);
-			$classname = $_POST['classname'];
-			$class = $classname::get_by_id($_POST['object_id']);
-			$transaction->add_link($class, $transaction->amount);
-			$transaction->apply_links();
-			Session::Redirect('/financial/account/transaction?action=batch_link?start=' . $transaction->id);
-		}
-
-		if (isset($_GET['start'])) {
-			$transaction = Bank_Account_Statement_Transaction::get_oldest_unbalanced($_GET['start']);
-		} else {
-			$transaction = Bank_Account_Statement_Transaction::get_oldest_unbalanced();
-		}
-		$template = Template::get();
-		$template->assign('transaction', $transaction);
-
-
-	}
-
-	/**
-	 * Batch link
+	 * Automatic link
 	 *
 	 * @access public
 	 */

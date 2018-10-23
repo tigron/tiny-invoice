@@ -228,6 +228,12 @@ console.log(response);
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li class="active">{% trans "Bank accounts" %}</li>
+
+			<div class="pull-right">
+				<a href="/financial/account/transaction?action=automatic_link">
+					<i class="fa fa-magic"></i> {% trans "Automatic link" %}
+				</a>
+			</div>
 		</ol>
 
 		<div class="alert alert-info">
