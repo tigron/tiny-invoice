@@ -420,7 +420,7 @@ class Bank_Account_Statement_Transaction {
 	 */
 	public static function get_unbalanced() {
 		$db = Database::get();
-		$ids = $db->get_column('SELECT id FROM bank_account_statement_transaction WHERE balanced=0', [ ]);
+		$ids = $db->get_column('SELECT id FROM bank_account_statement_transaction WHERE balanced=0 ORDER BY date DESC', [ ]);
 
 		$transactions = [];
 		foreach ($ids as $id) {
