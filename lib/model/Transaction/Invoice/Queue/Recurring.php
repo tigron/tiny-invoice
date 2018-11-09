@@ -2,8 +2,6 @@
 /**
  * Transaction_Invoice_Queue_Recurring
  *
- * @package KNX-lib
- * @subpackage transactions
  * @author Gerry Demaret <gerry@tigron.be>
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author David Vandemaele <david@tigron.be>

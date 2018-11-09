@@ -110,13 +110,33 @@ class Web_Module_Sales_Creditnote extends Module {
 				if (trim($item['invoice_item_id']) == '') {
 					unset($item['invoice_item_id']);
 				}
+
 				$creditnote_item->load_array($item);
+
+				if ($item['vat_rate_id'] > 0) {
+					$vat_rate = Vat_Rate::get_by_id($item['vat_rate_id']);
+					$vat_rate_country = Vat_Rate_Country::get_by_vat_rate_country($vat_rate, $invoice->customer_contact->country);
+					$creditnote_item->vat_rate_value = $vat_rate_country->vat;
+				} else {
+					$creditnote_item->vat_rate_id = null;
+					$creditnote_item->vat_rate_value = 0;
+				}
+
+				if ($invoice->vat_mode == 'group') {
+					$creditnote_item->price_excl = $creditnote_item->price;
+				} else {
+					$creditnote_item->price_incl = $creditnote_item->price;
+				}
+
+				$creditnote_item->calculate_prices();
+
 				if ($creditnote_item->validate($item_errors) === false) {
 					$errors[$row] = $item_errors;
 				} else {
 					$creditnote_items[] = $creditnote_item;
 				}
-				$total_price += $creditnote_item->price;
+
+				$total_price += $creditnote_item->price_excl;
 			}
 			if ($total_price == 0) {
 				$errors[-1] = 'free';
@@ -128,6 +148,7 @@ class Web_Module_Sales_Creditnote extends Module {
 				$creditnote = new Creditnote();
 				$creditnote->customer_id = $invoice->customer_id;
 				$creditnote->customer_contact_id = $invoice->customer_contact_id;
+				$creditnote->vat_mode = $invoice->vat_mode;
 				$creditnote->generate_number();
 				$creditnote->save();
 

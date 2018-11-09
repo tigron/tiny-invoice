@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7fd7a4546f227e8ed9a578704cc49e9",
+    "content-hash": "e85524d9dbe137ee92d6486a6ec67223",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -241,16 +241,16 @@
         },
         {
             "name": "bower-asset/codemirror",
-            "version": "5.40.2",
+            "version": "5.41.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/codemirror.git",
-                "reference": "3de7150a46c373a28de7ebfe0fd8b6792b651552"
+                "reference": "85730df96805f952ce3100c09899d17a793bd4b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/codemirror/zipball/3de7150a46c373a28de7ebfe0fd8b6792b651552",
-                "reference": "3de7150a46c373a28de7ebfe0fd8b6792b651552",
+                "url": "https://api.github.com/repos/components/codemirror/zipball/85730df96805f952ce3100c09899d17a793bd4b7",
+                "reference": "85730df96805f952ce3100c09899d17a793bd4b7",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -273,7 +273,7 @@
                     "mode/*/*.html"
                 ]
             },
-            "time": "2018-09-24T10:17:06+00:00"
+            "time": "2018-10-29T11:17:05+00:00"
         },
         {
             "name": "bower-asset/concrete-promise",
@@ -512,7 +512,8 @@
                     "test/*",
                     ".*"
                 ]
-            }
+            },
+            "time": "2018-03-08T22:58:48+00:00"
         },
         {
             "name": "bower-asset/jquery-ui",
@@ -609,16 +610,16 @@
         },
         {
             "name": "bower-asset/moment-timezone",
-            "version": "0.5.17",
+            "version": "0.5.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/moment/moment-timezone.git",
-                "reference": "75f9e6e7bf95e363b97a4d4376325272bcf5946b"
+                "reference": "d0bcdcad01acece5df6988603e8cec146d78bd12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/75f9e6e7bf95e363b97a4d4376325272bcf5946b",
-                "reference": "75f9e6e7bf95e363b97a4d4376325272bcf5946b",
+                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/d0bcdcad01acece5df6988603e8cec146d78bd12",
+                "reference": "d0bcdcad01acece5df6988603e8cec146d78bd12",
                 "shasum": ""
             },
             "require": {
@@ -641,7 +642,8 @@
             "license": [
                 "MIT"
             ],
-            "description": "Parse and display moments in any timezone."
+            "description": "Parse and display moments in any timezone.",
+            "time": "2018-10-29T03:04:38+00:00"
         },
         {
             "name": "bower-asset/tigron-confirm-modal",
@@ -720,7 +722,8 @@
                 "eonasdan",
                 "tigron",
                 "time"
-            ]
+            ],
+            "time": "2018-01-30T13:40:54+00:00"
         },
         {
             "name": "bower-asset/typeahead.js",
@@ -808,7 +811,8 @@
             },
             "license": [
                 "MIT"
-            ]
+            ],
+            "time": "2018-02-10T15:33:18+00:00"
         },
         {
             "name": "cocur/slugify",
@@ -2232,7 +2236,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -2290,16 +2294,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8"
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
-                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/c79c051f5b3a46be09205c73b80b346e4153e494",
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
                 "shasum": ""
             },
             "require": {
@@ -2345,7 +2349,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-08-06T14:22:27+00:00"
+            "time": "2018-09-21T13:07:52+00:00"
         },
         {
             "name": "tecnickcom/tcpdf",
@@ -2553,16 +2557,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v0.1.17",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "69b6c3dadcb70e6f65e7c57e8c84836c2698fe30"
+                "reference": "543af3cc44326651e3fed869c13078474b787ecb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/69b6c3dadcb70e6f65e7c57e8c84836c2698fe30",
-                "reference": "69b6c3dadcb70e6f65e7c57e8c84836c2698fe30",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/543af3cc44326651e3fed869c13078474b787ecb",
+                "reference": "543af3cc44326651e3fed869c13078474b787ecb",
                 "shasum": ""
             },
             "type": "library",
@@ -2582,7 +2586,7 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2018-10-03T08:09:28+00:00"
+            "time": "2018-10-03T08:11:15+00:00"
         },
         {
             "name": "tigron/skeleton-database",
@@ -2622,16 +2626,16 @@
         },
         {
             "name": "tigron/skeleton-email",
-            "version": "v0.2.4",
+            "version": "v0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-email.git",
-                "reference": "8cdeb4f27d4c59e07746b865284a2a18bea204a6"
+                "reference": "8172564dda3062e4a4bff6c56d09b954ff830b19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-email/zipball/8cdeb4f27d4c59e07746b865284a2a18bea204a6",
-                "reference": "8cdeb4f27d4c59e07746b865284a2a18bea204a6",
+                "url": "https://api.github.com/repos/tigron/skeleton-email/zipball/8172564dda3062e4a4bff6c56d09b954ff830b19",
+                "reference": "8172564dda3062e4a4bff6c56d09b954ff830b19",
                 "shasum": ""
             },
             "require": {
@@ -2656,7 +2660,7 @@
                 }
             ],
             "description": "Email infrastructure for skeleton",
-            "time": "2018-06-11T12:48:07+00:00"
+            "time": "2018-10-30T09:57:52+00:00"
         },
         {
             "name": "tigron/skeleton-error",
@@ -2992,6 +2996,43 @@
             "time": "2018-10-01T20:31:25+00:00"
         },
         {
+            "name": "tigron/skeleton-package-openapi",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tigron/skeleton-package-openapi.git",
+                "reference": "5eb2f6cdd121819b86955fd8dcb0e7ed31c440a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tigron/skeleton-package-openapi/zipball/5eb2f6cdd121819b86955fd8dcb0e7ed31c440a2",
+                "reference": "5eb2f6cdd121819b86955fd8dcb0e7ed31c440a2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "tigron/skeleton-template": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Skeleton\\Package\\": "lib/Skeleton/Package/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tigron BVBA",
+                    "email": "support@tigron.be"
+                }
+            ],
+            "description": "OpenAPI infrastructure for Skeleton",
+            "time": "2018-10-31T14:41:25+00:00"
+        },
+        {
             "name": "tigron/skeleton-pager",
             "version": "dev-master",
             "source": {
@@ -3306,6 +3347,8 @@
     "stability-flags": {
         "tigron/skeleton-file": 20,
         "tigron/skeleton-pager": 20,
+        "tigron/skeleton-core": 20,
+        "tigron/skeleton-package-openapi": 20,
         "dompdf/dompdf": 20,
         "bower-asset/eonasdan-bootstrap-datetimepicker": 20,
         "bower-asset/autogrow-textarea": 20,

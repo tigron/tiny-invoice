@@ -46,7 +46,9 @@ class Invoice {
 		foreach ($this->get_invoice_items() as $invoice_item) {
 			$price_excl += $invoice_item->get_price_excl();
 		}
+
 		$this->price_excl = $price_excl;
+		$this->generate_invoice_vat();
 		$this->price_incl = $this->get_price_incl();
 		$this->save();
 
@@ -54,6 +56,68 @@ class Invoice {
 			$invoice_queue = Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
 			$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
 			$invoice_queue->save();
+		}
+	}
+
+	/**
+	 * Calculate VAT
+	 *
+	 * Re-calculate the invoice_vat lines
+	 *
+	 * @access public
+	 */
+	public function generate_invoice_vat() {
+		// Depending on the mode selected, the VAT will either be calculated per
+		// invoice line, or per VAT rate group.
+
+		// Fetch the invoice_items
+		$invoice_items = $this->get_invoice_items();
+
+		// Get existing VAT lines, reset them without saving yet
+		$invoice_vats = [];
+		foreach (Invoice_Vat::get_by_invoice($this) as $invoice_vat) {
+			$invoice_vat->base = 0;
+			$invoice_vat->vat = 0;
+			$invoice_vats[$invoice_vat->vat_rate_id] = $invoice_vat;
+		}
+
+		foreach ($invoice_items as $invoice_item) {
+			if ($invoice_item->vat_rate_value == 0) {
+				continue;
+			} elseif (isset($invoice_vats[$invoice_item->vat_rate_id])) {
+				$invoice_vat = $invoice_vats[$invoice_item->vat_rate_id];
+			} else {
+				$invoice_vat = new Invoice_Vat();
+				$invoice_vat->invoice_id = $this->id;
+				$invoice_vat->vat_rate = $invoice_item->vat_rate;
+				$invoice_vat->rate = $invoice_item->vat_rate_value;
+				$invoice_vat->base = 0;
+				$invoice_vat->vat = 0;
+			}
+
+			// Check the vat mode, calculate accordingly
+			if ($this->vat_mode == 'line') {
+				// Calculate the VAT for each line, add the VAT per line
+				$invoice_vat->base = $invoice_vat->base + $invoice_item->get_price_excl();
+				$invoice_vat->vat = $invoice_vat->vat + ($invoice_item->get_price_incl() - $invoice_item->get_price_excl());
+				$invoice_vat->save();
+
+				$invoice_vats[$invoice_item->vat_rate_id] = $invoice_vat;
+			} else {
+				// Group all items subject to the same VAT rate, calculate VAT
+				// over the sum of these at the end
+				$invoice_vat->base = $invoice_vat->base + $invoice_item->get_price_excl();
+				$invoice_vats[$invoice_item->vat_rate_id] = $invoice_vat;
+			}
+		}
+
+		foreach ($invoice_vats as $invoice_vat) {
+			// Calculate the VAT over the group, if desired
+			if ($this->vat_mode == 'group') {
+				$invoice_vat->vat = $invoice_vat->base * ($invoice_vat->rate / 100);
+			}
+
+			$invoice_vat->save();
 		}
 	}
 
@@ -75,42 +139,14 @@ class Invoice {
 	 */
 	public function get_price_excl() {
 		$invoice_items = $this->get_invoice_items();
+
 		$price_excl = 0;
 		foreach ($invoice_items as $invoice_item) {
 			$price_excl += $invoice_item->get_price_excl();
 		}
+
 		return $price_excl;
 	}
-
-	/**
-	 * Get VAT array
-	 *
-	 * @access public
-	 * @return array $vat
-	 */
-	public function get_vat_array() {
-		if (!$this->customer_contact->vat_bound()) {
-			return [];
-		}
-		$invoice_items = $this->get_invoice_items();
-		$vat_array = [];
-
-		foreach ($invoice_items as $invoice_item) {
-			if (!isset($vat_array[$invoice_item->vat])) {
-				$vat_array[$invoice_item->vat] = 0;
-			}
-
-			$vat_array[$invoice_item->vat]+= $invoice_item->get_price_excl();
-		}
-
-		foreach ($vat_array as $vat => $price) {
-			$vat_array[$vat] = round($price*($vat/100), 2);
-		}
-
-		ksort($vat_array);
-		return $vat_array;
-	}
-
 
 	/**
 	 * Get price incl
@@ -122,11 +158,14 @@ class Invoice {
 		if (!$this->customer_contact->vat_bound()) {
 			return $this->get_price_excl();
 		}
-		$vat_array = $this->get_vat_array();
+
 		$incl = $this->get_price_excl();
-		foreach ($vat_array as $price) {
-			$incl += $price;
+
+		$invoice_vats = Invoice_Vat::get_by_invoice($this);
+		foreach ($invoice_vats as $invoice_vat) {
+			$incl += $invoice_vat->vat;
 		}
+
 		return $incl;
 	}
 
@@ -232,6 +271,16 @@ class Invoice {
 	}
 
 	/**
+	 * Get Invoice_Vat
+	 *
+	 * @access public
+	 * @return array Invoice_Vat
+	 */
+	public function get_invoice_vat() {
+		return Invoice_Vat::get_by_invoice($this);
+	}
+
+	/**
 	 * Get amount paid
 	 *
 	 * @access public
@@ -268,7 +317,7 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-			return $this->file;
+//			return $this->file;
 		}
 
 		$pdf = new Pdf('invoice', $this->customer->language);

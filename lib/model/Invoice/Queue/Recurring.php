@@ -2,7 +2,6 @@
 /**
  * Invoice_Queue_Recurring class
  *
- * @package KNX-lib
  * @author Gerry Demaret <gerry@tigron.be>
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author David Vandemaele <david@tigron.be>
@@ -26,9 +25,9 @@ class Invoice_Queue_Recurring {
 	public function validate(&$errors = []) {
 		$config = Config::Get();
 
-		$required_fields = array('name', 'price');
+		$required_fields = ['name', 'price'];
 
-		$errors = array();
+		$errors = [];
 		foreach ($required_fields as $field) {
 			if (!isset($this->details[$field]) || $this->details[$field] == '') {
 				$errors[$field] = $field;
@@ -88,8 +87,8 @@ class Invoice_Queue_Recurring {
 	 */
 	public static function get_by_invoice_queue_recurring_group(Invoice_Queue_Recurring_Group $group) {
 		$db = Database::Get();
-		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring WHERE invoice_queue_recurring_group_id=? AND archived="0000-00-00 00:00:00"', array($group->id));
-		$items = array();
+		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring WHERE invoice_queue_recurring_group_id=? AND archived="0000-00-00 00:00:00"', [$group->id]);
+		$items = [];
 		foreach ($ids as $id) {
 			$items[] = Invoice_Queue_Recurring::get_by_id($id);
 		}

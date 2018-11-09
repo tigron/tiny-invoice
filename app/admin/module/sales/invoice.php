@@ -138,23 +138,44 @@ class Web_Module_Sales_Invoice extends Module {
 		$template = Template::get();
 
 		if (isset($_POST['invoice_item'])) {
-
 			$errors = [];
 			$total_price = 0;
 			$invoice_items = [];
+
 			foreach ($_POST['invoice_item'] as $row => $item) {
 				$invoice_item = new Invoice_Item();
 				if (trim($item['invoice_queue_id']) == '') {
 					unset($item['invoice_queue_id']);
 				}
+
 				$invoice_item->load_array($item);
+
+				if ($item['vat_rate_id'] > 0) {
+					$vat_rate = Vat_Rate::get_by_id($item['vat_rate_id']);
+					$vat_rate_country = Vat_Rate_Country::get_by_vat_rate_country($vat_rate, $_SESSION['invoice']->customer_contact->country);
+					$invoice_item->vat_rate_value = $vat_rate_country->vat;
+				} else {
+					$invoice_item->vat_rate_id = null;
+					$invoice_item->vat_rate_value = 0;
+				}
+
+				if ($_POST['invoice']['vat_mode'] == 'group') {
+					$invoice_item->price_excl = $invoice_item->price;
+				} else {
+					$invoice_item->price_incl = $invoice_item->price;
+				}
+
+				$invoice_item->calculate_prices();
+
 				if ($invoice_item->validate($item_errors) === false) {
 					$errors[$row] = $item_errors;
 				} else {
 					$invoice_items[] = $invoice_item;
 				}
-				$total_price += $invoice_item->price;
+
+				$total_price += $invoice_item->price_excl;
 			}
+
 			if ($total_price == 0) {
 				$errors[-1] = 'free';
 			}
@@ -165,6 +186,7 @@ class Web_Module_Sales_Invoice extends Module {
 				$invoice = $_SESSION['invoice'];
 				$invoice->expiration_date = date('YmdHis', strtotime($_POST['invoice']['expiration_date']));
 				$invoice->reference = $_POST['invoice']['reference'];
+				$invoice->vat_mode = $_POST['invoice']['vat_mode'];
 				$invoice->generate_number();
 				$invoice->save();
 
@@ -283,7 +305,7 @@ class Web_Module_Sales_Invoice extends Module {
 	public function display_download() {
 		$invoice = Invoice::get_by_id($_GET['id']);
 		$file = $invoice->get_pdf();
-		$file->client_download();
+		$file->client_inline();
 	}
 
 	/**

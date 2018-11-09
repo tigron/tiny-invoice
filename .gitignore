@@ -3,6 +3,7 @@ tmp/twig/*
 tmp/log/*
 tmp/languages/*
 tmp/picture/*
+tmp/dompdf/*
 store/file/*
 store/documentation/*
 lib/external/*
