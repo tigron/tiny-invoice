@@ -63,6 +63,8 @@ class Bootstrap {
 		 * Initialize the database
 		 */
 		$database = \Skeleton\Database\Database::Get($config->database, true);
+		\Skeleton\Database\Config::$query_log = false;
+		\Skeleton\Database\Config::$query_counter = true;
 
 		/**
 		 * Initialize the file store

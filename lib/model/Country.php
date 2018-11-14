@@ -33,6 +33,25 @@ class Country {
 	}
 
 	/**
+	 * Get by VAT
+	 *
+	 * @access public
+	 * @param string $vat
+	 * @return Country $country
+	 */
+	public static function get_by_vat($vat) {
+		$db = Database::get();
+		$table = self::trait_get_database_table();
+		$id = $db->get_one('SELECT id FROM ' . $table . ' WHERE vat = ?', [ $vat ]);
+
+		if ($id === null) {
+			throw new Exception('No such country');
+		}
+
+		return self::get_by_id($id);
+	}
+
+	/**
 	 * Get grouped
 	 *
 	 * @access public

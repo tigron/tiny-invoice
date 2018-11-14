@@ -8,6 +8,8 @@
  */
 
 use \Skeleton\Pager\Pager;
+use \PhpOffice\PhpSpreadsheet\Spreadsheet;
+use \PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Export_Excel_Document_Invoice extends Export_Expertm {
 
@@ -30,10 +32,11 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 		$pager->page();
 		$invoices = $pager->items;
 
-		$excel = new PHPExcel();
+
+		$spreadsheet = new Spreadsheet();
 		$headers = ['Document number', 'Created', 'Expiration Date', 'Supplier', 'Title', 'Price excl', 'Price incl', 'Paid'];
 
-		$worksheet = $excel->getActiveSheet();
+		$worksheet = $spreadsheet->getActiveSheet();
 
 		foreach($headers as $key => $header) {
 			$worksheet->setCellValueByColumnAndRow($key, 1, $header);
@@ -57,7 +60,7 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 			}
 		}
 
-		$writer = new PHPExcel_Writer_Excel2007($excel);
+		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		ob_start();
 		$writer->save("php://output");
 		$content = ob_get_clean();
