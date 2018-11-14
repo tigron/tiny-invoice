@@ -230,7 +230,6 @@ class Migration_20181025_115250_Invoice_vat extends \Skeleton\Database\Migration
 				$count = 0;
 			}
 
-			echo $invoice_item_id . "\n";
 			$invoice_item = Invoice_Item::get_by_id($invoice_item_id);
 			if ($invoice_item->vat_rate_value > 0) {
 				if (strtotime($invoice_item->invoice->created) < strtotime('2015-01-01')) {
