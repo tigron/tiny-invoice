@@ -12,6 +12,8 @@
 	"description": "Tigron Skeleton",
 	"type": "project",
 	"require": {
+		"ext-soap": "*",
+
 		"tigron/skeleton-database": "~0",
 		"tigron/skeleton-object": "~0",
 		"tigron/skeleton-file": "dev-master",

@@ -528,6 +528,33 @@
 					</div>
 
 					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Service delivery in" %}</label>
+						<div class="col-xs-9">
+							<select name="invoice[service_delivery_to_country_id]" class="form-control multiselect" onchange="set_vat_regime();" id="vat_regime" data-company-country-id="{{ settings.country_id }}">
+								<optgroup label="{% trans "Other" %}">
+									{% for country in countries['european'] %}
+										{% if country.id == settings.country_id %}
+											<option value="{{ country.id }}" selected>{{ country.name }}</option>
+										{% endif %}
+									{% endfor %}
+									{% for country in countries['european'] %}
+										{% if country.id == env.session.invoice.customer_contact.country_id and country.id != settings.country_id %}
+											<option value="{{ country.id }}">{{ country.name }}</option>
+										{% endif %}
+									{% endfor %}
+									<option value="-1">{% trans "Outside Europe" %}</option>
+								</optgroup>
+
+								<optgroup label="{% trans "Europe" %}">
+								{% for country in countries['european'] %}
+									<option value="{{ country.id }}" >{{ country.name }}</option>
+								{% endfor %}
+								</optgroup>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Send invoice" %} ({{ env.session.invoice.customer_contact.invoice_method.name }})</label>
 						<div class="col-xs-9">
 							<input type="checkbox" data-group-cls="btn-group-xs" name="send_invoice" />
@@ -535,6 +562,47 @@
 					</div>
 				</div>
 			</div>
+
+			<script type="text/javascript">
+				function set_vat_regime() {
+					delivery_in_country_id = $('#vat_regime').val();
+					company_country_id = $('#vat_regime').data('company-country-id');
+
+					console.log(delivery_in_country_id);
+					console.log(company_country_id);
+					{% if env.session.invoice.customer_contact.vat != '' %}
+						customer_valid_vat = true;
+					{% else %}
+						customer_valid_vat = false;
+					{% endif %}
+
+					if (delivery_in_country_id == company_country_id) {
+						$('.vat_regime_customer_country').addClass('hide');
+						$('.vat_regime_company_country').removeClass('hide');
+						$('.vat_regime_none').addClass('hide');
+						return;
+					}
+
+					if (delivery_in_country_id == -1) {
+						$('.vat_regime_customer_country').addClass('hide');
+						$('.vat_regime_company_country').addClass('hide');
+						$('.vat_regime_none').removeClass('hide');
+						return;
+					}
+
+					if (customer_valid_vat) {
+						$('.vat_regime_customer_country').addClass('hide');
+						$('.vat_regime_company_country').addClass('hide');
+						$('.vat_regime_none').removeClass('hide');
+						return;
+					}
+
+					$('.vat_regime_customer_country').removeClass('hide');
+					$('.vat_regime_company_country').addClass('hide');
+					$('.vat_regime_none').addClass('hide');
+				}
+			</script>
+
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -587,6 +655,29 @@
 											</option>
 										{% endfor %}
 									</select>
+
+
+									<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
+										<option value="0">{% trans "No VAT" %} (0%)</option>
+										{% set selected = false %}
+										{% for vat_rate in customer_vat_rates %}
+											<option {% if selected == false and vat_rate.vat == invoice_queue_item.vat %}{% set selected = true %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+										{% endfor %}
+									</select>
+
+									<select name="invoice_item[{{ loop.index }}][company_vat_rate_id]" class="form-control vat_regime_company_country">
+										<option {% if selected == false and vat_rate.vat == invoice_queue_item.vat %}{% set selected = true %}selected{% endif %} value="0">{% trans "No VAT" %} (0%)</option>
+										{% for vat_rate in company_vat_rates %}
+											<option {% if vat_rate.vat_rate_id == 1 %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+										{% endfor %}
+									</select>
+
+									<span class="vat_regime_none">
+										<p class="form-control-static">
+											{% trans "No VAT" %}
+										</p>
+									</span>
+
 								</td>
 								<td>
 									<div class="form-control-static">
@@ -637,12 +728,25 @@
 					<input type="text" class="form-control" name="invoice_item[((nr))][price]" value="((price))">
 				</td>
 				<td>
-					<select name="invoice_item[((nr))][vat_rate_id]" class="form-control">
+					<select name="invoice_item[((nr))][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
 						<option value="0">{% trans "No VAT" %} (0%)</option>
-						{% for vat_rate in vat_rates %}
+						{% for vat_rate in customer_vat_rates %}
 							<option {% if vat_rate.vat_rate_id == 1 %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
 						{% endfor %}
 					</select>
+
+					<select name="invoice_item[((nr))][company_vat_rate_id]" class="form-control vat_regime_company_country">
+						<option value="0">{% trans "No VAT" %} (0%)</option>
+						{% for vat_rate in company_vat_rates %}
+							<option {% if vat_rate.vat_rate_id == 1 %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+						{% endfor %}
+					</select>
+
+					<span class="vat_regime_none">
+						<p class="form-control-static">
+							{% trans "No VAT" %}
+						</p>
+					</span>
 				</td>
 				<td>
 					<div class="form-control-static">
@@ -671,6 +775,7 @@
 				var template = Handlebars.compile(source);
 				$('#invoice-items').append(template(data));
 				$('.autogrow').autoGrow();
+				set_vat_regime();
 			}
 
 			function remove_item(obj) {

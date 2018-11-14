@@ -42,11 +42,15 @@ class Invoice_Vat {
 	public static function get_by_invoice(Invoice $invoice) {
 		$db = Database::get();
 		$table = self::trait_get_database_table();
-		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
+		$data = $db->get_all('SELECT * FROM ' . $table . ' WHERE invoice_id = ?', [ $invoice->id ]);
 
 		$items = [];
-		foreach ($ids as $id) {
-			$items[] = self::get_by_id($id);
+		foreach ($data as $row) {
+			$item = new self();
+			$item->id = $row['id'];
+			$item->details = $row;
+
+			$items[] = $item;
 		}
 
 		return $items;

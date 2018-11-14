@@ -68,7 +68,6 @@ class Web_Module_Sales_Invoice extends Module {
 
 		$template = Template::get();
 		$template->assign('pager', $pager);
-		$template->assign('customers', Customer::get_all('lastname'));
 	}
 
 	/**
@@ -150,13 +149,27 @@ class Web_Module_Sales_Invoice extends Module {
 
 				$invoice_item->load_array($item);
 
-				if ($item['vat_rate_id'] > 0) {
-					$vat_rate = Vat_Rate::get_by_id($item['vat_rate_id']);
-					$vat_rate_country = Vat_Rate_Country::get_by_vat_rate_country($vat_rate, $_SESSION['invoice']->customer_contact->country);
+				if ($_POST['invoice']['service_delivery_to_country_id'] == Setting::get_by_name('country_id')->value) {
+					// Vat in country of company
+					$vat_rate_country = Vat_Rate_Country::get_by_id($item['company_vat_rate_id']);
+					$invoice_item->vat_rate_id = $vat_rate_country->vat_rate_id;
 					$invoice_item->vat_rate_value = $vat_rate_country->vat;
 				} else {
-					$invoice_item->vat_rate_id = null;
-					$invoice_item->vat_rate_value = 0;
+					$delivery_country = Country::get_by_id($_POST['invoice']['service_delivery_to_country_id']);
+					if ($delivery_country->european) {
+						if ($_SESSION['invoice']->customer_contact->vat_bound()) {
+							// No vat
+							$invoice_item->vat_rate_id = null;
+							$invoice_item->vat_rate_value = 0;
+						} else {
+							$vat_rate_country = Vat_Rate_Country::get_by_id($item['customer_vat_rate_id']);
+							$invoice_item->vat_rate_id = $vat_rate_country->vat_rate_id;
+							$invoice_item->vat_rate_value = $vat_rate_country->vat;
+						}
+					} else {
+						$invoice_item->vat_rate_id = null;
+						$invoice_item->vat_rate_value = 0;
+					}
 				}
 
 				if ($_POST['invoice']['vat_mode'] == 'group') {
@@ -215,9 +228,12 @@ class Web_Module_Sales_Invoice extends Module {
 
 		$invoice_queue_items = Invoice_Queue::get_unprocessed_by_customer_contact($_SESSION['invoice']->customer_contact);
 		$template->assign('invoice_queue_items', $invoice_queue_items);
-		$template->assign('vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->customer_contact->country));
+		$template->assign('customer_vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->customer_contact->country));
+		$template->assign('company_vat_rates', Vat_Rate_Country::get_by_country(Country::get_by_id(Setting::get_by_name('country_id')->value)));
 		$template->assign('action', 'create_step3');
 		$template->assign('product_types', Product_Type::get_all('name'));
+		$template->assign('settings', Setting::get_as_array());
+		$template->assign('countries', Country::get_grouped());
 	}
 
 	/**
@@ -305,7 +321,7 @@ class Web_Module_Sales_Invoice extends Module {
 	public function display_download() {
 		$invoice = Invoice::get_by_id($_GET['id']);
 		$file = $invoice->get_pdf();
-		$file->client_inline();
+		$file->client_download();
 	}
 
 	/**

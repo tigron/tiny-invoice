@@ -171,9 +171,31 @@ class Migration_20181025_115250_Invoice_vat extends \Skeleton\Database\Migration
 		");
 
 		$db->query("
+			ALTER TABLE `invoice`
+			ADD `service_delivery_from_country_id` int(11) NULL AFTER `vat_mode`,
+			ADD `service_delivery_to_country_id` int(11) NULL AFTER `service_delivery_from_country_id`,
+			ADD FOREIGN KEY (`service_delivery_from_country_id`) REFERENCES `country` (`id`),
+			ADD FOREIGN KEY (`service_delivery_to_country_id`) REFERENCES `country` (`id`);
+		", []);
+
+		$country_id = $db->get_one('SELECT value FROM setting WHERE name=?', [ 'country_id'] );
+
+		$db->query("
+			UPDATE invoice SET service_delivery_from_country_id = ?
+		", [ $country_id ]);
+
+		$db->query("
 			ALTER TABLE `creditnote`
 			ADD `vat_mode` enum('line','group') NOT NULL DEFAULT 'group' AFTER `price_incl`;
 		");
+
+		$db->query("
+			ALTER TABLE `creditnote`
+			ADD `service_delivery_from_country_id` int(11) NULL AFTER `vat_mode`,
+			ADD `service_delivery_to_country_id` int(11) NULL AFTER `service_delivery_from_country_id`,
+			ADD FOREIGN KEY (`service_delivery_from_country_id`) REFERENCES `country` (`id`),
+			ADD FOREIGN KEY (`service_delivery_to_country_id`) REFERENCES `country` (`id`);
+		", []);
 
 		$db->query("
 			ALTER TABLE `invoice_item`
@@ -186,7 +208,7 @@ class Migration_20181025_115250_Invoice_vat extends \Skeleton\Database\Migration
 
 		$db->query("
 			ALTER TABLE `creditnote_item`
-			ADD `vat_rate_id` int(11) NOT NULL AFTER `product_type_id`,
+			ADD `vat_rate_id` int(11) NULL AFTER `product_type_id`,
 			CHANGE `price` `price_excl` decimal(10,2) NOT NULL AFTER `qty`,
 			ADD `price_incl` decimal(10,2) NOT NULL AFTER `price_excl`,
 			CHANGE `vat` `vat_rate_value` decimal(10,2) NOT NULL AFTER `price_incl`,
@@ -194,41 +216,162 @@ class Migration_20181025_115250_Invoice_vat extends \Skeleton\Database\Migration
 		");
 
 		// We're assuming none of the VAT rates have changed, ever
-		$invoice_items = Invoice_Item::get_all();
-		foreach ($invoice_items as $invoice_item) {
+		$invoice_item_ids = $db->get_column('SELECT id FROM invoice_item', []);
+
+		Database::reset();
+		$count = 0;
+		$settings = Setting::get_as_array();
+
+		foreach ($invoice_item_ids as $invoice_item_id) {
+			$count++;
+			if ($count > 10000) {
+				Database::reset();
+				$db = Database::get();
+				$count = 0;
+			}
+
+			echo $invoice_item_id . "\n";
+			$invoice_item = Invoice_Item::get_by_id($invoice_item_id);
 			if ($invoice_item->vat_rate_value > 0) {
-				$vat_rate_ids = $db->get_column('SELECT vat_rate_id FROM vat_rate_country WHERE country_id = ? AND vat = ?', [$invoice_item->invoice->customer_contact->country_id, $invoice_item->vat_rate_value]);
+				if (strtotime($invoice_item->invoice->created) < strtotime('2015-01-01')) {
+					$country_id = $settings['country_id'];
+				} else {
+					$country_id = $invoice_item->invoice->customer_contact->country_id;
+				}
 
-				$vat_rate_id = $vat_rate_ids[0];
+				$vat_rate_id = $db->get_one('SELECT vat_rate_id FROM vat_rate_country WHERE country_id = ? AND vat = ? ORDER BY vat_rate_id DESC LIMIT 1', [$country_id, $invoice_item->vat_rate_value]);
+				if ($vat_rate_id !== null) {
+					$vat_rate = Vat_Rate::get_by_id($vat_rate_id);
+					$invoice_item->vat_rate = $vat_rate;
+					$invoice_item->save();
 
-				$vat_rate = Vat_Rate::get_by_id($vat_rate_id);
+					$invoice = $invoice_item->invoice;
+					$invoice->service_delivery_to_country_id = $country_id;
+					$invoice->save();
+					continue;
+				}
 
-				$invoice_item->vat_rate = $vat_rate;
-				$invoice_item->save();
+				// Fallback to country of company
+				$vat_rate_id = $db->get_one('SELECT vat_rate_id FROM vat_rate_country WHERE country_id = ? AND vat = ? ORDER BY vat_rate_id DESC LIMIT 1', [$settings['country_id'], $invoice_item->vat_rate_value]);
+				if ($vat_rate_id !== null) {
+					$vat_rate = Vat_Rate::get_by_id($vat_rate_id);
+					$invoice_item->vat_rate = $vat_rate;
+					$invoice_item->save();
+
+					$invoice = $invoice_item->invoice;
+					$invoice->service_delivery_to_country_id = $settings['country_id'];
+					$invoice->save();
+					continue;
+				}
+
+				$invoice->service_delivery_to_country_id = $settings['country_id'];
+				$invoice->save();
+			} else {
+				if ($invoice_item->invoice->customer_contact->vat != '' and $invoice_item->invoice->customer_contact->country->european) {
+					$invoice = $invoice_item->invoice;
+					$invoice->service_delivery_to_country_id = $invoice_item->invoice->customer_contact->country_id;
+					$invoice->save();
+
+					$invoice_item->save();
+
+					continue;
+				}
+
+				if (!$invoice_item->invoice->customer_contact->country->european) {
+					$invoice = $invoice_item->invoice;
+					$invoice->service_delivery_to_country_id = $invoice_item->invoice->customer_contact->country_id;
+					$invoice->save();
+
+					$invoice_item->save();
+
+					continue;
+				}
 			}
 		}
 
-		$creditnote_items = Creditnote_Item::get_all();
-		foreach ($creditnote_items as $creditnote_item) {
+		Database::reset();
+
+		$count = 0;
+		$creditnote_item_ids = $db->get_column('SELECT id FROM creditnote_item', []);
+
+		foreach ($creditnote_item_ids as $creditnote_item_id) {
+			$count++;
+			if ($count > 10000) {
+				Database::reset();
+				$db = Database::get();
+				$count = 0;
+			}
+
+
+			$creditnote_item = Creditnote_Item::get_by_id($creditnote_item_id);
 			if ($creditnote_item->vat_rate_value > 0) {
-				$vat_rate_ids = $db->get_column('SELECT vat_rate_id FROM vat_rate_country WHERE country_id = ? AND vat = ?', [$creditnote_item->creditnote->customer_contact->country_id, $creditnote_item->vat_rate_value]);
+				if (strtotime($creditnote_item->creditnote->created) < strtotime('2015-01-01')) {
+					$country_id = $settings['country_id'];
+				} else {
+					$country_id = $creditnote_item->creditnote->customer_contact->country_id;
+				}
 
-				$vat_rate_id = $vat_rate_ids[0];
+				$vat_rate_id = $db->get_one('SELECT vat_rate_id FROM vat_rate_country WHERE country_id = ? AND vat = ? ORDER BY vat_rate_id DESC LIMIT 1', [$country_id, $creditnote_item->vat_rate_value]);
+				if ($vat_rate_id !== null) {
+					$vat_rate = Vat_Rate::get_by_id($vat_rate_id);
+					$creditnote_item->vat_rate = $vat_rate;
+					$creditnote_item->save();
 
-				$vat_rate = Vat_Rate::get_by_id($vat_rate_id);
+					$creditnote = $creditnote_item->creditnote;
+					$creditnote->service_delivery_to_country_id = $country_id;
+					$creditnote->save();
+					continue;
+				}
 
-				$creditnote_item->vat_rate = $vat_rate;
-				$creditnote_item->save();
+				// Fallback to country of company
+				$vat_rate_id = $db->get_one('SELECT vat_rate_id FROM vat_rate_country WHERE country_id = ? AND vat = ? ORDER BY vat_rate_id DESC LIMIT 1', [$settings['country_id'], $creditnote_item->vat_rate_value]);
+				if ($vat_rate_id !== null) {
+					$vat_rate = Vat_Rate::get_by_id($vat_rate_id);
+					$creditnote_item->vat_rate = $vat_rate;
+					$creditnote_item->save();
+
+					$creditnote = $creditnote_item->invoice;
+					$creditnote->service_delivery_to_country_id = $settings['country_id'];
+					$creditnote->save();
+					continue;
+				}
+
+				$creditnote->service_delivery_to_country_id = $settings['country_id'];
+				$creditnote->save();
+			} else {
+				if ($creditnote_item->creditnote->customer_contact->vat != '' and $creditnote_item->creditnote->customer_contact->country->european) {
+					$creditnote = $creditnote_item->creditnote;
+					$creditnote->service_delivery_to_country_id = $creditnote_item->creditnote->customer_contact->country_id;
+					$creditnote->save();
+
+					$creditnote_item->save();
+
+					continue;
+				}
+
+				if (!$creditnote_item->creditnote->customer_contact->country->european) {
+					$creditnote = $creditnote_item->creditnote;
+					$creditnote->service_delivery_to_country_id = $creditnote_item->creditnote->customer_contact->country_id;
+					$creditnote->save();
+
+					$creditnote_item->save();
+
+					continue;
+				}
 			}
 		}
 
-		$invoices = Invoice::get_all();
-		foreach ($invoices as $invoice) {
+		Database::reset();
+
+		$invoice_ids = $db->get_column('SELECT id FROM invoice', []);
+		foreach ($invoice_ids as $invoice_id) {
+			$invoice = Invoice::get_by_id($invoice_id);
 			$invoice->generate_invoice_vat();
 		}
 
-		$creditnotes = Creditnote::get_all();
-		foreach ($creditnotes as $creditnote) {
+		$creditnote_ids = $db->get_column('SELECT id FROM creditnote', []);
+		foreach ($creditnote_ids as $creditnote_id) {
+			$creditnote = Creditnote::get_by_id($creditnote_id);
 			$creditnote->generate_creditnote_vat();
 		}
 	}

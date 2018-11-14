@@ -155,10 +155,6 @@ class Invoice {
 	 * @return double $price
 	 */
 	public function get_price_incl() {
-		if (!$this->customer_contact->vat_bound()) {
-			return $this->get_price_excl();
-		}
-
 		$incl = $this->get_price_excl();
 
 		$invoice_vats = Invoice_Vat::get_by_invoice($this);
@@ -317,7 +313,7 @@ class Invoice {
 	 */
 	public function get_pdf() {
 		if ($this->file_id > 0) {
-//			return $this->file;
+			return $this->file;
 		}
 
 		$pdf = new Pdf('invoice', $this->customer->language);
