@@ -60,8 +60,8 @@ class Export_Expertm_Invoice extends Export_Expertm {
 			$output1 .= "\r\n";
 
 			$vat = 0;
-			foreach ($invoice->get_vat_array() as $price) {
-				$vat += $price;
+			foreach ($invoice->get_invoice_vat() as $invoice_vat) {
+				$vat += $invoice_vat->vat;
 			}
 
 			$i = 1;
@@ -92,13 +92,13 @@ class Export_Expertm_Invoice extends Export_Expertm {
 				$output2 .= "\r\n";
 				$i++;
 			}
-			foreach ($invoice->get_vat_array() as $vat) {
+			foreach ($invoice->get_invoice_vat() as $invoice_vat) {
 				$output2 .= $this->num(9, 0);
 				$output2 .= $this->alf(1, 'F');
 				$output2 .= $this->num(9, $invoice->number);
 				$output2 .= $this->alf(50, '');
-				$output2 .= $this->cur(20, $vat);
-				$output2 .= $this->cur(20, $vat);
+				$output2 .= $this->cur(20, $invoice_vat->vat);
+				$output2 .= $this->cur(20, $invoice_vat->vat);
 				$output2 .= $this->alf(1, 'C');
 				$output2 .= $this->num(3, 11);
 				$output2 .= $this->num(9, $i);

@@ -4,7 +4,6 @@
  *
  * @author Gerry Demaret <gerry@tigron.be>
  * @author Christophe Gosiau <christophe@tigron.be>
- * @version $Id$
  */
 
 class Vat_Rate {

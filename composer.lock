@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7fd7a4546f227e8ed9a578704cc49e9",
+    "content-hash": "d95bd09a7c4b49d29a4dd179448d2d4c",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -2558,16 +2558,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v0.1.17",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "69b6c3dadcb70e6f65e7c57e8c84836c2698fe30"
+                "reference": "543af3cc44326651e3fed869c13078474b787ecb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/69b6c3dadcb70e6f65e7c57e8c84836c2698fe30",
-                "reference": "69b6c3dadcb70e6f65e7c57e8c84836c2698fe30",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/543af3cc44326651e3fed869c13078474b787ecb",
+                "reference": "543af3cc44326651e3fed869c13078474b787ecb",
                 "shasum": ""
             },
             "type": "library",
@@ -2587,7 +2587,7 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2018-10-03T08:09:28+00:00"
+            "time": "2018-10-03T08:11:15+00:00"
         },
         {
             "name": "tigron/skeleton-database",
@@ -2997,6 +2997,43 @@
             "time": "2018-10-01T20:31:25+00:00"
         },
         {
+            "name": "tigron/skeleton-package-openapi",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tigron/skeleton-package-openapi.git",
+                "reference": "8d601b1351c2d00bed8ce5dd69fe2a2ce41ddd3f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tigron/skeleton-package-openapi/zipball/8d601b1351c2d00bed8ce5dd69fe2a2ce41ddd3f",
+                "reference": "8d601b1351c2d00bed8ce5dd69fe2a2ce41ddd3f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "tigron/skeleton-template": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Skeleton\\Package\\": "lib/Skeleton/Package/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tigron BVBA",
+                    "email": "support@tigron.be"
+                }
+            ],
+            "description": "OpenAPI infrastructure for Skeleton",
+            "time": "2018-11-05T15:09:11+00:00"
+        },
+        {
             "name": "tigron/skeleton-pager",
             "version": "dev-master",
             "source": {
@@ -3311,6 +3348,8 @@
     "stability-flags": {
         "tigron/skeleton-file": 20,
         "tigron/skeleton-pager": 20,
+        "tigron/skeleton-core": 20,
+        "tigron/skeleton-package-openapi": 20,
         "dompdf/dompdf": 20,
         "bower-asset/eonasdan-bootstrap-datetimepicker": 20,
         "bower-asset/autogrow-textarea": 20,
@@ -3323,6 +3362,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
+        "ext-soap": "*",
         "ext-imap": "*"
     },
     "platform-dev": []

@@ -133,7 +133,7 @@
 			<th style="width: 100mm">{% trans "Description" %}</th>
 			<th style="width: 15mm">{% trans "Qty" %}</th>
 			<th style="width: 15mm">{% trans "Unit price" %}</th>
-			<th style="width: 20mm">{% trans "Price" %}</th>
+			<th style="width: 20mm; text-align: right;">{% trans "Price" %}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -145,7 +145,7 @@
 			<td>{{ paragraph }}</td>
 		{% if loop.first %}
 			<td>{{ invoice_item.qty }}</td>
-			<td style="text-align: right">&euro;{{ invoice_item.price }}</td>
+			<td style="text-align: right">&euro;{{ invoice_item.price_excl }}</td>
 			<td style="text-align: right">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
 		{% else %}
 			<td>&nbsp;</td>
@@ -174,7 +174,7 @@
 			{% endif %}
 			</td>
 			<td  style="width: 50mm; border-top: solid 2px #ccc">
-				{% set vat_array = invoice.get_vat_array() %}
+				{% set invoice_vats = invoice.get_invoice_vat() %}
 				<table cellpadding="0" cellspacing="0" border="0">
 				<tbody>
 					<tr>
@@ -183,13 +183,13 @@
 						</td>
 						<td style="width: 20mm; padding-top: 2mm; text-align: right">&euro;{{ "%.2f"|format(invoice.get_price_excl()) }}</td>
 					</tr>
-					{% for key, vat_subtotal in vat_array %}
+					{% for invoice_vat in invoice_vats %}
 					<tr>
 						<td style="text-align: left; padding-bottom: 6px">
-							{% trans "VAT" %} ({{ key }}%)
+							{% trans "VAT" %} ({{ invoice_vat.rate }}%)
 						</td>
 						<td style="padding-bottom: 6px; text-align: right">
-							&euro;{{ "%.2f"|format(vat_subtotal) }}
+							&euro;{{ "%.2f"|format(invoice_vat.vat) }}
 						</td>
 					</tr>
 					{% endfor %}

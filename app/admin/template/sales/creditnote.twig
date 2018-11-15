@@ -67,6 +67,26 @@
 		<form method="post" action="/sales/creditnote?action=create_step2" class="form-horizontal">
 			<div class="panel panel-default">
 				<div class="panel-heading">
+					{% trans "Additional info" %}
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "VAT mode" %}</label>
+						<div class="col-xs-9">
+							<p class="form-control-static">
+								{% if invoice.vat_mode == 'group' %}
+									{% trans "Per group" %}
+								{% else %}
+									{% trans "Per line" %}
+								{% endif %}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
 					{% trans "Add items" %}
 				</div>
 				<div class="panel-body">
@@ -76,7 +96,13 @@
 								<th>{% trans "Product definition" %}</th>
 								<th width="50%">{% trans "Description" %}</th>
 								<th width="10%">{% trans "Qty" %}</th>
-								<th width="10%">{% trans "Price" %}</th>
+								<th width="10%">
+									{% if invoice.vat_mode == 'group' %}
+										{% trans "Price excl VAT" %}
+									{% else %}
+										{% trans "Price incl VAT" %}
+									{% endif %}
+								</th>
 								<th>&nbsp;</th>
 								<th>&nbsp;</th>
 							</tr>
@@ -99,13 +125,14 @@
 									<input type="text" class="form-control" name="creditnote_item[{{ loop.index }}][qty]" value="{{ invoice_item.qty }}">
 								</td>
 								<td>
-									<input type="text" class="form-control" name="creditnote_item[{{ loop.index }}][price]" value="{{ invoice_item.price }}">
+									<input type="text" class="form-control" name="creditnote_item[{{ loop.index }}][price]" value="{% if invoice_item.invoice.vat_mode == 'group' %}{{ invoice_item.price_excl }}{% else %}{{ invoice_item.price_incl }}{% endif %}">
 								</td>
 								<td>
-									<select name="creditnote_item[{{ loop.index }}][vat]" class="form-control">
-									{% for vat_rate in vat_rates %}
-										<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
-									{% endfor %}
+									<select name="creditnote_item[{{ loop.index }}][vat_rate_id]" class="form-control">
+										<option value="0" {% if invoice_item.vat_rate_value == 0 %}selected{% endif %}>{% trans "No VAT" %} (0%)</option>
+										{% for vat_rate in vat_rates %}
+											<option {% if invoice_item.vat_rate_id == vat_rate.id %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+										{% endfor %}
 									</select>
 								</td>
 								<td>
@@ -174,8 +201,7 @@
 		</script>
 		<script type="text/javascript">
 			function add_item(data) {
-
-				items = $('#creditnote_items').find('tr input[name*="qty"]');
+				items = $('#creditnote-items').find('tr input[name*="qty"]');
 				ids = [];
 				items.each(function(){
 					id = parseInt($(this).prop('name').match(/\d+/));
@@ -188,7 +214,7 @@
 				var source = $("#new-creditnote_item-tmpl").html();
 				Handlebars.setDelimiter('(',')');
 				var template = Handlebars.compile(source);
-				$('#creditnote_items').append(template(data));
+				$('#creditnote-items').append(template(data));
 				$('.autogrow').autoGrow();
 			}
 
@@ -197,7 +223,6 @@
 					obj.parents('tr').remove();
 				}
 			}
-
 		</script>
 	{% elseif action == 'edit' %}
 		<ol class="breadcrumb">
@@ -235,6 +260,29 @@
 						</dl>
 					</div>
 				</div>
+			</div>
+
+			<div class="col-xs-6" id="creditnote-settings">
+				<form class="form-horizontal form-condensed" action="/sales/creditnote?action=edit&id={{ creditnote.id }}" method="post">
+				<div class="panel panel-default">
+					<div class="panel-heading">{% trans "Creditnote settings" %}</div>
+					<div class="panel-body">
+
+						<div class="form-group">
+							<label class="col-xs-3 control-label">{% trans "VAT mode" %}</label>
+							<div class="col-xs-9">
+								<p class="form-control-static">
+									{% if creditnote.vat_mode == 'group' %}
+										{% trans "Per group" %}
+									{% else %}
+										{% trans "Per line" %}
+									{% endif %}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				</form>
 			</div>
 
 		</div>
@@ -303,37 +351,55 @@
 					<thead>
 						<tr>
 							<th>{% trans "Description" %}</th>
-							<th>{% trans "VAT" %}</th>
-							<th>{% trans "Qty" %}</th>
-							<th class="text-right">{% trans "Price" %}</th>
-							<th class="text-right">{% trans "Subtotal" %}</th>
+							<th width="95">{% trans "VAT" %}</th>
+							<th width="95">{% trans "Qty" %}</th>
+							<th class="{% if creditnote.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Item ex. VAT" %}</th>
+							<th class="{% if creditnote.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Item inc. VAT" %}</th>
+							<th class="{% if creditnote.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Total ex. VAT" %}</th>
+							<th class="{% if creditnote.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Total inc. VAT" %}</th>
 						</tr>
 					</thead>
 					<tbody>
 					{% for creditnote_item in creditnote.get_creditnote_items() %}
 						<tr>
 							<td>{{ creditnote_item.description|nl2br }}</td>
-							<td>{{ creditnote_item.vat|number_format }}%</td>
+							<td>{{ creditnote_item.vat_rate_value|number_format }}%</td>
 							<td>{{ creditnote_item.qty|number_format }}</td>
-							<td class="text-right">&euro;{{ creditnote_item.price|number_format }}</td>
-							<td class="text-right">&euro;{{ creditnote_item.get_price_excl()|number_format }}</td>
+							<td class="{% if creditnote.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ (creditnote_item.get_price_excl()/creditnote_item.qty)|number_format }}</td>
+							<td class="{% if creditnote.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ (creditnote_item.get_price_incl()/creditnote_item.qty)|number_format }}</td>
+							<td class="{% if creditnote.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ creditnote_item.get_price_excl()|number_format }}</td>
+							<td class="{% if creditnote.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ creditnote_item.get_price_incl()|number_format }}</td>
 						</tr>
 					{% endfor %}
 					<tr>
-						<td colspan="4"><strong>{% trans "Total excl VAT" %}</strong></td>
-						<td class="text-right"><strong>&euro;{{ creditnote.get_price_excl()|number_format }}</strong></td>
-					</tr>
-					{% for key, value in creditnote.get_vat_array() %}
-						<tr>
-							<td colspan="4">{% trans "VAT" %} ({{ key }}%)</td>
-							<td class="text-right">&euro;{{ value|number_format }}</td>
-						</tr>
-					{% endfor %}
-					<tr>
-						<td colspan="4"><strong>{% trans "Total incl VAT" %}</strong></td>
-						<td class="text-right"><strong>&euro;{{ creditnote.get_price_incl()|number_format }}</strong></td>
+						<td colspan="5"><strong>{% trans "Total" %}</strong></td>
+						<td class="{% if creditnote.vat_mode == 'line' %}text-muted{% endif %} text-right"><strong>&euro;{{ creditnote.get_price_excl()|number_format }}</strong></td>
+						<td class="{% if creditnote.vat_mode == 'group' %}text-muted{% endif %} text-right"><strong>&euro;{{ creditnote.get_price_incl()|number_format }}</strong></td>
 					</tr>
 					</tbody>
+				</table>
+
+				<table class="table table-striped table-hover table-condensed">
+					<thead>
+						<th>{% trans "Rate" %}</th>
+						<th class="text-right" width="95">{% trans "Base" %}</th>
+						<th class="text-right" width="95">{% trans "VAT" %}</th>
+					</thead>
+					<tbody>
+					{% set vat_total = 0 %}
+					{% for creditnote_vat in creditnote.get_creditnote_vat %}
+						{% set vat_total = vat_total + creditnote_vat.vat %}
+						<tr>
+							<td>{{ creditnote_vat.vat_rate.name }} ({{ creditnote_vat.rate }}%)</td>
+							<td class="text-right">&euro;{{ creditnote_vat.base }}</td>
+							<td class="text-right">&euro;{{ creditnote_vat.vat }}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+					<tr>
+						<td colspan="2"><strong>{% trans "Total" %}</strong></td>
+						<td class="text-right"><strong>&euro;{{ vat_total|number_format }}</strong></td>
+					</tr>
 				</table>
 			</div>
 		</div>

@@ -12,6 +12,8 @@
 	"description": "Tigron Skeleton",
 	"type": "project",
 	"require": {
+		"ext-soap": "*",
+
 		"tigron/skeleton-database": "~0",
 		"tigron/skeleton-object": "~0",
 		"tigron/skeleton-file": "dev-master",
@@ -20,7 +22,7 @@
 		"tigron/skeleton-i18n": "~0",
 		"tigron/skeleton-pager": "dev-master",
 		"tigron/skeleton-template-twig": "~0",
-		"tigron/skeleton-core": "~0",
+		"tigron/skeleton-core": "dev-master",
 		"tigron/skeleton-error": "~0",
 		"tigron/skeleton-template": "~0",
 		"tigron/skeleton-email": "~0",
@@ -32,6 +34,7 @@
 		"tigron/skeleton-transaction": "^0.2.6",
 		"tigron/codabox-gateway": "^0.0.1",
 		"tigron/sepa-payments": "0.0.5",
+		"tigron/skeleton-package-openapi": "dev-master",
 
 		"fxp/composer-asset-plugin": "~1.0",
 		"swiftmailer/swiftmailer": "5.*",
