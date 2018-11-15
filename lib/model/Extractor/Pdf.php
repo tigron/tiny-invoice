@@ -38,10 +38,15 @@ class Extractor_Pdf {
 	 */
 	public function extract_content(Document $document = null) {
 		// load the document
-		if ($document === null) {
-			$document = SetaPDF_Core_Document::loadByFilename($this->document->file->get_path());
-		} else {
-			$document = SetaPDF_Core_Document::loadByFilename($document->file->get_path());
+		try {
+			if ($document === null) {
+				$document = SetaPDF_Core_Document::loadByFilename($this->document->file->get_path());
+			} else {
+				$document = SetaPDF_Core_Document::loadByFilename($document->file->get_path());
+			}
+		} catch (Exception $e) {
+			// If the file is missing, we cannot extract the content
+			return '';
 		}
 
 		// get access to its pages

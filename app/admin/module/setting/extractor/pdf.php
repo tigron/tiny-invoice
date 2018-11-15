@@ -146,6 +146,9 @@ class Web_Module_Setting_Extractor_Pdf extends Crud {
 
     	$pager = new Pager('document');
     	$pager->set_search($query);
+    	$pager->set_sort('created');
+    	$pager->add_sort_permission('created');
+    	$pager->set_direction('desc');
     	$pager->page();
 
 		$results = [];
@@ -156,7 +159,6 @@ class Web_Module_Setting_Extractor_Pdf extends Crud {
     		}
     		$results[] = [ 'id' => $item->id, 'title' => $item->title, 'description' => $item->description, 'result' => $result ];
     	}
-
     	echo json_encode($results);
     }
 

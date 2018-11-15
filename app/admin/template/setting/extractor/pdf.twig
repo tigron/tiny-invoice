@@ -39,11 +39,16 @@
 					<label class="col-xs-3 control-label">{% trans "Document" %}</label>
 					<div class="col-xs-9">
 						<p class="form-control-static">
-							<span>{{ object.document.file.name }}</span> [ {{ object.document.file.get_human_size() }} ]
-
-							<a href="/administrative/document?action=download&id={{ object.document.id }}">
-								<span class="glyphicon glyphicon-download"></span>
-							</a>
+							<span>
+								<a href="/administrative/document?action=edit&id={{ object.document_id }}">
+									#{{ object.document_id }} - {{ object.document.title }}
+								</a>
+							</span>
+							{% if object.document.file_id > 0 %}
+								<a href="/administrative/document?action=download&id={{ object.document.id }}">
+									<span class="glyphicon glyphicon-download"></span>
+								</a>
+							{% endif %}
 							<a href="javascript:void(0);" data-toggle="modal" data-target="#select_document">
 								<span class="glyphicon glyphicon-pencil"></span>
 							</a>
