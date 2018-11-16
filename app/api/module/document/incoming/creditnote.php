@@ -21,7 +21,7 @@ class Web_Module_Document_Incoming_Creditnote extends \Skeleton\Package\Api\Web\
 	 * @return array $user
 	 */
 	public function call_getById() {
-		$document = Document::get_by_id($_REQUEST['id']);
+		$document = Document::get_by_uuid($_REQUEST['id']);
 		if ($document->classname != 'Document_Incoming_Creditnote') {
 			throw new Exception('incorrect document');
 		}
@@ -29,6 +29,26 @@ class Web_Module_Document_Incoming_Creditnote extends \Skeleton\Package\Api\Web\
 			throw new Exception('Not available');
 		}
 		return $document->get_info();
+	}
+
+	/**
+	 * Get PDF
+	 *
+	 * Get the PDF document of an incoming invoice by his ID
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return array $fileinfo
+	 */
+	public function call_getPdf() {
+		$document = Document::get_by_uuid($_REQUEST['id']);
+		if ($document->classname != 'Document_Incoming_Creditnote') {
+			throw new Exception('incorrect document');
+		}
+		if (!$document->available_for_api()) {
+			throw new Exception('Not available');
+		}
+		return $document->file->get_info();
 	}
 
 	/**

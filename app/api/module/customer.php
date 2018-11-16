@@ -19,7 +19,7 @@ class Web_Module_Customer extends \Skeleton\Package\Api\Web\Module\Call {
 	 * @return array $customer
 	 */
 	public function call_getById() {
-		$customer = Customer::get_by_id($_REQUEST['id']);
+		$customer = Customer::get_by_uuid($_REQUEST['id']);
 		return $customer->get_info();
 	}
 
@@ -35,7 +35,7 @@ class Web_Module_Customer extends \Skeleton\Package\Api\Web\Module\Call {
 		$customers = Customer::get_all();
 		$customer_ids = [];
 		foreach ($customers as $customer) {
-			$customer_ids[] = $customer->id;
+			$customer_ids[] = $customer->uuid;
 		}
 		return $customer_ids;
 	}

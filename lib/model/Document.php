@@ -13,11 +13,21 @@ class Document {
 		__get as trait_get;
 	}
 	use \Skeleton\Object\Get;
-	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Save {
+		save as trait_save;
+	}
 	use \Skeleton\Pager\Page;
 	use \Skeleton\Object\Delete {
 		delete as trait_delete;
 	}
+
+	/**
+	 * Class configuration
+	 * @var array $class_configuration
+	 */
+	private static $class_configuration = [
+		'child_classname_field' => 'classname'
+	];
 
 	/**
 	 * Get key
@@ -78,38 +88,17 @@ class Document {
 	 * @access public
 	 */
 	public function save($validate = true) {
+		if (empty($this->uuid)) {
+			$this->uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
+		}
+
 		if (isset($this->dirty_fields['file_id']) OR $this->id === null) {
 			$generate_preview = true;
 		} else {
 			$generate_preview = false;
 		}
 
-		// If we have a validate() method, execute it
-		if (method_exists($this, 'validate') AND is_callable([$this, 'validate']) and $validate) {
-			if ($this->validate($errors) === false) {
-				throw new Exception('Not validated. Errored fields: ' . implode(', ', array_keys($errors)));
-			}
-		}
-
-		$db = Database::get();
-
-		if (!isset($this->id) OR $this->id === null) {
-			if (!isset($this->details['created'])) {
-				$this->details['created'] = date('Y-m-d H:i:s');
-			}
-		} else {
-			$this->details['updated'] = date('Y-m-d H:i:s');
-		}
-
-		if (!isset($this->id) OR $this->id === null) {
-			$db->insert('document', $this->details);
-			$this->id = $db->get_one('SELECT LAST_INSERT_ID();');
-		} else {
-			$where = 'id=' . $db->quote($this->id);
-			$db->update('document', $this->details, $where);
-		}
-
-		$this->get_details();
+		$this->trait_save($validate);
 
 		if ($generate_preview) {
 			$this->create_preview();
@@ -297,22 +286,15 @@ class Document {
 	}
 
 	/**
-	 * Get by id
+	 * Get by uuid
 	 *
 	 * @access public
-	 * @param int $id
+	 * @param string $uuid
 	 * @return Document $document
 	 */
-	public static function get_by_id($id) {
+	public static function get_by_uuid($uuid) {
 		$db = Database::get();
-		$classname = $db->get_one('SELECT classname FROM document WHERE id=?', [ $id ]);
-		if ($classname === null) {
-			throw new Exception('Unknown document ' . $id);
-		}
-		if (!class_exists($classname)) {
-			throw new Exception('This document has an incorrect classname');
-		}
-		return new $classname($id);
+		$id = $db->get_one('SELECT id FROM document WHERE uuid=?', [ $uuid ]);
+		return self::get_by_id($id);
 	}
-
 }

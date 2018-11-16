@@ -23,6 +23,10 @@ class Customer_Contact {
 	 * @param boolean $validate
 	 */
 	public function save($validate = true) {
+		if (empty($this->uuid)) {
+			$this->uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
+		}
+
 		$this->trait_save($validate);
 		$this->export();
 	}
@@ -298,5 +302,18 @@ class Customer_Contact {
 		}
 
 		return $items;
+	}
+
+	/**
+	 * Get by uuid
+	 *
+	 * @access public
+	 * @param string $uuid
+	 * @return Customer_Contact $customer_contact
+	 */
+	public static function get_by_uuid($uuid) {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM customer_contact WHERE uuid=?', [ $uuid ]);
+		return self::get_by_id($id);
 	}
 }

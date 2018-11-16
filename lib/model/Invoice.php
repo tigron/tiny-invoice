@@ -9,7 +9,9 @@ use \Skeleton\Database\Database;
 
 class Invoice {
 	use \Skeleton\Object\Model;
-	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Get {
+		get_info as trait_get_info;
+	}
 	use \Skeleton\Object\Save;
 	use \Skeleton\Object\Delete;
 	use \Skeleton\Pager\Page;
@@ -29,6 +31,24 @@ class Invoice {
 			$number++;
 		}
 		$this->number = $number;
+	}
+
+	/**
+	 * Get info
+	 *
+	 * @access public
+	 * @return array $info
+	 */
+	public function get_info() {
+		$info = $this->trait_get_info();
+		$invoice_items = $this->get_invoice_items();
+		$info['customer_id'] = $this->customer->uuid;
+		$info['customer_contact_id'] = $this->customer_contact->uuid;
+		$info['invoice_items'] = [];
+		foreach ($invoice_items as $invoice_item) {
+			$info['invoice_items'][] = $invoice_item->get_info();
+		}
+		return $info;
 	}
 
 	/**

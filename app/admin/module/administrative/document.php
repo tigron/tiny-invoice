@@ -224,7 +224,7 @@ class Web_Module_Administrative_Document extends Module {
 				}
 			}
 
-			$document = $document->change_classname($_POST['document']['classname']);
+			$document = $document->cast($_POST['document']['classname']);
 			unset($_POST['document']['classname']);
 			$document->load_array($_POST['document']);
 

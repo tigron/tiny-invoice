@@ -11,9 +11,24 @@ use \IBAN\Validation\IBANValidator;
 class Supplier {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
-	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Save {
+		save as trait_save;
+	}
 	use \Skeleton\Object\Delete;
 	use \Skeleton\Pager\Page;
+
+	/**
+	 * Save the object
+	 *
+	 * @access public
+	 */
+	public function save($validate = true) {
+		if (empty($this->uuid)) {
+			$this->uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
+		}
+
+		$this->trait_save($validate);
+	}
 
 	/**
 	 * Validate user data
@@ -100,5 +115,18 @@ class Supplier {
 			$suppliers[] = self::get_by_id($id);
 		}
 		return $suppliers;
+	}
+
+	/**
+	 * Get by uuid
+	 *
+	 * @access public
+	 * @param string $uuid
+	 * @return Supplier $supplier
+	 */
+	public static function get_by_uuid($uuid) {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM supplier WHERE uuid=?', [ $uuid ]);
+		return self::get_by_id($id);
 	}
 }
