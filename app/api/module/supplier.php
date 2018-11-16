@@ -19,7 +19,7 @@ class Web_Module_Supplier extends \Skeleton\Package\Api\Web\Module\Call {
 	 * @return array $supplier
 	 */
 	public function call_getById() {
-		$supplier = Supplier::get_by_id($_REQUEST['id']);
+		$supplier = Supplier::get_by_uuid($_REQUEST['id']);
 		return $supplier->get_info();
 	}
 
@@ -35,7 +35,7 @@ class Web_Module_Supplier extends \Skeleton\Package\Api\Web\Module\Call {
 		$suppliers = Supplier::get_all();
 		$supplier_ids = [];
 		foreach ($suppliers as $supplier) {
-			$supplier_ids[] = $supplier->id;
+			$supplier_ids[] = $supplier->uuid;
 		}
 		return $supplier_ids;
 	}
