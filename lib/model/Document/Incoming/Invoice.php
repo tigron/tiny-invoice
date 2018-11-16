@@ -129,6 +129,7 @@ class Document_Incoming_Invoice extends Document {
 		$info = parent::get_info();
 		unset($info['id']);
 		unset($info['document_id']);
+		$info['supplier_id'] = $this->supplier->uuid;
 		return $info;
 	}
 
