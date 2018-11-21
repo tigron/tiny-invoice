@@ -53,7 +53,14 @@ class Web_Module_Sales_Invoice extends Module {
 		} elseif (isset($_POST['date_end']) AND $_POST['date_end'] != '' AND $_POST['date_start'] == '') {
 			$pager->add_condition('created', '<=', date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59')));
 		} elseif (isset($_POST['date_start']) AND $_POST['date_start'] != '' AND isset($_POST['date_end']) AND $_POST['date_end'] != '') {
-			$pager->add_condition('created', 'BETWEEN', date('Y-m-d H:i:s', strtotime($_POST['date_start'] . ' 00:00:00')), date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59')));
+			$pager->add_condition(
+					'created',
+					'BETWEEN',
+					[
+						date('Y-m-d H:i:s', strtotime($_POST['date_start'] . ' 00:00:00')),
+						date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59'))
+					]
+			);
 		}
 
 		if (isset($_POST['paid']) AND $_POST['paid'] != '') {
