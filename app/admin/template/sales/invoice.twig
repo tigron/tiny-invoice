@@ -573,8 +573,6 @@
 					delivery_in_country_id = $('#vat_regime').val();
 					company_country_id = $('#vat_regime').data('company-country-id');
 
-					console.log(delivery_in_country_id);
-					console.log(company_country_id);
 					{% if env.session.invoice.customer_contact.vat != '' %}
 						customer_valid_vat = true;
 					{% else %}
