@@ -564,6 +564,11 @@
 			</div>
 
 			<script type="text/javascript">
+
+				$(function() {
+					set_vat_regime();
+				});
+
 				function set_vat_regime() {
 					delivery_in_country_id = $('#vat_regime').val();
 					company_country_id = $('#vat_regime').data('company-country-id');
@@ -601,8 +606,8 @@
 					$('.vat_regime_company_country').addClass('hide');
 					$('.vat_regime_none').addClass('hide');
 				}
-			</script>
 
+			</script>
 
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -644,18 +649,6 @@
 									<input type="text" class="form-control" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_queue_item.price }}">
 								</td>
 								<td>
-
-									<select name="invoice_item[{{ loop.index }}][vat_rate_id]" class="form-control">
-										<option value="0">{% trans "No VAT" %} (0%)</option>
-										{# The VAT rates exist in order of preference. If a VAT rate exists twice, the most likely option will be the first hit. #}
-										{% set selected = false %}
-										{% for vat_rate in vat_rates %}
-											<option value="{{ vat_rate.vat_rate_id }}" {% if selected == false and vat_rate.vat == invoice_queue_item.vat %}{% set selected = true %}selected{% endif %}>
-												{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)
-											</option>
-										{% endfor %}
-									</select>
-
 
 									<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
 										<option value="0">{% trans "No VAT" %} (0%)</option>
