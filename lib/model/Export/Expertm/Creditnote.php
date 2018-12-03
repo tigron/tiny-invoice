@@ -56,8 +56,8 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 			$output1 .= "\r\n";
 
 			$vat = 0;
-			foreach ($creditnote->get_vat_array() as $price) {
-				$vat += $price;
+			foreach ($creditnote->get_creditnote_vat() as $creditnote_vat) {
+				$vat += $creditnote_vat->vat;
 			}
 
 			$i = 1;
@@ -88,13 +88,13 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 				$output2 .= "\r\n";
 				$i++;
 			}
-			foreach ($creditnote->get_vat_array() as $vat) {
+			foreach ($creditnote->get_creditnote_vat() as $creditnote_vat) {
 				$output2 .= $this->num(9, 0);
 				$output2 .= $this->alf(1, 'C');
 				$output2 .= $this->num(9, $creditnote->number);
 				$output2 .= $this->alf(50, '');
-				$output2 .= $this->cur(20, $vat);
-				$output2 .= $this->cur(20, $vat);
+				$output2 .= $this->cur(20, $creditnote_vat->vat);
+				$output2 .= $this->cur(20, $creditnote_vat->vat);
 				$output2 .= $this->alf(1, 'D');
 				$output2 .= $this->num(3, 11);
 				$output2 .= $this->num(9, $i);
