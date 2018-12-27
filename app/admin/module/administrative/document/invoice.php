@@ -65,6 +65,18 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 			$pager->clear_condition('document_incoming_invoice.paid');
 		}
 
+		if (isset($_POST['accounting_identifier'])) {
+			if ($_POST['accounting_identifier'] == 'empty') {
+				$pager->add_condition('document_incoming_invoice.accounting_identifier', '=', '');
+			} elseif ($_POST['accounting_identifier'] == 'not_empty') {
+				$pager->add_condition('document_incoming_invoice.accounting_identifier', '!=', '');
+			} else {
+				$pager->clear_condition('document_incoming_invoice.accounting_identifier');
+			}
+		} else {
+			$pager->clear_condition('document_incoming_invoice.accounting_identifier');
+		}
+
 		if (isset($_POST['supplier_id'])) {
 			if ($_POST['supplier_id'] > 0) {
 				$pager->add_condition('document_incoming_invoice.supplier_id', $_POST['supplier_id']);

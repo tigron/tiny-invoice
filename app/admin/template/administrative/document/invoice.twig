@@ -2,6 +2,19 @@
 
 
 {% block pager %}
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#toggle-advanced').click(function() {
+				if ($('.form-advanced').first().hasClass('hide')) {
+					$('.form-advanced').removeClass('hide')
+				} else {
+					$('.form-advanced').addClass('hide')
+				}
+			});
+		});
+	</script>
+
 	{% if action == 'edit' %}
 		{% block breadcrumb %}
 		<ul class="breadcrumb">
@@ -21,6 +34,11 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			{% trans "Filter" %}
+			<div class="pull-right">
+				<a href="#" id="toggle-advanced">
+					<i class="fa fa-caret-square-o-down"></i> {% trans "Advanced" %}
+				</a>
+			</div>
 		</div>
 		<div class="panel-body">
 			<form method="post" action="{{ env.module.get_path() }}" class="form-horizontal">
@@ -31,14 +49,14 @@
 					</div>
 				</div>
 
-				<div class="form-group">
+				<div class="form-group form-advanced hide">
 					<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
 					<div class="col-xs-9">
 						<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 					</div>
 				</div>
 
-				<div class="form-group">
+				<div class="form-group form-advanced hide">
 					<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
 					<div class="col-xs-9">
 						<select name="supplier_id" class="form-control">
@@ -50,13 +68,24 @@
 					</div>
 				</div>
 
-				<div class="form-group">
+				<div class="form-group form-advanced hide">
 					<label class="col-xs-3 control-label">{% trans "Paid" %}</label>
 					<div class="col-xs-9">
 						<select name="paid" class="form-control">
 							<option value="-1">{% trans "All" %}</option>
 							<option value="1" {% if pager.has_condition('document_incoming_invoice.paid', 1) %}selected{% endif %}>{% trans "Yes" %}</option>
 							<option value="0" {% if pager.has_condition('document_incoming_invoice.paid', 0) %}selected{% endif %}>{% trans "No" %}</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group form-advanced hide">
+					<label class="col-xs-3 control-label">{% trans "Booking status" %}</label>
+					<div class="col-xs-9">
+						<select name="accounting_identifier" class="form-control">
+							<option value="all">{% trans "Any" %}</option>
+							<option value="not_empty" {% if pager.has_condition('document_incoming_invoice.accounting_identifier', '!=', '') %}selected{% endif %}>{% trans "Booked" %}</option>
+							<option value="empty" {% if pager.has_condition('document_incoming_invoice.accounting_identifier', '=', '') %}selected{% endif %}>{% trans "Not booked" %}</option>
 						</select>
 					</div>
 				</div>
