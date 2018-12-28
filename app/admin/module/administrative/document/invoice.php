@@ -32,6 +32,16 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 	public function display() {
 		$pager = new Pager('document');
 
+		if (isset($_POST['advanced']) and $_POST['advanced'] == 1) {
+			Session::set_sticky('advanced', true);
+		} else {
+			unset($_POST['tag_ids']);
+			unset($_POST['supplier_id']);
+			unset($_POST['paid']);
+			unset($_POST['accounting_identifier']);
+		}
+
+
 		$selected_tags = [];
 		$tag_ids = [];
 		if (!empty($_POST['tag_ids'])) {
