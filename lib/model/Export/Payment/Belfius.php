@@ -111,6 +111,11 @@ class Export_Payment_Belfius extends Export {
 		$file = \Skeleton\File\File::store('payment_belfius_' . date('Ymd') . '.csv', $content);
  		$this->file_id = $file->id;
 		$this->save();
+
+		foreach ($document_ids as $document_id) {
+			$document = Document::get_by_id($document_id);
+			Log::create('Payment requested via export ' . $this->id, $document);
+		}
 	}
 
 }

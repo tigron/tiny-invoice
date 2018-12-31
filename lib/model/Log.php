@@ -39,7 +39,12 @@ class Log {
 	public static function get_by_object($object) {
 		$db = Database::get();
 		$table = self::trait_get_database_table();
-		$classname = get_class($object);
+		$classname = get_parent_class($object);
+		if ($classname === false) {
+			$classname = strtolower(get_class($object));
+		} else {
+			$classname = strtolower($classname);
+		}
 		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE classname=? AND object_id=? ORDER BY id DESC LIMIT 50', [$classname, $object->id]);
 
 		$logs = [];
@@ -61,7 +66,12 @@ class Log {
 		// what class is it
 		$classname = '';
 		if (!is_null($object)) {
-			$classname = strtolower(get_class($object));
+			$classname = get_parent_class($object);
+			if ($classname === false) {
+				$classname = strtolower(get_class($object));
+			} else {
+				$classname = strtolower($classname);
+			}
 		}
 
 		$log = new self();
