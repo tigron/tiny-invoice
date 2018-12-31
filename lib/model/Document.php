@@ -98,7 +98,16 @@ class Document {
 			$generate_preview = false;
 		}
 
+		$mode = 'update';
+		if (!isset($this->id)) {
+			$mode = 'insert';
+		}
+
 		$this->trait_save($validate);
+
+		if ($mode == 'insert') {
+			Log::create('add', $this);
+		}
 
 		if ($generate_preview) {
 			$this->create_preview();
@@ -226,6 +235,11 @@ class Document {
 			$document_tag->delete();
 		}
 
+		$logs = Log::get_by_object($this);
+		foreach ($logs as $log) {
+			$log->delete();
+		}
+
 		if (!is_null($this->preview_file_id)) {
 			try {
 				$file = File::get_by_id($this->preview_file_id);
@@ -276,7 +290,7 @@ class Document {
 			mkdir(\Skeleton\File\Picture\Config::$tmp_dir, 0755, true);
 		}
 
-		system('/usr/bin/convert -density 150 -background white -alpha remove -resize 600 ' . $this->file->get_path() . '[0] ' . \Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg');
+		system('/usr/bin/convert -density 150 -background white -alpha remove -resize 800 ' . $this->file->get_path() . '[0] ' . \Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg');
 		if (file_exists(\Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg')) {
 			$file = File::store(str_replace('pdf', 'jpg', $this->file->name), file_get_contents(\Skeleton\File\Picture\Config::$tmp_dir . 'preview.jpg'));
 			$this->preview_file_id = $file->id;
