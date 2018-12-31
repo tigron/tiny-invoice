@@ -155,6 +155,8 @@ class Extractor_Pdf {
 				return false;
 			}
 		}
+		$this->last_used = date('Y-m-d H:i:s');
+		$this->save();
 		return true;
 	}
 

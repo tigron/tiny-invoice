@@ -43,6 +43,7 @@ class Web_Module_Setting_Extractor_Pdf extends Crud {
     	$pager->add_sort_permission('id');
     	$pager->add_sort_permission('extractor_pdf.name');
     	$pager->add_sort_permission('file.name');
+    	$pager->add_sort_permission('last_used');
     	$pager->set_sort('id');
     	$pager->set_direction('desc');
     	$pager->page();

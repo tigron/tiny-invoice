@@ -146,11 +146,19 @@
 			{% block  pager_table_head%}
 				<th width="40">{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
 				<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
+				<th>{{ pager.create_header('Last used'|trans, 'last_used')|raw }}</th>
 			{% endblock pager_table_head %}
 
 			{% block pager_table_row %}
 				<td>{{ object.id }}</td>
 				<td>{{ object.name }}</td>
+				<td>
+					{% if object.last_used is null %}
+						<i>{% trans "Never" %}</i>
+					{% else %}
+						{{ object.last_used|datetime }}
+					{% endif %}
+				</td>
 			{% endblock pager_table_row %}
 
 		{% endembed %}

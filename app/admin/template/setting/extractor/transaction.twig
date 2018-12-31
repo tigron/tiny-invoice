@@ -288,8 +288,9 @@
 					<table class="table table-hover table-striped table-condensed table-responsive">
 					<thead>
 						<tr>
-							<th>#</th>
+							<th width="40">{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
 							<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
+							<th>{{ pager.create_header('Last used'|trans, 'last_used')|raw }}</th>
 							<th width="30">&nbsp;</th>
 							<th width="30">&nbsp;</th>
 						</tr>
@@ -300,6 +301,14 @@
 					<tr>
 						<td>{{ extractor.id }}</td>
 						<td>{{ extractor.name }}</td>
+						<td>
+							{% if extractor.last_used is null %}
+								<i>{% trans "Never" %}</i>
+							{% else %}
+								{{ extractor.last_used|datetime }}
+							{% endif %}
+						</td>
+
 						<td>
 							<a href="/setting/extractor/transaction?action=edit&id={{ extractor.id }}" title="">
 								<span class="glyphicon glyphicon-pencil"></span>

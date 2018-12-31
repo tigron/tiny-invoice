@@ -101,6 +101,8 @@ class Extractor_Bank_Account_Statement_Transaction {
 				return false;
 			}
 		}
+		$this->last_used = date('Y-m-d H:i:s');
+		$this->save();
 		return true;
 	}
 }

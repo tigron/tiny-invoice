@@ -40,6 +40,9 @@ class Web_Module_Setting_Extractor_Transaction extends Module {
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
 		}
+    	$pager->add_sort_permission('id');
+    	$pager->add_sort_permission('name');
+    	$pager->add_sort_permission('last_used');
 		$pager->page();
 
 		$template = Template::Get();
