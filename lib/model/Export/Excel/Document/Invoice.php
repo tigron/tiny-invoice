@@ -29,8 +29,11 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 		$pager->add_sort_permission('document_incoming_invoice.expiration_date');
 		$pager->add_sort_permission('supplier.company');
 		$pager->add_sort_permission('document_incoming_invoice.price_incl');
+		$pager->set_page(1);
 		$pager->page();
+
 		$invoices = $pager->items;
+
 
 
 		$spreadsheet = new Spreadsheet();
