@@ -15,8 +15,14 @@
 
 	<tr>
 		<th><p class="form-control-static">{{ key }}</p></th>
-		<td><p class="form-control-static">{{ attribute(document, key)|truncate(50) }}</p></td>
-		<td><input type="text" class="form-control" name="document[{{ key }}]" value="{{ value }}" /></td>
+		<td><p class="form-control-static">{{ attribute(document, key)|truncate(50)|nl2br }}</p></td>
+		<td>
+			{% if key == 'description' %}
+				<textarea class="form-control" name="document[{{ key }}]">{{ value }}</textarea>
+			{% else %}
+				<input type="text" class="form-control" name="document[{{ key }}]" value="{{ value }}" />
+			{% endif %}
+		</td>
 	</tr>
 
 	{% if loop.last %}
