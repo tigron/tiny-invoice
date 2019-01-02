@@ -42,6 +42,15 @@ class Web_Module_Setting_Extractor_Pdf_Fingerprint extends Module {
     public function display_add_fingerprint() {
 		$coordinates = json_decode($_POST['coordinates'], true)[0];
 		$sort = $coordinates['id'];
+
+		$extractor_pdf = Extractor_Pdf::get_by_id($_GET['id']);
+		$preview = $extractor_pdf->document->get_preview();
+
+		$coordinates['x'] = 100 / $preview->width * $coordinates['x'];
+		$coordinates['y'] = 100 / $preview->height * $coordinates['y'];
+		$coordinates['height'] = 100 / $preview->height * $coordinates['height'];
+		$coordinates['width'] = 100 / $preview->width * $coordinates['width'];
+
 		unset($coordinates['id']);
 		$fingerprint = new Extractor_Pdf_Fingerprint();
 		$fingerprint->extractor_pdf_id = $_GET['id'];

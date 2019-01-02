@@ -33,17 +33,10 @@ class Extractor_Pdf_Fingerprint {
 		$page_width = $first_page->getWidth();
 		$page_height = $first_page->getHeight();
 
-		$preview_height = $this->extractor_pdf->document->get_preview()->height;
-		$preview_width = $this->extractor_pdf->document->get_preview()->width;
-
-		$width_factor = $page_width / $preview_width;
-		$height_factor = $page_height / $preview_height;
-
-		$x1 = $this->x * $width_factor;
-		$x2 = ($this->x+$this->width) * $width_factor;
-		$y1 = ($preview_height-$this->y) * $height_factor;
-		$y2 = ($preview_height - ($this->y+$this->height)) * $height_factor;
-
+		$x1 = $this->x / 100 * $page_width;
+		$x2 = $x1 + ($this->width / 100 * $page_width);
+		$y1 = $page_height - ($this->y / 100 * $page_height);
+		$y2 = $y1 - ($this->height / 100 * $page_height);
 
 		// the interresting part: initiate an extractor instance
 		$extractor = new SetaPDF_Extractor($document);
@@ -54,7 +47,7 @@ class Extractor_Pdf_Fingerprint {
 		// pass a rectangle filter to the strategy
 		$strategy->setFilter(new SetaPDF_Extractor_Filter_Rectangle(
 			new SetaPDF_Core_Geometry_Rectangle($x1, $y1, $x2, $y2),
-			SetaPDF_Extractor_Filter_Rectangle::MODE_CONTACT
+			SetaPDF_Extractor_Filter_Rectangle::MODE_CONTAINS
 		));
 
 		$extractor->setStrategy($strategy);

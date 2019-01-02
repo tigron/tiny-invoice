@@ -13,8 +13,7 @@
 	<div class="panel-heading">{% trans "Manage fingerprints" %}</div>
 	<div class="panel-body">
 		<div class="form-group">
-			<label class="col-xs-3 control-label">{% trans "Fingerprints" %}</label>
-			<div class="col-xs-5">
+			<div class="col-xs-8">
 				<img src="/picture?id={{ extractor_pdf.document.preview_file_id }}" />
 			</div>
 			<div class="col-xs-4" id="fingerprints">
@@ -35,16 +34,19 @@
 		</div>
 	</script>
 	<script type="text/javascript">
+		{% set preview_height = extractor_pdf.document.get_preview().height %}
+		{% set preview_width = extractor_pdf.document.get_preview().width %}
+
 		$(document).ready(function () {
 			$('img').selectAreas({
 				minSize: [10, 10],
 				areas: [
 					{% for extractor_pdf_fingerprint in extractor_pdf.get_extractor_pdf_fingerprints() %}
 					{
-						x: {{ extractor_pdf_fingerprint.x }},
-						y: {{ extractor_pdf_fingerprint.y }},
-						width: {{ extractor_pdf_fingerprint.width }},
-						height: {{ extractor_pdf_fingerprint.height }}
+						x: {{ extractor_pdf_fingerprint.x / 100 * preview_width }},
+						y: {{ extractor_pdf_fingerprint.y / 100 * preview_height }},
+						width: {{ extractor_pdf_fingerprint.width / 100 * preview_width }},
+						height: {{extractor_pdf_fingerprint.height / 100 * preview_height }}
 					}{% if not loop.last %},{% endif %}
 					{% endfor %}
 				],

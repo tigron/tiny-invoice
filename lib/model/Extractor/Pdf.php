@@ -111,8 +111,6 @@ class Extractor_Pdf {
 		// load the document
 		SetaPDF_Core_Canvas_GraphicState::setMaxGraphicStateNestingLevel(400);
 		$seta_document = SetaPDF_Core_Document::loadByFilename($document->file->get_path());
-		$preview_width = $document->get_preview()->width;
-		$preview_height = $document->get_preview()->height;
 
 		// get access to its pages
 		$pages = $seta_document->getCatalog()->getPages();
@@ -121,17 +119,14 @@ class Extractor_Pdf {
 		$page_width = $first_page->getWidth();
 		$page_height = $first_page->getHeight();
 
-		$width_factor = $page_width / $preview_width;
-		$height_factor = $page_height / $preview_height;
-
 		// the interresting part: initiate an extractor instance
 		$extractor = new SetaPDF_Extractor($seta_document);
 
 		foreach ($this->get_extractor_pdf_fingerprints() as $extractor_pdf_fingerprint) {
-			$x1 = $extractor_pdf_fingerprint->x * $width_factor;
-			$x2 = ($extractor_pdf_fingerprint->x+$extractor_pdf_fingerprint->width) * $width_factor;
-			$y1 = ($preview_height-$extractor_pdf_fingerprint->y) * $height_factor;
-			$y2 = ($preview_height - ($extractor_pdf_fingerprint->y+$extractor_pdf_fingerprint->height)) * $height_factor;
+			$x1 = $extractor_pdf_fingerprint->x / 100 * $page_width;
+			$x2 = $x1 + ($extractor_pdf_fingerprint->width / 100 * $page_width);
+			$y1 = $page_height - ($extractor_pdf_fingerprint->y / 100 * $page_height);
+			$y2 = $y1 - ($extractor_pdf_fingerprint->height / 100 * $page_height);
 
 			// create a word strategy instance
 			$strategy = new SetaPDF_Extractor_Strategy_Word();
