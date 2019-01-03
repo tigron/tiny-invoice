@@ -165,4 +165,20 @@ class Extractor_Pdf {
 		return Extractor_Pdf_Fingerprint::get_by_extractor_pdf($this);
 	}
 
+	/**
+	 * Get by Document
+	 *
+	 * @access public
+	 * @param Document $document
+	 * @return Extractor_Pdf $extractor_pdf
+	 */
+	public static function get_by_document(Document $document) {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM extractor_pdf WHERE document_id=?', [ $document->id ]);
+		if ($id === null) {
+			throw new Exception('No extractor found for this document');
+		}
+		return self::get_by_id($id);
+	}
+
 }
