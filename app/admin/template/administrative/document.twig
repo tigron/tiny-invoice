@@ -22,6 +22,14 @@
 			<div class="alert alert-success alert-dismissable">
 				{% trans "The document tags have been updated." %}
 			</div>
+		{% elseif env.sticky_session.delete_error == 'extractor_exists' %}
+			<div class="alert alert-danger">
+				{% trans "This document cannot be deleted." %} {% trans "It is a basis for a PDF extractor." %} {% trans "Please modify the extractor first before deleting this document." %}
+			</div>
+		{% elseif env.sticky_session.delete_error == 'balances_exist' %}
+			<div class="alert alert-danger">
+				{% trans "This document cannot be deleted." %} {% trans "There are bank transactions linked to it." %} {% trans "Please remove the transactions before removing this document." %}
+			</div>
 		{% endif %}
 
 		<div class="row">
@@ -164,9 +172,15 @@
 
 						{% if settings.setasign_pdf_extractor %}
 						<span class="pull-right">
-							<a href="/setting/extractor/pdf?action=create&document_id={{ document.id }}">
-								<i class="fa fa-file-text" aria-hidden="true"></i> {% trans "Create extractor" %}
-							</a>
+							{% if extractor_pdf is defined %}
+								<a href="/setting/extractor/pdf?action=edit&id={{ extractor_pdf.id }}">
+									<i class="fa fa-file-text" aria-hidden="true"></i> {% trans "Edit extractor" %}
+								</a>
+							{% else %}
+								<a href="/setting/extractor/pdf?action=create&document_id={{ document.id }}">
+									<i class="fa fa-file-text" aria-hidden="true"></i> {% trans "Create extractor" %}
+								</a>
+							{% endif %}
 						</span>
 						{% endif %}
 					</div>

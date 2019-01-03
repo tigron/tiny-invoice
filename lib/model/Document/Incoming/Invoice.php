@@ -11,6 +11,29 @@ class Document_Incoming_Invoice extends Document {
 	use \Skeleton\Object\Child;
 
 	/**
+	 * Delete
+	 *
+	 * @access public
+	 */
+	public function delete() {
+
+		/**
+		 * The document cannot be deleted if there are balances linked to it
+		 */
+		$balances_exist = false;
+		$balances = $this->get_bank_account_statement_transaction_balances();
+		if (count($balances) > 0) {
+			$balances_exist = true;
+		}
+
+		if ($balances_exist) {
+			throw new Exception('Cannot delete document. There are balances linked to this document');
+		}
+
+		parent::delete();
+	}
+
+	/**
 	 * Change classname
 	 *
 	 * @access public

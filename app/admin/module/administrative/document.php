@@ -246,6 +246,12 @@ class Web_Module_Administrative_Document extends Module {
 
 		$template->assign('document', $document);
 		$template->assign('selected_tags', $selected_tags);
+
+		try {
+			$extractor_pdf = Extractor_Pdf::get_by_document($document);
+			$template->assign('extractor_pdf', $extractor_pdf);
+		} catch (Exception $e) { }
+
 		$template->assign('tags', Tag::get_all());
 	}
 
@@ -256,6 +262,37 @@ class Web_Module_Administrative_Document extends Module {
 	 */
 	public function display_delete() {
 		$document = Document::get_by_id($_GET['id']);
+
+		/**
+		 * The document cannot be deleted if it is used as basis for an extractor
+		 */
+		$extractor_exists = false;
+		try {
+			$extractor_pdf = Extractor_Pdf::get_by_document($document);
+			$extractor_exists = true;
+		} catch (Exception $e) { }
+
+		if ($extractor_exists) {
+			Session::set_sticky('delete_error', 'extractor_exists');
+			Session::redirect('/administrative/document?action=edit&id=' . $document->id);
+		}
+
+		/**
+		 * The document cannot be deleted if there are balances linked to it
+		 */
+		if ($document->classname == 'Document_Incoming_Invoice') {
+			$balances_exist = false;
+			$balances = $document->get_bank_account_statement_transaction_balances();
+			if (count($balances) > 0) {
+				$balances_exist = true;
+			}
+
+			if ($balances_exist) {
+				Session::set_sticky('delete_error', 'balances_exist');
+				Session::redirect('/administrative/document?action=edit&id=' . $document->id);
+			}
+		}
+
 		$document->delete();
 
 		Session::set_sticky('message', 'deleted');

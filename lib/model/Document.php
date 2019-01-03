@@ -230,6 +230,16 @@ class Document {
 	 * @access public
 	 */
 	public function delete() {
+		$extractor_exists = false;
+		try {
+			$extractor_pdf = Extractor_Pdf::get_by_document($this);
+			$extractor_exists = true;
+		} catch (Exception $e) { }
+
+		if ($extractor_exists) {
+			throw new Exception('Cannot delete document. There is an extractor based on this document');
+		}
+
 		$document_tags = Document_Tag::get_by_document($this);
 		foreach ($document_tags as $document_tag) {
 			$document_tag->delete();
