@@ -3,21 +3,21 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Backoffice</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{% if settings.company is not empty %}{{ settings.company }} - {% endif %}Tiny Invoice</title>
 
 	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="handheld, all">
 	<link rel="stylesheet" href="/style.css" type="text/css" media="handheld, all">
+
 	<script type="text/javascript" src="/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
+
 <body id="login">
-
 	<div id="login-wrapper">
-
 		<div id="login-content">
-
 			{% if error %}
 				<div class="alert alert-danger">
 					{% trans "Username and/or password is incorrect" %}
@@ -42,17 +42,13 @@
 					</button>
 				</div>
 			</form>
-
 		</div>
-
 	</div>
 
 	<script type="text/javascript">
-
 		$(document).ready(function() {
 			$('input[name=username]').focus();
 		});
-
 	</script>
 </body>
 </html>

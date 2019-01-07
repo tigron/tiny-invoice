@@ -5,7 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Tiny Invoice</title>
+
+	<title>{% if settings.company is not empty %}{{ settings.company }} - {% endif %}Tiny Invoice</title>
 
 	<link type="text/css" href="/typeahead.js-bootstrap-css/typeaheadjs.css" rel="stylesheet">
 	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="handheld, all">
