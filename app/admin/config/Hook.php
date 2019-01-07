@@ -18,6 +18,12 @@ class Hook_Admin {
 		if ($module->is_login_required()) {
 			if (!isset($_SESSION['user'])) {
 				\Skeleton\Core\Web\Session::destroy();
+				\Skeleton\Core\Web\Session::start();
+
+				if (isset($_SERVER['REQUEST_URI'])) {
+					$_SESSION['redirect_uri'] = $_SERVER['REQUEST_URI'];
+				}
+
 				\Skeleton\Core\Web\Session::redirect('/login');
 			}
 

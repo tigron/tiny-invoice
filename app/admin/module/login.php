@@ -39,7 +39,14 @@ class Web_Module_Login extends Module {
 				$user = User::authenticate($_POST['username'], $_POST['password']);
 				Log::create('User logged in', $user);
 				$_SESSION['user'] = $user;
-				Session::redirect('/');
+
+				if (isset($_SESSION['redirect_uri'])) {
+					$redirect = $_SESSION['redirect_uri'];
+					unset($_SESSION['redirect_uri']);
+					Session::redirect($redirect);
+				} else {
+					Session::redirect('/');
+				}
 			} catch (\Exception $e) {
 				Template::get()->assign('error', true);
 			}
