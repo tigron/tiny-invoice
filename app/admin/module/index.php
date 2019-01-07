@@ -33,7 +33,6 @@ class Web_Module_Index extends Module {
 	 * @access public
 	 */
 	public function display() {
-
+		Session::redirect('/sales/invoice');
 	}
-
 }
