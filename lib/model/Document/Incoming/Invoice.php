@@ -106,10 +106,8 @@ class Document_Incoming_Invoice extends Document {
 				if ($invoice->id == $this->id) {
 					unset($invoices[$key]);
 				}
-				if ($invoice->price_excl != $this->price_excl) {
-					unset($invoices[$key]);
-				}
 			}
+
 			if (count($invoices) > 0) {
 				$errors['supplier_identifier'] = 'unique';
 			}
