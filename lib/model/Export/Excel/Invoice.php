@@ -33,7 +33,7 @@ class Export_Excel_Invoice extends Export {
 		}
 
 		$spreadsheet = new Spreadsheet();
-		$headers = ['Invoice number', 'Created', 'Expiration Date', 'Customer', 'Price', 'Paid'];
+		$headers = ['Invoice number', 'Created', 'Expiration Date', 'Customer', 'Price excl', 'Price incl', 'Paid'];
 
 		$worksheet = $spreadsheet->getActiveSheet();
 
@@ -49,11 +49,12 @@ class Export_Excel_Invoice extends Export {
 			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->created);
 			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->expiration_date);
 			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->customer->get_display_name());
-			$worksheet->setCellValueByColumnAndRow(5, $row, $invoice->price_incl);
+			$worksheet->setCellValueByColumnAndRow(5, $row, $invoice->price_excl);
+			$worksheet->setCellValueByColumnAndRow(6, $row, $invoice->price_incl);
 			if ($invoice->paid) {
-				$worksheet->setCellValueByColumnAndRow(6, $row, 'Yes');
+				$worksheet->setCellValueByColumnAndRow(7, $row, 'Yes');
 			} else {
-				$worksheet->setCellValueByColumnAndRow(6, $row, 'No');
+				$worksheet->setCellValueByColumnAndRow(7, $row, 'No');
 			}
 		}
 
