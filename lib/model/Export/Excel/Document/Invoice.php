@@ -37,31 +37,37 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 
 
 		$spreadsheet = new Spreadsheet();
-		$headers = ['Document number', 'Created', 'Accounting identifier', 'Expiration Date', 'Supplier', 'Title', 'Price excl', 'Price incl', 'Paid'];
+		$headers = ['Document number', 'Date', 'Accounting identifier', 'Expiration Date', 'Supplier', 'Title', 'Price excl', 'Price incl', 'Paid', 'Tags'];
 
 		$worksheet = $spreadsheet->getActiveSheet();
 
 		foreach($headers as $key => $header) {
-			$worksheet->setCellValueByColumnAndRow($key, 1, $header);
+			$worksheet->setCellValueByColumnAndRow(($key+1), 1, $header);
 		}
 
 		$row = 1;
 		foreach ($invoices as $invoice) {
 			$row++;
 
-			$worksheet->setCellValueByColumnAndRow(0, $row, $invoice->id);
-			$worksheet->setCellValueByColumnAndRow(1, $row, $invoice->created);
-			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->accounting_identifier);
-			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->expiration_date);
-			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->supplier->company);
-			$worksheet->setCellValueByColumnAndRow(5, $row, $invoice->title);
-			$worksheet->setCellValueByColumnAndRow(6, $row, $invoice->price_excl);
-			$worksheet->setCellValueByColumnAndRow(7, $row, $invoice->price_incl);
+			$worksheet->setCellValueByColumnAndRow(1, $row, $invoice->id);
+			$worksheet->setCellValueByColumnAndRow(2, $row, $invoice->date);
+			$worksheet->setCellValueByColumnAndRow(3, $row, $invoice->accounting_identifier);
+			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->expiration_date);
+			$worksheet->setCellValueByColumnAndRow(5, $row, $invoice->supplier->company);
+			$worksheet->setCellValueByColumnAndRow(6, $row, $invoice->title);
+			$worksheet->setCellValueByColumnAndRow(7, $row, $invoice->price_excl);
+			$worksheet->setCellValueByColumnAndRow(8, $row, $invoice->price_incl);
 			if ($invoice->paid) {
-				$worksheet->setCellValueByColumnAndRow(8, $row, 'Yes');
+				$worksheet->setCellValueByColumnAndRow(9, $row, 'Yes');
 			} else {
-				$worksheet->setCellValueByColumnAndRow(8, $row, 'No');
+				$worksheet->setCellValueByColumnAndRow(9, $row, 'No');
 			}
+			$tags = $invoice->get_tags();
+			$txt_tags = '';
+			foreach ($tags as $tag) {
+				$txt_tags .= $tag->name . ' ';
+			}
+			$worksheet->setCellValueByColumnAndRow(10, $row, $txt_tags);
 		}
 
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
