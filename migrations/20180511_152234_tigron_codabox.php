@@ -21,8 +21,8 @@ class Migration_20180511_152234_Tigron_codabox extends \Skeleton\Database\Migrat
 		$db = Database::get();
 
 		$db->query("
-			INSERT INTO `transaction` (`classname`, `created`, `data`, `retry_attempt`, `recurring`, `completed`, `failed`, `locked`, `frozen`, `parallel`) VALUES
-			('Tigron_Coda',	'2016-04-25 13:48:06',	'\"\"',	0,	1,	0,	0,	0,	0,	0);",
+			INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `data`, `retry_attempt`, `recurring`, `completed`, `failed`, `locked`, `frozen`, `parallel`) VALUES
+			('Tigron_Coda',	'2016-04-25 13:48:06',	now(), '\"\"',	0,	1,	0,	0,	0,	0,	0);",
 		[]);
 
 	}

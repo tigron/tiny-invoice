@@ -21,6 +21,8 @@ class Migration_20151022_202847_Create_user extends \Skeleton\Database\Migration
 		$user->firstname = 'user';
 		$user->lastname = 'user';
 		$user->email = 'user@example.com';
+		$user->language_id = 1;
+		$user->admin = true;
 		$user->save();
 	}
 

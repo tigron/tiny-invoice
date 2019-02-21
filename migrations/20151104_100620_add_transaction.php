@@ -18,10 +18,10 @@ class Migration_20151104_100620_Add_transaction extends \Skeleton\Database\Migra
 	 */
 	public function up() {
 		$db = Database::get();
-		$db->query("INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `executed_at`, `data`, `completed`, `failed`, `locked`, `frozen`) VALUES ('Mailscanner', now(), now(), '', '', '0', '0', '0', '0');");
-		$db->query("INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `executed_at`, `data`, `completed`, `failed`, `locked`, `frozen`) VALUES ('Reminder_Invoice', now(), now(), '', '', '0', '0', '0', '0');");
-		$db->query("INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `executed_at`, `data`, `completed`, `failed`, `locked`, `frozen`) VALUES ('Reminder_Purchase', now(), now(), '', '', '0', '0', '0', '0');");
-		$db->query("INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `executed_at`, `data`, `completed`, `failed`, `locked`, `frozen`) VALUES ('Cleanup_File', now(), now(), '', '', '0', '0', '0', '0');");
+		$db->query("INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `executed_at`, `data`, `completed`, `failed`, `locked`, `frozen`) VALUES ('Mailscanner', now(), now(), now(), '', '0', '0', '0', '0');");
+		$db->query("INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `executed_at`, `data`, `completed`, `failed`, `locked`, `frozen`) VALUES ('Reminder_Invoice', now(), now(), now(), '', '0', '0', '0', '0');");
+		$db->query("INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `executed_at`, `data`, `completed`, `failed`, `locked`, `frozen`) VALUES ('Reminder_Purchase', now(), now(), now(), '', '0', '0', '0', '0');");
+		$db->query("INSERT INTO `transaction` (`classname`, `created`, `scheduled_at`, `executed_at`, `data`, `completed`, `failed`, `locked`, `frozen`) VALUES ('Cleanup_File', now(), now(), now(), '', '0', '0', '0', '0');");
 	}
 
 	/**

@@ -44,7 +44,7 @@ class Migration_20170630_213323_Extractor_transaction extends \Skeleton\Database
 			  `fingerprint_other_account_number` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
 			  `eval` text COLLATE utf8_unicode_ci NOT NULL,
 			  `created` datetime NOT NULL,
-			  `updated` datetime NOT NULL,
+			  `updated` datetime NULL,
 			  PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		", []);

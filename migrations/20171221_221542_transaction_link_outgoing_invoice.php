@@ -40,6 +40,9 @@ if (isset($output_array[1])) {
 }
 return false;
 		';
+		$extractor_bank_account_statement_transaction->fingerprint_message = '';
+		$extractor_bank_account_statement_transaction->fingerprint_other_account_name = '';
+		$extractor_bank_account_statement_transaction->fingerprint_other_account_number = '';
 		$extractor_bank_account_statement_transaction->save();
 	}
 
