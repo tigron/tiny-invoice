@@ -164,7 +164,7 @@
 		<tr>
 			<td style="width: 100mm; vertical-align">&nbsp;</td>
 			<td  style="width: 50mm; border-top: solid 2px #ccc">
-				{% set vat_array = creditnote.get_vat_array() %}
+				{% set creditnote_vats = creditnote.get_creditnote_vat() %}
 				<table cellpadding="0" cellspacing="0" border="0">
 				<tbody>
 					<tr>
@@ -173,13 +173,13 @@
 						</td>
 						<td style="width: 20mm; padding-top: 2mm; text-align: right">&euro;{{ "%.2f"|format(creditnote.get_price_excl()) }}</td>
 					</tr>
-					{% for key, vat_subtotal in vat_array %}
+					{% for creditnote_vat in creditnote_vats %}
 					<tr>
 						<td style="text-align: left; padding-bottom: 6px">
-							{% trans "VAT" %} ({{ key }}%)
+							{% trans "VAT" %} ({{ creditnote_vat.rate }}%)
 						</td>
 						<td style="padding-bottom: 6px; text-align: right">
-							&euro;{{ "%.2f"|format(vat_subtotal) }}
+							&euro;{{ "%.2f"|format(creditnote_vat.vat) }}
 						</td>
 					</tr>
 					{% endfor %}
@@ -195,9 +195,6 @@
 			</td>
 		</tr>
 		</table>
-
-
-
 	</div>
 
 {% endblock content %}
