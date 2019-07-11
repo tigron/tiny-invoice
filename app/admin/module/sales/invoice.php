@@ -161,7 +161,7 @@ class Web_Module_Sales_Invoice extends Module {
 					$vat_rate_country = Vat_Rate_Country::get_by_id($item['company_vat_rate_id']);
 					$invoice_item->vat_rate_id = $vat_rate_country->vat_rate_id;
 					$invoice_item->vat_rate_value = $vat_rate_country->vat;
-				} else {
+				} elseif ($_POST['invoice']['service_delivery_to_country_id'] > 0) {
 					$delivery_country = Country::get_by_id($_POST['invoice']['service_delivery_to_country_id']);
 					if ($delivery_country->european) {
 						if ($_SESSION['invoice']->customer_contact->vat_bound()) {
@@ -177,6 +177,9 @@ class Web_Module_Sales_Invoice extends Module {
 						$invoice_item->vat_rate_id = null;
 						$invoice_item->vat_rate_value = 0;
 					}
+				} else {
+					$invoice_item->vat_rate_id = null;
+					$invoice_item->vat_rate_value = 0;
 				}
 
 				if ($_POST['invoice']['vat_mode'] == 'group') {
