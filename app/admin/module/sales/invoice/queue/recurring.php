@@ -177,10 +177,12 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 				} else {
 					$invoice_queue_recurring_group->direct_invoice_send_invoice = false;
 				}
+				$invoice_queue_recurring_group->direct_invoice_reference = $_POST['invoice_queue_recurring_group']['direct_invoice_reference'];
 			} else {
 				$invoice_queue_recurring_group->direct_invoice = false;
 				$invoice_queue_recurring_group->direct_invoice_expiration_period = '';
 				$invoice_queue_recurring_group->direct_invoice_send_invoice = false;
+				$invoice_queue_recurring_group->direct_invoice_reference = '';
 			}
 
 			$invoice_queue_recurring_group->save();
