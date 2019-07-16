@@ -84,23 +84,32 @@
 						</div>
 					</div>
 
-					<div class="form-group direct_invoice">
-						<label class="col-xs-4 control-label">{% trans "Invoice expiration" %}</label>
-						<div class="col-xs-8">
-							<select class="form-control" name="invoice_queue_recurring_group[direct_invoice_expiration_period]">
-								<option value="+2 weeks"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+2 weeks' %} selected="selected"{% endif %}>
-									2 {% trans "weeks" %}
-								</option>
-								<option value="+1 month"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+1 month' or invoice_queue_recurring_group.direct_invoice_expiration_period == '' %} selected="selected"{% endif %}>
-									1 {% trans "month" %}
-								</option>
-								<option value="+60 days"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+60 days' %} selected="selected"{% endif %}>
-									60 {% trans "days" %}
-								</option>
-								<option value="+90 days"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+90 days' %} selected="selected"{% endif %}>
-									90 {% trans "days" %}
-								</option>
-							</select>
+					<div class="direct_invoice">
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Invoice expiration" %}</label>
+							<div class="col-xs-8">
+								<select class="form-control" name="invoice_queue_recurring_group[direct_invoice_expiration_period]">
+									<option value="+2 weeks"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+2 weeks' %} selected="selected"{% endif %}>
+										2 {% trans "weeks" %}
+									</option>
+									<option value="+1 month"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+1 month' or invoice_queue_recurring_group.direct_invoice_expiration_period == '' %} selected="selected"{% endif %}>
+										1 {% trans "month" %}
+									</option>
+									<option value="+60 days"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+60 days' %} selected="selected"{% endif %}>
+										60 {% trans "days" %}
+									</option>
+									<option value="+90 days"{% if invoice_queue_recurring_group.direct_invoice_expiration_period == '+90 days' %} selected="selected"{% endif %}>
+										90 {% trans "days" %}
+									</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-xs-4 control-label">{% trans "Invoice reference" %}</label>
+							<div class="col-xs-8">
+								<input type="text" class="form-control" name="invoice_queue_recurring_gruop[direct_invoice_reference]">
+							</div>
 						</div>
 					</div>
 

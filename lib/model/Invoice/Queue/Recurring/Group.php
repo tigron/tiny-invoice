@@ -86,7 +86,7 @@ class Invoice_Queue_Recurring_Group {
 			$invoice->customer_id = $this->customer_id;
 			$invoice->customer_contact_id = $this->customer_contact_id;
 			$invoice->expiration_date = date('YmdHis', strtotime($this->direct_invoice_expiration_period));
-			$invoice->reference = $this->customer_contact->reference;
+			$invoice->reference = $this->direct_invoice_reference;
 			$invoice->generate_number();
 			$invoice->save();
 
