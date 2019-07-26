@@ -204,7 +204,7 @@
 						<div class="col-xs-4">
 							<select name="invoice_queue[vat]" class="form-control">
 							{% for vat_rate in vat_rates %}
-								<option value="{{ vat_rate.vat }}"{% if vat_rate.vat == invoice_queue.vat %} selected{% endif %}>{{ vat_rate.vat }}%</option>
+								<option value="{{ vat_rate.vat }}"{% if vat_rate.vat_rate_id == invoice_queue.vat_rate_id %} selected{% endif %}>{{ vat_rate.vat }}%</option>
 							{% endfor %}
 							</select>
 						</div>

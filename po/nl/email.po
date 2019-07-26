@@ -10,104 +10,103 @@ msgstr ""
 "Language: nl\n"
 
 msgid "A new invoice has been created, please print this immediately. To open the invoice, you will need a PDF reader, such as Adobe Acrobat."
-msgstr ""
+msgstr "Er werd een nieuwe factuur aangemaakt, gelieve deze af te drukken. Om de factuur te openen heeft u een PDF reader nodig, zoals Adobe Acrobat."
 
 msgid "Adobe Acrobat can be downloaded from the following URL:"
-msgstr ""
+msgstr "Adobe Acrobat kan u downloaden op de volgende locatie:"
 
 msgid "Bank"
-msgstr ""
+msgstr "Bank"
 
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 msgid "Dear customer"
-msgstr ""
+msgstr "Beste klant"
 
 msgid "Description"
-msgstr ""
+msgstr "Beschrijving"
 
 msgid "E"
-msgstr ""
+msgstr "E"
 
 msgid "Expiration date"
-msgstr ""
+msgstr "Vervaldag"
 
 msgid "Hello"
-msgstr ""
+msgstr "Hallo"
 
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 msgid "If you recently paid the invoices, you can ignore this email. It can take up to a week for your payment to be processed."
-msgstr ""
+msgstr "Indien u de facturen onlangs betaald heeft, mag u deze mail negeren. Het kan tot een week duren voordat uw betaling verwerkt wordt."
 
 msgid "In attachment you'll find the unpaid invoices."
-msgstr ""
+msgstr "In bijlage kan u de onbetaalde facturen terugvinden."
 
 msgid "Invoice"
-msgstr ""
+msgstr "Factuur"
 
 msgid "Invoice reminder"
-msgstr ""
+msgstr "Factuur herinnering"
 
 msgid "Message"
-msgstr ""
+msgstr "Bericht"
 
 msgid "New invoice"
-msgstr ""
+msgstr "Nieuwe factuur"
 
 msgid "Nr"
-msgstr ""
+msgstr "Nr"
 
 msgid "P"
-msgstr ""
+msgstr "T"
 
 msgid "Payment details"
-msgstr ""
+msgstr "Betalings gegevens"
 
 msgid "Please keep in mind that we did not yet receive a payment for this order. You can find all the necessary payment information below, as well as on the invoice."
-msgstr ""
+msgstr "We hebben voor deze bestelling nog geen betaling ontvangen. U kan de betaalgegevens hieronder vinden, alsook op het factuur."
 
 msgid "Price excl."
-msgstr ""
+msgstr "Prijs excl BTW"
 
 msgid "Price incl."
-msgstr ""
+msgstr "Prijs incl BTW"
 
 msgid "Product"
-msgstr ""
+msgstr "Product"
 
 msgid "Products"
-msgstr ""
+msgstr "Producten"
 
 msgid "Qty"
-msgstr ""
+msgstr "Aantal"
 
 msgid "Services"
-msgstr ""
+msgstr "Diensten"
 
 msgid "Structured message"
-msgstr ""
+msgstr "Gestructureerde mededeling"
 
 msgid "Subtotal"
-msgstr ""
+msgstr "Subtotaal"
 
 msgid "Total to pay"
-msgstr ""
+msgstr "Totaal te betalen"
 
 msgid "Unit price"
-msgstr ""
+msgstr "Eenheidsprijs"
 
 msgid "Unpaid invoices"
-msgstr ""
+msgstr "Onbetaalde facturen"
 
 msgid "VAT"
-msgstr ""
+msgstr "BTW"
 
 msgid "W"
-msgstr ""
+msgstr "W"
 
 msgid "We noticed that you have one or more unpaid invoices."
-msgstr ""
-
+msgstr "We hebben gemerkt dat u één of meerdere onbetaalde facturen heeft."

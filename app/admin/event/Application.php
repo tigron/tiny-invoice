@@ -1,18 +1,26 @@
 <?php
 /**
- * Hooks
+ * Event
  *
- * @author Gerry Demaret <gerry@tigron.be>
  * @author Christophe Gosiau <christophe@tigron.be>
+ * @author Gerry Demaret <gerry@tigron.be>
+ * @author David Vandemaele <david@tigron.be>
  */
 
-class Hook_Admin {
+namespace App\Admin\Event;
+
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Web\Session;
+use \Skeleton\Database\Database;
+
+class Application extends \Skeleton\Core\Event {
+
 	/**
-	 * Bootstrap the application
+	 * Display method
 	 *
-	 * @access private
+	 * @access public
 	 */
-	public static function bootstrap(\Skeleton\Core\Web\Module $module) {
+	public function bootstrap(\Skeleton\Core\Web\Module $module) {
 		// Bootsprap the application
 		// Example: check if we need to log in, if we do and we aren't, redirect
 		if ($module->is_login_required()) {
@@ -27,7 +35,7 @@ class Hook_Admin {
 				\Skeleton\Core\Web\Session::redirect('/login');
 			}
 
-			User::set($_SESSION['user']);
+			\User::set($_SESSION['user']);
 		}
 
 		if (is_callable([ $module, 'secure' ])) {
@@ -43,16 +51,6 @@ class Hook_Admin {
 		$template->add_environment('sticky_session', $sticky_session);
 
 		// Assign settings to template. Used for company information in header
-		$template->assign('settings', Setting::get_as_array());
-
-	}
-
-	/**
-	 * Teardown of the application
-	 *
-	 * @access private
-	 */
-	public static function teardown(\Skeleton\Core\Web\Module $module) {
-		// Do your cleanup jobs here
+		$template->assign('settings', \Setting::get_as_array());
 	}
 }

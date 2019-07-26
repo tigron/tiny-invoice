@@ -66,8 +66,8 @@ class Invoice_Queue_Recurring {
 		$invoice_queue->qty = $this->qty;
 
 		$vat = $customer_contact->get_vat(Vat_Rate::get_by_id(1));
-		$invoice_queue->vat = $vat;
-
+		$invoice_queue->vat_rate_id = $this->vat_rate_id;
+		$invoice_queue->vat_rate_value = $this->vat_rate_value;
 		$invoice_queue->save();
 
 		$history = new Invoice_Queue_Recurring_History();

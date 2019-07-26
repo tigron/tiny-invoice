@@ -109,10 +109,10 @@
 						</div>
 					</div>
 
-					<div class="form-group{% if 'iban' in errors|keys %} has-error{% endif %}">
+                    <div class="form-group{% if 'iban' in errors|keys %} has-error{% endif %}">
 						<label for="accounting_identifier" class="control-label col-xs-3">{% trans "IBAN" %}</label>
 						<div class="col-xs-5">
-							<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{{ supplier.iban }}">
+							<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{% if supplier.iban is defined %}{{ supplier.iban }}{% elseif env.post.supplier.iban is defined %}{{ env.post.supplier.iban }}{% endif %}">
 							{{ form.invalid_input('iban', errors) }}
 						</div>
 					</div>

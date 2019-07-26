@@ -194,7 +194,18 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 				$invoice_queue_recurring = new Invoice_Queue_Recurring();
 				$invoice_queue_recurring->product_type_id = $_POST['queue_item']['product_type_id'][$key];
 				$invoice_queue_recurring->description = $_POST['queue_item']['description'][$key];
-				$invoice_queue_recurring->vat = $_POST['queue_item']['vat'][$key];
+				$invoice_queue_recurring->vat_rate_id = $_POST['queue_item']['vat_rate_id'][$key];
+
+
+				if ($invoice_queue_recurring->vat_rate_id != 0) {
+					$vat_rate_country = Vat_Rate_Country::get_by_vat_rate_country($invoice_queue_recurring->vat_rate, $invoice_queue_recurring_group->customer_contact->country);
+					$invoice_queue_recurring->vat_rate_id = $vat_rate_country->vat_rate_id;
+					$invoice_queue_recurring->vat_rate_value = $vat_rate_country->vat;
+				} else {
+					$invoice_queue_recurring->vat_rate_id = null;
+					$invoice_queue_recurring->vat_rate_value = 0;
+				}
+
 				$invoice_queue_recurring->qty = $_POST['queue_item']['qty'][$key];
 				$invoice_queue_recurring->price = $_POST['queue_item']['price'][$key];
 				$invoice_queue_recurring->invoice_queue_recurring_group_id = $invoice_queue_recurring_group->id;
@@ -207,6 +218,16 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 			foreach ($_POST['existing_queue_item'] as $invoice_queue_recurring_id => $data) {
 				$invoice_queue_recurring = Invoice_Queue_recurring::get_by_id($invoice_queue_recurring_id);
 				$invoice_queue_recurring->load_array($data);
+
+				if ($invoice_queue_recurring->vat_rate_id != 0) {
+					$vat_rate_country = Vat_Rate_Country::get_by_vat_rate_country($invoice_queue_recurring->vat_rate, $invoice_queue_recurring_group->customer_contact->country);
+					$invoice_queue_recurring->vat_rate_id = $vat_rate_country->vat_rate_id;
+					$invoice_queue_recurring->vat_rate_value = $vat_rate_country->vat;
+				} else {
+					$invoice_queue_recurring->vat_rate_id = null;
+					$invoice_queue_recurring->vat_rate_value = 0;
+				}
+
 				if ($invoice_queue_recurring->is_dirty()) {
 					$updated = true;
 				}
@@ -221,6 +242,13 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 
 		$template->assign('invoice_queue_recurring_group', $invoice_queue_recurring_group);
 		$template->assign('product_types', Product_Type::get_all('name'));
+		if ($invoice_queue_recurring_group->customer_contact->vat != '') {
+			$template->assign('vat_rates', Vat_Rate_Country::get_by_country(Country::get_by_id(Setting::get_by_name('country_id')->value)));
+		} else {
+			$template->assign('vat_rates', Vat_Rate_Country::get_by_country($_SESSION['invoice']->customer_contact->country));
+		}
+
+
 	}
 
 	/**

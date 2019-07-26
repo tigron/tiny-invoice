@@ -206,7 +206,7 @@ class Web_Module_Sales_Invoice extends Module {
 					$invoice_items[] = $invoice_item;
 				}
 
-				$total_price += $invoice_item->price_excl;
+				$total_price += $invoice_item->get_price_excl();
 			}
 
 			if ($total_price == 0) {

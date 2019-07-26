@@ -2,8 +2,8 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: pdf-nl.1485274707\n"
-"PO-Revision-Date: 2017-01-24 17:18+0100\n"
+"Project-Id-Version: pdf-nl.1563575101\n"
+"PO-Revision-Date: 2019-07-20 00:25+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,14 +15,17 @@ msgstr "Reeds betaald"
 msgid "An overview of the outstanding invoices can be found below."
 msgstr "Een overzicht van de openstaande facturen kan u hieronder vinden."
 
-msgid "BIC"
-msgstr "BIC"
-
 msgid "Bank"
 msgstr "Bank"
 
+msgid "BIC"
+msgstr "BIC"
+
 msgid "Credit note"
 msgstr "Kredietnota"
+
+msgid "Creditnote"
+msgstr ""
 
 msgid "Customer"
 msgstr "Klant"
@@ -63,6 +66,9 @@ msgstr "Factuurnummer"
 msgid "Message"
 msgstr "Bericht"
 
+msgid "or via email on"
+msgstr "of per email op"
+
 msgid "Our records indicate that one or more invoices are still unpaid."
 msgstr "Uit onze administratie blijkt dat één of meerdere facturen nog steeds onbetaald zijn."
 
@@ -88,10 +94,10 @@ msgid "Subtotal"
 msgstr "Subtotaal"
 
 msgid "T"
-msgstr ""
+msgstr "T"
 
 msgid "This invoice is payable to account"
-msgstr ""
+msgstr "Dit factuur dient te worden betaald op rekening"
 
 msgid "Total to pay"
 msgstr "Totaal te betalen"
@@ -113,6 +119,3 @@ msgstr "We vragen u beleefd om het openstaande bedrag binnen 14 dagen te betalen
 
 msgid "With kind regards"
 msgstr "Met vriendelijke groeten"
-
-msgid "or via email on"
-msgstr "of per email op"

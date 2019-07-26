@@ -2,7 +2,6 @@
 
 {% block tab %}
 
-
 		{% if errors is defined %}
 			<div class="alert alert-danger">
 				{% trans "The form contains mistakes. Please correct them." %}
@@ -12,7 +11,6 @@
 		{% endif %}
 
 		<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier/detail?action=edit&id={{ supplier.id }}">
-
 
 			<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
 				<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
@@ -31,7 +29,6 @@
 				<label class="col-xs-3 control-label">{% trans "Housenumber" %}</label>
 				<div class="col-xs-5"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ supplier.housenumber }}"/></div>
 			</div>
-
 			<div class="form-group">
 				<label class="col-xs-3 control-label">{% trans "Zipcode" %}</label>
 				<div class="col-xs-5"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ supplier.zipcode }}" /></div>

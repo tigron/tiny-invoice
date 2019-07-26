@@ -96,8 +96,9 @@ class Invoice_Queue_Recurring_Group {
 				$invoice_item->product_type_id = $invoice_queue_item->product_type_id;
 				$invoice_item->invoice_queue_id = $invoice_queue_item->id;
 				$invoice_item->qty = $invoice_queue_item->qty;
-				$invoice_item->price = $invoice_queue_item->price;
-				$invoice_item->vat = $invoice_queue_item->vat;
+				$invoice_item->price_excl = $invoice_queue_item->price;
+				$invoice_item->vat_rate_id = $invoice_queue_item->vat_rate_id;
+				$invoice_item->vat_rate_value = $invoice_queue_item->vat_rate_value;
 				$invoice_item->save();
 				$invoice->add_invoice_item($invoice_item);
 

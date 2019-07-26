@@ -59,6 +59,8 @@
 						<div class="col-xs-8"><input type="checkbox" id="run_forever" name="invoice_queue_recurring_group[run_forever]" data-group-cls="btn-group-xs" {% if invoice_queue_recurring_group.stop_after == '0000-00-00 00:00:00' %}checked{% endif %} onchange="toggle_run_forever();"></div>
 					</div>
 
+					<hr>
+
 					<div class="form-group" id="stop_after">
 						<label class="col-xs-4 control-label">{% trans "Stop after" %}</label>
 						<div class="col-xs-8">
@@ -138,9 +140,8 @@
 						</div>
 					</div>
 
-
 					<div class="form-group">
-						<div class="col-xs-9 col-xs-offset-3">
+						<div class="col-xs-8 col-xs-offset-4">
 							<button class="btn btn-primary" type="submit">{% trans "Save" %}</button>
 						</div>
 					</div>
@@ -195,7 +196,7 @@
 
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				{% trans "Queue content" %}
+				{% trans "Items" %}
 				<div class="pull-right">
 					<a href="javascript:add_queue_item();"">
 						<div class="glyphicon glyphicon-plus"></div> {% trans "Add item" %}
@@ -212,6 +213,7 @@
 							<th width="150">{% trans "VAT" %}</th>
 							<th width="150">{% trans "Quantity" %}</th>
 							<th width="150">{% trans "Price" %}</th>
+
 							<th width="30">&nbsp;</th>
 							<th width="30">&nbsp;</th>
 						</tr>
@@ -232,10 +234,12 @@
 
 
 							<td>
-								<select name="existing_queue_item[{{ invoice_queue_recurring.id }}][vat]" class="form-control">
-									<option value="6" {% if invoice_queue_recurring.vat == 6 %}selected{% endif %}>6%</option>
-									<option value="12" {% if invoice_queue_recurring.vat == 12 %}selected{% endif %}>12%</option>
-									<option value="21" {% if invoice_queue_recurring.vat == 21 %}selected{% endif %}>21%</option>
+								<select name="existing_queue_item[{{ invoice_queue_recurring.id }}][vat_rate_id]" class="form-control">
+									<option value="0">{% trans "No VAT" %} (0%)</option>
+									{% set selected = false %}
+									{% for vat_rate in vat_rates %}
+										<option {% if selected == false and vat_rate.vat_rate_id == invoice_queue_recurring.vat_rate_id %}{% set selected = true %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+									{% endfor %}
 								</select>
 							</td>
 							<td>
@@ -262,7 +266,7 @@
 						<tr class="view invoice_queue_recurring_{{ invoice_queue_recurring.id }}">
 							<td>{{ invoice_queue_recurring.product_type.name }}</td>
 							<td>{{ invoice_queue_recurring.description|nl2br }}</td>
-							<td>{{ invoice_queue_recurring.vat }}%</td>
+							<td>{{ invoice_queue_recurring.vat_rate_value }}%</td>
 							<td>{{ invoice_queue_recurring.qty }}</td>
 							<td>&euro;{{ invoice_queue_recurring.price|number_format }}</td>
 							<td>
