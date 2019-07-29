@@ -38,6 +38,36 @@ class Bank_Account {
 			return false;
 		}
 	}
+
+	/**
+	 * Validate
+	 *
+	 * @access public
+	 * @param array &$errors
+	 * @return bool $validated
+	 */
+	public function validate(&$errors = []) {
+		$required_fields = [ 'number', 'name' ];
+		foreach ($required_fields as $required_field) {
+			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
+				$errors[$required_field] = 'required';
+			}
+		}
+
+		try {
+			$user = self::get_by_number($this->details['number']);
+			if ($this->id === null OR ($this->id !== null AND $this->id != $user->id)) {
+				$errors['number'] = 'already exists';
+			}
+		} catch (Exception $e) { }
+
+		if (count($errors) > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	/**
 	 * Get last bank_account_statement
 	 *

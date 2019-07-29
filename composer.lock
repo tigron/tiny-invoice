@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9eec1c95d8a224cf082bf4f4f4b56f6b",
+    "content-hash": "244d2bb78a4566fbd5a14f09e23a9091",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -240,17 +240,71 @@
             "time": "2016-05-09T21:03:50+00:00"
         },
         {
-            "name": "bower-asset/codemirror",
-            "version": "5.48.0",
+            "name": "bower-asset/bootstrap-select",
+            "version": "v1.13.10",
             "source": {
                 "type": "git",
-                "url": "https://github.com/components/codemirror.git",
-                "reference": "aa79fba5d97891d8d845cd94ad31c5df869e560e"
+                "url": "https://github.com/snapappointments/bootstrap-select.git",
+                "reference": "b6135994a96269c7920169ae18d42852c62a6c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/codemirror/zipball/aa79fba5d97891d8d845cd94ad31c5df869e560e",
-                "reference": "aa79fba5d97891d8d845cd94ad31c5df869e560e",
+                "url": "https://api.github.com/repos/snapappointments/bootstrap-select/zipball/b6135994a96269c7920169ae18d42852c62a6c1b",
+                "reference": "b6135994a96269c7920169ae18d42852c62a6c1b",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/bootstrap": ">=3.0.0",
+                "bower-asset/jquery": ">=1.9.1,<4.0"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "./less/bootstrap-select.less",
+                    "./dist/css/bootstrap-select.css",
+                    "./dist/js/bootstrap-select.js"
+                ],
+                "bower-asset-ignore": [
+                    ".eslintignore",
+                    ".gitignore",
+                    "CONTRIBUTING.md",
+                    "Gruntfile.js",
+                    "composer.json",
+                    ".github",
+                    "docs",
+                    "js",
+                    "!dist/js",
+                    "nuget",
+                    "tests"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "The jQuery plugin that brings select elements into the 21st century with intuitive multiselection, searching, and much more.",
+            "keywords": [
+                "bootstrap",
+                "dropdown",
+                "form",
+                "javascript",
+                "jquery",
+                "replacement",
+                "select"
+            ],
+            "time": "2019-04-19T15:54:51+00:00"
+        },
+        {
+            "name": "bower-asset/codemirror",
+            "version": "5.48.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/codemirror.git",
+                "reference": "5a8cf72b1b6a874a1493c715d7a7717c70ff4176"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/codemirror/zipball/5a8cf72b1b6a874a1493c715d7a7717c70ff4176",
+                "reference": "5a8cf72b1b6a874a1493c715d7a7717c70ff4176",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -273,7 +327,7 @@
                     "mode/*/*.html"
                 ]
             },
-            "time": "2019-06-28T10:17:05+00:00"
+            "time": "2019-07-22T10:17:05+00:00"
         },
         {
             "name": "bower-asset/concrete-promise",
@@ -2389,16 +2443,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.29",
+            "version": "v3.4.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "1172dc1abe44dfadd162239153818b074e6e53bf"
+                "reference": "bc977cb2681d75988ab2d53d14c4245c6c04f82f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/1172dc1abe44dfadd162239153818b074e6e53bf",
-                "reference": "1172dc1abe44dfadd162239153818b074e6e53bf",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/bc977cb2681d75988ab2d53d14c4245c6c04f82f",
+                "reference": "bc977cb2681d75988ab2d53d14c4245c6c04f82f",
                 "shasum": ""
             },
             "require": {
@@ -2441,7 +2495,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-06-18T21:26:03+00:00"
+            "time": "2019-07-23T08:39:19+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2947,16 +3001,16 @@
         },
         {
             "name": "tigron/skeleton-file-pdf",
-            "version": "v0.2.3",
+            "version": "v0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-file-pdf.git",
-                "reference": "907212480fe4e8691ccb4c6ec6d0b0a31b2fdc5d"
+                "reference": "bc873540a64fefba3419a4d23fc562cde159bd87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-file-pdf/zipball/907212480fe4e8691ccb4c6ec6d0b0a31b2fdc5d",
-                "reference": "907212480fe4e8691ccb4c6ec6d0b0a31b2fdc5d",
+                "url": "https://api.github.com/repos/tigron/skeleton-file-pdf/zipball/bc873540a64fefba3419a4d23fc562cde159bd87",
+                "reference": "bc873540a64fefba3419a4d23fc562cde159bd87",
                 "shasum": ""
             },
             "require": {
@@ -2982,7 +3036,7 @@
                 }
             ],
             "description": "Tigron PDF utilities",
-            "time": "2019-07-12T08:10:11+00:00"
+            "time": "2019-07-29T14:46:08+00:00"
         },
         {
             "name": "tigron/skeleton-file-picture",

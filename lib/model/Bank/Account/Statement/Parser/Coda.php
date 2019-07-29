@@ -42,9 +42,11 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 			} catch (Exception $e) {
 				$bank_account = new Bank_Account();
 			}
-			$bank_account->number = $statement->original_situation->account_number;
+			$bank_account->number = trim($statement->original_situation->account_number);
 			$bank_account->description = $statement->original_situation->account_description;
 			$bank_account->name = $statement->original_situation->account_name;
+			$bank_account->bic = $statement->identification->account_bic;
+			$bank_account->from_coda = true;
 			$bank_account->save();
 
 			$statement_sequence_number = $statement->original_situation->statement_sequence_number;

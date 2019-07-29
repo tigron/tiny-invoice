@@ -16,13 +16,12 @@ class Export_Payment_Sepa extends Export {
 	 */
 	public function run() {
 		$data = $this->get_data();
-		$document_ids = $data['document_ids'];
+		$payment_list = Payment_List::get_by_id($data['payment_list_id']);
+		$payments = $payment_list->get_payments();
 		$total_price = 0;
 
-		$documents = [];
-		foreach ($document_ids as $document_id) {
-			$document = Document::get_by_id($document_id);
-			$documents[] = $document;
+		foreach ($payments as $payment) {
+			$document = $payment->document;
 			if ($document->classname != 'Document_Incoming_Invoice') {
 				throw new Exception('Incorrect document type');
 			}
@@ -33,7 +32,8 @@ class Export_Payment_Sepa extends Export {
 		 * Sort the documents
 		 */
 		$sorted = [];
-		foreach ($documents as $document) {
+		foreach ($payments as $payment) {
+			$document = $payment->document;
 			$document_date = new DateTime($document->expiration_date);
 			if ($document_date < new Datetime()) {
 				$document_date = new DateTime();
@@ -48,7 +48,7 @@ class Export_Payment_Sepa extends Export {
 			if (!isset($sorted[$expiration_date])) {
 				$sorted[$expiration_date] = [];
 			}
-			$sorted[$expiration_date][] = $document;
+			$sorted[$expiration_date][] = $payment;
 		}
 		ksort($sorted);
 
@@ -73,19 +73,19 @@ class Export_Payment_Sepa extends Export {
 		$debtor->street = Setting::get_by_name('street')->value;
 		$debtor->housenumber = Setting::get_by_name('housenumber')->value;
 
-		foreach ($sorted as $key => $documents) {
+		foreach ($sorted as $key => $payments) {
 			// Create a payment
-			$payment = new \Tigron\Sepa\Payment();
-			$payment->paymentInformationIdentification = 'export_' . $this->id;
+			$sepa_payment = new \Tigron\Sepa\Payment();
+			$sepa_payment->paymentInformationIdentification = 'export_' . $this->id;
 
 			$document_date = DateTime::createFromFormat('Y-m-d', $key);
 
-			$payment->requestedExecutionDate = $document_date;
-			$payment->debtorAccount = str_replace(' ', '', Setting::get_by_name('iban')->value);
-			$payment->debtorAgent = Setting::get_by_name('bic')->value;
-			$payment->debtor = $debtor;
+			$sepa_payment->requestedExecutionDate = $document_date;
+			$sepa_payment->debtorAccount = $payment_list->bank_account->number;
+			$sepa_payment->debtorAgent = $payment_list->bank_account->bic;
+			$sepa_payment->debtor = $debtor;
 
-			foreach ($documents as $document) {
+			foreach ($payments as $payment) {
 
 				// Create a transaction
 				$supplier = $document->supplier;
@@ -98,27 +98,28 @@ class Export_Payment_Sepa extends Export {
 				$creditor->housenumber = $supplier->housenumber;
 
 				$transaction = new \Tigron\Sepa\Transaction();
-				$transaction->paymentIdentification = 'document_' . $document->id;
-				$transaction->amount = $document->price_incl;
-				$transaction->creditorAgent = $supplier->bic;
-				$transaction->creditorAccount = $supplier->iban;
+				$transaction->paymentIdentification = 'document_' . $payment->document_id;
+				$transaction->amount = $payment->amount;
+				$transaction->creditorAgent = $payment->bank_account_bic;
+				$transaction->creditorAccount = $payment->bank_account_number;
 				$transaction->creditor = $creditor;
-				if ($document->payment_message != '') {
-					$transaction->unstructured_message = $document->payment_message;
+				if ($payment->payment_message != '') {
+					$transaction->unstructured_message = $payment->payment_message;
 				} else {
-					$transaction->structured_message = $document->payment_structured_message;
+					$transaction->structured_message = $payment->payment_structured_message;
 				}
 
-				$payment->transactions[] = $transaction;
+				$sepa_payment->transactions[] = $transaction;
 
 				if ($data['mark_paid']) {
+					$document = $payment->document;
 					$document->paid = true;
 					$document->save();
 				}
 
 
 			}
-			$credit->payments[] = $payment;
+			$credit->payments[] = $sepa_payment;
 		}
 
 		$xml = $credit->render();
@@ -126,8 +127,8 @@ class Export_Payment_Sepa extends Export {
  		$this->file_id = $file->id;
 		$this->save();
 
-		foreach ($document_ids as $document_id) {
-			$document = Document::get_by_id($document_id);
+		foreach ($payments as $payment) {
+			$document = $payment->document;
 			Log::create('Payment requested via export ' . $this->id, $document);
 		}
 	}

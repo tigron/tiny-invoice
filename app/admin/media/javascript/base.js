@@ -32,8 +32,7 @@ $(document).ready(function(){
 	/**
 	 * Initialize multiselect
 	 */
-	$('.multiselect').multiselect({
-		maxHeight: 300
+	$('.multiselect').selectpicker({
 	});
 
 	/**

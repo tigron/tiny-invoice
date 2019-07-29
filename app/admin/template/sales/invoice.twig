@@ -1007,9 +1007,9 @@
 				<td class="text-right">€{{ invoice.get_price_incl()|number_format }}</td>
 				<td>
 				{% if invoice.paid %}
-					<span class="glyphicon glyphicon-ok"></span>
+					<span class="label label-success">{% trans "Yes" %}</span>
 				{% else %}
-					<span class="glyphicon glyphicon-remove"></span>
+					<span class="label label-danger">{% trans "No" %}</span>
 				{% endif %}
 				</td>
 				<td>

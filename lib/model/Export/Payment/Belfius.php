@@ -16,13 +16,12 @@ class Export_Payment_Belfius extends Export {
 	 */
 	public function run() {
 		$data = $this->get_data();
-		$document_ids = $data['document_ids'];
+		$payment_list = Payment_List::get_by_id($data['payment_list_id']);
+		$payments = $payment_list->get_payments();
 		$total_price = 0;
 
-		$documents = [];
-		foreach ($document_ids as $document_id) {
-			$document = Document::get_by_id($document_id);
-			$documents[] = $document;
+		foreach ($payments as $payment) {
+			$document = $payment->document;
 			if ($document->classname != 'Document_Incoming_Invoice') {
 				throw new Exception('Incorrect document type');
 			}
@@ -33,7 +32,7 @@ class Export_Payment_Belfius extends Export {
 		$output[] = [
 			'A' => 'Individue(e)l(e) transactie(s)',
 			'B' => 'Aantal transacties',
-			'C' => count($document_ids),
+			'C' => count($payments),
 			'D' => 'Total bedrag',
 			'E' => str_replace('.', ',', $total_price),
 			'F' => '',
@@ -60,14 +59,15 @@ class Export_Payment_Belfius extends Export {
 			'L' => 'Referte opdrachtgever',
 		];
 
-		$iban = Setting::get_by_name('iban')->value;
+		$iban = $payment_list->bank_account->number;
 		$company = Setting::get_by_name('company')->value;
 
-		foreach ($documents as $document) {
-			if ($document->payment_structured_message != '') {
-				$message = str_replace('/', '', $document->payment_structured_message);
+		foreach ($payments as $payment) {
+			$document = $payment->document;
+			if ($payment->payment_structured_message != '') {
+				$message = str_replace('/', '', $payment->payment_structured_message);
 			} else {
-				$message = $document->payment_message;
+				$message = $payment->payment_message;
 			}
 
 			if (!$data['pay_on_expiration_date']) {
@@ -84,8 +84,8 @@ class Export_Payment_Belfius extends Export {
 				'A' => str_replace(' ', '', $iban),
 				'B' => $company,
 				'C' => date('d/m/Y', $expiration_date),
-				'D' => str_replace('.', ',', $document->price_incl),
-				'E' => $document->supplier->iban,
+				'D' => str_replace('.', ',', $payment->amount),
+				'E' => $payment->bank_account_number,
 				'F' => $document->supplier->company,
 				'G' => $document->supplier->street . ' ' . $document->supplier->housenumber,
 				'H' => $document->supplier->zipcode . ' ' . $document->supplier->city,
@@ -102,7 +102,8 @@ class Export_Payment_Belfius extends Export {
 		}
 
 		if ($data['mark_paid']) {
-			foreach ($documents as $document) {
+			foreach ($payments as $payment) {
+				$document = $payment->document;
 				$document->paid = true;
 				$document->save();
 			}
@@ -112,8 +113,8 @@ class Export_Payment_Belfius extends Export {
  		$this->file_id = $file->id;
 		$this->save();
 
-		foreach ($document_ids as $document_id) {
-			$document = Document::get_by_id($document_id);
+		foreach ($payments as $payment) {
+			$document = $payment->document;
 			Log::create('Payment requested via export ' . $this->id, $document);
 		}
 	}

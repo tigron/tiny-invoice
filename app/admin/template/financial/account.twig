@@ -225,13 +225,15 @@ console.log(response);
 		</script>
 
 	{% else %}
+		{% include "financial/account/modal.add_account.twig" with {id: 'add_account'} %}
+
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li class="active">{% trans "Bank accounts" %}</li>
 
 			<div class="pull-right">
-				<a href="/financial/account/transaction?action=automatic_link">
-					<i class="fa fa-magic"></i> {% trans "Automatic link" %}
+				<a href="#add_account" data-toggle="modal">
+					<span class="glyphicon glyphicon-plus-sign"></span> {% trans "Add bank account" %}
 				</a>
 			</div>
 		</ol>
@@ -246,12 +248,12 @@ console.log(response);
 
 		<div class="row">
 		{% for bank_account in bank_accounts %}
-			{% include "financial/account/modal.account_settings.twig" with {id: 'modal_account_settings_' ~ bank_account.id, bank_account: bank_account} %}
+			{% include "financial/account/modal.edit_account.twig" with {id: 'modal_edit_account_' ~ bank_account.id, bank_account: bank_account} %}
 			<div class="col-xs-3">
 				<div class="panel panel-default panel-link" data-id="{{ bank_account.id }}" href="/financial/account/transaction?bank_account_id={{ bank_account.id }}">
 					<div class="panel-body">
 						<div class="pull-right">
-							<a href="#modal_account_settings_{{ bank_account.id }}" data-toggle="modal" alt="{% trans "Settings" %}">
+							<a href="#modal_edit_account_{{ bank_account.id }}" data-toggle="modal" alt="{% trans "Settings" %}">
 								<i class="fa fa-cog"></i> {% trans "Settings" %}
 							</a>&nbsp;
 
@@ -272,7 +274,8 @@ console.log(response);
 
 						{{ bank_account.name }}<br />
 						{{ bank_account.description }}<br />
-						{{ bank_account.number }}<br /><br />
+						{{ bank_account.number }}<br />
+						{{ bank_account.bic }}<br /><br />
 
 						{% if bank_account.has_bank_account_statements() %}
 							{% set last_statement = bank_account.get_last_bank_account_statement() %}

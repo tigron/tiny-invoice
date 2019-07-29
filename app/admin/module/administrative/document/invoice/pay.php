@@ -43,6 +43,9 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 		$pager->page(true);
 
 		$template->assign('pager', $pager);
+
+		$bank_accounts  = Bank_Account::get_all();
+		$template->assign('bank_accounts', $bank_accounts);
 	}
 
 	/**
@@ -64,9 +67,30 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 			Session::redirect('/administrative/document/invoice/pay');
 		}
 
-		$data = [
-			'document_ids' => $document_ids,
-		];
+		$payment_list = new Payment_List();
+		$payment_list->bank_account_id = $_POST['bank_account_id'];
+		$payment_list->save();
+
+		foreach ($document_ids as $document_id) {
+			$document = Document::get_by_id($document_id);
+
+			$payment = new Payment();
+			$payment->payment_list_id = $payment_list->id;
+			$payment->document_id = $document_id;
+			$payment->bank_account_number = $document->supplier->iban;
+			$payment->bank_account_bic = $document->supplier->bic;
+			if ($document->payment_message != '') {
+				$payment->payment_message = $document->payment_message;
+			} else {
+				$payment->payment_structured_message = $document->payment_structured_message;
+			}
+			$payment->amount = $document->price_incl;
+			$payment->save();
+		}
+
+		$data = [];
+		$data['payment_list_id'] = $payment_list->id;
+
 		if (isset($_POST['mark_paid'])) {
 			$data['mark_paid'] = true;
 		} else {

@@ -50,7 +50,42 @@ class Web_Module_Financial_Account extends Module {
 	 * @access public
 	 */
 	public function display_edit() {
+		if (isset($_POST['bank_account']['default_for_payment'])) {
+			$_POST['bank_account']['default_for_payment'] = true;
+			$bank_accounts = Bank_Account::get_all();
+			foreach ($bank_accounts as $bank_account) {
+				$bank_account->default_for_payment = false;
+				$bank_account->save(false);
+			}
+		} else {
+			$_POST['bank_account']['default_for_payment'] = false;
+		}
+
 		$bank_account = Bank_Account::get_by_id($_GET['id']);
+		$bank_account->load_array($_POST['bank_account']);
+		$bank_account->save();
+
+		Session::redirect('/financial/account');
+	}
+
+	/**
+	 * Edit the bank account
+	 *
+	 * @access public
+	 */
+	public function display_add() {
+		if (isset($_POST['bank_account']['default_for_payment'])) {
+			$_POST['bank_account']['default_for_payment'] = true;
+			$bank_accounts = Bank_Account::get_all();
+			foreach ($bank_accounts as $bank_account) {
+				$bank_account->default_for_payment = false;
+				$bank_account->save(false);
+			}
+		} else {
+			$_POST['bank_account']['default_for_payment'] = false;
+		}
+
+		$bank_account = new Bank_Account();
 		$bank_account->load_array($_POST['bank_account']);
 		$bank_account->save();
 
@@ -109,7 +144,24 @@ class Web_Module_Financial_Account extends Module {
 	 */
 	public function display_import_finish() {
 		$template = Template::get();
+	}
 
+	/**
+	 * Validate a bank account
+	 *
+	 * @access public
+	 */
+	public function display_validate() {
+		if (isset($_POST['bank_account']['id'])) {
+			$bank_account = Bank_Account::get_by_id($_POST['bank_account']['id']);
+		} else {
+			$bank_account = new Bank_Account();
+		}
+
+		$bank_account->load_array($_POST['bank_account']);
+		$bank_account->validate($errors);
+		echo json_encode($errors);
+		$this->template = false;
 	}
 
 	/**

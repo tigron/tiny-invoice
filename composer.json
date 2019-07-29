@@ -69,7 +69,8 @@
 		"bower-asset/typeahead.js-bootstrap-css": "^1.2",
 		"bower-asset/highcharts": "^4.2",
 		"bower-asset/font-awesome": "^4",
-		"ramsey/uuid": "^3.8"
+		"ramsey/uuid": "^3.8",
+		"bower-asset/bootstrap-select": "^1.13"
 	},
 	"suggest": {
 		"ext-imap": "*"
