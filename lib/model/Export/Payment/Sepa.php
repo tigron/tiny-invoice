@@ -86,7 +86,7 @@ class Export_Payment_Sepa extends Export {
 			$sepa_payment->debtor = $debtor;
 
 			foreach ($payments as $payment) {
-
+				$document = $payment->document;
 				// Create a transaction
 				$supplier = $document->supplier;
 				$creditor = new \Tigron\Sepa\Creditor();
