@@ -55,18 +55,26 @@ class Migration_20190726_170521_Payment_file extends \Skeleton\Database\Migratio
 			ADD `default_for_payment` tinyint(4) NOT NULL AFTER `from_coda`;
 		", []);
 
-		$iban = Setting::get_by_name('company')->value;
-		$bic = Setting::get_by_name('bic')->value;
 		try {
-			$bank_account = Bank_Account::get_by_number(trim($iban));
+			$iban = Setting::get_by_name('company')->value;
+			$bic = Setting::get_by_name('bic')->value;
 		} catch (Exception $e) {
-			$bank_accounts = Bank_Account::get_all();
-			if (count($bank_accounts) == 0) {
-				$bank_account = new Bank_Account();
-				$bank_account->number = $iban;
-				$bank_account->bic = $bic;
-				$bank_account->name = 'Default account';
-				$bank_account->save();
+			$iban = null;
+			$bic = null;
+		}
+
+		if ($iban !== null and $bic !== null) {
+			try {
+				$bank_account = Bank_Account::get_by_number(trim($iban));
+			} catch (Exception $e) {
+				$bank_accounts = Bank_Account::get_all();
+				if (count($bank_accounts) == 0) {
+					$bank_account = new Bank_Account();
+					$bank_account->number = $iban;
+					$bank_account->bic = $bic;
+					$bank_account->name = 'Default account';
+					$bank_account->save();
+				}
 			}
 		}
 
@@ -76,9 +84,11 @@ class Migration_20190726_170521_Payment_file extends \Skeleton\Database\Migratio
 			$bank_account->save();
 		}
 
-		$first_bank_account = array_shift($bank_accounts);
-		$first_bank_account->default_for_payment = true;
-		$first_bank_account->save();
+		if (count($bank_accounts) > 0) {
+			$first_bank_account = array_shift($bank_accounts);
+			$first_bank_account->default_for_payment = true;
+			$first_bank_account->save();
+		}
 
 		$exports = $db->get_all('SELECT * FROM export WHERE classname=? OR classname=?', [ 'Export_Payment_Sepa', 'Export_Payment_Belfius' ]);
 		foreach ($exports as $export) {
