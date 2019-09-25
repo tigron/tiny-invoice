@@ -62,29 +62,39 @@ class Export_Expertm_Invoice extends Export_Expertm {
 
 			$i = 1;
 			foreach ($invoice->get_invoice_items() as $invoice_item) {
-				$output2 .= $this->num(9, $invoice_item->product_type->identifier);
-				$output2 .= $this->alf(1, 'F');
-				$output2 .= $this->num(9, $invoice->number);
-				$output2 .= $this->alf(50, '');
-				$output2 .= $this->cur(20, $invoice_item->get_price_excl());
-				$output2 .= $this->cur(20, $invoice_item->get_price_excl());
-				$output2 .= $this->alf(1, 'C');
-				if ($vat > 0) {
-					$output2 .= $this->num(3, 5);
+				$output2 .= $this->num(9, $invoice_item->product_type->identifier); // Grootboekrekening
+				$output2 .= $this->alf(1, 'F');										// Document soort
+				$output2 .= $this->num(9, $invoice->number);						// Document nummer
+				$output2 .= $this->alf(50, '');										// Referte
+				$output2 .= $this->cur(20, $invoice_item->get_price_excl());		// Bedrag valuta
+				$output2 .= $this->cur(20, $invoice_item->get_price_excl());		// Bedrag referentiemunt
+				$output2 .= $this->alf(1, 'C');										// Code debet/credit
+				if ($invoice_item->vat_rate_id !== null) {
+					$ventilatie = 5;
+					if ($invoice_item->vat_rate_value == 0) {
+						$ventilatie = 1;
+					} elseif ($invoice_item->vat_rate_value == 1) {
+						$ventilatie = 2;
+					} elseif ($invoice_item->vat_rate_value == 6) {
+						$ventilatie = 3;
+					} elseif ($invoice_item->vat_rate_value == 12) {
+						$ventilatie = 4;
+					}
+					$output2 .= $this->num(3, $ventilatie);							// Ventilatiecode
 				} else {
 					if ($customer_contact->country->iso2 == 'BE') {
 						/**
 						 * Diplomatie:
 						 * http://diplomatie.belgium.be/sites/default/files/downloads/specimenEcert.pdf
 						 */
-						$output2 .= $this->num(3, 102);
+						$output2 .= $this->num(3, 102);								// Ventilatiecode
 					} elseif ($customer_contact->country->european) {
-						$output2 .= $this->num(3, 57);
+						$output2 .= $this->num(3, 57);								// Ventilatiecode
 					} else {
-						$output2 .= $this->num(3, 70);
+						$output2 .= $this->num(3, 70);								// Ventilatiecode
 					}
 				}
-				$output2 .= $this->num(9, $i);
+				$output2 .= $this->num(9, $i);										// Volgnummer
 				$output2 .= "\r\n";
 				$i++;
 			}

@@ -169,7 +169,7 @@ class Web_Module_Sales_Invoice extends Module {
 				} elseif ($_POST['invoice']['service_delivery_to_country_id'] > 0) {
 					$delivery_country = Country::get_by_id($_POST['invoice']['service_delivery_to_country_id']);
 					if ($delivery_country->european) {
-						if ($_SESSION['invoice']->customer_contact->vat_bound()) {
+						if (!$_SESSION['invoice']->customer_contact->vat_bound()) {
 							// No vat
 							$invoice_item->vat_rate_id = null;
 							$invoice_item->vat_rate_value = 0;

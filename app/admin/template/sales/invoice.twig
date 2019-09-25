@@ -185,7 +185,8 @@
 				<table class="table table-striped table-hover table-condensed">
 					<thead>
 						<tr>
-							<th>{% trans "Description" %}</th>
+							<th>{% trans "Product" %}</th>
+							<th width="50%">{% trans "Description" %}</th>
 							<th width="95">{% trans "VAT" %}</th>
 							<th width="95">{% trans "Qty" %}</th>
 							<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Item ex. VAT" %}</th>
@@ -198,6 +199,7 @@
 					{% for invoice_item in invoice.get_invoice_items() %}
 
 						<tr>
+							<td>{% if invoice_item.product_type_id is defined %}{{ invoice_item.product_type.name }}{% else %}<i>{% trans "Unknown" %}</i>{% endif %}</td>
 							<td>{{ invoice_item.description|nl2br }}</td>
 							<td>{{ invoice_item.vat_rate_value|number_format }}%</td>
 							<td>{{ invoice_item.qty|number_format }}</td>

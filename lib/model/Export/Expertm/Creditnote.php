@@ -69,8 +69,18 @@ class Export_Expertm_Creditnote extends Export_Expertm {
 				$output2 .= $this->cur(20, $creditnote_item->get_price_excl());
 				$output2 .= $this->cur(20, $creditnote_item->get_price_excl());
 				$output2 .= $this->alf(1, 'D');
-				if ($vat > 0) {
-					$output2 .= $this->num(3, 5);
+				if ($creditnote_item->vat_rate_id !== null) {
+					$ventilatie = 5;
+					if ($creditnote_item->vat_rate_value == 0) {
+						$ventilatie = 1;
+					} elseif ($creditnote_item->vat_rate_value == 1) {
+						$ventilatie = 2;
+					} elseif ($creditnote_item->vat_rate_value == 6) {
+						$ventilatie = 3;
+					} elseif ($creditnote_item->vat_rate_value == 12) {
+						$ventilatie = 4;
+					}
+					$output2 .= $this->num(3, $ventilatie);
 				} else {
 					if ($customer_contact->country->iso2 == 'BE') {
 						/**
