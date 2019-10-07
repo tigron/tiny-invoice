@@ -24,53 +24,93 @@
 					</a>
 				</span>
 			</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Transaction ID" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.id }}</p></div>
-				</div>
+			<div class="panel-body" style="max-height: 400px; overflow-y: scroll;" id="transaction-list">
+				{% set bank_account_statement = transaction.bank_account_statement %}
+				<table class="table">
+					<tr>
+						<td colspan="2">
+							<h5><strong>{% trans "Situation on" %} {{ bank_account_statement.original_situation_date|date }}</strong></h5>
+						</td>
+						<td width="200" class="text-right">
+							<h4>
+							{% if bank_account_statement.original_situation_balance > 0 %}
+								+
+							{% else %}
+								-
+							{% endif %}
+							{{ bank_account_statement.original_situation_balance|number_format }}
+							&nbsp; <small>EUR</small>
+							</h4>
+						</td>
+					</tr>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Date" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.date|date }}</p></div>
-				</div>
+					{% for bank_account_statement_transaction in bank_account_statement.get_bank_account_statement_transactions() %}
+						{% set href = '/financial/account/transaction?id=' ~ bank_account_statement_transaction.id ~ '&action=edit' %}
+						
+						{% if bank_account_statement_transaction.id == transaction.id %}
+							{% set active = true %}
+						{% else %}
+							{% set active = false %}
+						{% endif %}
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Bank account" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.bank_account_statement.bank_account.number }}</p></div>
-				</div>
+						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
+							<td rowspan="3" width="100">
+								<strong>{{ bank_account_statement_transaction.date|date }}</strong> <br />
+								{% if bank_account_statement_transaction.balanced %}
+									<span class="label label-success">{% trans "Balanced" %}</span>
+								{% else %}
+									<span class="label label-danger">{% trans "Unbalanced" %}</span>								
+								{% endif %}
+							</td>
+							<td><strong>{{ bank_account_statement_transaction.other_account_name }}</strong></td>
+							<td rowspan="2" class="text-right">
+								{% if bank_account_statement_transaction.amount > 0 %}
+									<h4 class="text-success">+
+								{% else %}
+									<h4 class="text-danger">
+								{% endif %}
+								{{ bank_account_statement_transaction.amount|number_format }}&nbsp; <small>EUR</small></h4></td>
+						</tr>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Bank Account Statement" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.bank_account_statement.sequence }}</p></div>
-				</div>
+						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
+							<td>{{ bank_account_statement_transaction.other_account_number }}</td>
+						</tr>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "To" %}/{% trans "From" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.other_account_name }}</p></div>
-				</div>
+						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
+							<td colspan="2"><pre>{{ bank_account_statement_transaction.get_message() }}</pre></td>
+						</tr>
+						
+					{% endfor %}
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "To" %}/{% trans "From" %} {% trans "Account" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.other_account_number }}</p></div>
-				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Amount" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">&euro;{{ transaction.amount }}</p></div>
-				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Balance" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">&euro;{{ transaction.get_balance() }}</p></div>
-				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Message" %}</label>
-					<div class="col-xs-9"><p class="form-control-static">{{ transaction.get_message() }}</p></div>
-				</div>
+					<tr>
+						<td colspan="2">
+							<h5>{% trans "Situation on" %} {{ bank_account_statement.new_situtation_date|date }}</h5>
+						</td>
+						<td width="200" class="text-right">
+							<h4>
+							{% if bank_account_statement.new_situation_balance > 0 %}
+								+
+							{% else %}
+								-
+							{% endif %}
+							{{ bank_account_statement.new_situation_balance|number_format }}
+							&nbsp; <small>EUR</small></h4>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
+
+		<script type="text/javascript">
+			position = $('#transaction-list .table tr.info').offset();
+			console.log(position);
+			$("#transaction-list").scrollTop(position.top-300);
+			
+			$('tr[data-href]').css('cursor', 'pointer').on('click', function() {
+				window.location.href = $(this).data('href');				
+			});
+		</script>
+
 		</form>
 		{% include "financial/account/transaction/modal.outgoing_invoice.twig" with {id: 'modal_outgoing_invoice', modal_size: 'lg'} %}
 		{% include "financial/account/transaction/modal.incoming_invoice.twig" with {id: 'modal_incoming_invoice', modal_size: 'lg'} %}
