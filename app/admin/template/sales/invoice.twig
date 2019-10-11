@@ -146,6 +146,9 @@
 
 							<dt>&nbsp;</dt>
 							<dd>{{ invoice.customer.country.name }}</dd>
+
+							<dt>{% trans "Email" %}</dt>
+							<dd>{{ invoice.customer.email }}</dd>
 						</dl>
 					</div>
 				</div>
@@ -170,6 +173,9 @@
 
 							<dt>&nbsp;</dt>
 							<dd>{{ invoice.customer_contact.country.name }}</dd>
+
+							<dt>{% trans "Email" %}</dt>
+							<dd>{{ invoice.customer_contact.email }}</dd>
 
 							<dt>{% trans "VAT" %}</dt>
 							<dd>{{ invoice.customer_contact.get_vat_formatted() }}</dd>
