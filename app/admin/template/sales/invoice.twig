@@ -216,7 +216,7 @@
 						</tr>
 					{% endfor %}
 					<tr>
-						<td colspan="5"><strong>{% trans "Total" %}</strong></td>
+						<td colspan="6"><strong>{% trans "Total" %}</strong></td>
 						<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_excl()|number_format }}</strong></td>
 						<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_incl()|number_format }}</strong></td>
 					</tr>
