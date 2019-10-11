@@ -45,19 +45,19 @@ class Creditnote_Item {
 			$this->price_excl = 0;
 		}
 
-		if ($this->price_incl > 0 && $this->price_excl > 0 || (empty($this->price_incl) && empty($this->price_excl) && $empty)) {
+		if ($this->price_incl != 0 && $this->price_excl != 0 || (empty($this->price_incl) && empty($this->price_excl) && $empty)) {
 			return;
 		}
 
 		if (empty($this->vat_rate_value)) {
-			return;
+			$this->vat_rate_value = 0;
 		}
 
-		if ($this->price_incl > 0) {
+		if ($this->price_incl != 0) {
 			$this->price_excl = $this->price_incl / (1 + ($this->vat_rate_value / 100));
 		}
 
-		if ($this->price_excl > 0) {
+		if ($this->price_excl != 0) {
 			$this->price_incl = $this->price_excl + ($this->price_excl * ($this->vat_rate_value / 100));
 		}
 
