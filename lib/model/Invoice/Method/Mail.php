@@ -24,9 +24,12 @@ class Invoice_Method_Mail extends Invoice_Method {
 		$email->assign('customer_contact', $customer_contact);
 		foreach ($invoices as $invoice) {
 			$email->add_attachment($invoice->get_pdf());
-			Log::create('Sending reminder to ' . $customer_contact->firstname . ' ' . $customer_contact->lastname . ' (' . $customer_contact->email . ')', $invoice);
 		}
 		$email->send();
+
+		foreach ($invoices as $invoice) {
+			Log::create('Sending reminder to ' . $customer_contact->firstname . ' ' . $customer_contact->lastname . ' (' . $customer_contact->email . ')', $invoice);
+		}
 	}
 
 	/**
