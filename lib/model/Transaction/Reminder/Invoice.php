@@ -50,11 +50,16 @@ class Transaction_Reminder_Invoice extends Transaction {
 				continue;
 			}
 
-			echo $customer_contact->get_identifier() . ';' . $customer_contact->customer_id . ';' . $customer_contact->invoice_method->name . ';' . implode(',', $ids) . "\n";
+			try {
+				$customer_contact->invoice_method->remind($customer_contact);
+				$customer_contact->last_invoice_reminder = date('Y-m-d H:i:s');
+				$customer_contact->save(false);
+			} catch (\Exception $e) {
+				echo $customer_contact->get_identifier() . ';NOK;' . $customer_contact->customer_id . ';' . $customer_contact->invoice_method->name . ';' . implode(',', $ids) . "\n";
+				continue;
+			}
 
-			$customer_contact->invoice_method->remind($customer_contact);
-			$customer_contact->last_invoice_reminder = date('Y-m-d H:i:s');
-			$customer_contact->save(false);
+			echo $customer_contact->get_identifier() . ';OK;' . $customer_contact->customer_id . ';' . $customer_contact->invoice_method->name . ';' . implode(',', $ids) . "\n";			
 		}
 
 		$this->schedule('1 day');
