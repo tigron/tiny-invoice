@@ -46,6 +46,9 @@
 
 							<dt>{% trans "Reference" %}</dt>
 							<dd>{{ invoice.reference }}</dd>
+							
+							<dt>{% trans "Internal reference" %}</dt>
+							<dd>{{ invoice.internal_reference }}</dd>
 
 							<dt>{% trans "Download PDF" %}</dt>
 							<dd>
@@ -511,6 +514,13 @@
 						<label class="col-xs-3 control-label">{% trans "Reference" %}</label>
 						<div class="col-xs-9">
 							<input type="text" class="form-control" id="reference" name="invoice[reference]" value="{{ env.session.invoice.reference }}">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-xs-3 control-label">{% trans "Internal reference" %}</label>
+						<div class="col-xs-9">
+							<input type="text" class="form-control" id="reference" name="invoice[internal_reference]" value="{{ env.session.invoice.internal_reference }}">
 						</div>
 					</div>
 

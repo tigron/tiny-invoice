@@ -143,7 +143,10 @@ class Web_Module_Sales_Invoice extends Module {
 	public function display_create_step3() {
 		$template = Template::get();
 
-		if (isset($_POST['invoice_item'])) {
+		if (isset($_POST['invoice_item']) or isset($_POST['invoice'])) {
+			if (!isset($_POST['invoice_item'])) {
+				$_POST['invoice_item'] = [];
+			}
 			$errors = [];
 			$total_price = 0;
 			$invoice_items = [];
@@ -215,10 +218,13 @@ class Web_Module_Sales_Invoice extends Module {
 
 			if (count($errors) > 0) {
 				$template->assign('errors', $errors);
+				$_SESSION['invoice']->reference = $_POST['invoice']['reference'];
+				$_SESSION['invoice']->internal_reference = $_POST['invoice']['internal_reference'];
 			} else {
 				$invoice = $_SESSION['invoice'];
 				$invoice->expiration_date = date('YmdHis', strtotime($_POST['invoice']['expiration_date']));
 				$invoice->reference = $_POST['invoice']['reference'];
+				$invoice->internal_reference = $_POST['invoice']['internal_reference'];
 				$invoice->vat_mode = $_POST['invoice']['vat_mode'];
 				$invoice->generate_number();
 				$invoice->save();
