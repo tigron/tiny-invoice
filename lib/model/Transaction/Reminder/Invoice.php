@@ -59,7 +59,7 @@ class Transaction_Reminder_Invoice extends Transaction {
 				continue;
 			}
 
-			echo $customer_contact->get_identifier() . ';OK;' . $customer_contact->customer_id . ';' . $customer_contact->invoice_method->name . ';' . implode(',', $ids) . "\n";			
+			echo $customer_contact->get_identifier() . ';OK;' . $customer_contact->customer_id . ';' . $customer_contact->invoice_method->name . ';' . implode(',', $ids) . "\n";
 		}
 
 		$this->schedule('1 day');

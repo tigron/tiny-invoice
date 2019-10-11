@@ -15,20 +15,36 @@ class Invoice_Method_Mail extends Invoice_Method {
 	 * @param Customer_Contact $customer_contact
 	 */
 	public function remind(Customer_Contact $customer_contact) {
-		$email = new Email('invoice_reminder', $customer_contact->language);
-		$email->add_to($customer_contact->email, $customer_contact->firstname . ' ' . $customer_contact->lastname);
-		$email->set_sender(Setting::get('email'), Setting::get('company'));
+		$mail = new Email('invoice_reminder', $customer_contact->language);
+
+		$to = '';
+
+		if ($customer_contact->email != '') {
+			$to = $customer_contact->email;
+			$mail->add_to($customer_contact->email, $customer_contact->firstname . ' ' . $customer_contact->lastname);
+		}	
+
+		if ($customer_contact->email == '' and $customer_contact->customer->email != '') {
+			$to = $customer_contact->customer->email;		
+			$mail->add_to($customer_contact->customer->email, $customer_contact->customer->firstname . ' ' . $customer_contact->customer->lastname);
+		}		
+
+		if ($customer_contact->email != $customer_contact->customer->email AND $customer_contact->customer->email != '') {
+			$mail->add_cc($customer_contact->customer->email, $customer_contact->customer->firstname . ' ' . $customer_contact->customer->lastname);
+		}		
+		
+		$mail->set_sender(Setting::get('email'), Setting::get('company'));
 
 		$invoices = $customer_contact->get_expired_invoices();
-		$email->assign('invoices', $invoices);
-		$email->assign('customer_contact', $customer_contact);
+		$mail->assign('invoices', $invoices);
+		$mail->assign('customer_contact', $customer_contact);
 		foreach ($invoices as $invoice) {
-			$email->add_attachment($invoice->get_pdf());
+			$mail->add_attachment($invoice->get_pdf());
 		}
-		$email->send();
+		$mail->send();
 
 		foreach ($invoices as $invoice) {
-			Log::create('Sending reminder to ' . $customer_contact->firstname . ' ' . $customer_contact->lastname . ' (' . $customer_contact->email . ')', $invoice);
+			Log::create('Sending reminder to ' . $to, $invoice);
 		}
 	}
 
