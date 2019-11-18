@@ -28,7 +28,7 @@ class Migration_20190726_170521_Payment_file extends \Skeleton\Database\Migratio
 			  KEY `export_id` (`export_id`),
 			  CONSTRAINT `payment_list_ibfk_1` FOREIGN KEY (`bank_account_id`) REFERENCES `bank_account` (`id`),
 			  CONSTRAINT `payment_list_ibfk_2` FOREIGN KEY (`export_id`) REFERENCES `export` (`id`)
-			) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		", []);
 
 		$db->query("
@@ -47,7 +47,7 @@ class Migration_20190726_170521_Payment_file extends \Skeleton\Database\Migratio
 			  KEY `payment_list_id` (`payment_list_id`),
 			  CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`document_id`) REFERENCES `document` (`id`),
 			  CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`payment_list_id`) REFERENCES `payment_list` (`id`)
-			) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		", []);
 
 		$db->query("
@@ -115,7 +115,10 @@ class Migration_20190726_170521_Payment_file extends \Skeleton\Database\Migratio
 					$data['payment_message'] = $document->payment_message;
 					$data['payment_structured_message'] = $document->payment_structured_message;
 					$data['amount'] = $document->price_incl;
-				} catch (Exception $e) { }
+				} catch (Exception $e) {
+					continue;
+				}
+
 				$db->insert('payment', $data);
 			}
 		}
