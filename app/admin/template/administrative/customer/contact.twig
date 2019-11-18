@@ -56,7 +56,7 @@
 	});
 
 	function delete_contact(id) {
-		$.get('/sales/invoice/contact?action=delete&id=' + id, function(data) {
+		$.get('/administrative/customer/contact?action=delete&id=' + id, function(data) {
 			if(data['status'] == 1) {
 				$('#customer-contact-' + id).remove();
 				$('#invoice-create-step2 input').val('');
