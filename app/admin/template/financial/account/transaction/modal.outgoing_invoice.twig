@@ -152,14 +152,6 @@
 		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').html('/ €' + invoice_amount);
 		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').attr('data-value', invoice_amount);
 
-		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').click(function() {
-			value = $(this).data('value');
-			$(this).parents('.input-group').find('.form-control').val(value).trigger('change');
-		});
-		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').click();
-
-		$('#invoice_id').val(row.data('id'));
-
 		$('#link_invoice_amount,#link_outgoing_invoice #link_supplier_amount').change(function() {
 			balance = parseFloat($('#link_outgoing_invoice #transaction_balance').data('value'));
 			document_amount = parseFloat($('#link_invoice_amount').val());
@@ -167,6 +159,14 @@
 			new_balance = balance - document_amount - customer_amount;
 			$('#new_transaction_balance').html('<b>&euro;' + new_balance.toFixed(2) + '</b>');
 		});
+		
+		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').click(function() {
+			value = $(this).data('value');
+			$(this).parents('.input-group').find('.form-control').val(value).trigger('change');
+		});
+		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').click();
+
+		$('#invoice_id').val(row.data('id'));
 	}
 </script>
 

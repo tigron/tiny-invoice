@@ -146,14 +146,6 @@
 		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').html('/ €' + credit_amount);
 		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').attr('data-value', credit_amount);
 
-		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').click(function() {
-			value = $(this).data('value');
-			$(this).parents('.input-group').find('.form-control').val(value).trigger('change');
-		});
-		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').click();
-
-		$('#credit_document_id').val(row.data('id'));
-
 		$('#link_incoming_creditnote_amount,#link_incoming_creditnote #link_supplier_amount').change(function() {
 			balance = parseFloat($('#link_incoming_creditnote #transaction_balance').data('value'));
 			document_amount = parseFloat($('#link_incoming_creditnote_amount').val());
@@ -161,6 +153,14 @@
 			new_balance = balance - document_amount - supplier_amount;
 			$('#new_transaction_balance').html('<b>&euro;' + new_balance.toFixed(2) + '</b>');
 		});
+
+		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').click(function() {
+			value = $(this).data('value');
+			$(this).parents('.input-group').find('.form-control').val(value).trigger('change');
+		});
+		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').click();
+
+		$('#credit_document_id').val(row.data('id'));
 	}
 </script>
 
