@@ -59,13 +59,23 @@
 	<div class="alert alert-danger hide">
 		{% trans "There is a problem with the amounts you have entered." %} {% trans "The total amount cannot exceed the amount of the transaction" %}.
 	</div>
+
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "Current transaction balance" %}</label>
+		<div class="col-xs-3">
+			<p class="form-control-static" id="transaction_balance" data-value="{{ transaction.get_balance() }}">&euro;{{ transaction.get_balance() }}</p>
+		</div>
+	</div>
+
 	<div class="form-group">
 		<label class="col-xs-3 control-label">{% trans "Link with credit note" %}</label>
 		<div class="col-xs-3">
 			<div class="input-group">
 				<span class="input-group-addon">&euro;</span>
-				<input type="text" class="form-control" id="link_incoming_creditnote_amount" style="width: 143px;" name="link_incoming_creditnote_amount" value="">
-				<span class="input-group-addon" id="max_incoming_creditnote_amount"></span>
+				<input type="text" class="form-control" id="link_incoming_creditnote_amount" style="width: 143px;" name="link_incoming_creditnote_amount" value="0">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button" id="max_incoming_creditnote_amount" data-value=""></button>
+				</span>
 			</div>
 		</div>
 	</div>
@@ -75,12 +85,15 @@
 		<div class="col-xs-4">
 			<div class="input-group">
 				<span class="input-group-addon">&euro;</span>
-				<input type="text" class="form-control" id="link_supplier_amount" style="width: 143px;" name="link_supplier_amount" value="">
-				<span class="input-group-btn">
-					<button class="btn btn-default" id="supplier_amount_0" type="button">€0</button>
-					<button class="btn btn-default" id="supplier_credit_amount_max" type="button">{% trans "Max" %}</button>
-				</span>
+				<input type="text" class="form-control" id="link_supplier_amount" style="width: 143px;" name="link_supplier_amount" value="0">
 			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-xs-3 control-label">{% trans "New transaction balance" %}</label>
+		<div class="col-xs-3">
+			<p class="form-control-static" id="new_transaction_balance"><b>&euro;{{ transaction.get_balance() }}</b></p>
 		</div>
 	</div>
 
@@ -90,7 +103,6 @@
 		</div>
 	</div>
 </script>
-
 
 <script type="text/javascript">
 	$('#search_incoming_creditnotes').submit(function(event) {
@@ -125,17 +137,6 @@
 	var transaction_amount;
 	var credit_amount;
 
-	function incoming_creditnote_fill_up() {
-		if (transaction_amount <= credit_amount && transaction_amount > 0) {
-			$('#confirm_link_incoming_creditnotes #link_incoming_creditnote_amount').val(transaction_amount);
-			$('#confirm_link_incoming_creditnotes #link_supplier_amount').val(0);
-		} else {
-			$('#confirm_link_incoming_creditnotes #link_incoming_creditnote_amount').val(credit_amount);
-			$('#confirm_link_incoming_creditnotes #link_supplier_amount').val( (Math.round( (transaction_amount-credit_amount) * 100) / 100));
-		}
-	}
-
-
 	function table_incoming_creditnotes_tr_click(row) {
 		var source = $("#selected-incoming-creditnote").html();
 		$('#confirm_link_incoming_creditnotes').html(source)
@@ -143,41 +144,24 @@
 		credit_amount = parseFloat(row.data('amount'));
 
 		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').html('/ €' + credit_amount);
+		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').attr('data-value', credit_amount);
+
+		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').click(function() {
+			value = $(this).data('value');
+			$(this).parents('.input-group').find('.form-control').val(value).trigger('change');
+		});
+		$('#confirm_link_incoming_creditnotes #max_incoming_creditnote_amount').click();
+
 		$('#credit_document_id').val(row.data('id'));
 
-		$('#supplier_amount_0').on('click', function() {
-			incoming_creditnote_fill_up();
-			$('#confirm_link_incoming_creditnotes #link_supplier_amount').val(0);
-			$(this).addClass('active');
-			$('#supplier_credit_amount_max').removeClass('active');
-		})
-
-		$('#supplier_credit_amount_max').on('click', function() {
-			incoming_creditnote_fill_up();
-			$(this).addClass('active');
-			$('#supplier_amount_0').removeClass('active');
-		})
-
-		$('#supplier_amount_0').click();
+		$('#link_incoming_creditnote_amount,#link_incoming_creditnote #link_supplier_amount').change(function() {
+			balance = parseFloat($('#link_incoming_creditnote #transaction_balance').data('value'));
+			document_amount = parseFloat($('#link_incoming_creditnote_amount').val());
+			supplier_amount = parseFloat($('#link_incoming_creditnote #link_supplier_amount').val());
+			new_balance = balance - document_amount - supplier_amount;
+			$('#new_transaction_balance').html('<b>&euro;' + new_balance.toFixed(2) + '</b>');
+		});
 	}
-
-	$('#link_incoming_creditnote').submit(function(event) {
-		for_incoming_creditnote = parseFloat($('#confirm_link_incoming_creditnotes #link_incoming_creditnote_amount').val());
-		for_supplier = parseFloat($('#confirm_link_incoming_creditnotes #link_supplier_amount').val());
-
-		if (transaction_amount < for_incoming_creditnote + for_supplier) {
-			$('#confirm_link_incoming_creditnotes .alert').removeClass('hide');
-			event.preventDefault();
-			return false;
-		} else if (for_incoming_creditnote > credit_amount) {
-			$('#confirm_link_incoming_creditnotes .alert').removeClass('hide');
-			event.preventDefault();
-			return false;
-		} else {
-			$('#confirm_link_incoming_creditnotes .alert').addClass('hide');
-			return true;
-		}
-	})
 </script>
 
 {% endblock body %}

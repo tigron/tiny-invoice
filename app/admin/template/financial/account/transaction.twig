@@ -46,7 +46,7 @@
 
 					{% for bank_account_statement_transaction in bank_account_statement.get_bank_account_statement_transactions() %}
 						{% set href = '/financial/account/transaction?id=' ~ bank_account_statement_transaction.id ~ '&action=edit' %}
-						
+
 						{% if bank_account_statement_transaction.id == transaction.id %}
 							{% set active = true %}
 						{% else %}
@@ -59,7 +59,7 @@
 								{% if bank_account_statement_transaction.balanced %}
 									<span class="label label-success">{% trans "Balanced" %}</span>
 								{% else %}
-									<span class="label label-danger">{% trans "Unbalanced" %}</span>								
+									<span class="label label-danger">{% trans "Unbalanced" %}</span>
 								{% endif %}
 							</td>
 							<td><strong>{{ bank_account_statement_transaction.other_account_name }}</strong></td>
@@ -79,7 +79,7 @@
 						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
 							<td colspan="2"><pre>{{ bank_account_statement_transaction.get_message() }}</pre></td>
 						</tr>
-						
+
 					{% endfor %}
 
 					<tr>
@@ -105,9 +105,9 @@
 			position = $('#transaction-list .table tr.info').offset();
 			console.log(position);
 			$("#transaction-list").scrollTop(position.top-300);
-			
+
 			$('tr[data-href]').css('cursor', 'pointer').on('click', function() {
-				window.location.href = $(this).data('href');				
+				window.location.href = $(this).data('href');
 			});
 		</script>
 
@@ -177,7 +177,7 @@
 						<tbody>
 						<tr>
 							<td>{% trans "Payment" %} {{ transaction.id }}</td>
-							<td>&euro;{{ transaction.amount }}</td>
+							<td class="text-right">&euro;{{ transaction.amount|number_format }}</td>
 							<td>&nbsp;</td>
 						</tr>
 					{% endif %}
@@ -204,7 +204,7 @@
 								{{ balance.linked_object_classname }} {{ balance.linked_object_id }}
 							{% endif %}
 						</td>
-						<td>&euro;{{ balance.amount*-1 }}</td>
+						<td class="text-right">&euro;{{ (balance.amount*-1)|number_format }}</td>
 						<td>
 							<a href="/financial/account/transaction?action=delete_balance&id={{ balance.id }}" title="{% trans "Delete booking" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to remove this booking" %}?">
 								<span class="glyphicon glyphicon-remove"></span>
@@ -216,7 +216,7 @@
 						{% if balances|length > 0 %}
 							<tr>
 								<th>{% trans "Balance" %}</th>
-								<th>&euro;{{ transaction.get_balance() }}</th>
+								<th class="text-right">&euro;{{ transaction.get_balance()|number_format }}</th>
 								<th>&nbsp;</th>
 							</tr>
 						{% endif %}
@@ -253,7 +253,7 @@
 			<tr data-price="{{ transaction.amount }}" data-id="{{ transaction.id }}">
 				<td><input type="checkbox" data-group-cls="btn-group-xs" onchange="calculate_sum();"/></td>
 				<td>{{ transaction.date|date }}</td>
-				<td>{{ transaction.amount }}</td>
+				<td class="text-right">{{ transaction.amount }}</td>
 				<td>{{ transaction.get_message() }}</td>
 				<td>{{ transaction.other_account_name }}</td>
 				<td class="status"></td>
@@ -408,7 +408,7 @@
 					<td>{{ transaction.id }}</td>
 					<td>{{ transaction.date|date }}</td>
 					<td>{{ transaction.bank_account_statement.sequence }}</td>
-					<td>&euro;{{ transaction.amount }}</td>
+					<td class="text-right" style="padding-right: 10px;">&euro;{{ transaction.amount|number_format }}</td>
 					<td>{{ transaction.get_message|truncate(80) }}</td>
 					<td>{{ transaction.other_account_name }}</td>
 					<td>

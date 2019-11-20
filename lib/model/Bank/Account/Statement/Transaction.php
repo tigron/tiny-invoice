@@ -139,6 +139,16 @@ class Bank_Account_Statement_Transaction {
 		}
 	}
 
+	private function check_balance() {
+		if ($this->get_balance() == 0) {
+			$this->balanced = true;
+		} else {
+			$this->balanced = false;
+		}
+
+		$this->save();
+	}
+
 	/**
 	 * Link invoice
 	 *
@@ -157,10 +167,7 @@ class Bank_Account_Statement_Transaction {
 		$balance->amount = $amount;
 		$balance->save();
 
-		if ($this->get_balance() == 0) {
-			$this->balanced = true;
-			$this->save();
-		}
+		$this->check_balance();
 
 		$transfer = new Transfer();
 		$transfer->created = $this->date;
@@ -190,10 +197,7 @@ class Bank_Account_Statement_Transaction {
 		$balance->amount = $amount;
 		$balance->save();
 
-		if ($this->get_balance() == 0) {
-			$this->balanced = true;
-			$this->save(false);
-		}
+		$this->check_balance();
 	}
 
 	/**
@@ -213,10 +217,7 @@ class Bank_Account_Statement_Transaction {
 		$balance->amount = $amount;
 		$balance->save();
 
-		if ($this->get_balance() == 0) {
-			$this->balanced = true;
-			$this->save(false);
-		}
+		$this->check_balance();
 	}
 
 	/**
@@ -242,10 +243,7 @@ class Bank_Account_Statement_Transaction {
 			$this->save();
 		}
 
-		if ($document->get_balance() == 0) {
-			$document->balanced = true;
-			$document->save(false);
-		}
+		$this->check_balance();
 	}
 
 	/**
@@ -265,10 +263,7 @@ class Bank_Account_Statement_Transaction {
 		$balance->amount = $amount;
 		$balance->save();
 
-		if ($this->get_balance() == 0) {
-			$this->balanced = true;
-			$this->save();
-		}
+		$this->check_balance();
 	}
 
 	/**
