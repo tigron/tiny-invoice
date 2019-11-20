@@ -145,6 +145,9 @@
 		$('#confirm_link_outgoing_invoices').html(source)
 		transaction_amount = {{ transaction.get_balance() }};
 		invoice_amount = row.data('amount');
+		if (transaction_amount < invoice_amount) {
+			invoice_amount = transaction_amount;
+		}
 
 		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').html('/ €' + invoice_amount);
 		$('#confirm_link_outgoing_invoices #max_outgoing_invoice_amount').attr('data-value', invoice_amount);

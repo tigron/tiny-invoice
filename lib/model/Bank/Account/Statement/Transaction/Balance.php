@@ -64,7 +64,7 @@ class Bank_Account_Statement_Transaction_Balance {
 		}
 
 		$transaction = $this->bank_account_statement_transaction;
-		$transaction->check_balanced();
+		$transaction->check_balance();
 	}
 
 	/**
