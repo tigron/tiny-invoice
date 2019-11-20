@@ -64,13 +64,7 @@ class Bank_Account_Statement_Transaction_Balance {
 		}
 
 		$transaction = $this->bank_account_statement_transaction;
-
-		if ($transaction->get_balance() == 0) {
-			$transaction->balanced = true;
-		} else {
-			$transaction->balanced = false;
-		}
-		$transaction->save();
+		$transaction->check_balanced();
 	}
 
 	/**

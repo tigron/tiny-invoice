@@ -139,7 +139,12 @@ class Bank_Account_Statement_Transaction {
 		}
 	}
 
-	private function check_balance() {
+	/**
+	 * Check transaction for balanced
+	 *
+	 * @access public
+	 */
+	public function check_balance() {
 		if ($this->get_balance() == 0) {
 			$this->balanced = true;
 		} else {
@@ -238,12 +243,12 @@ class Bank_Account_Statement_Transaction {
 		$balance->amount = $amount;
 		$balance->save();
 
-		if ($this->get_balance() == 0) {
-			$this->balanced = true;
-			$this->save();
-		}
-
 		$this->check_balance();
+
+		if ($document->get_balance() == 0) {
+			$document->balanced = true;
+			$document->save(false);
+		}
 	}
 
 	/**
