@@ -74,12 +74,12 @@ class Export_Payment_Belfius extends Export {
 				$document->expiration_date = date('Y-m-d');
 			}
 
-
 			if (strtotime($document->expiration_date) < time()) {
 				$expiration_date = time();
 			} else {
 				$expiration_date = strtotime($document->expiration_date);
 			}
+
 			$output[] = [
 				'A' => str_replace(' ', '', $iban),
 				'B' => $company,
@@ -89,7 +89,7 @@ class Export_Payment_Belfius extends Export {
 				'F' => $document->supplier->company,
 				'G' => $document->supplier->street . ' ' . $document->supplier->housenumber,
 				'H' => $document->supplier->zipcode . ' ' . $document->supplier->city,
-				'I' => $document->supplier->country->name,
+				'I' => $document->supplier->country->text_en_name,
 				'J' => $message,
 				'K' => 'N',
 				'L' => ''

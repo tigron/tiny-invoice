@@ -310,7 +310,7 @@
 							<dd>{{ creditnote.customer.zipcode }} {{ creditnote.customer.city }}</dd>
 
 							<dt>&nbsp;</dt>
-							<dd>{{ creditnote.customer.country.name }}</dd>
+							<dd>{{ attribute(creditnote.customer.country, 'text_' ~ env.language.name_short ~ '_name') }}</dd>
 						</dl>
 					</div>
 				</div>
@@ -334,7 +334,7 @@
 							<dd>{{ creditnote.customer_contact.zipcode }} {{ creditnote.customer_contact.city }}</dd>
 
 							<dt>&nbsp;</dt>
-							<dd>{{ creditnote.customer_contact.country.name }}</dd>
+							<dd>{{ attribute(creditnote.customer_contact.country, 'text_' ~ env.language.name_short ~ '_name') }}</dd>
 
 							<dt>{% trans "VAT" %}</dt>
 							<dd>{{ creditnote.customer_contact.get_vat_formatted() }}</dd>

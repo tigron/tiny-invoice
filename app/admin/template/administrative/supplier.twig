@@ -84,7 +84,7 @@
 								{% endif %}
 
 								{% for country in countries[group] %}
-									<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if env.post.supplier.country_id == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>
+									<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if env.post.supplier.country_id == country.id %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 								{% endfor %}
 								</optgroup>
 							{% endfor %}
@@ -208,7 +208,7 @@
 						<th>#</th>
 						<th>{{ pager.create_header('Company'|trans, 'company')|raw }}</th>
 						<th>{{ pager.create_header('City'|trans, 'city')|raw }}</th>
-						<th>{{ pager.create_header('Country'|trans, 'country.name')|raw }}</th>
+						<th>{% trans "Country" %}</th>
 						<th>{{ pager.create_header('Vat'|trans, 'vat')|raw }}</th>
 						<th>{{ pager.create_header('Accounting ID'|trans, 'supplier.accounting_identifier')|raw }}</th>
 						<th>&nbsp;</th>
@@ -222,7 +222,7 @@
 				<td>{{ supplier.company }}</td>
 				<td>{{ supplier.city }}</td>
 				<td>
-					{% if supplier.country_id > 0 %}{{ supplier.country.name }}{% else %}<em>{% trans "Unknown country" %}</em>{% endif %}
+					{% if supplier.country_id > 0 %}{{ attribute(supplier.country, 'text_' ~ env.language.name_short ~ '_name') }}{% else %}<em>{% trans "Unknown country" %}</em>{% endif %}
 				</td>
 				<td>{{ supplier.get_vat_formatted() }}</td>
 				<td>{{ supplier.accounting_identifier }}</td>

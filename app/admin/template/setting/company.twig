@@ -62,7 +62,7 @@
 							{% for key, country_group in countries %}
 								<optgroup label="{{ key }}">
 								{% for country in country_group %}
-									<option value="{{ country.id }}" {% if settings.country_id == country.id %}selected{% endif %} >{{ country.name }}</option>
+									<option value="{{ country.id }}" {% if settings.country_id == country.id %}selected{% endif %} >{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 								{% endfor %}
 								</optgroup>
 							{% endfor %}

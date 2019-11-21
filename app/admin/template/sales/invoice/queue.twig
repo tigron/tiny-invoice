@@ -301,7 +301,7 @@
 								{{ customer_contact.firstname }} {{ customer_contact.lastname }}<br>
 								{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
 								{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
-								{{ customer_contact.country.name }}
+								{{ attribute(customer_contact.country, 'text_' ~ env.language.name_short ~ '_name') }}
 								{% if customer_contact.vat != '' %}<br>{{ customer_contact.get_vat_formatted() }}{% endif %}
 							</div>
 						</div>

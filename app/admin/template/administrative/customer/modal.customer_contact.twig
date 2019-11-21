@@ -68,12 +68,10 @@
 
 		</div>
 
-		<div class="form-group"{% if 'country_id' in errors|keys %} has-error{% endif %}">
+		<div class="form-group {% if 'country_id' in errors|keys %} has-error{% endif %}">
 			<label for="country_id" class="control-label col-xs-3">{% trans "Country" %}</label>
 			<div class="col-xs-9">
-				<select id="country_id" name="customer_contact[country_id]" class="form-control">
-
-				</select>
+				<select id="country_id" name="customer_contact[country_id]" class="form-control"></select>
 			</div>
 		</div>
 
@@ -151,12 +149,14 @@
 	</form>
 
 	<script type="text/javascript">
+
 		load_countries();
 		load_languages();
 
 		$('#invoice-contact-form').on('submit', function() {
 			return validate_customer_contact();
 		});
+
 		$('#invoice-contact-form input').keydown(function(e) {
 			var key = e.which;
 			if (key == 13) {
@@ -190,7 +190,7 @@
 					$.each(value, function(key, country) {
 						var option = $('<option></option>');
 						option.val(country.id);
-						option.text(country.name);
+						option.text(country.text_{{ env.language.name_short }}_name);
 						optgroup.append(option);
 					});
 					optgroup.appendTo($('#country_id'));

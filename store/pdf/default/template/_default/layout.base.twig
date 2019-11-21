@@ -121,7 +121,7 @@
 	<div id="footer">
 		<ul id="settings">
 			<li style="color: #111111"><strong>{{ settings.company }}</strong></li>
-			<li>{{ settings.street }} {{ settings.housenumber }} - {{ settings.zipcode }} {{ settings.city }} - {{ settings.country.name }}</li>
+			<li>{{ settings.street }} {{ settings.housenumber }} - {{ settings.zipcode }} {{ settings.city }} - {{ attribute(settings.country, 'text_' ~ env.language.name_short ~ '_name') }}</li>
 			<li style="padding-top: 1mm">
 			{% set cinfo = {'T': settings.phone, 'W': settings.website, 'E': settings.email, 'B': settings.vat} %}
 			{% for key, item in cinfo %}
@@ -144,7 +144,7 @@
 		{% endif %}
 			<li>{{ recipient_info.street }} {{ recipient_info.housenumber }}</li>
 			<li>{{ recipient_info.zipcode }} {{ recipient_info.city }}</li>
-			<li>{{ recipient_info.country.name }}</li>
+			<li>{{ attribute(recipient_info.country, 'text_' ~ env.language.name_short ~ '_name') }}</li>
 		</ul>
 	{% endif %}
 

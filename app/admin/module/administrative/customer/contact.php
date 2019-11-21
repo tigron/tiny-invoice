@@ -115,6 +115,8 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 	 * @access public
 	 */
 	public function display_load_customer_contact() {
+		session_write_close();
+
 		$this->template = null;
 
 		$customer_contact = Customer_Contact::get_by_id($_GET['id']);
@@ -127,6 +129,10 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 	 * @access public
 	 */
 	public function display_load_countries() {
+		session_write_close();
+
+		$this->template = null;
+
 		$countries = Country::get_grouped();
 		$result = [];
 		foreach ($countries as $group => $country_list) {
@@ -146,6 +152,10 @@ class Web_Module_Administrative_Customer_Contact extends Module {
 	 * @access public
 	 */
 	public function display_load_languages() {
+		session_write_close();
+
+		$this->template = null;
+
 		$languages = Language::get_all();
 		$result = [];
 		foreach ($languages as $language) {

@@ -36,10 +36,8 @@ class Web_Module_Administrative_Supplier extends Module {
 		$template = Template::get();
 
 		$pager = new Pager('supplier');
-
 		$pager->add_sort_permission('company');
 		$pager->add_sort_permission('vat');
-		$pager->add_sort_permission('country.name');
 		$pager->add_sort_permission('accounting_identifier');
 		$pager->add_sort_permission('city');
 

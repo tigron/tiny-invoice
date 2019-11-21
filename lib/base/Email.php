@@ -32,6 +32,6 @@ class Email extends \Skeleton\Email\Email {
 		}
 		$this->assign('settings', $settings);
 
-		parent::__construct($type, $language);
+		parent::__construct($type);
 	}
 }

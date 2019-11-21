@@ -76,7 +76,8 @@ class Invoice_Method_Clickpost extends Invoice_Method {
 			$to = $customer_contact->company;
 		}
 
-		$transport->add_variable('ToBlockAddress', $to . "\n" . $customer_contact->street . ' ' . $customer_contact->housenumber . "\n" . $customer_contact->zipcode . ' ' . $customer_contact->city . "\n" . $customer_contact->country->name);
+		$name_key = 'text_' . $customer_contact->language->name_short . '_name';
+		$transport->add_variable('ToBlockAddress', $to . "\n" . $customer_contact->street . ' ' . $customer_contact->housenumber . "\n" . $customer_contact->zipcode . ' ' . $customer_contact->city . "\n" . $customer_contact->country->$name_key);
 		$transport->add_variable('Color', 'Y');
 		$transport->add_variable('Cover', 'N');
 		$transport->add_variable('BothSided', 'N');

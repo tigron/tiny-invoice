@@ -40,7 +40,7 @@
 
 		{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
 		{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
-		{{ customer_contact.country.name }}<br />
+		{{ attribute(customer_contact.country, 'text_' ~ env.language.name_short ~ '_name') }}<br />
 		{% if customer_contact.vat != '' %}{{ customer_contact.get_vat_formatted() }}<br />{% endif %}
 		<abbr title="{% trans "Phone" %}">P:</abbr> {{ customer_contact.phone }} {% if customer_contact.fax != '' %}<abbr title="{% trans "Fax" %}">F:</abbr> {{ customer_contact.fax }}{% endif %}		<br />
 		<abbr title="{% trans "Email" %}">E:</abbr> <a href="mailto:{{ customer_contact.email }}">{{ customer_contact.email }}</a>

@@ -46,7 +46,7 @@
 
 							<dt>{% trans "Reference" %}</dt>
 							<dd>{{ invoice.reference }}</dd>
-							
+
 							<dt>{% trans "Internal reference" %}</dt>
 							<dd>{{ invoice.internal_reference }}</dd>
 
@@ -148,7 +148,7 @@
 							<dd>{{ invoice.customer.zipcode }} {{ invoice.customer.city }}</dd>
 
 							<dt>&nbsp;</dt>
-							<dd>{{ invoice.customer.country.name }}</dd>
+							<dd>{{ attribute(invoice.customer.country, 'text_' ~ env.language.name_short ~ '_name') }}</dd>
 
 							<dt>{% trans "Email" %}</dt>
 							<dd>{{ invoice.customer.email }}</dd>
@@ -175,7 +175,7 @@
 							<dd>{{ invoice.customer_contact.zipcode }} {{ invoice.customer_contact.city }}</dd>
 
 							<dt>&nbsp;</dt>
-							<dd>{{ invoice.customer_contact.country.name }}</dd>
+							<dd>{{ attribute(invoice.customer_contact.country, 'text_' ~ env.language.name_short ~ '_name') }}</dd>
 
 							<dt>{% trans "Email" %}</dt>
 							<dd>{{ invoice.customer_contact.email }}</dd>
@@ -558,7 +558,7 @@
 									{% endfor %}
 									{% for country in countries['european'] %}
 										{% if country.id == env.session.invoice.customer_contact.country_id and country.id != settings.country_id %}
-											<option value="{{ country.id }}">{{ country.name }}</option>
+											<option value="{{ country.id }}">{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 										{% endif %}
 									{% endfor %}
 									<option value="-1">{% trans "Outside Europe" %}</option>
@@ -566,7 +566,7 @@
 
 								<optgroup label="{% trans "Europe" %}">
 								{% for country in countries['european'] %}
-									<option value="{{ country.id }}" >{{ country.name }}</option>
+									<option value="{{ country.id }}" >{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 								{% endfor %}
 								</optgroup>
 							</select>

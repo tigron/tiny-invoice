@@ -51,7 +51,7 @@
 						{% endif %}
 
 						{% for country in countries[group] %}
-							<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if supplier.country_id == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>
+							<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if supplier.country_id == country.id %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 						{% endfor %}
 						</optgroup>
 					{% endfor %}

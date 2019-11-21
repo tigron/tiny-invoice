@@ -91,7 +91,7 @@
 				<td style="font-size: 10px; color: #666666">
 					<p style="padding: 10px 0">
 						<strong>{{ settings.company }}</strong><br />
-						{{ settings.street }} {{ settings.nr }} - {{ settings.zipcode }} {{ settings.city }} - {{ settings.country.name }}<br />
+						{{ settings.street }} {{ settings.nr }} - {{ settings.zipcode }} {{ settings.city }} - {{ attribute(settings.country, 'text_' ~ env.language.name_short ~ '_name') }}<br />
 						{% trans "P" %}: {{ settings.phone }} - {% trans "W" %}: {{ settings.website }} - {% trans "E" %}: {{ settings.email }} - {{ settings.vat }}
 					</p>
 				</td>

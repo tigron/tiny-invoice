@@ -9,7 +9,7 @@
 	{% elseif env.sticky_session.message is defined %}
 		{{ base.display_flash_message(env.sticky_session.message, 'customer') }}
 	{% endif %}
-    
+
 	<form class="form form-horizontal form-condensed" method="post" action="/administrative/customer/detail?action=edit&id={{ customer.id }}">
 		<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
 			<label for="company" class="col-xs-3 control-label">{% trans "Company" %}</label>
@@ -79,7 +79,7 @@
 					{% endif %}
 
 					{% for country in countries[group] %}
-						<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if customer.country_id is defined and customer.country_id == country.id %}selected="selected"{% elseif env.post.customer.country_id is defined and env.post.customer.country_id == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>
+						<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if customer.country_id is defined and customer.country_id == country.id %}selected="selected"{% elseif env.post.customer.country_id is defined and env.post.customer.country_id == country.id %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 					{% endfor %}
 					</optgroup>
 				{% endfor %}

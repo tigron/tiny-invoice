@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "390dad20af55ca8701c61cc57784285c",
+    "content-hash": "639ac292f8b6075911462522f6e3d20f",
     "packages": [
         {
             "name": "aptoma/twig-markdown",
@@ -300,16 +300,16 @@
         },
         {
             "name": "bower-asset/bootstrap-select",
-            "version": "v1.13.11",
+            "version": "v1.13.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/snapappointments/bootstrap-select.git",
-                "reference": "6375e69577415abd875dda6b36718bd93a097689"
+                "reference": "38e031a6bc42cdb18b1bff62e8094ae75bb1c22c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/snapappointments/bootstrap-select/zipball/6375e69577415abd875dda6b36718bd93a097689",
-                "reference": "6375e69577415abd875dda6b36718bd93a097689",
+                "url": "https://api.github.com/repos/snapappointments/bootstrap-select/zipball/38e031a6bc42cdb18b1bff62e8094ae75bb1c22c",
+                "reference": "38e031a6bc42cdb18b1bff62e8094ae75bb1c22c",
                 "shasum": ""
             },
             "require": {
@@ -350,20 +350,20 @@
                 "replacement",
                 "select"
             ],
-            "time": "2019-09-20T01:43:37+00:00"
+            "time": "2019-10-11T00:02:17+00:00"
         },
         {
             "name": "bower-asset/codemirror",
-            "version": "5.49.0",
+            "version": "5.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/codemirror.git",
-                "reference": "b573a9d62e0f64662c00961c445f8cc84d3c6241"
+                "reference": "d3bf96a897f6ae4cb57abc32847e2d5adaf9e00a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/codemirror/zipball/b573a9d62e0f64662c00961c445f8cc84d3c6241",
-                "reference": "b573a9d62e0f64662c00961c445f8cc84d3c6241",
+                "url": "https://api.github.com/repos/components/codemirror/zipball/d3bf96a897f6ae4cb57abc32847e2d5adaf9e00a",
+                "reference": "d3bf96a897f6ae4cb57abc32847e2d5adaf9e00a",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -386,7 +386,7 @@
                     "mode/*/*.html"
                 ]
             },
-            "time": "2019-09-24T10:17:06+00:00"
+            "time": "2019-10-22T10:17:07+00:00"
         },
         {
             "name": "bower-asset/concrete-promise",
@@ -723,16 +723,16 @@
         },
         {
             "name": "bower-asset/moment-timezone",
-            "version": "0.5.25",
+            "version": "0.5.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/moment/moment-timezone.git",
-                "reference": "c377ac8fd7ff6c2fc52e2f432034ac5727dba1d8"
+                "reference": "963d24bd8d1961123bfdfb733f2b22e156084895"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/c377ac8fd7ff6c2fc52e2f432034ac5727dba1d8",
-                "reference": "c377ac8fd7ff6c2fc52e2f432034ac5727dba1d8",
+                "url": "https://api.github.com/repos/moment/moment-timezone/zipball/963d24bd8d1961123bfdfb733f2b22e156084895",
+                "reference": "963d24bd8d1961123bfdfb733f2b22e156084895",
                 "shasum": ""
             },
             "require": {
@@ -756,7 +756,7 @@
                 "MIT"
             ],
             "description": "Parse and display moments in any timezone.",
-            "time": "2019-04-18T06:12:36+00:00"
+            "time": "2019-10-19T03:37:12+00:00"
         },
         {
             "name": "bower-asset/tigron-confirm-modal",
@@ -897,16 +897,16 @@
         },
         {
             "name": "bower-asset/urijs",
-            "version": "v1.19.1",
+            "version": "v1.19.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/medialize/URI.js.git",
-                "reference": "fa46615b9934217a971edd482b59b9f88303db00"
+                "reference": "594ffc1d1ba995d8e90814d6de18e1330d419be1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/medialize/URI.js/zipball/fa46615b9934217a971edd482b59b9f88303db00",
-                "reference": "fa46615b9934217a971edd482b59b9f88303db00",
+                "url": "https://api.github.com/repos/medialize/URI.js/zipball/594ffc1d1ba995d8e90814d6de18e1330d419be1",
+                "reference": "594ffc1d1ba995d8e90814d6de18e1330d419be1",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -926,7 +926,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2018-02-10T15:33:18+00:00"
+            "time": "2019-10-20T14:52:23+00:00"
         },
         {
             "name": "cocur/slugify",
@@ -1875,16 +1875,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.8.2",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "0c1346a1956347590b7db09533966307d20cb7cc"
+                "reference": "f734783d826bd84c3d54fcf7b71c37ab9bac4b04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/0c1346a1956347590b7db09533966307d20cb7cc",
-                "reference": "0c1346a1956347590b7db09533966307d20cb7cc",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/f734783d826bd84c3d54fcf7b71c37ab9bac4b04",
+                "reference": "f734783d826bd84c3d54fcf7b71c37ab9bac4b04",
                 "shasum": ""
             },
             "require": {
@@ -1902,20 +1902,19 @@
                 "ext-zip": "*",
                 "ext-zlib": "*",
                 "markbaker/complex": "^1.4",
-                "markbaker/matrix": "^1.1",
-                "php": "^5.6|^7.0",
+                "markbaker/matrix": "^1.2",
+                "php": "^7.1",
                 "psr/simple-cache": "^1.0"
             },
             "require-dev": {
-                "doctrine/instantiator": "^1.0.0",
-                "dompdf/dompdf": "^0.8.0",
-                "friendsofphp/php-cs-fixer": "@stable",
+                "dompdf/dompdf": "^0.8.3",
+                "friendsofphp/php-cs-fixer": "^2.16",
                 "jpgraph/jpgraph": "^4.0",
-                "mpdf/mpdf": "^7.0.0",
-                "phpcompatibility/php-compatibility": "^8.0",
-                "phpunit/phpunit": "^5.7",
-                "squizlabs/php_codesniffer": "^3.3",
-                "tecnickcom/tcpdf": "^6.2"
+                "mpdf/mpdf": "^8.0",
+                "phpcompatibility/php-compatibility": "^9.3",
+                "phpunit/phpunit": "^7.5",
+                "squizlabs/php_codesniffer": "^3.5",
+                "tecnickcom/tcpdf": "^6.3"
             },
             "suggest": {
                 "dompdf/dompdf": "Option for rendering PDF with PDF Writer",
@@ -1931,15 +1930,9 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-2.1-or-later"
+                "MIT"
             ],
             "authors": [
-                {
-                    "name": "Erik Tilt"
-                },
-                {
-                    "name": "Adrien Crivelli"
-                },
                 {
                     "name": "Maarten Balliauw",
                     "homepage": "https://blog.maartenballiauw.be"
@@ -1951,6 +1944,12 @@
                 {
                     "name": "Franck Lefevre",
                     "homepage": "https://rootslabs.net"
+                },
+                {
+                    "name": "Erik Tilt"
+                },
+                {
+                    "name": "Adrien Crivelli"
                 }
             ],
             "description": "PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine",
@@ -1965,7 +1964,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2019-07-08T21:21:25+00:00"
+            "time": "2019-11-18T11:33:05+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2061,16 +2060,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.1.0",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
-                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/446d54b4cb6bf489fc9d75f55843658e6f25d801",
+                "reference": "446d54b4cb6bf489fc9d75f55843658e6f25d801",
                 "shasum": ""
             },
             "require": {
@@ -2079,7 +2078,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -2104,7 +2103,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2018-11-20T15:27:04+00:00"
+            "time": "2019-11-01T11:05:21+00:00"
         },
         {
             "name": "psr/simple-cache",
@@ -2153,6 +2152,80 @@
                 "simple-cache"
             ],
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "punic/punic",
+            "version": "3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/punic/punic.git",
+                "reference": "0fd7772bb494a11aec50d779b738611e164a33ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/punic/punic/zipball/0fd7772bb494a11aec50d779b738611e164a33ee",
+                "reference": "0fd7772bb494a11aec50d779b738611e164a33ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "replace": {
+                "punic/calendar": "*",
+                "punic/common": "*"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "2.2.*",
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.4"
+            },
+            "bin": [
+                "bin/punic-data"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Punic\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michele Locati",
+                    "email": "mlocati@gmail.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Remo Laubacher",
+                    "email": "remo.laubacher@gmail.com",
+                    "role": "Collaborator, motivator and perfectionist supporter"
+                },
+                {
+                    "name": "Christian Schmidt",
+                    "email": "github@chsc.dk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP-Unicode CLDR",
+            "homepage": "https://github.com/punic/punic",
+            "keywords": [
+                "calendar",
+                "cldr",
+                "date",
+                "date-time",
+                "i18n",
+                "internationalization",
+                "l10n",
+                "localization",
+                "php",
+                "time",
+                "translate",
+                "translations",
+                "unicode"
+            ],
+            "time": "2019-05-22T08:47:32+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -2502,16 +2575,16 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.32",
+            "version": "v3.4.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "b3e7ce815d82196435d16dc458023f8fb6b36ceb"
+                "reference": "f72e33fdb1170b326e72c3157f0cd456351dd086"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/b3e7ce815d82196435d16dc458023f8fb6b36ceb",
-                "reference": "b3e7ce815d82196435d16dc458023f8fb6b36ceb",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/f72e33fdb1170b326e72c3157f0cd456351dd086",
+                "reference": "f72e33fdb1170b326e72c3157f0cd456351dd086",
                 "shasum": ""
             },
             "require": {
@@ -2554,7 +2627,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-09-19T15:32:51+00:00"
+            "time": "2019-10-24T15:33:53+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2879,16 +2952,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v1.0.5",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "9b800b0835f25f544e5d5b2051a427936db3570b"
+                "reference": "9a5b0077eda6f868da7045a121205f978d0e6bba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/9b800b0835f25f544e5d5b2051a427936db3570b",
-                "reference": "9b800b0835f25f544e5d5b2051a427936db3570b",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/9a5b0077eda6f868da7045a121205f978d0e6bba",
+                "reference": "9a5b0077eda6f868da7045a121205f978d0e6bba",
                 "shasum": ""
             },
             "type": "library",
@@ -2908,7 +2981,7 @@
                 }
             ],
             "description": "Core functionality for Skeleton",
-            "time": "2019-09-25T10:17:11+00:00"
+            "time": "2019-11-05T08:39:11+00:00"
         },
         {
             "name": "tigron/skeleton-database",
@@ -3019,16 +3092,16 @@
         },
         {
             "name": "tigron/skeleton-file",
-            "version": "v0.3.1",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-file.git",
-                "reference": "db423d1b14827575be439c8e315d6ff6aa6b8f7d"
+                "reference": "5474fd320f8e1fa2ccda60d93e697f157f291938"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-file/zipball/db423d1b14827575be439c8e315d6ff6aa6b8f7d",
-                "reference": "db423d1b14827575be439c8e315d6ff6aa6b8f7d",
+                "url": "https://api.github.com/repos/tigron/skeleton-file/zipball/5474fd320f8e1fa2ccda60d93e697f157f291938",
+                "reference": "5474fd320f8e1fa2ccda60d93e697f157f291938",
                 "shasum": ""
             },
             "require": {
@@ -3053,7 +3126,7 @@
                 }
             ],
             "description": "Tigron File utilities",
-            "time": "2019-06-17T13:49:54+00:00"
+            "time": "2019-11-08T09:09:31+00:00"
         },
         {
             "name": "tigron/skeleton-file-pdf",
@@ -3462,16 +3535,16 @@
         },
         {
             "name": "tigron/skeleton-transaction",
-            "version": "v0.3.6",
+            "version": "v0.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-transaction.git",
-                "reference": "aa9f9ef8a606cc501e8f5e7417160271b9544451"
+                "reference": "c24acd23142682608f18b5c0a463b9f5b5caa782"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/aa9f9ef8a606cc501e8f5e7417160271b9544451",
-                "reference": "aa9f9ef8a606cc501e8f5e7417160271b9544451",
+                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/c24acd23142682608f18b5c0a463b9f5b5caa782",
+                "reference": "c24acd23142682608f18b5c0a463b9f5b5caa782",
                 "shasum": ""
             },
             "require": {
@@ -3499,7 +3572,7 @@
                 }
             ],
             "description": "Background tasks for skeleton",
-            "time": "2019-09-10T10:06:03+00:00"
+            "time": "2019-10-22T09:08:10+00:00"
         },
         {
             "name": "twig/extensions",
