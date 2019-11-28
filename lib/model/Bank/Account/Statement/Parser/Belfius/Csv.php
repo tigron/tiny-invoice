@@ -46,9 +46,10 @@ class Bank_Account_Statement_Parser_Belfius_Csv extends Bank_Account_Statement_P
 		}
 
 		foreach ($transactions as $transaction) {
-			$required_keys = [ 'Rekening', 'Rekening tegenpartij', 'Valutadatum', 'Bedrag', 'Naam tegenpartij bevat', 'Straat en nummer', 'Postcode en plaats', 'Transactie', 'Afschriftnummer' ];
+			$required_keys = [ 'Rekening', 'Rekening tegenpartij', 'Valutadatum', 'Bedrag', 'Naam tegenpartij bevat', 'Straat en nummer', 'Postcode en plaats', 'Transactie', 'Rekeninguittrekselnummer' ];
 			foreach ($required_keys as $required_key) {
 				if (!isset($transaction[$required_key])) {
+					echo $required_key;
 					return false;
 				}
 			}
@@ -95,7 +96,7 @@ class Bank_Account_Statement_Parser_Belfius_Csv extends Bank_Account_Statement_P
 		}
 
 		foreach ($transactions as $transaction) {
-			$required_keys = [ 'Rekening', 'Rekening tegenpartij', 'Valutadatum', 'Transactienummer', 'Bedrag', 'Naam tegenpartij bevat', 'Straat en nummer', 'Postcode en plaats', 'Transactie', 'Afschriftnummer' ];
+			$required_keys = [ 'Rekening', 'Rekening tegenpartij', 'Valutadatum', 'Transactienummer', 'Bedrag', 'Naam tegenpartij bevat', 'Straat en nummer', 'Postcode en plaats', 'Transactie', 'Rekeninguittrekselnummer' ];
 			foreach ($required_keys as $required_key) {
 				if (!isset($transaction[$required_key])) {
 					throw new Exception('Required field is missing: ' . $required_key);
@@ -115,9 +116,9 @@ class Bank_Account_Statement_Parser_Belfius_Csv extends Bank_Account_Statement_P
 			/**
 			 * Check the statement identifier
 			 */
-			$date = split("/", $transaction['Valutadatum']);
+			$date = explode("/", $transaction['Valutadatum']);
 			$date = $date[2] . '-' . $date[1] . '-' . $date[0];
-			$number = $transaction['Afschriftnummer']; //afschrift number
+			$number = $transaction['Rekeninguittrekselnummer']; //afschrift number
 			try {
 				$bank_account_statement = Bank_Account_Statement::get_by_bank_account_sequence($bank_account, $number);
 			} catch (Exception $e) {
