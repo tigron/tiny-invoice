@@ -11,6 +11,7 @@ use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 use \Ddeboer\Imap\Server;
+use \Ddeboer\Imap\Exception\AuthenticationFailedException;
 
 class Web_Module_Setting_Mailscanner extends Module {
 	/**
@@ -65,7 +66,7 @@ class Web_Module_Setting_Mailscanner extends Module {
 			$server->authenticate($mailscanner_username, $mailscanner_password);
 
 			$template->assign('imap_status', 'ok');
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$template->assign('imap_status', 'nok');
 		}
 

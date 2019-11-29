@@ -13,6 +13,7 @@ class Document {
 		__get as trait_get;
 	}
 	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Uuid;
 	use \Skeleton\Object\Save {
 		save as trait_save;
 	}
@@ -88,10 +89,6 @@ class Document {
 	 * @access public
 	 */
 	public function save($validate = true) {
-		if (empty($this->uuid)) {
-			$this->uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
-		}
-
 		if (isset($this->dirty_fields['file_id']) OR $this->id === null) {
 			$generate_preview = true;
 		} else {

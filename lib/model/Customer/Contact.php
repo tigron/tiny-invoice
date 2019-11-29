@@ -10,6 +10,7 @@ use \Skeleton\Database\Database;
 class Customer_Contact {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Uuid;
 	use \Skeleton\Object\Save {
 		save as trait_save;
 	}
@@ -23,10 +24,6 @@ class Customer_Contact {
 	 * @param boolean $validate
 	 */
 	public function save($validate = true) {
-		if (empty($this->uuid)) {
-			$this->uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
-		}
-
 		$this->trait_save($validate);
 		$this->export();
 	}

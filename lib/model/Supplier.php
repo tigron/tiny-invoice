@@ -11,24 +11,10 @@ use \IBAN\Validation\IBANValidator;
 class Supplier {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
-	use \Skeleton\Object\Save {
-		save as trait_save;
-	}
+	use \Skeleton\Object\Uuid;
+	use \Skeleton\Object\Save;
 	use \Skeleton\Object\Delete;
 	use \Skeleton\Pager\Page;
-
-	/**
-	 * Save the object
-	 *
-	 * @access public
-	 */
-	public function save($validate = true) {
-		if (empty($this->uuid)) {
-			$this->uuid = Ramsey\Uuid\Uuid::uuid4()->toString();
-		}
-
-		$this->trait_save($validate);
-	}
 
 	/**
 	 * Validate user data
