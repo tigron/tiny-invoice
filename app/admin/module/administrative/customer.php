@@ -71,6 +71,7 @@ class Web_Module_Administrative_Customer extends Module {
 				$template->assign('errors', $errors);
 			} else {
 				$customer->save();
+				$customer->create_first_customer_contact();
 
 				Session::set_sticky('message', 'created');
 				Session::redirect('/administrative/customer');
