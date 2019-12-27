@@ -102,6 +102,34 @@ class Customer {
 	public function get_customer_contacts() {
 		return Customer_Contact::get_by_customer($this);
 	}
+	
+	/**
+	 * Create first customer_contact
+	 *
+	 * @access public
+	 * @return Customer_Contact $customer_contact
+	 */
+	public function create_first_customer_contact() {
+		$customer_contact = new Customer_Contact();
+		$customer_contact->company = $this->company;
+		$customer_contact->customer_id = $this->id;
+		$customer_contact->firstname = $this->firstname;
+		$customer_contact->lastname = $this->lastname;
+		$customer_contact->email = $this->email;
+		$customer_contact->street = $this->street;
+		$customer_contact->housenumber = $this->housenumber;
+		$customer_contact->city = $this->city;
+		$customer_contact->zipcode = $this->zipcode;
+		$customer_contact->country_id = $this->country_id;
+		$customer_contact->phone = $this->phone;
+		$customer_contact->mobile = $this->mobile;
+		$customer_contact->fax = $this->fax;
+		$customer_contact->email = $this->email;			
+		$customer_contact->active = true;
+		$customer_contact->save();
+		
+		return $customer_contact;
+	}
 
 	/**
 	 * Get by uuid
@@ -116,3 +144,4 @@ class Customer {
 		return self::get_by_id($id);
 	}
 }
+

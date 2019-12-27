@@ -61,19 +61,19 @@
 						</div>
 					</div>
 
-					<div class="form-group{% if 'city' in errors|keys %} has-error{% endif %}">
-						<label for="city" class="col-xs-3 control-label">{% trans "City" %}</label>
-						<div class="col-xs-5">
-							<input type="text" name="customer[city]" id="city" class="form-control" value="{{ env.post.customer.city }}">
-							{{ form.invalid_input('city', errors) }}
-						</div>
-					</div>
-
 					<div class="form-group{% if 'zipcode' in errors|keys %} has-error{% endif %}">
 						<label for="zipcode" class="col-xs-3 control-label">{% trans "Zip code" %}</label>
 						<div class="col-xs-2">
 							<input type="text" name="customer[zipcode]" id="zipcode" class="form-control" value="{{ env.post.customer.zipcode }}">
 							{{ form.invalid_input('zipcode', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'city' in errors|keys %} has-error{% endif %}">
+						<label for="city" class="col-xs-3 control-label">{% trans "City" %}</label>
+						<div class="col-xs-5">
+							<input type="text" name="customer[city]" id="city" class="form-control" value="{{ env.post.customer.city }}">
+							{{ form.invalid_input('city', errors) }}
 						</div>
 					</div>
 
@@ -89,7 +89,7 @@
 								{% endif %}
 
 								{% for country in countries[group] %}
-									<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if env.post.customer.country_id == country.id %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
+									<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if env.post.customer.country_id == country.id %}selected="selected"{% elseif env.post.customer.country_id is not defined and country.id == 203 %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 								{% endfor %}
 								</optgroup>
 							{% endfor %}
