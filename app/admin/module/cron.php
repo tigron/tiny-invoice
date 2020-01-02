@@ -35,9 +35,10 @@ class Web_Module_Cron extends Module {
 		if (count($transactions) == 0) {
 			return;
 		}
-		
+
 		$transaction = array_shift($transactions);
 		$transaction->lock();
 		$transaction->run();
+		$transaction->unlock();
 	}
 }
