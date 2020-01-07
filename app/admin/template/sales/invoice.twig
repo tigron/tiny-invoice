@@ -520,7 +520,7 @@
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Internal reference" %}</label>
 						<div class="col-xs-9">
-							<input type="text" class="form-control" id="reference" name="invoice[internal_reference]" value="{{ env.session.invoice.internal_reference }}">
+							<input type="text" class="form-control" id="internal_reference" name="invoice[internal_reference]" value="{{ env.session.invoice.internal_reference }}">
 						</div>
 					</div>
 
@@ -661,10 +661,10 @@
 									<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_item.description }}</textarea>
 								</td>
 								<td>
-									<input type="text" class="form-control" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_item.qty }}">
+									<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_item.qty }}">
 								</td>
 								<td>
-									<input type="text" class="form-control" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_item.price }}">
+									<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_item.price }}">
 								</td>
 								<td>
 
@@ -714,10 +714,10 @@
 									<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_queue_item.description }}</textarea>
 								</td>
 								<td>
-									<input type="text" class="form-control" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_queue_item.qty }}">
+									<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_queue_item.qty }}">
 								</td>
 								<td>
-									<input type="text" class="form-control" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_queue_item.price }}">
+									<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_queue_item.price }}">
 								</td>
 								<td>
 
@@ -753,6 +753,12 @@
 							</tr>
 							{% endfor %}
 
+							<tr>
+								<td class="text-right grand-total" colspan="4">{% trans "Total excl VAT" %}</td>
+								<td id="total" class="grand-total">&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+
 						</tbody>
 					</table>
 
@@ -786,10 +792,10 @@
 					<textarea class="form-control autogrow" name="invoice_item[((nr))][description]">((description))</textarea>
 				</td>
 				<td>
-					<input type="text" class="form-control" name="invoice_item[((nr))][qty]" value="((qty))">
+					<input type="text" class="form-control qty" name="invoice_item[((nr))][qty]" value="((qty))">
 				</td>
 				<td>
-					<input type="text" class="form-control" name="invoice_item[((nr))][price]" value="((price))">
+					<input type="text" class="form-control price" name="invoice_item[((nr))][price]" value="((price))">
 				</td>
 				<td>
 					<select name="invoice_item[((nr))][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
@@ -837,15 +843,17 @@
 				var source = $("#new-invoice-item-tmpl").html();
 				Handlebars.setDelimiter('(',')');
 				var template = Handlebars.compile(source);
-				$('#invoice-items').append(template(data));
+				$('#invoice-items').find('tr:last').before(template(data));
 				$('.autogrow').autoGrow();
 				set_vat_regime();
+				check_total_price();
 			}
 
 			function remove_item(obj) {
 				if($('#invoice-items').find('tr').length > 1) {
 					obj.parents('tr').remove();
 				}
+				check_total_price();
 			}
 
 			function toggle_vat_mode(element) {
@@ -858,6 +866,47 @@
 					$('#price_header_line').show();
 				}
 			}
+
+			function check_total_price() {
+				total = 0;
+				$('#invoice-items tr').each(function() {
+					price = $(this).find('.price').val();
+					qty = $(this).find('.qty').val();
+					
+					if (price != parseFloat(price)) {
+						$('#total').text('');
+						return;
+					}
+
+					if (qty != parseFloat(qty)) {
+						$('#total').text('');
+						return;
+					}
+					
+					price = price.replace(',', '.');
+					qty = qty.replace(',', '.');
+					
+					
+
+					if (price != '' && qty != '') {
+						total += parseFloat(price)*parseFloat(qty);
+					}
+				});
+				
+				if (isNaN(total.toFixed(2))) {
+					$('#total').text('');
+				} else {
+					$('#total').text('€' + total.toFixed(2));
+				}
+			}
+
+			$(document).ready(function() {
+				check_total_price();
+			});
+
+			$(document).on('change keyup paste', '.price' ,function() {
+				check_total_price();
+			});
 		</script>
 	{% elseif action == 'export' %}
 		<ol class="breadcrumb">
