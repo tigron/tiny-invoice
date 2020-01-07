@@ -46,6 +46,7 @@ class Web_Module_Administrative_Document_Invoice_Pay extends Module {
 
 		$bank_accounts  = Bank_Account::get_all();
 		$template->assign('bank_accounts', $bank_accounts);
+		$template->assign('tags', Tag::get_all());
 	}
 
 	/**

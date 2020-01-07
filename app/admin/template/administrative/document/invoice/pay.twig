@@ -22,6 +22,7 @@
 				<th>{{ pager.create_header('Supplier'|trans, 'supplier.company')|raw }}</th>
 				<th>{{ pager.create_header('IBAN'|trans, 'supplier.iban')|raw }}</th>
 				<th>{% trans "Message" %}</th>
+				<th>{% trans "Tags" %}</th>
 				<th class="text-right">{% trans "Price" %}</th>
 			</tr>
 		</thead>
@@ -35,13 +36,21 @@
 		<td>{{ unpaid_invoice.supplier.company }}</td>
 		<td>{{ unpaid_invoice.supplier.iban }}</td>
 		<td>
-
 			{% if unpaid_invoice.payment_structured_message != '' %}
 				***{{ unpaid_invoice.payment_structured_message }}***
 			{% else %}
 				{{ unpaid_invoice.payment_message }}
 			{% endif %}
+		</td>
+		<td>
+			{% set document_tags = [] %}
+			{% for tag in tags if unpaid_invoice.has_tag(tag)%}
+				{% set document_tags = document_tags|merge([tag]) %}
+			{% endfor %}
 
+			{% for document_tag in document_tags %}
+				{{ document_tag.name }}{% if not loop.last %}, {% endif %}
+			{% endfor %}
 		</td>
 		<td class="text-right">
 			&euro;{{ unpaid_invoice.price_incl }}
