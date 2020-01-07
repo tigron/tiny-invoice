@@ -31,6 +31,14 @@ class Web_Module_Cron extends Module {
 	 * @access public
 	 */
 	public function display() {
-		\Skeleton\Transaction\Runner::run();
+		$transactions = \Skeleton\Transaction\Transaction::get_runnable();
+		if (count($transactions) == 0) {
+			return;
+		}
+
+		$transaction = array_shift($transactions);
+		$transaction->lock();
+		$transaction->run();
+		$transaction->unlock();
 	}
 }
