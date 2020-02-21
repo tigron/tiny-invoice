@@ -149,9 +149,41 @@
 	</form>
 
 	<script type="text/javascript">
+		var country_ajax = $.ajax({
+			url: '/administrative/customer/contact?action=load_countries',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data) {
+				$.each(data, function(key, value) {
+					var optgroup = $('<optgroup />');
+					optgroup.attr('label', key);
 
-		load_countries();
-		load_languages();
+					$.each(value, function(key, country) {
+						var option = $('<option></option>');
+						option.val(country.id);
+						option.text(country.text_{{ env.language.name_short }}_name);
+						optgroup.append(option);
+					});
+					optgroup.appendTo($('#country_id'));
+				})
+			}
+		});
+
+		var language_ajax = $.ajax({
+			url: '/administrative/customer/contact?action=load_languages',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data) {
+				$('#language_id option').remove();
+				$.each(data, function(key, language) {
+					var option = $('<option></option>');
+					option.val(language.id);
+					option.text(language.name);
+					option.appendTo($('#language_id'));
+				});
+			}
+		});
+
 
 		$('#invoice-contact-form').on('submit', function() {
 			return validate_customer_contact();
@@ -164,22 +196,28 @@
 			}
 		});
 
+
+
 		$('#manage-customer-contact').on('show.bs.modal', function (e) {
+			$.when(country_ajax, language_ajax).done(function(xhrObject1, xhrObject2) {
+				$('#invoice-contact-form input, select').val('');
+				$('.form-group').removeClass('has-error');
+				current_customer_contact_id = 0;
 
-			$('#invoice-contact-form input, select').val('');
-			$('.form-group').removeClass('has-error');
-			current_customer_contact_id = 0;
+				var $invoker = $(e.relatedTarget);
 
-			var $invoker = $(e.relatedTarget);
+				if($invoker.data('customer-contacts') == 0) {
+					load_customer_data($invoker.data('customer-id'));
+				} else if($invoker.data('customer-contact-id')) {
+					load_customer_contact_data($invoker.data('customer-contact-id'));
+				}
 
-			if($invoker.data('customer-contacts') == 0) {
-				load_customer_data($invoker.data('customer-id'));
-			} else if($invoker.data('customer-contact-id')) {
-				load_customer_contact_data($invoker.data('customer-contact-id'));
-			}
-
-			$('#invoice-contact-form #customer_id').val($invoker.data('customer-id'));
+				$('#invoice-contact-form #customer_id').val($invoker.data('customer-id'));
+			});
 		});
+
+
+
 
 		function load_countries() {
 			$.get('/administrative/customer/contact?action=load_countries', function(data) {
@@ -200,6 +238,7 @@
 
 		function load_languages() {
 			$.get('/administrative/customer/contact?action=load_languages', function(data) {
+				$('#language_id option').remove();
 				$.each(data, function(key, language) {
 					var option = $('<option></option>');
 					option.val(language.id);
@@ -212,7 +251,7 @@
 		function load_customer_data(id) {
 			$.get('/administrative/customer?action=load_customer&id=' + id, function(data) {
 				$.each(data, function(key, value) {
-					if($('#invoice-contact-form #' + key).length == 1) {
+					if ($('#invoice-contact-form #' + key).length == 1) {
 						$('#invoice-contact-form #' + key).val(value);
 					}
 				});
@@ -233,7 +272,6 @@
 		}
 
 		function validate_customer_contact() {
-			console.log('aze');
 			data = $('#invoice-contact-form').serialize();
 
 			$('.form-group').removeClass('has-error');
