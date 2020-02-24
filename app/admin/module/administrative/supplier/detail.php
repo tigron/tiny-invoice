@@ -40,10 +40,16 @@ class Web_Module_Administrative_Supplier_Detail extends Module {
 		if (isset($_POST['supplier'])) {
 			$_POST['supplier']['iban'] = str_replace(' ', '', $_POST['supplier']['iban']);
 			$supplier->load_array($_POST['supplier']);
-			if ($supplier->validate($errors) === false) {
+			$validated = $supplier->validate($errors);
+			
+			if (isset($_POST['ignore_vat'])) {
+				unset($errors['vat']);
+			}
+		
+			if (count($errors) > 0) {
 				$template->assign('errors', $errors);
 			} else {
-				$supplier->save();
+				$supplier->save(false);
 
 				Session::set_sticky('message', 'updated');
 				Session::redirect('/administrative/supplier/detail?action=edit&id=' . $supplier->id);

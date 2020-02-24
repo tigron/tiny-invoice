@@ -81,32 +81,6 @@ class Web_Module_Administrative_Supplier extends Module {
 	}
 
 	/**
-	 * Edit
-	 *
-	 * @access public
-	 */
-	public function display_edit() {
-		$template = Template::Get();
-		$supplier = Supplier::get_by_id($_GET['id']);
-
-		if (isset($_POST['supplier'])) {
-			$_POST['supplier']['iban'] = str_replace(' ', '', $_POST['supplier']['iban']);
-			$supplier->load_array($_POST['supplier']);
-			if ($supplier->validate($errors) === false) {
-				$template->assign('errors', $errors);
-			} else {
-				$supplier->save();
-
-				Session::set_sticky('message', 'updated');
-				Session::redirect('/administrative/supplier?action=edit&id=' . $supplier->id);
-			}
-		}
-
-		$template->assign('supplier', $supplier);
-		$template->assign('countries', Country::get_grouped());
-	}
-
-	/**
 	 * Search supplier (ajax)
 	 *
 	 * @access public

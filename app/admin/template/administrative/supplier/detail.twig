@@ -1,16 +1,25 @@
 {% extends "administrative/supplier.twig" %}
 
 {% block tab %}
-
-		{% if errors is defined %}
-			<div class="alert alert-danger">
-				{% trans "The form contains mistakes. Please correct them." %}
-			</div>
-		{% elseif env.sticky_session.message is defined %}
-			{{ base.display_flash_message(env.sticky_session.message, 'supplier') }}
-		{% endif %}
-
 		<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier/detail?action=edit&id={{ supplier.id }}">
+
+			{% if errors is defined and errors|length == 1 and errors.vat is defined %}
+				<div class="alert alert-warning">
+					<p>
+					{% trans "The VAT number could not be verified." %} {% trans "If you still want to save this VAT number, please confirm." %}
+					</p>
+
+					<button type="submit" class="btn btn-warning" name="ignore_vat">
+						{% trans "Confirm VAT number" %}
+					</button>
+				</div>
+			{% elseif errors is defined %}
+				<div class="alert alert-danger">
+					{% trans "The form contains mistakes. Please correct them." %}
+				</div>
+			{% elseif env.sticky_session.message is defined %}
+				{{ base.display_flash_message(env.sticky_session.message, 'supplier') }}
+			{% endif %}
 
 			<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
 				<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
