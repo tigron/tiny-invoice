@@ -56,14 +56,13 @@ class Web_Module_Administrative_Customer_Detail extends Module {
 		if (isset($_POST['ignore_vat'])) {
 			unset($errors['vat']);
 		}
-
 		
 		if (count($errors) > 0) {
 			$template->assign('errors', $errors);
 			$this->display();
 			return;
 		} else {
-			$customer->save();
+			$customer->save(false);
 
 			Session::set_sticky('message', 'updated');
 			Session::redirect('/administrative/customer/detail?id=' . $customer->id);
