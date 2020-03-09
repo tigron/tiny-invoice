@@ -5,13 +5,11 @@
 
 			{% if errors is defined and errors|length == 1 and errors.vat is defined %}
 				<div class="alert alert-warning">
-					<p>
-					{% trans "The VAT number could not be verified." %} {% trans "If you still want to save this VAT number, please confirm." %}
-					</p>
-
-					<button type="submit" class="btn btn-warning" name="ignore_vat">
+					<button type="submit" class="btn btn-xs btn-warning pull-right" name="ignore_vat">
 						{% trans "Confirm VAT number" %}
 					</button>
+
+					{% trans "The VAT number could not be verified." %} {% trans "If you still want to save this VAT number, please confirm." %}
 				</div>
 			{% elseif errors is defined %}
 				<div class="alert alert-danger">
