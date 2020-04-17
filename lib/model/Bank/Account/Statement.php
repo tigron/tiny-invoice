@@ -110,6 +110,73 @@ class Bank_Account_Statement {
 	}
 
 	/**
+	 * get_by_bank_account_with_dynamic_resolution
+	 *
+	 * @access public
+	 * @param Bank_Account $bank_account
+	 * @param int          $maximum_data_points
+	 * @return Bank_Account_Statement[]
+	 * @throws Exception
+	 */
+	public static function get_by_bank_account_with_dynamic_resolution(Bank_Account $bank_account, int $maximum_data_points) {
+		$db = Database::get();
+
+		// calculate divider
+		$statements_count = $db->get_one('SELECT COUNT(id) FROM bank_account_statement WHERE bank_account_id=? ORDER BY original_situation_date ASC', [ $bank_account->id ]);
+		$divider = ceil($statements_count / $maximum_data_points);
+
+		$ids = $db->get_column('SELECT id FROM bank_account_statement WHERE bank_account_id=? AND id MOD ? = 0 ORDER BY original_situation_date ASC', [ $bank_account->id, $divider ]);
+
+		$statements = [];
+		foreach ($ids as $id) {
+			$statements[] = self::get_by_id($id);
+		}
+		return $statements;
+	}
+
+	/**
+	 * get_by_bank_account_interval
+	 *
+	 * @access public
+	 * @param Bank_Account $bank_account
+	 * @param DateTime     $start
+	 * @param DateTime     $end
+	 * @param int|NULL     $maximum_data_points
+	 * @return Bank_Account_Statement[]
+	 * @throws Exception
+	 */
+	public static function get_by_bank_account_interval(Bank_Account $bank_account, DateTime $start, DateTime $end, int $maximum_data_points = null) {
+		$db = Database::get();
+
+		// calculate divider
+		if (!is_null($maximum_data_points)) {
+			$statements_count = $db->get_one('SELECT COUNT(id) FROM bank_account_statement WHERE bank_account_id=? AND original_situation_date > ? AND original_situation_date < ? ORDER BY original_situation_date ASC', [ $bank_account->id, $start->format("Y-m-d"), $end->format("Y-m-d") ]);
+			$divider = ceil($statements_count / $maximum_data_points);
+		}
+
+		// build interval query
+		$query = 'SELECT id FROM bank_account_statement	WHERE bank_account_id=?';
+		$params = [ $bank_account->id ];
+
+		if (!is_null($maximum_data_points)) {
+			$query .= ' AND id MOD ? = 0';
+			$params[] = $divider;
+		}
+
+		$query .= ' AND original_situation_date > ? AND original_situation_date < ? ORDER BY original_situation_date ASC';
+		$params[] = $start->format("Y-m-d");
+		$params[] = $end->format("Y-m-d");
+
+		$ids = $db->get_column($query, $params);
+
+		$statements = [];
+		foreach ($ids as $id) {
+			$statements[] = self::get_by_id($id);
+		}
+		return $statements;
+	}
+
+	/**
 	 * Get by bank_account identifier
 	 *
 	 * @access public
