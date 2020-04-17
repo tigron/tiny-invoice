@@ -1,0 +1,65 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Select supplier" %}{% endblock header %}
+
+{% block body %}
+
+	<div id="modal-supplier-edit-error" class="alert alert-danger hide">
+		{% trans "Some fields were not filled in correctly" %}. {% trans "Please correct them" %}.
+	</div>
+
+	<form class="form-horizontal form-condensed" method="post" id="supplier-select-form">
+
+		<div class="form-group">
+			<label for="supplier_id" class="control-label col-xs-3">{% trans "Supplier" %}</label>
+			<div class="col-xs-9">
+				<select id="supplier_id" name="supplier_id" class="form-control"></select>
+			</div>
+		</div>
+
+	</form>
+
+	<script type="text/javascript">
+        var supplier_ajax = $.ajax({
+            url: '/administrative/supplier?action=load_suppliers',
+            type: 'GET',
+            dataType: 'json',
+				success: function (data) {
+                    $.each(data, function(key, supplier) {
+                        var option = $('<option></option>');
+                        option.val(supplier.id);
+                        option.text(supplier.company);
+                        option.appendTo($('#supplier_id'));
+                    });
+			 }
+        });
+
+        $('#supplier-select-form').on('submit', function() {
+			data = $('#supplier-select-form').serialize();
+
+            // hide previous messages
+            $("#{{ id }} .alert-success").addClass("hide");
+            $("#{{ id }} .alert-danger").addClass("hide");
+
+	        $.post('/administrative/document?action=ajax_edit_supplier&id=' + {{ document.id }}, data, function(data) {
+                $("#modal-supplier-edit-success").hide();
+                $("#modal-supplier-edit-error").hide();
+                if ("supplier_id" in data) {
+			        window.location = '{{ redirect|raw }}';
+                } else {
+                    $("#{{ id }} .alert-danger").removeClass("hide");
+                }
+                return false;
+            }, 'json');
+
+            return false;
+        });
+
+	</script>
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+{% endblock footer %}

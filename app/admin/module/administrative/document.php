@@ -378,6 +378,23 @@ class Web_Module_Administrative_Document extends Module {
 	}
 
 	/**
+	 * Ajax set supplier for document
+	 *
+	 * @access public
+	 */
+	public function display_ajax_edit_supplier() {
+		$this->template = NULL;
+
+		$document = Document::get_by_id($_GET['id']);
+		$supplier = Supplier::get_by_id($_POST['supplier_id']);
+
+		$document->supplier = $supplier;
+		$document->save();
+
+		echo json_encode($document->get_info());
+	}
+
+	/**
 	 * Load document (ajax)
 	 *
 	 * @access public

@@ -106,6 +106,24 @@ class Web_Module_Administrative_Supplier extends Module {
 	}
 
 	/**
+	 * Load the suppliers
+	 *
+	 * @access public
+	 */
+	public function display_load_suppliers() {
+		session_write_close();
+
+		$this->template = NULL;
+
+		$suppliers = Supplier::get_all('company');
+		$result = [];
+		foreach ($suppliers as $supplier) {
+			$result[] = $supplier->get_info();
+		}
+		echo json_encode($result);
+	}
+
+	/**
 	 * Secure
 	 *
 	 * @access public
