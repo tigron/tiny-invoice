@@ -451,6 +451,7 @@
 						<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
 						<th>{{ pager.create_header('Date'|trans, 'document.date')|raw }}</th>
 						<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
+						<th>{{ pager.create_header('Type'|trans, 'classname')|raw }}</th>
 						<th>{% trans "Tags" %}</th>
 						<th colspan="3">&nbsp;</th>
 					</tr>
@@ -462,6 +463,7 @@
 				<td>{{ document.id }}</td>
 				<td>{{ document.date|date }}</td>
 				<td>{{ document.title }}</td>
+				<td>{{ document.classname }}</td>
 				<td>
 					{% set document_tags = [] %}
 					{% for tag in tags if document.has_tag(tag)%}
