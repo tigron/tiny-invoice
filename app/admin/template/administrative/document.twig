@@ -463,7 +463,21 @@
 				<td>{{ document.id }}</td>
 				<td>{{ document.date|date }}</td>
 				<td>{{ document.title }}</td>
-				<td>{{ document.classname }}</td>
+				<td>
+					{% if document.classname == "Document" %}
+						{% trans "Standard document" %}
+					{% elseif document.classname == 'Document_Contract' %}
+						{% trans "Contract" %}
+					{% elseif document.classname == 'Document_Documentation' %}
+						{% trans "Documentation" %}
+					{% elseif document.classname == 'Document_Incoming_Invoice' %}
+						{% trans "Incoming invoice" %}
+					{% elseif document.classname == 'Document_Incoming_Creditnote' %}
+						{% trans "Incoming creditnote" %}
+					{% else %}
+						{{ document.classname }}
+					{% endif %}
+				</td>
 				<td>
 					{% set document_tags = [] %}
 					{% for tag in tags if document.has_tag(tag)%}
