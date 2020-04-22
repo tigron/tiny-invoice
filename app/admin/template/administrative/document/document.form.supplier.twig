@@ -79,7 +79,7 @@
 								<div class="form-group">
 									<label class="col-xs-3 control-label">{% trans "IBAN" %}</label>
 									<div class="col-xs-9">
-										<input type="text" class="form-control edit-form hide" name="supplier[iban]" value="{{ supplier.iban | iban_to_human_format }}"/>
+										<input type="text" class="form-control edit-form hide" name="supplier[iban]" value="{{ supplier.iban }}"/>
 										<p class="form-control-static edit-text" id="iban">
 											{% if document.supplier_id == '' or document.supplier_id == 0 or supplier.iban == '' %}
 												<em>{% trans "Unknown IBAN" %}</em>
@@ -148,6 +148,7 @@
 							<hr>
 							<div class="col-xs-8 col-xs-offset-3">
 								<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+								<button type="button" onclick="toggle_edit_mode()" class="btn btn-default">{% trans "Cancel" %}</button>
 							</div>
 						</div>
 
@@ -189,7 +190,7 @@
 				let edit_mode = $('#edit_status');
 				let edit_form = $('.edit-form');
 				let edit_text = $('.edit-text');
-				let btn_toggle_edit = $('.btn_toggle_edit');
+				let btn_toggle_edit = $('#btn_toggle_edit');
 
 				if (parseInt(edit_mode.val()) === 0) {
 					edit_mode.val(1);
@@ -250,10 +251,18 @@
 
 			function populate_form_fields(data) {
 				$.each(data, function (key, value) {
-					let el = $("#form-supplier-edit input[name='supplier[" + key + "]']");
-					el.closest(".form-group").find("p.edit-text").html(value);
+					let el = form_supplier_edit.find("input[name='supplier[" + key + "]']");
+					let text_value = value;
+					if (key === 'iban' && value.length > 0) {
+						text_value = format_iban(value);
+					}
+					el.closest(".form-group").find("p.edit-text").html(text_value);
 					el.val(value);
 				});
+			}
+
+			function format_iban(iban) {
+				return iban.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
 			}
 
 		</script>
