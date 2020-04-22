@@ -292,7 +292,7 @@
 								</td>
 								<td>{{ transaction.get_message()|truncate(120) }}</td>
 								<td>{{ transaction.other_account_name }}</td>
-								<td>{{ transaction.other_account_number }}</td>
+								<td>{{ transaction.other_account_number|iban_to_human_format }}</td>
 								<td>&euro;{{ transfer.bank_account_statement_transaction_balance.amount|number_format }}</td>
 							</tr>
 						{% else %}

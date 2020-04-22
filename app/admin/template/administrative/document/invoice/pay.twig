@@ -34,7 +34,7 @@
 		<td>{{ unpaid_invoice.date|date }}</td>
 		<td>{{ unpaid_invoice.expiration_date|date }}</td>
 		<td>{{ unpaid_invoice.supplier.company }}</td>
-		<td>{{ unpaid_invoice.supplier.iban }}</td>
+		<td>{{ unpaid_invoice.supplier.iban|iban_to_human_format }}</td>
 		<td>
 			{% if unpaid_invoice.payment_structured_message != '' %}
 				***{{ unpaid_invoice.payment_structured_message }}***

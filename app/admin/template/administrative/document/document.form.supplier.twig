@@ -84,7 +84,7 @@
 											{% if document.supplier_id == '' or document.supplier_id == 0 or supplier.iban == '' %}
 												<em>{% trans "Unknown IBAN" %}</em>
 											{% else %}
-												{{ supplier.iban | iban_to_human_format }}
+												{{ supplier.iban|iban_to_human_format }}
 											{% endif %}
 										</p>
 									</div>
