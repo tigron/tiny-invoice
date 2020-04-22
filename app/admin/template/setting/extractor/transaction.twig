@@ -149,6 +149,11 @@
 				indentUnit: 4,
 				indentWithTabs: true
 			});
+
+			$(document).ready(function() {
+				$('input[name="extractor[fingerprint_other_account_number]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000', { placeholder: '____ ____ ____ ____ ____ ____ ____'  });
+			});
+
 		</script>
 
 	{% elseif action == 'add' %}
@@ -243,6 +248,11 @@
 			</div>
 		</div>
 
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('input[name="extractor[fingerprint_other_account_name]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000', { placeholder: '____ ____ ____ ____ ____ ____ ____'  });
+			});
+		</script>
 
 	{% else %}
 
