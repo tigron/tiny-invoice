@@ -1,0 +1,37 @@
+{% extends "_default/modal.base.twig" %}
+
+{% block header %}{% trans "Select supplier" %}{% endblock header %}
+
+{% block body %}
+
+	<form class="form-horizontal form-condensed" method="post" action="/administrative/document?action=edit_supplier&id={{ document.id }}" id="form-supplier-select">
+		<div class="form-group">
+			<label for="supplier_id" class="control-label col-xs-3">{% trans "Supplier" %}</label>
+			<div class="col-xs-9">
+				<select id="supplier_id" name="document[supplier_id]" class="form-control"></select>
+			</div>
+		</div>
+	</form>
+
+	<script type="text/javascript">
+		var supplier_ajax = $.ajax({
+			url: '/administrative/supplier?action=load_suppliers',
+			type: 'GET',
+			dataType: 'json',
+			success: function (data) {
+				$.each(data, function(key, supplier) {
+					var option = $('<option></option>');
+					option.val(supplier.id);
+					option.text(supplier.company);
+					option.appendTo($('#supplier_id'));
+				});
+			}
+		});
+	</script>
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="submit" class="btn btn-primary" form="form-supplier-select">{% trans "Save" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+{% endblock footer %}

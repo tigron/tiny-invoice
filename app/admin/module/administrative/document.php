@@ -378,20 +378,18 @@ class Web_Module_Administrative_Document extends Module {
 	}
 
 	/**
-	 * Ajax set supplier for document
+	 * display_edit_supplier
 	 *
 	 * @access public
 	 */
-	public function display_ajax_edit_supplier() {
-		$this->template = NULL;
-
+	public function display_edit_supplier() {
 		$document = Document::get_by_id($_GET['id']);
-		$supplier = Supplier::get_by_id($_POST['supplier_id']);
+		$supplier = Supplier::get_by_id($_POST['document']['supplier_id']);
 
 		$document->supplier = $supplier;
 		$document->save();
 
-		echo json_encode($document->get_info());
+		Session::redirect('/administrative/document?action=edit&id=' . $_GET['id']);
 	}
 
 	/**
