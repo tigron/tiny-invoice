@@ -265,6 +265,9 @@
 				return iban.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
 			}
 
+			$(document).ready(function() {
+				$('input[name="supplier[iban]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000', { placeholder: '____ ____ ____ ____ ____ ____ ____'  });
+			});
 		</script>
 	{% endif %}
 {% endif %}
