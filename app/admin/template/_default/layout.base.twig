@@ -44,17 +44,17 @@
 	<script src="/codemirror/mode/clike/clike.js"></script>
 	<script type="text/javascript" src="/codemirror/mode/php/php.js"></script>
 
-	{% spaceless %}
+	{% apply spaceless %}
 		{% block head %}{% endblock head %}
-	{% endspaceless %}
+	{% endapply %}
 </head>
 <body>
 	{% include '_default/nav_bar.twig' %}
 	<div class="container-fluid">{% block content %}{% endblock content %}</div>
 
-	{% spaceless %}
+	{% apply spaceless %}
 		{% block javascript %}{% endblock %}
-	{% endspaceless %}
+	{% endapply %}
 	<script type="text/javascript" src="/base.js"></script>
 </body>
 </html>
