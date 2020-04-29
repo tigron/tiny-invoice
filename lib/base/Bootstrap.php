@@ -102,6 +102,7 @@ class Bootstrap {
 		 * Initialize the template caching path
 		 */
 		\Skeleton\Template\Twig\Config::$cache_directory = $root_path . '/tmp/twig/';
+		\Skeleton\Template\Twig\Config::add_extension("Template_Twig_Extension_Custom");
 
 		/**
 		 * Set the email path
