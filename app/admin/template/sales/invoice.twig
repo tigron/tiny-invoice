@@ -700,58 +700,60 @@
 							</tr>
 							{% endfor %}
 
-							{% for invoice_queue_item in invoice_queue_items if env.post.invoice_item is not defined %}
-							<tr>
-								<td>
-									<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-control">
-										{% for product_type in product_types %}
-											<option value="{{ product_type.id }}" {% if product_type.id == invoice_queue_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
-										{% endfor %}
-									</select>
-								</td>
-								<td>
-									<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_queue_item.id }}">
-									<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_queue_item.description }}</textarea>
-								</td>
-								<td>
-									<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_queue_item.qty }}">
-								</td>
-								<td>
-									<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_queue_item.price }}">
-								</td>
-								<td>
+							{% if env.post.invoice_item is not defined %}
+								{% for invoice_queue_item in invoice_queue_items %}
+								<tr>
+									<td>
+										<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-control">
+											{% for product_type in product_types %}
+												<option value="{{ product_type.id }}" {% if product_type.id == invoice_queue_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
+											{% endfor %}
+										</select>
+									</td>
+									<td>
+										<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_queue_item.id }}">
+										<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_queue_item.description }}</textarea>
+									</td>
+									<td>
+										<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_queue_item.qty }}">
+									</td>
+									<td>
+										<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_queue_item.price }}">
+									</td>
+									<td>
 
-									<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
-										<option value="0">{% trans "No VAT" %} (0%)</option>
-										{% set selected = false %}
-										{% for vat_rate in customer_vat_rates %}
-											<option {% if selected == false and vat_rate.id == invoice_queue_item.vat_rate_id %}{% set selected = true %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-										{% endfor %}
-									</select>
+										<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
+											<option value="0">{% trans "No VAT" %} (0%)</option>
+											{% set selected = false %}
+											{% for vat_rate in customer_vat_rates %}
+												<option {% if selected == false and vat_rate.id == invoice_queue_item.vat_rate_id %}{% set selected = true %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+											{% endfor %}
+										</select>
 
-									<select name="invoice_item[{{ loop.index }}][company_vat_rate_id]" class="form-control vat_regime_company_country">
-										<option {% if selected == false and vat_rate.id == invoice_queue_item.vat_rate_id %}{% set selected = true %}selected{% endif %} value="0">{% trans "No VAT" %} (0%)</option>
-										{% for vat_rate in company_vat_rates %}
-											<option {% if vat_rate.vat_rate_id == invoice_queue_item.vat_rate_id %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-										{% endfor %}
-									</select>
+										<select name="invoice_item[{{ loop.index }}][company_vat_rate_id]" class="form-control vat_regime_company_country">
+											<option {% if selected == false and vat_rate.id == invoice_queue_item.vat_rate_id %}{% set selected = true %}selected{% endif %} value="0">{% trans "No VAT" %} (0%)</option>
+											{% for vat_rate in company_vat_rates %}
+												<option {% if vat_rate.vat_rate_id == invoice_queue_item.vat_rate_id %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+											{% endfor %}
+										</select>
 
-									<span class="vat_regime_none">
-										<p class="form-control-static">
-											{% trans "No VAT" %}
-										</p>
-									</span>
+										<span class="vat_regime_none">
+											<p class="form-control-static">
+												{% trans "No VAT" %}
+											</p>
+										</span>
 
-								</td>
-								<td>
-									<div class="form-control-static">
-										<a href="javascript:void(0);" onclick="remove_item($(this));">
-											<span class="glyphicon glyphicon-remove"></span>
-										</a>
-									</div>
-								</td>
-							</tr>
-							{% endfor %}
+									</td>
+									<td>
+										<div class="form-control-static">
+											<a href="javascript:void(0);" onclick="remove_item($(this));">
+												<span class="glyphicon glyphicon-remove"></span>
+											</a>
+										</div>
+									</td>
+								</tr>
+								{% endfor %}
+							{% endif %}
 
 							<tr>
 								<td class="text-right grand-total" colspan="4">{% trans "Total excl VAT" %}</td>
