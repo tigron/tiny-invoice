@@ -40,12 +40,12 @@ class Web_Module_Administrative_Supplier_Detail extends Module {
 		if (isset($_POST['supplier'])) {
 			$_POST['supplier']['iban'] = str_replace(' ', '', $_POST['supplier']['iban']);
 			$supplier->load_array($_POST['supplier']);
-			$validated = $supplier->validate($errors);
-			
+			$supplier->validate($errors);
+
 			if (isset($_POST['ignore_vat'])) {
 				unset($errors['vat']);
 			}
-		
+
 			if (count($errors) > 0) {
 				$template->assign('errors', $errors);
 			} else {

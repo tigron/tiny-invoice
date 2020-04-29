@@ -55,7 +55,8 @@ class User {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = []) {
+	public function validate(&$errors = null) {
+		$errors = [];
 		$required_fields = [ 'username', 'password', 'firstname', 'lastname', 'email' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
@@ -173,10 +174,10 @@ class User {
 
 		// If we got here, we can assume the password is correct. If the password
 		// is still using a weak hash, we can rehash it.
-		if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
-			$user->set_password($password);
-			$user->save();
-		}
+			if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
+				$user->set_password($password);
+				$user->save();
+			}
 		$user->load_permissions();
 
 		return $user;

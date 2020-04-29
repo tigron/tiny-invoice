@@ -81,7 +81,6 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 			$_SESSION['invoice_queue_recurring']->load_array($_POST['invoice_queue_recurring_group']);
 			$_SESSION['invoice_queue_recurring']->validate($errors);
 			if (count($errors) > 0) {
-			print_r($errors);
 				$template->assign('errors', $errors);
 			} else {
 				$_SESSION['invoice_queue_recurring']->save();

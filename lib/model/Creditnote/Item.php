@@ -73,7 +73,8 @@ class Creditnote_Item {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = []) {
+	public function validate(&$errors = null) {
+		$errors = [];
 		$required_fields = ['description', 'qty', 'price_incl', 'price_excl'];
 
 		foreach ($required_fields as $required_field) {
