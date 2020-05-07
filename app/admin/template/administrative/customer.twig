@@ -1,5 +1,7 @@
 {% extends "_default/layout.base.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+
 {% block content %}
 
 	{% if action == 'add' %}
@@ -279,7 +281,6 @@
 					<a href="/administrative/customer?action=export" title="{% trans "Export customers" %}">
 						<i class="fa fa-file"></i> {% trans "Export customers" %}
 					</a>
-
 				</div>
 				{{ base.pager_count(pager.item_count) }}
 			</div>
