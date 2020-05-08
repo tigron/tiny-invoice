@@ -29,7 +29,7 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 		$template = Template::get();
 
 		$pager = new Pager('invoice_queue_recurring_group');
-        $pager->add_condition('archived', '=', '0000-00-00 00:00:00');
+        $pager->add_condition('archived', 'IS', NULL);
         $pager->add_sort_permission('id');
 		$pager->add_sort_permission('created');
 		$pager->add_sort_permission('next_run');

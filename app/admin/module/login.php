@@ -37,6 +37,7 @@ class Web_Module_Login extends Module {
 		if (isset($_POST['username']) AND isset($_POST['password'])) {
 			try {
 				$user = User::authenticate($_POST['username'], $_POST['password']);
+				User::set($user);
 				Log::create('User logged in', $user);
 				$_SESSION['user'] = $user;
 

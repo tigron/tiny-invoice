@@ -75,8 +75,8 @@
 
 		$('.form-group').removeClass('has-error');
 		$('#frm_add_account .alert').addClass('hide');
-		$.post('/financial/account?action=validate', data, function(data) {
-			if (data === null) {
+		$.post('/financial/account?action=validate', data, function (data) {
+			if (data.length === 0) {
 				$('#frm_add_account').off();
 				$('#frm_add_account').submit();
 				return true;
