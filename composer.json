@@ -46,7 +46,7 @@
 		"phpdocumentor/reflection-docblock": "^5.1.0",
 		"phpoffice/phpspreadsheet": "^1.12.0",
 		"phpseclib/phpseclib": "^2.0",
-		"ddeboer/imap": "^1.10.0",
+		"ddeboer/imap": "^0.5.2",
 		"punic/punic": "^3.5.1",
 		"ramsey/uuid": "^4.0.1",
 
@@ -71,7 +71,7 @@
 		"bower-asset/highcharts": "^4.2",
 		"bower-asset/font-awesome": "^4.7",
 		"bower-asset/bootstrap-select": "^1.13",
-		"npm-asset/jquery": "3.4.1"
+		"npm-asset/jquery": "^2.2"
 	},
 	"suggest": {
 		"ext-imap": "*"

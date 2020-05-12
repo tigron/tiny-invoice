@@ -432,9 +432,15 @@
 			<li class="active">{% trans "Export credit notes" %}</li>
 		</ol>
 
+		{% if errors is defined and errors|length > 0 %}
+			<div class="alert alert-danger">
+				{% trans "Please select at least one month" %}.
+			</div>
+		{% endif %}
+
 		<form class="form-horizontal" method="post" action="/sales/creditnote?action=export">
 		<div class="well">
-			<div class="form-group">
+			<div class="form-group {% if errors.months is defined %}has-error{% endif %}">
 				<label class="col-xs-3 control-label">{% trans "Export invoices" %}</label>
 				<div class="col-xs-9">
 					<select name="months[]" class="form-control multiselect" multiple="multiple">
