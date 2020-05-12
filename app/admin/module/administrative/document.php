@@ -67,6 +67,7 @@ class Web_Module_Administrative_Document extends Module {
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('document.date');
 		$pager->add_sort_permission('title');
+		$pager->add_sort_permission('classname');
 		$pager->add_sort_permission('file.name');
 
 		$pager->set_sort('document.date');

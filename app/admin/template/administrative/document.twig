@@ -456,6 +456,7 @@
 						<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
 						<th>{{ pager.create_header('Date'|trans, 'document.date')|raw }}</th>
 						<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
+						<th>{{ pager.create_header('Type'|trans, 'classname')|raw }}</th>
 						<th>{% trans "Tags" %}</th>
 						<th colspan="3">&nbsp;</th>
 					</tr>
@@ -467,6 +468,21 @@
 				<td>{{ document.id }}</td>
 				<td>{{ document.date|date }}</td>
 				<td>{{ document.title }}</td>
+				<td>
+					{% if document.classname == "Document" %}
+						{% trans "Standard document" %}
+					{% elseif document.classname == 'Document_Contract' %}
+						{% trans "Contract" %}
+					{% elseif document.classname == 'Document_Documentation' %}
+						{% trans "Documentation" %}
+					{% elseif document.classname == 'Document_Incoming_Invoice' %}
+						{% trans "Incoming invoice" %}
+					{% elseif document.classname == 'Document_Incoming_Creditnote' %}
+						{% trans "Incoming creditnote" %}
+					{% else %}
+						{{ document.classname }}
+					{% endif %}
+				</td>
 				<td>
 					{% set document_tags = [] %}
 					{% for tag in tags %}
