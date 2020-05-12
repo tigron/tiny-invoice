@@ -1,5 +1,8 @@
 {% extends "administrative/supplier.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+{% import '_default/form.base.twig' as form %}
+
 {% block tab %}
 		<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier/detail?action=edit&id={{ supplier.id }}">
 

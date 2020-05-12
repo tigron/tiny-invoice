@@ -10,7 +10,8 @@
 	<div class="form-group">
 		<label class="col-xs-3 control-label">{% trans "Name" %}</label>
 		<div class="col-xs-8">
-			<input type="text" id="autocomplete_document" name="document_id" class="form-control"/>
+			<input type="text" id="autocomplete_document" class="form-control"/>
+			<input type="hidden" name="document_id" class="form-control"/>
 		</div>
 	</div>
 
@@ -40,7 +41,7 @@
 				$(this).removeClass("loading");
 			});
 			$('#autocomplete_document').bind('typeahead:select', function(ev, suggestion) {
-				$('#autocomplete_document').val(suggestion.id);
+				$('input[name="document_id"]').val(suggestion.id);
 			});
 		});
 	</script>

@@ -24,9 +24,8 @@ class Invoice_Queue_Recurring_Group {
 	 * @return array The array containing the errors
 	 * @access public
 	 */
-	public function validate(&$errors = []) {
-		$config = Config::Get();
-
+	public function validate(&$errors = null) {
+		$errors = [];
 		$required_fields = array('name', 'repeat_every', 'next_run', 'customer_contact_id');
 
 		$errors = array();

@@ -51,12 +51,12 @@ class Web_Module_Administrative_Customer_Detail extends Module {
 		$template = Template::get();
 		$customer = Customer::get_by_id($_GET['id']);
 		$customer->load_array($_POST['customer']);
-		$validated = $customer->validate($errors);
+		$customer->validate($errors);
 
 		if (isset($_POST['ignore_vat'])) {
 			unset($errors['vat']);
 		}
-		
+
 		if (count($errors) > 0) {
 			$template->assign('errors', $errors);
 			$this->display();

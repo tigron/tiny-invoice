@@ -38,6 +38,7 @@ class Web_Module_Sales_Product_Type extends Module {
 		$pager = new Pager('product_type');
 		$pager->add_sort_permission('name');
 		$pager->add_sort_permission('identifier');
+		$pager->add_condition('archived', 'IS', NULL);
 
 		if (isset($_POST['search'])) {
 			$pager->set_search($_POST['search']);
