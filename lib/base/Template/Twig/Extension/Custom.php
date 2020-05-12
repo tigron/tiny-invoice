@@ -24,6 +24,7 @@ class Template_Twig_Extension_Custom extends \Twig\Extension\AbstractExtension {
 	public function getFilters() {
 		return [
 			new \Twig\TwigFilter('iban_to_human_format', [ $this, 'iban_to_human_format_filter' ]),
+			new \Twig\TwigFilter('truncate', [ $this, 'truncate' ])
 		];
 	}
 
@@ -40,4 +41,16 @@ class Template_Twig_Extension_Custom extends \Twig\Extension\AbstractExtension {
 		$iban = str_replace(' ','',$iban);
 		return wordwrap($iban,4,' ',true);
 	}
+	
+	/** Truncate text
+	 *
+	 * @access public
+	 * @param  string $string
+	 * @param  int    $length
+	 * @return string $string
+	 */
+	public function truncate(string $string, int $length = 180) {
+		return substr($string, 0, $length);
+	}
+
 }

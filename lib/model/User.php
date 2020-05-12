@@ -55,7 +55,8 @@ class User {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = []) {
+	public function validate(&$errors = null) {
+		$errors = [];
 		$required_fields = [ 'username', 'password', 'firstname', 'lastname', 'email' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {

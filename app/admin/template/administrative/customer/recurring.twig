@@ -1,5 +1,7 @@
 {% extends "administrative/customer.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+
 {% block tab %}
 
 	{% for invoice_queue_recurring_group in pager.items %}
