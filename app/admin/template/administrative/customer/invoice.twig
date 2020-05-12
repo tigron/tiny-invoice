@@ -1,5 +1,7 @@
 {% extends "administrative/customer.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+
 {% block tab %}
 	{% if expired_invoices|length > 0 %}
 		<div class="alert alert-warning">

@@ -111,7 +111,8 @@
 		$('.form-group').removeClass('has-error');
 		$('#frm_edit_account_{{ bank_account.id }} .alert').addClass('hide');
 		$.post('/financial/account?action=validate', data, function(data) {
-			if (data === null) {
+			// if (data === null) {
+			if (data.length === 0) {
 				$('#frm_edit_account_{{ bank_account.id }}').off();
 				$('#frm_edit_account_{{ bank_account.id }}').submit();
 				return true;

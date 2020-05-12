@@ -1,5 +1,6 @@
 {% extends "/administrative/document.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
 
 {% block pager %}
 
@@ -160,8 +161,10 @@
 			<td>{{ document.supplier.company }}</td>
 			<td>
 				{% set document_tags = [] %}
-				{% for tag in tags if document.has_tag(tag)%}
-					{% set document_tags = document_tags|merge([tag]) %}
+				{% for tag in tags %}
+					{% if document.has_tag(tag) %}
+						{% set document_tags = document_tags|merge([tag]) %}
+					{% endif %}
 				{% endfor %}
 
 				{% for document_tag in document_tags %}

@@ -12,24 +12,8 @@ class Role {
 	use \Skeleton\Object\Model;
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Save;
-	use \Skeleton\Object\Delete {
-		delete as trait_delete;
-	}
+	use \Skeleton\Object\Delete;
 	use \Skeleton\Pager\Page;
-
-	/**
-	 * Delete
-	 *
-	 * @access public
-	 */
-	public function delete() {
-		$document_tags = Document_Tag::get_by_tag($this);
-		foreach ($document_tags as $document_tag) {
-			$document_tag->delete();
-		}
-
-		$this->trait_delete();
-	}
 
 	/**
 	 * Has permission
@@ -68,7 +52,8 @@ class Role {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors = []) {
+	public function validate(&$errors = null) {
+		$errors = [];
 		$required_fields = [ 'name' ];
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {

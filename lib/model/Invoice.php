@@ -109,7 +109,7 @@ class Invoice {
 			} else {
 				$invoice_vat = new Invoice_Vat();
 				$invoice_vat->invoice_id = $this->id;
-				$invoice_vat->vat_rate = $invoice_item->vat_rate;
+				$invoice_vat->vat_rate_id = $invoice_item->vat_rate_id;
 				$invoice_vat->rate = $invoice_item->vat_rate_value;
 				$invoice_vat->base = 0;
 				$invoice_vat->vat = 0;

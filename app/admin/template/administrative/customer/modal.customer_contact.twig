@@ -1,5 +1,7 @@
 {% extends "_default/modal.base.twig" %}
 
+{% import '_default/form.base.twig' as form %}
+
 {% block header %}{% trans "Manage invoice contact" %}{% endblock header %}
 
 {% block body %}
@@ -201,6 +203,9 @@
 		$('#manage-customer-contact').on('show.bs.modal', function (e) {
 			$.when(country_ajax, language_ajax).done(function(xhrObject1, xhrObject2) {
 				$('#invoice-contact-form input, select').val('');
+				$('#invoice-contact-form select').each(function() {
+					$(this).val($(this).find('option:first').val());
+				});
 				$('.form-group').removeClass('has-error');
 				current_customer_contact_id = 0;
 

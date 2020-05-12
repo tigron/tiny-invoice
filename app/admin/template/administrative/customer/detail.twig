@@ -1,5 +1,8 @@
 {% extends "administrative/customer.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+{% import '_default/form.base.twig' as form %}
+
 {% block tab %}
 	<form class="form form-horizontal form-condensed" method="post" action="/administrative/customer/detail?action=edit&id={{ customer.id }}">
 		{% if errors is defined and errors|length == 1 and errors.vat is defined %}
