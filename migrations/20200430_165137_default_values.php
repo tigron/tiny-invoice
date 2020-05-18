@@ -95,6 +95,12 @@ class Migration_20200430_165137_Default_values extends \Skeleton\Database\Migrat
 		", []);
 
 		$db->query("
+			UPDATE `file`
+			SET `deleted` = NULL
+			WHERE `deleted` = '0000-00-00 00:00:00'
+		", []);
+
+		$db->query("
 			ALTER TABLE `invoice`
 			CHANGE `file_id` `file_id` int(11) NULL AFTER `customer_contact_id`,
 			CHANGE `paid` `paid` tinyint(4) DEFAULT 0 AFTER `customer_contact_id`,
@@ -164,4 +170,5 @@ class Migration_20200430_165137_Default_values extends \Skeleton\Database\Migrat
 	public function down() {
 
 	}
+
 }
