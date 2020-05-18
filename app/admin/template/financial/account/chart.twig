@@ -16,83 +16,75 @@
 	<div id="container" style="height: 400px; min-width: 310px"></div>
 
 	<script type="text/javascript">
-        let chart_extremes = [ null, null ];
+		let chart_extremes = [null, null];
 
-        $(document).ready(function() {
-            $.getJSON('/json/bank/account?id={{ bank_account.id }}', function (data) {
-                window.chart = new Highcharts.StockChart({
-                    chart : {
-                        renderTo : 'container'
-                    },
-                    navigator : {
-                        adaptToUpdatedData: false,
-                        series : {
-                            data : data
-                        }
-                    },
-                    xAxis: {
-                        type: 'datetime',
-                        //minRange: 1,
-                        ordinal: false,
-                        minRange: 1 * 30 * 24 * 3600 * 1000, // 1 month
-                        events: {
-                            afterSetExtremes: after_set_extremes
-                        }
-                    },
-                    yAxis: {
-                        labels: {
-                            formatter: function() {
-                                return '€' + this.axis.defaultLabelFormatter.call(this);
-                            }
-                        }
-                    },
-                    rangeSelector : {
-                        selected : 1
-                    },
-                    series : [{
-                        name: "{% trans "Balance" %}",
-                        data : data,
-                        events: {
-                            click: function(e) {
-                                console.log(
-                                    e.point.id
-                                )
-                            }
-                        }
+		$(document).ready(function () {
+			$.getJSON('/json/bank/account?id={{ bank_account.id }}', function (data) {
+				window.chart = new Highcharts.StockChart({
+					chart: {
+						renderTo: 'container'
+					},
+					navigator: {
+						adaptToUpdatedData: false,
+						series: {
+							data: data
+						}
+					},
+					xAxis: {
+						type: 'datetime',
+						//minRange: 1,
+						ordinal: false,
+						minRange: 1 * 30 * 24 * 3600 * 1000, // 1 month
+						events: {
+							afterSetExtremes: after_set_extremes
+						}
+					},
+					yAxis: {
+						labels: {
+							formatter: function () {
+								return '€' + this.axis.defaultLabelFormatter.call(this);
+							}
+						}
+					},
+					rangeSelector: {
+						selected: 1
+					},
+					series: [{
+						name: "{% trans "Balance" %}",
+						data: data,
+						events: {
+							click: function (e) {
+								console.log(
+									e.point.id
+								)
+							}
+						}
 
-                    }]
-                });
-            });
-        });
+					}]
+				});
+			});
+		});
 
-        function after_set_extremes(e) {
-            // draw max distance of 2 years
-            let min = e.min;
-            let max = e.max;
-            let oldMin = chart_extremes[0];
-            let oldMax = chart_extremes[1];
-            let max_interval = 2 * 365 * 24 * 3600 * 1000;
+		function after_set_extremes(e) {
+			let start = moment.utc(e.min).local().format("YYYY-MM-DD");
+			let end = moment.utc(e.max).local().format("YYYY-MM-DD");
 
-            let start = moment.utc(min).local().format("YYYY-MM-DD");
-            let end = moment.utc(max).local().format("YYYY-MM-DD");
+			// Get fresh data
+			$.getJSON('/json/bank/account?action=interval&id={{ bank_account.id }}&start=' + start + '&end=' + end, function (data) {
+				chart.series[0].setData(data);
+			});
 
-            // Get fresh data
-            $.getJSON('/json/bank/account?action=interval&id={{ bank_account.id }}&start=' + start + '&end=' + end, function (data) {
-                chart.series[0].setData(data);
-            });
-
-            // See if maximum interval is not exceeded before setting extremes
-            if ((max - min) > max_interval) {
-                if (oldMin !== min) {
-                    max = min + max_interval;
-                } else if (oldMax !== max) {
-                    min = max - max_interval;
-                }
-            }
-
-            this.setExtremes(min, max);
-            chart_extremes = [min, max];
-        }
+			// draw max distance of 2 years
+			var maxDistance = 2 * 365 * 24 * 3600 * 1000;
+			var xaxis = this;
+			if ((e.max - e.min) > maxDistance) {
+				var extreme_min = e.max - maxDistance;
+				var extreme_max = e.max;
+				window.setTimeout(function() {
+					xaxis.setExtremes(extreme_min, extreme_max);
+				}, 1);
+			}
+		}
 
 	</script>
 
