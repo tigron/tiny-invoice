@@ -46,7 +46,7 @@
 		"phpdocumentor/reflection-docblock": "^5.1.0",
 		"phpoffice/phpspreadsheet": "^1.12.0",
 		"phpseclib/phpseclib": "^2.0",
-		"ddeboer/imap": "^0.5.2",
+		"ddeboer/imap": "^1.10",
 		"punic/punic": "^3.5.1",
 		"ramsey/uuid": "^4.0.1",
 
