@@ -16,8 +16,8 @@
 
 		"tigron/skeleton-database": "^0.2.2",
 		"tigron/skeleton-object": "^0.2.4",
-		"tigron/skeleton-file": "^0.3",
-		"tigron/skeleton-file-picture": "^0.2.10",
+		"tigron/skeleton-file": "0.4.1",
+		"tigron/skeleton-file-picture": "0.2.11",
 		"tigron/skeleton-file-pdf": "^0.2.4",
 		"tigron/skeleton-i18n": "^2.1.0",
 		"tigron/skeleton-pager": "^0.1.24",

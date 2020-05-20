@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a06fda9ac2e705bb819fd7380ac3be7a",
+    "content-hash": "cc3f384006358ce2100f236c93649256",
     "packages": [
         {
             "name": "bower-asset/autosize",
@@ -5184,16 +5184,16 @@
         },
         {
             "name": "tigron/skeleton-file",
-            "version": "v0.3.2",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-file.git",
-                "reference": "5474fd320f8e1fa2ccda60d93e697f157f291938"
+                "reference": "a6635b7c53220e3d167841d6a3bb116eec30dab8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-file/zipball/5474fd320f8e1fa2ccda60d93e697f157f291938",
-                "reference": "5474fd320f8e1fa2ccda60d93e697f157f291938",
+                "url": "https://api.github.com/repos/tigron/skeleton-file/zipball/a6635b7c53220e3d167841d6a3bb116eec30dab8",
+                "reference": "a6635b7c53220e3d167841d6a3bb116eec30dab8",
                 "shasum": ""
             },
             "require": {
@@ -5218,7 +5218,7 @@
                 }
             ],
             "description": "Tigron File utilities",
-            "time": "2019-11-08T09:09:31+00:00"
+            "time": "2020-05-20T14:40:58+00:00"
         },
         {
             "name": "tigron/skeleton-file-pdf",
@@ -5261,20 +5261,20 @@
         },
         {
             "name": "tigron/skeleton-file-picture",
-            "version": "v0.2.10",
+            "version": "v0.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-file-picture.git",
-                "reference": "486ca1ffb360032f19760f147b2b8f21aa07fca0"
+                "reference": "768777f3fc68e6b5009dd14ac66001f30aad48b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-file-picture/zipball/486ca1ffb360032f19760f147b2b8f21aa07fca0",
-                "reference": "486ca1ffb360032f19760f147b2b8f21aa07fca0",
+                "url": "https://api.github.com/repos/tigron/skeleton-file-picture/zipball/768777f3fc68e6b5009dd14ac66001f30aad48b9",
+                "reference": "768777f3fc68e6b5009dd14ac66001f30aad48b9",
                 "shasum": ""
             },
             "require": {
-                "tigron/skeleton-file": "^0.3"
+                "tigron/skeleton-file": "*"
             },
             "type": "library",
             "autoload": {
@@ -5293,7 +5293,7 @@
                 }
             ],
             "description": "Tigron File utilities",
-            "time": "2019-09-20T11:53:21+00:00"
+            "time": "2019-12-05T11:27:26+00:00"
         },
         {
             "name": "tigron/skeleton-i18n",
