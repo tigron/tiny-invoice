@@ -16,34 +16,44 @@
 	<div id="container" style="height: 400px; min-width: 310px"></div>
 
 	<script type="text/javascript">
-		$(document).ready(function() {
+		let chart_extremes = [null, null];
 
+		$(document).ready(function () {
 			$.getJSON('/json/bank/account?id={{ bank_account.id }}', function (data) {
 				window.chart = new Highcharts.StockChart({
-					chart : {
-					    renderTo : 'container'
-
+					chart: {
+						renderTo: 'container'
+					},
+					navigator: {
+						adaptToUpdatedData: false,
+						series: {
+							data: data
+						}
 					},
 					xAxis: {
-					    type: 'datetime',
-					    //minRange: 1,
-					    ordinal: false
+						type: 'datetime',
+						//minRange: 1,
+						ordinal: false,
+						minRange: 1 * 30 * 24 * 3600 * 1000, // 1 month
+						events: {
+							afterSetExtremes: after_set_extremes
+						}
 					},
 					yAxis: {
 						labels: {
-							formatter: function() {
+							formatter: function () {
 								return '€' + this.axis.defaultLabelFormatter.call(this);
 							}
 						}
 					},
-					rangeSelector : {
-					    selected : 1
+					rangeSelector: {
+						selected: 1
 					},
-					series : [{
+					series: [{
 						name: "{% trans "Balance" %}",
-					    data : data,
+						data: data,
 						events: {
-							click: function(e) {
+							click: function (e) {
 								console.log(
 									e.point.id
 								)
@@ -52,9 +62,30 @@
 
 					}]
 				});
-
 			});
 		});
+
+		function after_set_extremes(e) {
+			let start = moment.utc(e.min).local().format("YYYY-MM-DD");
+			let end = moment.utc(e.max).local().format("YYYY-MM-DD");
+
+			// Get fresh data
+			$.getJSON('/json/bank/account?action=interval&id={{ bank_account.id }}&start=' + start + '&end=' + end, function (data) {
+				chart.series[0].setData(data);
+			});
+
+			// draw max distance of 2 years
+			var maxDistance = 2 * 365 * 24 * 3600 * 1000;
+			var xaxis = this;
+			if ((e.max - e.min) > maxDistance) {
+				var extreme_min = e.max - maxDistance;
+				var extreme_max = e.max;
+				window.setTimeout(function() {
+					xaxis.setExtremes(extreme_min, extreme_max);
+				}, 1);
+			}
+		}
+
 	</script>
 
 {% endblock content %}

@@ -1,5 +1,7 @@
 {% extends "_default/layout.base.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+
 {% block content %}
 
 	<ol class="breadcrumb">
@@ -127,5 +129,11 @@
 			</div>
 		</div>
 	</form>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('input[name="setting[iban]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000', { placeholder: '____ ____ ____ ____ ____ ____ ____'  });
+		});
+	</script>
 
 {% endblock content %}

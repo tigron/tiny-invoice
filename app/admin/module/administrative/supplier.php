@@ -81,6 +81,29 @@ class Web_Module_Administrative_Supplier extends Module {
 	}
 
 	/**
+	 * Edit supplier (ajax)
+	 *
+	 * @access public
+	 */
+	public function display_ajax_edit() {
+		$this->template = NULL;
+
+		if (isset($_POST['supplier'])) {
+			$supplier = Supplier::get_by_id($_GET['id']);
+			$supplier->load_array($_POST['supplier']);
+
+			$errors = [];
+			if ($supplier->validate($errors) === false) {
+				echo json_encode($errors);
+				return;
+			}
+
+			$supplier->save();
+			echo json_encode($supplier->get_info());
+		}
+	}
+
+	/**
 	 * Search supplier (ajax)
 	 *
 	 * @access public
@@ -103,6 +126,24 @@ class Web_Module_Administrative_Supplier extends Module {
 			];
 		}
 		echo json_encode($data);
+	}
+
+	/**
+	 * Load the suppliers
+	 *
+	 * @access public
+	 */
+	public function display_load_suppliers() {
+		session_write_close();
+
+		$this->template = NULL;
+
+		$suppliers = Supplier::get_all('company');
+		$result = [];
+		foreach ($suppliers as $supplier) {
+			$result[] = $supplier->get_info();
+		}
+		echo json_encode($result);
 	}
 
 	/**

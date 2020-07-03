@@ -1,5 +1,8 @@
 {% extends "_default/layout.base.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+{% import '_default/form.base.twig' as form %}
+
 {% block content %}
 
 	{% if action == 'edit' %}
@@ -149,6 +152,11 @@
 				indentUnit: 4,
 				indentWithTabs: true
 			});
+
+			$(document).ready(function() {
+				$('input[name="extractor[fingerprint_other_account_number]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000', { placeholder: '____ ____ ____ ____ ____ ____ ____'  });
+			});
+
 		</script>
 
 	{% elseif action == 'add' %}
@@ -183,7 +191,7 @@
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Account number" %}</label>
-						<div class="col-xs-9"><p class="form-control-static">{{ transaction.other_account_number }}</div>
+						<div class="col-xs-9"><p class="form-control-static">{{ transaction.other_account_number|iban_to_human_format }}</div>
 					</div>
 
 					<div class="form-group">
@@ -243,6 +251,11 @@
 			</div>
 		</div>
 
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('input[name="extractor[fingerprint_other_account_name]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000', { placeholder: '____ ____ ____ ____ ____ ____ ____'  });
+			});
+		</script>
 
 	{% else %}
 

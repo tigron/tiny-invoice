@@ -207,6 +207,11 @@ class Web_Module_Sales_Creditnote extends Module {
 		$template = Template::Get();
 
 		if (isset($_POST['export_format'])) {
+			if (empty($_POST['months'])) {
+				$template->assign('errors', [ 'months' => 'empty' ]);
+				return;
+			}
+
 			$export = new $_POST['export_format']();
 			$export->data = json_encode( $_POST['months'] );
 			$export->save();

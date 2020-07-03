@@ -1,12 +1,6 @@
-	<hr>
-	<div class="form-group{% if 'supplier_id' in errors|keys %} has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
-		<div class="col-xs-9">
-			<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
-			<input type="hidden" class="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
+{% import '_default/form.base.twig' as form %}
 
-		</div>
-	</div>
+	<hr>
 
 	<div class="form-group{% if 'supplier_identifier' in errors|keys %} has-error{% endif %}">
 		<label class="col-xs-3 control-label">{% trans "Supplier identifier" %}</label>
@@ -112,19 +106,6 @@
 	<div class="form-group" id="payment_message_type_free">
 		<div class="col-xs-9 col-xs-offset-3">
 			<textarea name="document[payment_message]" class="form-control autogrow">{{ document.payment_message }}</textarea>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "IBAN" %}</label>
-		<div class="col-xs-9">
-			<p class="form-control-static" id="iban">
-				{% if document.supplier_id == '' or document.supplier_id == 0 or document.supplier.iban == '' %}
-					<em>{% trans "Unknown IBAN" %}</em>
-				{% else %}
-					{{ document.supplier.iban }}
-				{% endif %}
-			</p>
 		</div>
 	</div>
 

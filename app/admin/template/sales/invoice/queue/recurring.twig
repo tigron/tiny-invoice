@@ -1,5 +1,7 @@
 {% extends "_default/layout.base.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+
 {% block content %}
 
 	{% if action == 'edit' %}
@@ -475,9 +477,9 @@
 				<form method="post" action="/sales/invoice/queue/recurring?action=add_step2">
 					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
 					<div class="pull-left">
-						<button class="btn btn-default">
+						<a class="btn btn-default" href="/sales/invoice/queue/recurring?action=add_step1">
 							&laquo; {% trans "Previous" %}
-						</button>
+						</a>
 					</div>
 					<div class="pull-right">
 						<button class="btn btn-primary">

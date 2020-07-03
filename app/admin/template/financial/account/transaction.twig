@@ -1,5 +1,7 @@
 {% extends "_default/layout.base.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+
 {% block content %}
 	{% if action == 'edit' %}
 		<ol class="breadcrumb">
@@ -73,7 +75,7 @@
 						</tr>
 
 						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
-							<td>{{ bank_account_statement_transaction.other_account_number }}</td>
+							<td>{{ bank_account_statement_transaction.other_account_number|iban_to_human_format }}</td>
 						</tr>
 
 						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>

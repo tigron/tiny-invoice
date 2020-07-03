@@ -67,6 +67,7 @@ class Web_Module_Administrative_Document extends Module {
 		$pager->add_sort_permission('id');
 		$pager->add_sort_permission('document.date');
 		$pager->add_sort_permission('title');
+		$pager->add_sort_permission('classname');
 		$pager->add_sort_permission('file.name');
 
 		$pager->set_sort('document.date');
@@ -375,6 +376,21 @@ class Web_Module_Administrative_Document extends Module {
 		$template->assign('fields', $fields);
 		$template->assign('document', $document);
 		$template->assign('extractor', $extractor);
+	}
+
+	/**
+	 * display_edit_supplier
+	 *
+	 * @access public
+	 */
+	public function display_edit_supplier() {
+		$document = Document::get_by_id($_GET['id']);
+		$supplier = Supplier::get_by_id($_POST['document']['supplier_id']);
+
+		$document->supplier = $supplier;
+		$document->save();
+
+		Session::redirect('/administrative/document?action=edit&id=' . $_GET['id']);
 	}
 
 	/**

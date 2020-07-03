@@ -1,5 +1,8 @@
 {% extends "_default/layout.base.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+{% import '_default/form.base.twig' as form %}
+
 {% block content %}
 
 	{% if action == 'edit' %}
@@ -190,6 +193,8 @@
 				</div>
 			</div>
 			{% endif %}
+
+			{% include '/administrative/document/document.form.supplier.twig' %}
 		</div>
 
 		{% if document.classname == 'Document_Incoming_Invoice' or document.classname == 'Document_Incoming_Creditnote' %}
@@ -228,7 +233,7 @@
 							</td>
 							<td>{{ transaction.get_message() }}</td>
 							<td>{{ transaction.other_account_name }}</td>
-							<td>{{ transaction.other_account_number }}</td>
+							<td>{{ transaction.other_account_number|iban_to_human_format }}</td>
 							<td>&euro;{{ balance.amount|number_format }}</td>
 						</tr>
 						{% if loop.last %}
@@ -451,6 +456,7 @@
 						<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
 						<th>{{ pager.create_header('Date'|trans, 'document.date')|raw }}</th>
 						<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
+						<th>{{ pager.create_header('Type'|trans, 'classname')|raw }}</th>
 						<th>{% trans "Tags" %}</th>
 						<th colspan="3">&nbsp;</th>
 					</tr>
@@ -463,9 +469,26 @@
 				<td>{{ document.date|date }}</td>
 				<td>{{ document.title }}</td>
 				<td>
+					{% if document.classname == "Document" %}
+						{% trans "Standard document" %}
+					{% elseif document.classname == 'Document_Contract' %}
+						{% trans "Contract" %}
+					{% elseif document.classname == 'Document_Documentation' %}
+						{% trans "Documentation" %}
+					{% elseif document.classname == 'Document_Incoming_Invoice' %}
+						{% trans "Incoming invoice" %}
+					{% elseif document.classname == 'Document_Incoming_Creditnote' %}
+						{% trans "Incoming creditnote" %}
+					{% else %}
+						{{ document.classname }}
+					{% endif %}
+				</td>
+				<td>
 					{% set document_tags = [] %}
-					{% for tag in tags if document.has_tag(tag)%}
-						{% set document_tags = document_tags|merge([tag]) %}
+					{% for tag in tags %}
+						{% if document.has_tag(tag) %}
+							{% set document_tags = document_tags|merge([tag]) %}
+						{% endif %}
 					{% endfor %}
 
 					{% for document_tag in document_tags %}
@@ -639,11 +662,7 @@
 			});
 			$('.autocomplete_supplier').on('typeahead:selected typeahead:autocompleted', function(e,data) {
 				$('.supplier_id').val(data.id);
-				if (data.iban != "") {
-					$('#iban').html(data.iban);
-				} else {
-					$('#iban').html('<em>{% trans "Unknown IBAN" %}</em>');
-				}
+				$("#autocomplete_supplier_btn").removeClass("hide");
 			});
 
 			var customers = new Bloodhound({

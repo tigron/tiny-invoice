@@ -1,6 +1,9 @@
 {% extends "_default/layout.base.twig" %}
 
+{% import '_default/macro.base.twig' as base %}
+
 {% block content %}
+
 {% if action == 'edit' %}
 	<ol class="breadcrumb">
 		<li><a href="/">{% trans "Home" %}</a></li>
