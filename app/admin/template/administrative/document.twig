@@ -194,7 +194,6 @@
 			</div>
 			{% endif %}
 
-			{% include '/administrative/document/document.form.supplier.twig' %}
 		</div>
 
 		{% if document.classname == 'Document_Incoming_Invoice' or document.classname == 'Document_Incoming_Creditnote' %}
@@ -688,7 +687,7 @@
 		</script>
 	{% endif %}
 
-
+	{% include 'administrative/document/modal.supplier_select.twig' with {'id': 'modal-supplier-select', 'supplier': document.supplier } %}
 
 {% endblock javascript %}
 

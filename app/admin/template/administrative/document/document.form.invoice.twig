@@ -2,6 +2,45 @@
 
 	<hr>
 
+	<div class="form-group">
+		<label class="col-xs-3 control-label">
+			{% trans "Supplier" %}
+		</label>
+		<div class="col-xs-5">
+			{% if document.supplier is not defined %}
+				<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" placeholder="{% trans "Search supplier" %}..."/>   {# TODO fix width #}
+				<input type="hidden" class="supplier_id" name="document[supplier_id]" value=""/>
+			{% else %}
+				<div class="pull-right" style="padding-top: 8px;">
+					<a href="#modal-supplier-select" data-toggle="modal"><span class="glyphicon glyphicon-refresh"></span></a>
+					&nbsp;
+					<a href="/administrative/supplier/detail?id={{ document.supplier.id }}"><span class="glyphicon glyphicon-pencil"></span></a>
+				</div>
+				<address style="padding-top: 8px; padding-left: 5px;">
+					<strong style="margin-right: 10px;">{{ document.supplier.company }} {% if document.supplier.accounting_identifier %}({{ document.supplier.accounting_identifier }}){% endif %}</strong>
+					<br>
+					{{ document.supplier.street }} {{ document.supplier.housenumber }}
+					<br>
+					{{ document.supplier.zipcode }} {{ document.supplier.city }}
+					<br>
+					{{ attribute(document.supplier.country, 'text_' ~ env.language.name_short ~ '_name') }}
+					{% if document.supplier.vat %}
+						<br>
+						{{ document.supplier.country.iso2 }} {{ document.supplier.vat }}
+					{% endif %}
+					{% if document.supplier.iban %}
+						<br>
+						{{ document.supplier.iban|iban_to_human_format }}
+					{% endif %}
+					{% if document.supplier.bic %}
+						<br>
+						{{ document.supplier.bic }}
+					{% endif %}
+				</address>
+			{% endif %}
+		</div>
+	</div>
+
 	<div class="form-group{% if 'supplier_identifier' in errors|keys %} has-error{% endif %}">
 		<label class="col-xs-3 control-label">{% trans "Supplier identifier" %}</label>
 		<div class="col-xs-5">
