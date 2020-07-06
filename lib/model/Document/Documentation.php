@@ -32,7 +32,7 @@ class Document_Documentation extends Document {
 	 * @param array $errors
 	 * @return bool $validated
 	 */
-	public function validate(&$errors) {
+	public function validate(&$errors = null) {
 		$errors = [];
 		parent::validate($parent_errors);
 
