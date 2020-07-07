@@ -15,7 +15,13 @@
 
 	<tr>
 		<th><p class="form-control-static">{{ key }}</p></th>
-		<td><p class="form-control-static">{{ attribute(document, key)|truncate(50)|nl2br }}</p></td>
+		<td>
+			<p class="form-control-static">
+				{% if attribute(document, key) is not null %}
+					{{ attribute(document, key)|truncate(50)|nl2br }}
+				{% endif %}
+			</p>
+		</td>
 		<td>
 			{% if key == 'description' %}
 				<textarea class="form-control" name="document[{{ key }}]">{{ value }}</textarea>

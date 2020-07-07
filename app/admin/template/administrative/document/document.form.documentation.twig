@@ -1,106 +1,48 @@
 	<hr>
+	<div class="form-group">
+		<label class="col-xs-3 control-label" style="line-height: 26px;">{% trans "Documentation for" %}</label>
 
-	{% if document.customer_id > 0 or document.supplier_id > 0 %}
-		<div class="form-group">
-			<label class="col-xs-3 control-label">{% trans "Documentation for" %}</label>
-			<div class="col-xs-5">
+		<div class="col-xs-9">
+			<label class="radio-inline" style="line-height: 28px;">
+				<input type="radio" name="documentation_for" value="customer" {% if document.customer_id > 0 %}checked{% endif %}>{% trans "Customer" %}
+			</label>
 
-				{% if document.customer_id > 0 %}
-
-					<address style="padding-top: 8px; padding-left: 5px;">
-						<strong style="margin-right: 10px;">{{ document.customer.get_display_name() }}</strong>
-						<br>
-						{{ document.customer.street }} {{ document.customer.housenumber }}
-						<br>
-						{{ document.customer.zipcode }} {{ document.customer.city }}
-						<br>
-						{{ attribute(document.customer.country, 'text_' ~ env.language.name_short ~ '_name') }}
-						{% if document.customer.vat %}
-							<br>
-							{{ document.customer.country.iso2 }} {{ document.customer.vat }}
-						{% endif %}
-					</address>
-
-				{% elseif document.supplier_id > 0 %}
-
-					<address style="padding-top: 8px; padding-left: 5px;">
-						<strong style="margin-right: 10px;">{{ document.supplier.company }} {% if document.supplier.accounting_identifier %}({{ document.supplier.accounting_identifier }}){% endif %}</strong>
-						<br>
-						{{ document.supplier.street }} {{ document.supplier.housenumber }}
-						<br>
-						{{ document.supplier.zipcode }} {{ document.supplier.city }}
-						<br>
-						{{ attribute(document.supplier.country, 'text_' ~ env.language.name_short ~ '_name') }}
-						{% if document.supplier.vat %}
-							<br>
-							{{ document.supplier.country.iso2 }} {{ document.supplier.vat }}
-						{% endif %}
-						{% if document.supplier.iban %}
-							<br>
-							{{ document.supplier.iban|iban_to_human_format }}
-						{% endif %}
-						{% if document.supplier.bic %}
-							<br>
-							{{ document.supplier.bic }}
-						{% endif %}
-					</address>
-
-				{% endif %}
-			</div>
+			<label class="radio-inline" style="line-height: 28px;">
+				<input type="radio" name="documentation_for" value="supplier"  {% if document.supplier_id > 0 %}checked{% endif %} style="vertical-align: top;">
+				{% trans "Supplier" %}
+			</label>
 		</div>
+	</div>
 
-	{% else %}
+	<script type="text/javascript">
+		$('input[name=documentation_for]').on('change', function() {
+			set_documentation_for();
+		});
 
-		<div class="form-group">
-			<label class="col-xs-3 control-label">{% trans "Documentation for" %}</label>
-
-			<div class="col-xs-9">
-				<label class="radio-inline" style="line-height: 28px;">
-					<input type="radio" name="documentation_for" value="customer" {% if document.customer_id > 0 %}checked{% endif %}>{% trans "Customer" %}
-				</label>
-
-				<label class="radio-inline" style="line-height: 28px;">
-					<input type="radio" name="documentation_for" value="supplier"  {% if document.supplier_id > 0 %}checked{% endif %} style="vertical-align: top;">
-					{% trans "Supplier" %}
-				</label>
-			</div>
-		</div>
-
-		<script type="text/javascript">
-			$('input[name=documentation_for]').on('change', function() {
-				set_documentation_for();
-			});
-
-			function set_documentation_for() {
-				value = $('input[name=documentation_for]:checked').val();
-				if (value == 'supplier') {
-					$('.documentation_for_customer').hide();
-					$('.documentation_for_supplier').show();
-				} else {
-					$('.documentation_for_customer').show();
-					$('.documentation_for_supplier').hide();
-				}
+		function set_documentation_for() {
+			value = $('input[name=documentation_for]:checked').val();
+			if (value == 'supplier') {
+				$('.documentation_for_customer').hide();
+				$('.documentation_for_supplier').show();
+			} else {
+				$('.documentation_for_customer').show();
+				$('.documentation_for_supplier').hide();
 			}
-		</script>
+		}
+	</script>
 
-		<div class="form-group{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_customer">
-			<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
-			<div class="col-xs-9">
-				<input type="text" name="customer" class="form-control typeahead autocomplete_customer" value="{% if document.customer_id > 0 %}{{ document.customer.get_display_name() }}{% endif %}" placeholder="{% trans "Search customer" %}...">
-				<input type="hidden" class="customer_id" name="document[customer_id]" value="{{ document.customer_id }}">
-			</div>
+	<div class="form-group{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_customer">
+		<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
+		<div class="col-xs-9">
+			<input type="text" name="customer" class="form-control typeahead autocomplete_customer" value="{% if document.customer_id > 0 %}{{ document.customer.get_display_name() }}{% endif %}" placeholder="{% trans "Search customer" %}...">
+			<input type="hidden" class="customer_id" name="document[customer_id]" value="{{ document.customer_id }}">
 		</div>
+	</div>
 
-		<div class="form-group{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_supplier">
-			<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
-			<div class="col-xs-9">
-				<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
-				<input type="hidden" class="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
-			</div>
+	<div class="form-group{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_supplier">
+		<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
+		<div class="col-xs-9">
+			<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
+			<input type="hidden" class="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
 		</div>
-
-	{% endif %}
-
-
-
-
+	</div>

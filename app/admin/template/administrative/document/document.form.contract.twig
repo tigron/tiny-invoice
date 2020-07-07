@@ -1,14 +1,14 @@
 	<hr>
 
 	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Contract for" %}</label>
+		<label class="col-xs-3 control-label" style="line-height: 26px;">{% trans "Contract for" %}</label>
 
 		<div class="col-xs-9">
-			<label class="radio-inline">
+			<label class="radio-inline" style="line-height: 28px;">
 				<input type="radio" name="contract_for" value="customer" {% if document.customer_id > 0 or document_customer_id == '' %}checked{% endif %}>{% trans "Customer" %}
 			</label>
 
-			<label class="radio-inline">
+			<label class="radio-inline" style="line-height: 28px;">
 				<input type="radio" name="contract_for" value="supplier" {% if document.supplier_id > 0 %}checked{% endif %}>{% trans "Supplier" %}
 			</label>
 		</div>
