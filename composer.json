@@ -14,7 +14,7 @@
 	"require": {
 		"ext-soap": "*",
 
-		"tigron/skeleton-database": "^0.2.2",
+		"tigron/skeleton-database": "^0.2.3",
 		"tigron/skeleton-object": "^0.2.4",
 		"tigron/skeleton-file": "0.4.1",
 		"tigron/skeleton-file-picture": "0.2.11",
@@ -71,7 +71,8 @@
 		"bower-asset/highcharts": "^4.2",
 		"bower-asset/font-awesome": "^4.7",
 		"bower-asset/bootstrap-select": "^1.13",
-		"npm-asset/jquery": "^2.2"
+		"npm-asset/jquery": "^2.2",
+		"npm-asset/jsqr": "^1.3"
 	},
 	"suggest": {
 		"ext-imap": "*"
