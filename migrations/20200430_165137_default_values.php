@@ -146,6 +146,11 @@ class Migration_20200430_165137_Default_values extends \Skeleton\Database\Migrat
 			CHANGE `admin` `admin` tinyint(1) NOT NULL DEFAULT 0 AFTER `role_id`,
 			CHANGE `receive_expired_invoice_overview` `receive_expired_invoice_overview` tinyint(1) NOT NULL DEFAULT 0 AFTER `admin`;
 		", []);
+
+		$db->query("
+			ALTER TABLE `incoming_page`
+			CHANGE `preview_file_id` `preview_file_id` int(11) NULL AFTER `file_id`;
+		", []);
 	}
 
 	/**
