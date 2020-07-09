@@ -38,6 +38,12 @@ class Migration_20200709_131909_Fix_payment_list extends \Skeleton\Database\Migr
 			ALTER TABLE `payment_list`
 			CHANGE `created_new` `created` datetime NOT NULL AFTER `export_id`;
 		", []);
+
+		$db->query("
+			ALTER TABLE `payment`
+			CHANGE `payment_message` `payment_message` varchar(255) COLLATE 'utf8_unicode_ci' NULL AFTER `bank_account_bic`,
+			CHANGE `payment_structured_message` `payment_structured_message` varchar(128) COLLATE 'utf8_unicode_ci' NULL AFTER `payment_message`;
+		", []);
 	}
 
 	/**
