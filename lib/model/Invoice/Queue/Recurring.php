@@ -86,7 +86,7 @@ class Invoice_Queue_Recurring {
 	 */
 	public static function get_by_invoice_queue_recurring_group(Invoice_Queue_Recurring_Group $group) {
 		$db = Database::Get();
-		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring WHERE invoice_queue_recurring_group_id=? AND archived="0000-00-00 00:00:00"', [$group->id]);
+		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring WHERE invoice_queue_recurring_group_id=? AND archived is null', [$group->id]);
 		$items = [];
 		foreach ($ids as $id) {
 			$items[] = Invoice_Queue_Recurring::get_by_id($id);

@@ -165,6 +165,8 @@ class Web_Module_Sales_Invoice_Queue_Recurring extends Module {
 		if (isset($_POST['invoice_queue_recurring_group'])) {
 			if (isset($_POST['invoice_queue_recurring_group']['run_forever'])) {
 				$_POST['invoice_queue_recurring_group']['stop_after'] = null;
+			} elseif (empty($_POST['invoice_queue_recurring_group']['stop_after'])) {
+				$_POST['invoice_queue_recurring_group']['stop_after'] = null;
 			}
 			$invoice_queue_recurring_group->load_array($_POST['invoice_queue_recurring_group']);
 

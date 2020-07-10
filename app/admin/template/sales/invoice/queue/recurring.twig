@@ -58,7 +58,7 @@
 
 					<div class="form-group">
 						<label class="col-xs-4 control-label">{% trans "Run forever" %}</label>
-						<div class="col-xs-8"><input type="checkbox" id="run_forever" name="invoice_queue_recurring_group[run_forever]" data-group-cls="btn-group-xs" {% if invoice_queue_recurring_group.stop_after == '0000-00-00 00:00:00' %}checked{% endif %} onchange="toggle_run_forever();"></div>
+						<div class="col-xs-8"><input type="checkbox" id="run_forever" name="invoice_queue_recurring_group[run_forever]" data-group-cls="btn-group-xs" {% if invoice_queue_recurring_group.stop_after is null %}checked{% endif %} onchange="toggle_run_forever();"></div>
 					</div>
 
 					<hr>
@@ -351,10 +351,11 @@
 					<textarea name="queue_item[description][]" class="form-control autoresize"></textarea>
 				</td>
 				<td>
-					<select name="queue_item[vat][]" class="form-control">
-						<option value="6">6%</option>
-						<option value="12">12%</option>
-						<option value="21" selected>21%</option>
+					<select name="queue_item[vat_rate_id]" class="form-control">
+						<option value="0">{% trans "No VAT" %} (0%)</option>
+						{% for vat_rate in vat_rates %}
+							<option value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+						{% endfor %}
 					</select>
 				</td>
 				<td>

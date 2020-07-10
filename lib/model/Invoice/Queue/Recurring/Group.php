@@ -26,9 +26,9 @@ class Invoice_Queue_Recurring_Group {
 	 */
 	public function validate(&$errors = null) {
 		$errors = [];
-		$required_fields = array('name', 'repeat_every', 'next_run', 'customer_contact_id');
+		$required_fields = [ 'name', 'repeat_every', 'next_run', 'customer_contact_id' ];
 
-		$errors = array();
+		$errors = [];
 		foreach ($required_fields as $field) {
 			if (!isset($this->details[$field]) || $this->details[$field] == '') {
 				$errors[$field] = $field;
@@ -71,7 +71,7 @@ class Invoice_Queue_Recurring_Group {
 			$invoice_queues[] = $item->run();
 		}
 
-		if ($this->next_run == '0000-00-00 00:00:00') {
+		if ($this->next_run === null) {
 			$next_run = time();
 		} else {
 			$next_run = strtotime($this->next_run);
@@ -130,8 +130,8 @@ class Invoice_Queue_Recurring_Group {
 	 */
 	public static function get_runnable() {
 		$db = Database::Get();
-		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring_group WHERE archived = "0000-00-00 00:00:00" AND next_run < NOW() AND (next_run < stop_after OR stop_after = "0000-00-00 00:00:00")', array());
-		$groups = array();
+		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring_group WHERE archived is null AND next_run < NOW() AND (next_run < stop_after OR stop_after is null)', array());
+		$groups = [];
 		foreach ($ids as $id) {
 			$groups[] = Invoice_Queue_Recurring_Group::get_by_id($id);
 		}
@@ -147,8 +147,8 @@ class Invoice_Queue_Recurring_Group {
 	 */
 	public static function get_by_customer_contact(Customer_Contact $customer_contact) {
 		$db = Database::Get();
-		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring_group WHERE archived = "0000-00-00 00:00:00" AND customer_contact_id = ?', [$customer_contact->id]);
-		$groups = array();
+		$ids = $db->get_column('SELECT id FROM invoice_queue_recurring_group WHERE archived is null AND customer_contact_id = ?', [$customer_contact->id]);
+		$groups = [];
 		foreach ($ids as $id) {
 			$groups[] = Invoice_Queue_Recurring_Group::get_by_id($id);
 		}
