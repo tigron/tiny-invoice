@@ -151,6 +151,15 @@ class Migration_20200430_165137_Default_values extends \Skeleton\Database\Migrat
 			ALTER TABLE `incoming_page`
 			CHANGE `preview_file_id` `preview_file_id` int(11) NULL AFTER `file_id`;
 		", []);
+
+		$db->query("
+			ALTER TABLE `invoice_queue_recurring`
+			CHANGE `archived` `archived` datetime NULL AFTER `created`;
+		", []);
+
+		$db->query("
+			UPDATE invoice_queue_recurring SET archived = null WHERE archived = "0000-00-00 00:00:00"
+		", []);
 	}
 
 	/**
