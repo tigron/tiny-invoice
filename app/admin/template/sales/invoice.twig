@@ -848,7 +848,7 @@
 				Handlebars.setDelimiter('(',')');
 				var template = Handlebars.compile(source);
 				$('#invoice-items').find('tr:last').before(template(data));
-				$('.autogrow').autoGrow();
+				autosize($('.autogrow'));
 				set_vat_regime();
 				check_total_price();
 			}
