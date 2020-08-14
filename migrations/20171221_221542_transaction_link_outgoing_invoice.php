@@ -19,7 +19,7 @@ class Migration_20171221_221542_Transaction_link_outgoing_invoice extends \Skele
 	 */
 	public function up() {
 		$extractor_bank_account_statement_transaction = new Extractor_Bank_Account_Statement_Transaction();
-		$extractor_bank_account_statement_transaction->bank_account_statement_transaction_id = 0;
+		$extractor_bank_account_statement_transaction->bank_account_statement_transaction_id = null;
 		$extractor_bank_account_statement_transaction->name = 'Outgoing invoices with correct OGM';
 		$extractor_bank_account_statement_transaction->eval = '
 if ($transaction->amount < 0) {

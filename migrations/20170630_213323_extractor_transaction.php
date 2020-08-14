@@ -37,7 +37,7 @@ class Migration_20170630_213323_Extractor_transaction extends \Skeleton\Database
 		$db->query("
 			CREATE TABLE `extractor_bank_account_statement_transaction` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
-			  `bank_account_statement_transaction_id` int(11) NOT NULL,
+			  `bank_account_statement_transaction_id` int(11) NULL,
 			  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
 			  `fingerprint_message` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
 			  `fingerprint_other_account_name` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
