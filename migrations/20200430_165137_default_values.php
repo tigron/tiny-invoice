@@ -158,7 +158,7 @@ class Migration_20200430_165137_Default_values extends \Skeleton\Database\Migrat
 		", []);
 
 		$db->query("
-			UPDATE invoice_queue_recurring SET archived = null WHERE archived = "0000-00-00 00:00:00"
+			UPDATE invoice_queue_recurring SET archived = null WHERE archived = '0000-00-00 00:00:00'
 		", []);
 	}
 
