@@ -105,6 +105,16 @@ class Bootstrap {
 		\Skeleton\Template\Twig\Config::add_extension("Template_Twig_Extension_Custom");
 
 		/**
+		 * Transaction daemon settings
+		 */
+		if (isset($config->transaction_pid)) {
+			\Skeleton\Transaction\Config::$pid_file = $config->transaction_pid;
+		}
+		if (isset($config->transaction_monitor)) {
+			\Skeleton\Transaction\Config::$monitor_file = $config->transaction_monitor;
+		}
+
+		/**
 		 * Set the email path
 		 */
 
