@@ -1,0 +1,202 @@
+{% extends "_default/layout.base.twig" %}
+
+{% import '_default/macro.base.twig' as base %}
+{% import '_default/form.base.twig' as form %}
+
+{% block content %}
+
+	{% if env.module.get_name() != 'administrative_user' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/administrative/user">{% trans "Users" %}</a></li>
+			<li class="active">{% trans "Edit user" %}</li>
+		</ol>
+
+		<ul class="nav nav-tabs">
+			<li {% if env.module.get_name() == 'administrative_user_detail' %}class="active"{% endif %}>
+				<a href="/administrative/user/detail?id={{ user.id }}">{% trans "Details" %}</a>
+			</li>
+			<li {% if env.module.get_name() == 'administrative_user_mobile' %}class="active"{% endif %}>
+				<a href="/administrative/user/mobile?id={{ user.id }}">{% trans "Mobile" %}</a>
+			</li>
+		</ul>
+
+		<div class="tab-content">
+			{% block tab %}{% endblock tab %}
+		</div>
+
+
+	{% elseif action == 'add' %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li><a href="/user">{% trans "Users" %}</a></li>
+			<li class="active">{% trans "Add user" %}</li>
+		</ol>
+
+		{% if errors is defined %}
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{% trans "Details" %}
+			</div>
+			<div class="panel-body">
+				<form class="form form-horizontal form-condensed" method="post" action="/administrative/user?action=add">
+					<div class="form-group{% if 'username' in errors|keys %} has-error{% endif %}">
+						<label for="username" class="col-xs-3 control-label">{% trans "Username" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="user[username]" id="username" class="form-control" value="{{ env.post.user.username }}">
+							{{ form.invalid_input('username', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'firstname' in errors|keys %} has-error{% endif %}">
+						<label for="firstname" class="col-xs-3 control-label">{% trans "Firstname" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="user[firstname]" id="firstname" class="form-control" value="{{ env.post.user.firstname }}">
+							{{ form.invalid_input('firstname', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'lastname' in errors|keys %} has-error{% endif %}">
+						<label for="lastname" class="col-xs-3 control-label">{% trans "Lastname" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="user[lastname]" id="lastname" class="form-control" value="{{ env.post.user.lastname }}">
+							{{ form.invalid_input('lastname', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'email' in errors|keys %} has-error{% endif %}">
+						<label for="email" class="col-xs-3 control-label">{% trans "Email" %}</label>
+						<div class="col-xs-9">
+							<input type="text" name="user[email]" id="email" class="form-control" value="{{ env.post.user.email }}">
+							{{ form.invalid_input('email', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group{% if 'password' in errors|keys %} has-error{% endif %}">
+						<label for="password" class="col-xs-3 control-label">{% trans "Password" %}</label>
+						<div class="col-xs-9">
+							<input type="password" name="user[password]" id="password" class="form-control" value="{{ env.post.user.password }}">
+							{{ form.invalid_input('password', errors) }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="language_id" class="col-xs-3 control-label">{% trans "Language" %}</label>
+						<div class="col-xs-4">
+							<select name="user[language_id]" id="language_id" class="form-control">
+								{% for language in languages %}
+									<option value="{{ language.id }}"{% if env.post.user.language_id == language.id %} selected{% endif %}>{{ language.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="language_id" class="col-xs-3 control-label">{% trans "Role" %}</label>
+						<div class="col-xs-4">
+							<select name="user[role_id]" id="language_id" class="form-control">
+								{% for role in roles %}
+									<option value="{{ role.id }}"{% if role.id == user.role_id %} selected{% endif %}>{{ role.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="language_id" class="col-xs-3 control-label">{% trans "Receive expired invoice overview" %}</label>
+						<div class="col-xs-4">
+							<input type="checkbox" data-group-cls="btn-group-xs" name="user[receive_expired_invoice_overview]">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-3 col-xs-offset-3">
+							<button class="btn btn-primary">
+								{% trans "Save" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+	{% else %}
+
+		<ol class="breadcrumb">
+			<li><a href="/">{% trans "Home" %}</a></li>
+			<li class="active">{% trans "Users" %}</li>
+		</ol>
+
+		{% if env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'user') }}
+		{% endif %}
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="pull-right">
+					<a href="/administrative/user?action=add" title="">
+						<span class="glyphicon glyphicon-plus-sign"></span>
+						{% trans "Add user" %}
+					</a>
+				</div>
+				{{ base.pager_count(pager.item_count) }}
+			</div>
+			<div class="panel-body">
+			{% for user in pager.items %}
+				{% if loop.first %}
+					<table class="table table-hover table-striped table-condensed table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>{{ pager.create_header('First name'|trans, 'firstname')|raw }}</th>
+							<th>{{ pager.create_header('Last name'|trans, 'lastname')|raw }}</th>
+							<th>{{ pager.create_header('Username'|trans, 'username')|raw }}</th>
+							<th>{{ pager.create_header('Role'|trans, 'role.name')|raw }}</th>
+							<th width="30">&nbsp;</th>
+							<th width="30">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+				{% endif %}
+
+					<tr>
+						<td>{{ user.id }}</td>
+						<td>{{ user.firstname }}</td>
+						<td>{{ user.lastname }}</td>
+						<td>{{ user.username }}</td>
+						<td>{{ user.role.name }}</td>
+						<td>
+							<a href="/administrative/user/detail?id={{ user.id }}" title="">
+								<span class="glyphicon glyphicon-pencil"></span>
+							</a>
+						</td>
+						<td>
+						{% if env.session.user.id != user.id %}
+							<a href="/administrative/user?id={{ user.id }}&action=delete" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to remove this user?" %}">
+								<span class="glyphicon glyphicon-remove" />
+							</a>
+						{% endif %}
+						</td>
+					</tr>
+
+				{% if loop.last %}
+					</tbody>
+					</table>
+
+					{{ pager.links|raw }}
+				{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+
+	{% endif %}
+
+{% endblock content %}

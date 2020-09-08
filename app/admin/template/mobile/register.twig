@@ -1,0 +1,91 @@
+{% extends "_default/layout.base.twig" %}
+
+{% block content %}
+	<script type="text/javascript" src="/jsqr/dist/jsQR.js"></script>
+	<script type="text/javascript" src="/platform/platform.js"></script>	
+
+	<div class="container">
+		<h3>{% trans "Register smartphone" %}</h3>
+
+		<div class="alert alert-info">
+			{% trans "Your smartphone is not yet registered." %} {% trans "Please open your Tinyinvoice webinterface an scan the QR code associated with your account." %}
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div id="loadingMessage">{% trans "Please enable webcam" %}</div>
+				<canvas id="canvas" hidden class="img-responsive"></canvas>
+		  	</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<a href="/mobile" class="btn btn-default btn-block">{% trans "Back" %}</a>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var video = document.createElement("video");
+		var canvasElement = document.getElementById("canvas");
+		var canvas = canvasElement.getContext("2d");
+		var loadingMessage = document.getElementById("loadingMessage");
+
+		function drawLine(begin, end, color) {
+			canvas.beginPath();
+			canvas.moveTo(begin.x, begin.y);
+			canvas.lineTo(end.x, end.y);
+			canvas.lineWidth = 4;
+			canvas.strokeStyle = color;
+			canvas.stroke();
+		}
+
+		// Use facingMode: environment to attemt to get the front camera on phones
+		navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+			video.srcObject = stream;
+			video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+			video.play();
+			requestAnimationFrame(tick);
+		});
+
+		function tick() {
+			loadingMessage.innerText = "⌛ Loading video..."
+			if (video.readyState === video.HAVE_ENOUGH_DATA) {
+				loadingMessage.hidden = true;
+				canvasElement.hidden = false;
+
+				canvasElement.height = video.videoHeight;
+				canvasElement.width = video.videoWidth;
+				canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+				var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+				var code = jsQR(imageData.data, imageData.width, imageData.height, {
+					inversionAttempts: "dontInvert",
+				});
+				if (code) {
+					drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+					drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+					drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+					drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+					console.log(code);
+					data = {
+						'code': code.data,
+						'name': platform.description
+					}
+
+					$.post('/mobile/register?action=register', data, function(response) {
+						$('.alert').removeClass('alert-info');
+						$('.alert').removeClass('alert-danger');
+						console.log(response);
+						if (response.success) {
+							$('.alert').addClass('alert-success').html('{% trans "Your mobile phone is now registered." %}');
+							window.location.href = '/mobile';							
+						}
+					}, 'json');
+				}
+			}
+			requestAnimationFrame(tick);
+		}
+	</script>
+
+
+{% endblock content %}

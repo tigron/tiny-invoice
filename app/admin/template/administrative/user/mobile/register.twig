@@ -1,0 +1,24 @@
+
+<div class="alert alert-info" id="alert-register">
+	{% trans "To register your smartphone, open this application on your smartphone." %} {% trans "On the login screen choose for mobile application." %}
+</div>
+<center>
+	<img src="/administrative/user/mobile?action=qr&code={{ mobile.token }}" />
+</center>
+
+<script type="text/javascript">
+	poller = setInterval(poll, 1000);
+	
+	function poll() {
+		$.get('/administrative/user/mobile?id=3&action=poll&mobile_id={{ mobile.id }}', function(response) {
+			if (response) {
+				$('#alert-register').removeClass('alert-info').addClass('alert-success').html('{% trans "Your smartphone is registered" %}');
+				window.location.href = '/administrative/user/mobile?id={{ mobile.user_id }}';
+			}
+		}, 'json');
+	}
+
+	$('#add-mobile').on('hide.bs.modal', function () {
+		clearInterval(poller);
+	});	
+</script>

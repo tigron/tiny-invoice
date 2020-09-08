@@ -1,0 +1,43 @@
+{% extends "_default/layout.mobile.twig" %}
+
+{% block content %}
+
+<div class="container">
+
+<h3>{% trans "Tinyinvoice mobile interface" %}</h3>
+{% if env.sticky_session.message == 'upload_success' %}
+	<div class="alert alert-success">
+		{% trans 'Your document has been successfully uploaded.' %} {% trans 'Click the button below to add a new document.' %}
+	</div>
+{% endif %}
+
+{% if not registered %}
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="alert alert-info">
+				{% trans "Your smartphone is not registered yet." %} {% trans "Please register your smartphone to add documents." %}
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<a href="/mobile/register" class="btn btn-default btn-block">{% trans "Register smartphone" %}</a>
+		</div>
+	</div>
+{% else %}
+
+
+	<div class="row">
+		<div class="col-xs-12">
+			<a href="/mobile/scan" class="btn btn-primary btn-block btn-lg">
+				<i class="fa fa-camera"></i> {% trans "Scan document" %}
+			</a>
+		</div>
+	</div>
+
+
+{% endif %}
+</div>
+
+{% endblock content %}

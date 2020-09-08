@@ -17,20 +17,23 @@
 
 <body id="login">
 	<div id="login-wrapper">
+
+
 		<div id="login-content">
+			<img src="/logo.svg" width="100%" />
 			{% if error %}
 				<div class="alert alert-danger">
 					{% trans "Username and/or password is incorrect" %}
 				</div>
 			{% endif %}
 
+			<p class="login-box-msg">{% trans "Sign in to start your session" %}</p>
+
 			<form action="/login" method="post">
 				<div class="form-group">
-					<label>{% trans "Username" %}</label>
 					<input type="text" name="username" class="form-control" placeholder="{% trans "Username" %}" />
 				</div>
 				<div class="form-group">
-					<label>{% trans "Password" %}</label>
 					<input type="password" name="password" class="form-control" placeholder="{% trans "Password" %}" />
 				</div>
 
@@ -40,6 +43,9 @@
 					<button type="submit" class="btn btn-primary">
 						{% trans "Login" %} <span class="glyphicon glyphicon-arrow-right"></span>
 					</button>
+					<a href="/mobile" class="btn btn-primary pull-right">
+						<span class="glyphicon glyphicon-phone"></span> {% trans "Mobile interface" %}
+					</a>
 				</div>
 			</form>
 		</div>

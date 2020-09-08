@@ -1,0 +1,98 @@
+{% extends "administrative/user.twig" %}
+
+{% import '_default/macro.base.twig' as base %}
+{% import '_default/form.base.twig' as form %}
+
+{% block tab %}
+
+	<form class="form form-horizontal form-condensed" method="post" action="/administrative/user/detail?id={{ user.id }}">
+		{% if errors is defined %}
+			<div class="alert alert-danger">
+				{% trans "The form contains mistakes. Please correct them." %}
+			</div>
+		{% elseif env.sticky_session.message is defined %}
+			{{ base.display_flash_message(env.sticky_session.message, 'user') }}
+		{% endif %}
+
+	
+		<div class="form-group{% if 'username' in errors|keys %} has-error{% endif %}">
+			<label for="username" class="col-xs-3 control-label">{% trans "Username" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="user[username]" id="username" class="form-control" value="{{ user.username }}">
+				{{ form.invalid_input('username', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'firstname' in errors|keys %} has-error{% endif %}">
+			<label for="firstname" class="col-xs-3 control-label">{% trans "Firstname" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="user[firstname]" id="firstname" class="form-control" value="{{ user.firstname }}">
+				{{ form.invalid_input('firstname', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'lastname' in errors|keys %} has-error{% endif %}">
+			<label for="lastname" class="col-xs-3 control-label">{% trans "Lastname" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="user[lastname]" id="lastname" class="form-control" value="{{ user.lastname }}">
+				{{ form.invalid_input('lastname', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'email' in errors|keys %} has-error{% endif %}">
+			<label for="email" class="col-xs-3 control-label">{% trans "Email" %}</label>
+			<div class="col-xs-9">
+				<input type="text" name="user[email]" id="email" class="form-control" value="{{ user.email }}">
+				{{ form.invalid_input('email', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group{% if 'password' in errors|keys %} has-error{% endif %}">
+			<label for="password" class="col-xs-3 control-label">{% trans "Password" %}</label>
+			<div class="col-xs-9">
+				<input type="password" name="user[password]" id="password" class="form-control" value="DONOTUPDATEME">
+				{{ form.invalid_input('password', errors) }}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="language_id" class="col-xs-3 control-label">{% trans "Language" %}</label>
+			<div class="col-xs-4">
+				<select name="user[language_id]" id="language_id" class="form-control">
+					{% for language in languages %}
+						<option value="{{ language.id }}"{% if user.language_id == language.id %} selected{% endif %}>{{ language.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="language_id" class="col-xs-3 control-label">{% trans "Role" %}</label>
+			<div class="col-xs-4">
+				<select name="user[role_id]" id="language_id" class="form-control">
+					{% for role in roles %}
+						<option value="{{ role.id }}"{% if role.id == user.role_id %} selected{% endif %}>{{ role.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="language_id" class="col-xs-3 control-label">{% trans "Receive expired invoice overview" %}</label>
+			<div class="col-xs-4">
+				<input type="checkbox" data-group-cls="btn-group-xs" name="user[receive_expired_invoice_overview]"{% if user.receive_expired_invoice_overview == 1 %} checked{% endif %}>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-3 col-xs-offset-3">
+				<button class="btn btn-primary">
+					{% trans "Save" %}
+				</button>
+			</div>
+		</div>
+	</form>
+
+
+
+{% endblock tab %}

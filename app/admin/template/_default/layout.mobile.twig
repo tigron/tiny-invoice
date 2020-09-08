@@ -1,0 +1,34 @@
+<!doctype html>
+<html class="no-js" lang="{{ env.session.language.name_short }}">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{% if settings.company is not empty %}{{ settings.company }} - {% endif %}Tiny Invoice</title>
+
+	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="handheld, all">
+	<link rel="stylesheet" href="/bootstrap-select/dist/css/bootstrap-select.css" />
+	<link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/style.css" type="text/css" media="handheld, all">
+
+	<script type="text/javascript" src="/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/jquery.selectareas.min.js"></script>
+	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/moment/min/moment.min.js"></script>
+
+
+	{% apply spaceless %}
+		{% block head %}{% endblock head %}
+	{% endapply %}
+</head>
+<body>
+	<div class="container-fluid">{% block content %}{% endblock content %}</div>
+
+	{% apply spaceless %}
+		{% block javascript %}{% endblock %}
+	{% endapply %}
+	<script type="text/javascript" src="/base.mobile.js"></script>
+</body>
+</html>

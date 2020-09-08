@@ -194,7 +194,7 @@
 
 					<tr>
 						<td>{{ incoming.id }}</td>
-						<td>{{ incoming.created|date }}</td>
+						<td>{{ incoming.created|date('d/m/Y H:i:s') }}</td>
 						<td>{{ incoming.subject }}</td>
 						<td width="20">
 							<a href="/administrative/incoming?action=edit&id={{ incoming.id }}" title="{% trans "Edit incoming" %}">

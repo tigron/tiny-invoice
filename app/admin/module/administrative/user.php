@@ -10,7 +10,7 @@ use \Skeleton\Core\Web\Module;
 use \Skeleton\Core\Web\Session;
 use \Skeleton\Pager\Web\Pager;
 
-class Web_Module_User extends Module {
+class Web_Module_Administrative_User extends Module {
 	/**
 	 * Login required
 	 *
@@ -25,7 +25,7 @@ class Web_Module_User extends Module {
 	 * @access protected
 	 * @var string $template
 	 */
-	protected $template = 'user.twig';
+	protected $template = 'administrative/user.twig';
 
 	/**
 	 * Display method
@@ -75,44 +75,10 @@ class Web_Module_User extends Module {
 				$user->save();
 
 				Session::set_sticky('message', 'created');
-				Session::redirect('/user');
+				Session::redirect('/administrative/user');
 			}
 		}
 		$template->assign('roles', Role::get_all());
-		$template->assign('languages', Language::get_all());
-	}
-
-	/**
-	 * Edit
-	 *
-	 * @access public
-	 */
-	public function display_edit() {
-		$template = Template::Get();
-		$user = User::get_by_id($_GET['id']);
-
-		if (isset($_POST['user'])) {
-			if ($_POST['user']['password'] != 'DONOTUPDATEME') {
-				$user->set_password($_POST['user']['password']);
-			}
-			unset($_POST['user']['password']);
-			if (isset($_POST['user']['receive_expired_invoice_overview'])) {
-				$_POST['user']['receive_expired_invoice_overview'] = 1;
-			} else {
-				$_POST['user']['receive_expired_invoice_overview'] = 0;
-			}
-			$user->load_array($_POST['user']);
-			if ($user->validate($errors) === false) {
-				$template->assign('errors', $errors);
-			} else {
-				$user->save();
-
-				Session::set_sticky('message', 'updated');
-				Session::redirect('/user?action=edit&id=' . $user->id);
-			}
-		}
-		$template->assign('roles', Role::get_all());
-		$template->assign('user', $user);
 		$template->assign('languages', Language::get_all());
 	}
 
@@ -134,7 +100,7 @@ class Web_Module_User extends Module {
 			Session::set_sticky('message', 'error_delete');
 		}
 
-		Session::redirect('/user');
+		Session::redirect('/administrative/user');
 	}
 
 	/**

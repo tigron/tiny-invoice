@@ -99,8 +99,10 @@ class Web_Module_Administrative_Incoming extends Module {
 			$pdf_pages[] = $incoming_page->file;
 		}
 
-		if (count($incoming_pages) > 0) {
+		if (count($incoming_pages) > 1) {
 			$pdf = \Skeleton\File\Pdf\Pdf::merge($incoming_pages[0]->incoming->file->name, $pdf_pages);
+		} elseif (count($incoming_pages) == 1) {
+			$pdf = $incoming_pages[0]->file->copy();
 		} else {
 			$pdf = $incoming->file->copy();
 		}

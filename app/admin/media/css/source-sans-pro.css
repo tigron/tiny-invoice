@@ -1,0 +1,156 @@
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-extralight-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-extralight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-extralight-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-extralight-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-extralight-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-extralight-webfont.svg#source_sans_proextralight') format('svg');
+    font-weight: 200;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-extralightit-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-extralightit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-extralightit-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-extralightit-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-extralightit-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-extralightit-webfont.svg#source_sans_proXLtIt') format('svg');
+    font-weight: 200;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-light-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-light-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-light-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-light-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-light-webfont.svg#source_sans_prolight') format('svg');
+    font-weight: 300;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-lightit-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-lightit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-lightit-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-lightit-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-lightit-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-lightit-webfont.svg#source_sans_prolight_italic') format('svg');
+    font-weight: 300;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-regular-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-regular-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-regular-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-regular-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-regular-webfont.svg#source_sans_proregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-it-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-it-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-it-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-it-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-it-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-it-webfont.svg#source_sans_proitalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-semibold-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-semibold-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-semibold-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-semibold-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-semibold-webfont.svg#source_sans_prosemibold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-semiboldit-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-semiboldit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-semiboldit-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-semiboldit-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-semiboldit-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-semiboldit-webfont.svg#source_sans_proSBdIt') format('svg');
+    font-weight: 600;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-bold-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-bold-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-bold-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-bold-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-bold-webfont.svg#source_sans_probold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-boldit-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-boldit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-boldit-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-boldit-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-boldit-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-boldit-webfont.svg#source_sans_probold_italic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-black-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-black-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-black-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-black-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-black-webfont.svg#source_sans_problack') format('svg');
+    font-weight: 900;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-blackit-webfont.eot');
+    src: url('moe-font-sourcesanspro/fonts/sourcesanspro-blackit-webfont.eot?#iefix') format('embedded-opentype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-blackit-webfont.woff2') format('woff2'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-blackit-webfont.woff') format('woff'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-blackit-webfont.ttf') format('truetype'),
+         url('moe-font-sourcesanspro/fonts/sourcesanspro-blackit-webfont.svg#source_sans_problack_italic') format('svg');
+    font-weight: 900;
+    font-style: italic;
+
+}
+

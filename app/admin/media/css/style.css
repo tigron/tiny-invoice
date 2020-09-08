@@ -1,15 +1,24 @@
 body {
 	font-size: 12px;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-weight: 400;
+	font-size: 1.4em;
 }
+
 .dropdown-menu {
 	font-size: 13px
 }
 
 #login {
-	background-color: #ddd;
+	background-color: #fff;
 	color: #fff
 }
-
+	#login .login-box-msg {
+		margin: 0;
+		text-align: center;
+		padding: 0 20px 20px 20px;
+	}
+	
 	#login-wrapper {
 		max-width: 460px;
 		margin: 0 auto;
@@ -22,6 +31,9 @@ body {
 		background: #fff;
 		border-radius: 3px;
 		margin-top: 15px
+	}
+	#login-content img {
+		margin-bottom: 20px;
 	}
 
 .form-condensed .form-group {
@@ -199,4 +211,11 @@ body {
 	font-size: 1.3em;
 	font-weight: bold;
 	padding-top: 5px;
+}
+
+dt, label {
+	font-weight: 600;
+}
+.btn, .form-control {
+	border-radius: 0;
 }

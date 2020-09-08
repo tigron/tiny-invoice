@@ -1,0 +1,18 @@
+{% extends "_default/modal.base.twig" %}
+{% block header %}{% trans "Add mobile" %}{% endblock header %}
+
+{% block body %}
+
+<div id="new-mobile"></div>
+
+<script type="text/javascript">
+	$('#add-mobile').on('shown.bs.modal', function () {
+		$('#new-mobile').load('/administrative/user/mobile?id={{ user.id }}&action=register');
+	});
+</script>
+
+{% endblock body %}
+
+{% block footer %}
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+{% endblock footer %}
