@@ -2,8 +2,8 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: pdf-fr.1485276383\n"
-"PO-Revision-Date: 2017-01-24 17:46+0100\n"
+"Project-Id-Version: pdf-fr.1600782534\n"
+"PO-Revision-Date: 2020-09-22 15:48+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,14 +21,11 @@ msgstr "Banque"
 msgid "BIC"
 msgstr "BIC"
 
-msgid "Credit note"
-msgstr "Note de crédit"
+msgid "Creditnote"
+msgstr ""
 
 msgid "Customer"
 msgstr "Client"
-
-msgid "Customer number"
-msgstr "Numéro de client"
 
 msgid "Date"
 msgstr "Date"
@@ -84,17 +81,20 @@ msgstr "Qté"
 msgid "Reference"
 msgstr "Référence"
 
+msgid "Reverse charge"
+msgstr ""
+
 msgid "Structured message"
 msgstr "Message structuré"
 
 msgid "Subtotal"
 msgstr "Sous-total"
 
-msgid "T"
-msgstr "T"
-
 msgid "This invoice is payable to account"
 msgstr "Cette facture est payable au compte"
+
+msgid "Total"
+msgstr ""
 
 msgid "Total to pay"
 msgstr "Total à payer"
@@ -116,3 +116,4 @@ msgstr "Nous vous saurions gré de payer le(s) montant(s) en suspens sous 14 jou
 
 msgid "With kind regards"
 msgstr "Cordialement"
+

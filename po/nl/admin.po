@@ -1,13 +1,13 @@
-# .po file for project "admin" in French
+# .po file for project "admin" in Dutch
 
 msgid ""
 msgstr ""
-"Project-Id-Version: admin-fr.1600782533\n"
+"Project-Id-Version: admin-nl.1600782533\n"
 "PO-Revision-Date: 2020-09-22 15:48+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
+"Language: nl\n"
 
 msgid "#"
 msgstr ""

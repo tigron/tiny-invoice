@@ -2,8 +2,8 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: skeleton-package-crud-nl.1485276131\n"
-"PO-Revision-Date: 2017-01-24 17:42+0100\n"
+"Project-Id-Version: skeleton-package-crud-nl.1600782534\n"
+"PO-Revision-Date: 2020-09-22 15:48+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -49,6 +49,9 @@ msgid "The e-mail address has already been entered before."
 msgstr ""
 
 msgid "The e-mail address is invalid."
+msgstr ""
+
+msgid "The object has been removed successfully."
 msgstr ""
 
 msgid "The object has been updated successfully."

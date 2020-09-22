@@ -2,8 +2,8 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: pdf-nl.1563575101\n"
-"PO-Revision-Date: 2019-07-20 00:25+0200\n"
+"Project-Id-Version: pdf-nl.1600782534\n"
+"PO-Revision-Date: 2020-09-22 15:48+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,17 +21,11 @@ msgstr "Bank"
 msgid "BIC"
 msgstr "BIC"
 
-msgid "Credit note"
-msgstr "Kredietnota"
-
 msgid "Creditnote"
 msgstr ""
 
 msgid "Customer"
 msgstr "Klant"
-
-msgid "Customer number"
-msgstr "Klantnummer"
 
 msgid "Date"
 msgstr "Datum"
@@ -87,17 +81,20 @@ msgstr "Hoeveelheid"
 msgid "Reference"
 msgstr "Referentie"
 
+msgid "Reverse charge"
+msgstr ""
+
 msgid "Structured message"
 msgstr "Gestructureerde mededeling"
 
 msgid "Subtotal"
 msgstr "Subtotaal"
 
-msgid "T"
-msgstr "T"
-
 msgid "This invoice is payable to account"
 msgstr "Dit factuur dient te worden betaald op rekening"
+
+msgid "Total"
+msgstr ""
 
 msgid "Total to pay"
 msgstr "Totaal te betalen"
@@ -119,3 +116,4 @@ msgstr "We vragen u beleefd om het openstaande bedrag binnen 14 dagen te betalen
 
 msgid "With kind regards"
 msgstr "Met vriendelijke groeten"
+
