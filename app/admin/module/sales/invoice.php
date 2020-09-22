@@ -345,8 +345,7 @@ class Web_Module_Sales_Invoice extends Module {
 	 */
 	public function display_download() {
 		$invoice = Invoice::get_by_id($_GET['id']);
-		$file = $invoice->get_pdf();
-		$file->client_download();
+		$file = $invoice->get_pdf()->client_download();
 	}
 
 	/**

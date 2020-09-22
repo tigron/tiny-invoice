@@ -103,7 +103,7 @@ class Customer {
 	public function get_customer_contacts() {
 		return Customer_Contact::get_by_customer($this);
 	}
-	
+
 	/**
 	 * Create first customer_contact
 	 *
@@ -125,10 +125,12 @@ class Customer {
 		$customer_contact->phone = $this->phone;
 		$customer_contact->mobile = $this->mobile;
 		$customer_contact->fax = $this->fax;
-		$customer_contact->email = $this->email;			
+		$customer_contact->email = $this->email;
+		$customer_contact->vat = $this->vat;
+		$customer_contact->language_id = $this->language_id;
 		$customer_contact->active = true;
 		$customer_contact->save();
-		
+
 		return $customer_contact;
 	}
 
@@ -145,4 +147,3 @@ class Customer {
 		return self::get_by_id($id);
 	}
 }
-

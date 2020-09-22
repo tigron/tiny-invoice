@@ -135,11 +135,12 @@ class Pdf {
 				$options->set([
 					'dpi' => 300,
 					'isPhpEnabled' => true,
+					'chroot' => dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media'
 					'fontDir' => dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/font/fonts/',
 					'tempDir' => realpath(dirname(__FILE__) . '/../../tmp/dompdf'),
 					'isRemoteEnabled' => true,
 					'logOutputFile' => false,
-					'isFontSubsettingEnabled' => false
+					'isFontSubsettingEnabled' => false,
 				]);
 
 				$dompdf = new DOMPDF();
@@ -149,8 +150,7 @@ class Pdf {
                 $dompdf->load_html($html);
                 $dompdf->render();
 
-                $file = File::store($filename, $dompdf->output());
-                return $file;
+                return File::store($filename, $dompdf->output());
 		}
 	}
 }
