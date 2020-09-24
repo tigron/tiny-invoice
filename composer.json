@@ -31,7 +31,7 @@
 		"tigron/skeleton-package-api": "^0.1.1",
 		"tigron/skeleton-package-crud": "^0.1.3",
 		"tigron/click-post": "^0.0.3",
-		"tigron/skeleton-transaction": "^0.3",
+		"tigron/skeleton-transaction": "0.4.*",
 		"tigron/codabox-gateway": "^0.0.1",
 		"tigron/sepa-payments": "0.0.5",
 		"tigron/skeleton-package-openapi": "dev-master",

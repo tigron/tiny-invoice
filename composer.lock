@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46739a0e07eebe45d191f7212dd1aedd",
+    "content-hash": "5dda4d699b355892e2dbe91bb714106b",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -7161,16 +7161,16 @@
         },
         {
             "name": "tigron/skeleton-transaction",
-            "version": "v0.3.13",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-transaction.git",
-                "reference": "ef5342a5249b3d7198c2dc5d7903bc764d1d470b"
+                "reference": "d5251e39f43a5d6b81384f5d84fbcf5e115f6111"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/ef5342a5249b3d7198c2dc5d7903bc764d1d470b",
-                "reference": "ef5342a5249b3d7198c2dc5d7903bc764d1d470b",
+                "url": "https://api.github.com/repos/tigron/skeleton-transaction/zipball/d5251e39f43a5d6b81384f5d84fbcf5e115f6111",
+                "reference": "d5251e39f43a5d6b81384f5d84fbcf5e115f6111",
                 "shasum": ""
             },
             "require": {
@@ -7198,7 +7198,7 @@
                 }
             ],
             "description": "Background tasks for skeleton",
-            "time": "2020-04-01T07:36:25+00:00"
+            "time": "2020-08-14T10:52:22+00:00"
         },
         {
             "name": "twig/extra-bundle",
