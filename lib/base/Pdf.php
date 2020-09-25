@@ -135,7 +135,7 @@ class Pdf {
 				$options->set([
 					'dpi' => 300,
 					'isPhpEnabled' => true,
-					'chroot' => dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media'
+					'chroot' => dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media',
 					'fontDir' => dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/font/fonts/',
 					'tempDir' => realpath(dirname(__FILE__) . '/../../tmp/dompdf'),
 					'isRemoteEnabled' => true,
