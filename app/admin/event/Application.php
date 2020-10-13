@@ -63,7 +63,7 @@ class Application extends \Skeleton\Core\Event {
 	 *
 	 * @access private
 	 */
-	public function teardown(\Skeleton\Core\Web\Module $module) {
+	public function teardown(\Skeleton\Core\Web\Module $module = null) {
 		$database = Database::get();
 		$queries = $database->query_counter;
 
