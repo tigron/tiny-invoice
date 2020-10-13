@@ -282,9 +282,9 @@ console.log(response);
 						{% if bank_account.has_bank_account_statements() %}
 							{% set last_statement = bank_account.get_last_bank_account_statement() %}
 
-							<h3><i>&euro;{{ last_statement.new_situation_balance|number_format }}</i></h3> ({% trans "Last update:" %} {{ last_statement.new_situation_date|date }}
+							<h3><i>&euro;{{ last_statement.new_situation_balance|number_format }}</i></h3> ({% trans "Last update:" %} {{ last_statement.new_situation_date|date }})
 						{% else %}
-							<h3><i>{% trans "Unknown" %}</i></h3> ({% trans "Last update:" %} {% trans "never" %}
+							<h3><i>{% trans "Unknown" %}</i></h3> ({% trans "Last update:" %} {% trans "never" %})
 						{% endif %}
 					</div>
 				</div>
