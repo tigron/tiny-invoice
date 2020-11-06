@@ -372,7 +372,7 @@ class Invoice {
 			'id' => $this->id
 		];
 		$transaction->data = json_encode($data);
-		$transaction->save();
+		$transaction->schedule();
 	}
 
 	/**
