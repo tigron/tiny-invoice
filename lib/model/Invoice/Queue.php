@@ -91,7 +91,7 @@ class Invoice_Queue {
 	public static function get_unprocessed_by_customer_contact(Customer_Contact $customer_contact) {
 		$db = Database::get();
 		$table = self::trait_get_database_table();
-		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE customer_contact_id = ? AND processed_to_invoice_item_id IS NULL', [ $customer_contact->id ]);
+		$ids = $db->get_column('SELECT id FROM ' . $table . ' WHERE customer_contact_id = ? AND processed_to_invoice_item_id IS NULL AND deleted IS NULL', [ $customer_contact->id ]);
 
 		$items = [];
 		foreach ($ids as $id) {
