@@ -37,8 +37,6 @@ class Web_Module_Cron extends Module {
 		}
 
 		$transaction = array_shift($transactions);
-		$transaction->lock();
-		$transaction->run();
-		$transaction->unlock();
+		echo \Skeleton\Transaction\Runner::run_transaction($transaction);		
 	}
 }
