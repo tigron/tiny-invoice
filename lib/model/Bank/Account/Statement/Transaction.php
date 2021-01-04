@@ -245,7 +245,14 @@ class Bank_Account_Statement_Transaction {
 
 		$this->check_balance();
 
-		if ($document->get_balance() == 0) {
+		$document_balance = $document->get_balance();
+
+		if ($document_balance <= 0) {
+			$document->paid = true;
+			$document->save(false);
+		}
+
+		if ($document_balance == 0) {
 			$document->balanced = true;
 			$document->save(false);
 		}
