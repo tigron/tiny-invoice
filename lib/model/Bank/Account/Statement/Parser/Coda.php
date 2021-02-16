@@ -89,10 +89,13 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 				$bank_account_statement_transaction->amount = $transaction->getAmount();
 
 				$structured_message = $transaction->getStructuredMessage();
-				if (empty($structured_message)) {
+
+				if (!empty($structured_message)) {
 					$bank_account_statement_transaction->structured_message = $structured_message;
+					$bank_account_statement_transaction->message = null;
 				} else {
 					$bank_account_statement_transaction->message = $transaction->getMessage();
+					$bank_account_statement_transaction->structured_message = null;
 				}
 
 				$other_account = $transaction->getAccount();
