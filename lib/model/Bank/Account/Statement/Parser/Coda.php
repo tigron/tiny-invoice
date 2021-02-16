@@ -35,7 +35,6 @@ class Bank_Account_Statement_Parser_Coda extends Bank_Account_Statement_Parser {
 	public function parse(\Skeleton\File\File $file) {
 		$parser = new Codelicious\Coda\Parser();
 		$statements = $parser->parseFile($file->get_path(), 'raw');
-print_r($statements);
 
 		foreach ($statements as $statement) {
 			$statement_account = $statement->getAccount();
@@ -72,8 +71,8 @@ print_r($statements);
 			}
 			$bank_account_statement->original_situation_date = $statement->getDate()->format('Y-m-d');
 			$bank_account_statement->original_situation_balance = $statement->getInitialBalance();
-			$bank_account_statement->new_situation_date = $statement->getNewBalance();
-			$bank_account_statement->new_situation_balance = $statement->getNewDate()->format('Y-m-d');
+			$bank_account_statement->new_situation_balance = $statement->getNewBalance();
+			$bank_account_statement->new_situation_date = $statement->getNewDate()->format('Y-m-d');
 			$bank_account_statement->save();
 
 
@@ -88,18 +87,18 @@ print_r($statements);
 				$bank_account_statement_transaction->date = $transaction->getTransactionDate()->format('Y-m-d');
 				$bank_account_statement_transaction->valuta_date = $transaction->getValutaDate()->format('Y-m-d');
 				$bank_account_statement_transaction->amount = $transaction->getAmount();
-				
+
 				$structured_message = $transaction->getStructuredMessage();
 				if (empty($structured_message)) {
 					$bank_account_statement_transaction->structured_message = $structured_message;
 				} else {
-					$bank_account_statement_transaction->message = $transaction->getMessage();				
+					$bank_account_statement_transaction->message = $transaction->getMessage();
 				}
 
 				$other_account = $transaction->getAccount();
 				$bank_account_statement_transaction->other_account_bic = $other_account->getBic();
 				$bank_account_statement_transaction->other_account_number = $other_account->getNumber();
-				$bank_account_statement_transaction->other_account_name = $other_account->getName();												
+				$bank_account_statement_transaction->other_account_name = $other_account->getName();
 				$bank_account_statement_transaction->save();
 			}
 
