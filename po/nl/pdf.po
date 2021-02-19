@@ -91,7 +91,7 @@ msgid "Subtotal"
 msgstr "Subtotaal"
 
 msgid "This invoice is payable to account"
-msgstr "Dit factuur dient te worden betaald op rekening"
+msgstr "Deze factuur dient te worden betaald op rekening"
 
 msgid "Total"
 msgstr ""
