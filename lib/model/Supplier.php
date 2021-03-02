@@ -3,10 +3,11 @@
  * Supplier class
  *
  * @author David Vandemaele <david@tigron.be>
+
  */
 
 use \Skeleton\Database\Database;
-use \IBAN\Validation\IBANValidator;
+use \Iban\Validation\Validator;
 
 class Supplier {
 	use \Skeleton\Object\Model;
@@ -39,11 +40,12 @@ class Supplier {
 		}
 
 		if (!empty($this->details['iban'])) {
-			$iban_validator = new IBANValidator();
+			$iban_validator = new Validator();
 			if (!$iban_validator->validate($this->details['iban'])) {
 				$errors['iban'] = 'incorrect';
 			}
 		}
+
 
 		if (count($errors) > 0) {
 			return false;
