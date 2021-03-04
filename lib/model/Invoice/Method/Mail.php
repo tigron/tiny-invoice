@@ -1,4 +1,7 @@
 <?php
+
+use PhpOffice\PhpSpreadsheet\Writer\Ods\Settings;
+
 /**
  * Invoice_Method_Mail class
  *
@@ -22,17 +25,17 @@ class Invoice_Method_Mail extends Invoice_Method {
 		if ($customer_contact->email != '') {
 			$to = $customer_contact->email;
 			$mail->add_to($customer_contact->email, $customer_contact->firstname . ' ' . $customer_contact->lastname);
-		}	
+		}
 
 		if ($customer_contact->email == '' and $customer_contact->customer->email != '') {
-			$to = $customer_contact->customer->email;		
+			$to = $customer_contact->customer->email;
 			$mail->add_to($customer_contact->customer->email, $customer_contact->customer->firstname . ' ' . $customer_contact->customer->lastname);
-		}		
+		}
 
-		if ($customer_contact->email != $customer_contact->customer->email AND $customer_contact->customer->email != '') {
+		if ($customer_contact->email != $customer_contact->customer->email and $customer_contact->customer->email != '') {
 			$mail->add_cc($customer_contact->customer->email, $customer_contact->customer->firstname . ' ' . $customer_contact->customer->lastname);
-		}		
-		
+		}
+
 		$mail->set_sender(Setting::get('email'), Setting::get('company'));
 
 		$invoices = $customer_contact->get_expired_invoices();
@@ -62,7 +65,7 @@ class Invoice_Method_Mail extends Invoice_Method {
 		if ($invoice->customer_contact->email == '' and $invoice->customer->email != '') {
 			$mail->add_to($invoice->customer->email, $invoice->customer->firstname . ' ' . $invoice->customer->lastname);
 		}
-		if ($invoice->customer_contact->email != $invoice->customer->email AND $invoice->customer->email != '') {
+		if ($invoice->customer_contact->email != $invoice->customer->email and $invoice->customer->email != '') {
 			$mail->add_cc($invoice->customer->email, $invoice->customer->firstname . ' ' . $invoice->customer->lastname);
 		}
 
@@ -73,6 +76,12 @@ class Invoice_Method_Mail extends Invoice_Method {
 		} catch (Exception $e) {
 		}
 
+		$conditions_file_setting = Setting::get_by_name('file_id');
+		if (isset($conditions_file_setting->value) && $conditions_file_setting->value != 0 && $conditions_file_setting->value != "") {
+			$conditions_file = File::get_by_id($conditions_file_setting->value);
+			$mail->add_attachment($conditions_file);
+		}
+		
 		$mail->add_attachment($invoice->get_pdf());
 		$mail->assign('invoice', $invoice);
 
