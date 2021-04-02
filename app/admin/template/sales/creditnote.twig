@@ -176,7 +176,6 @@
 					</select>
 				</td>
 				<td>
-					<input type="hidden" name="creditnote_item[((nr))][invoice_queue_id]" value="((invoice_queue_id))">
 					<textarea class="form-control autogrow" name="creditnote_item[((nr))][description]">((description))</textarea>
 				</td>
 				<td>
@@ -186,10 +185,11 @@
 					<input type="text" class="form-control" name="creditnote_item[((nr))][price]" value="((price))">
 				</td>
 				<td>
-					<select name="creditnote_item[((nr))][vat]" class="form-control">
-					{% for vat_rate in vat_rates %}
-						<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
-					{% endfor %}
+					<select name="creditnote_item[((nr))][vat_rate_id]" class="form-control">
+						<option value="0">{% trans "No VAT" %} (0%)</option>
+						{% for vat_rate in vat_rates %}
+							<option value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+						{% endfor %}
 					</select>
 				</td>
 				<td>

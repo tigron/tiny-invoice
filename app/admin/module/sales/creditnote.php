@@ -107,7 +107,7 @@ class Web_Module_Sales_Creditnote extends Module {
 			$creditnote_items = [];
 			foreach ($_POST['creditnote_item'] as $row => $item) {
 				$creditnote_item = new Creditnote_Item();
-				if (trim($item['invoice_item_id']) == '') {
+				if (isset($item['invoice_item_id']) and trim($item['invoice_item_id']) == '') {
 					unset($item['invoice_item_id']);
 				}
 

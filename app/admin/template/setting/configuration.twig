@@ -4,237 +4,375 @@
 
 {% block content %}
 
-	<ol class="breadcrumb">
-		<li><a href="/">{% trans "Home" %}</a></li>
-		<li>{% trans "Settings" %}</li>
-		<li class="active">{% trans "Configuration" %}</li>
-	</ol>
+<ol class="breadcrumb">
+	<li><a href="/">{% trans "Home" %}</a></li>
+	<li>{% trans "Settings" %}</li>
+	<li class="active">{% trans "Configuration" %}</li>
+</ol>
 
-	{% if env.sticky_session.message is defined %}
-		{{ base.display_flash_message(env.sticky_session.message, 'configuration') }}
-	{% endif %}
+{% if env.sticky_session.message is defined %}
+{{ base.display_flash_message(env.sticky_session.message, 'configuration') }}
+{% endif %}
 
-	<form action="/setting/configuration" method="post" class="form-condensed form-horizontal">
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Invoice delivery" %}</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Archive mailbox" %}</label>
-					<div class="col-xs-9">
-						<input type="text" name="setting[archive_mailbox]" class="form-control" value="{{ settings.archive_mailbox }}">
-					</div>
+<form action="/setting/configuration" method="post" class="form-condensed form-horizontal">
+	<div class="panel panel-default">
+		<div class="panel-heading">{% trans "Invoice delivery" %}</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Archive mailbox" %}</label>
+				<div class="col-xs-9">
+					<input type="text" name="setting[archive_mailbox]" class="form-control"
+						value="{{ settings.archive_mailbox }}">
 				</div>
+			</div>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Enable invoice reminders" %}</label>
-					<div class="col-xs-9">
-						<input type="checkbox" data-group-cls="btn-group-xs" name="setting[enable_invoice_reminder]" {% if settings.enable_invoice_reminder %}checked{% endif %}>
-					</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Enable invoice reminders" %}</label>
+				<div class="col-xs-9">
+					<input type="checkbox" data-group-cls="btn-group-xs" name="setting[enable_invoice_reminder]" {% if
+						settings.enable_invoice_reminder %}checked{% endif %}>
 				</div>
+			</div>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Invoice reminder email window" %}</label>
-					<div class="col-xs-9">
-						<div class="input-group">
-							<input type="number" name="setting[invoice_reminder_email_window]" class="form-control" value="{{ settings.invoice_reminder_email_window }}">
-							<div class="input-group-addon">
-								<span class="input-group-text">{% trans "Days after expiration day" %}</span>
-							</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Invoice reminder email window" %}</label>
+				<div class="col-xs-9">
+					<div class="input-group">
+						<input type="number" name="setting[invoice_reminder_email_window]" class="form-control"
+							value="{{ settings.invoice_reminder_email_window }}">
+						<div class="input-group-addon">
+							<span class="input-group-text">{% trans "Days after expiration day" %}</span>
 						</div>
 					</div>
 				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Enable Click & Post" %}</label>
-					<div class="col-xs-9">
-						<input type="checkbox" id="chk_enable_click_post" data-group-cls="btn-group-xs" name="setting[enable_click_post]" {% if settings.enable_click_post %}checked{% endif %} onchange="toggle_click_post();">
-					</div>
-				</div>
-
-				<div class="form-group click_post_option hidden">
-					<label class="col-xs-3 control-label">{% trans "Click & Post username" %}</label>
-					<div class="col-xs-9">
-						<input type="text" class="form-control" name="setting[click_post_username]" value="{{ settings.click_post_username }}" />
-					</div>
-				</div>
-
-				<div class="form-group click_post_option hidden">
-					<label class="col-xs-3 control-label">{% trans "Click & Post password" %}</label>
-					<div class="col-xs-9">
-						<input type="text" class="form-control" name="setting[click_post_password]" value="{{ settings.click_post_password }}" />
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-
 			</div>
-		</div>
 
-		<script type="text/javascript">
-			function toggle_click_post() {
-				if ($('#chk_enable_click_post').is(':checked')) {
-					$('.click_post_option').removeClass('hidden');
-				} else {
-					$('.click_post_option').addClass('hidden');
-				}
+			<div class="form-group click_post_option hidden">
+				<label class="col-xs-3 control-label">{% trans "Click & Post username" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" name="setting[click_post_username]"
+						value="{{ settings.click_post_username }}" />
+				</div>
+			</div>
+
+			<div class="form-group click_post_option hidden">
+				<label class="col-xs-3 control-label">{% trans "Click & Post password" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" name="setting[click_post_password]"
+						value="{{ settings.click_post_password }}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Enable Click & Post" %}</label>
+				<div class="col-xs-9">
+					<input type="checkbox" id="chk_enable_click_post" data-group-cls="btn-group-xs"
+						name="setting[enable_click_post]" {% if settings.enable_click_post %}checked{% endif %}
+						onchange="toggle_click_post();">
+				</div>
+			</div>
+
+			<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
+				<label for="file_id" class="col-xs-3 control-label">{% trans "Conditions file" %}</label>
+				<div class="col-xs-9">
+					<div id="document-file" class="form-control-static hide">
+						{% if file.id > 0 %}
+						<div class="file">
+							<input type="hidden" name="setting[file_id]" value="{{ file.id }}" />
+							<span>
+								<strong>{{ file.name }}</strong>
+							</span>
+							[ {{ file.get_human_size() }} ]
+							<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));"
+								title="{% trans " Delete file" %}">
+								<span class="glyphicon glyphicon-remove"></span>
+							</a>
+						</div>
+						{% endif %}
+
+						{{ form.invalid_input('file_id', errors) }}
+					</div>
+
+					<div class="dropzone" id="document-dropzone">
+						<div class="dz-default dz-message">
+							<span>{% trans "Drag and Drop file or click here" %}</span>
+							<span>({% trans "only pdf" %})</span>
+						</div>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+								aria-valuemax="100">
+								<span class="sr-only">0% Complete</span>
+							</div>
+						</div>
+						<div class="fallback"></div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function toggle_click_post() {
+			if ($('#chk_enable_click_post').is(':checked')) {
+				$('.click_post_option').removeClass('hidden');
+			} else {
+				$('.click_post_option').addClass('hidden');
 			}
-			toggle_click_post();
-		</script>
+		}
+		toggle_click_post();
+	</script>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Skins" %}</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Email skin" %}</label>
-					<div class="col-xs-9">
-						<select name="setting[skin_email_id]" class="form-control">
-							{% for skin_email in skin_emails %}
-								<option value="{{ skin_email.id }}" {% if skin_email.id == settings.skin_email_id %}selected{% endif %}>{{ skin_email.description }}</option>
-							{% endfor %}
-						</select>
-					</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">{% trans "Skins" %}</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Email skin" %}</label>
+				<div class="col-xs-9">
+					<select name="setting[skin_email_id]" class="form-control">
+						{% for skin_email in skin_emails %}
+						<option value="{{ skin_email.id }}" {% if skin_email.id==settings.skin_email_id %}selected{%
+							endif %}>{{ skin_email.description }}</option>
+						{% endfor %}
+					</select>
 				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Pdf skin" %}</label>
-					<div class="col-xs-9">
-						<select name="setting[skin_pdf_id]" class="form-control">
-							{% for skin_pdf in skin_pdfs %}
-								<option value="{{ skin_pdf.id }}" {% if skin_pdf.id == settings.skin_pdf_id %}selected{% endif %}>{{ skin_pdf.description }}</option>
-							{% endfor %}
-						</select>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-
 			</div>
-		</div>
 
-
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Object indentifiers" %}</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Customer identifier" %}</label>
-					<div class="col-xs-9">
-						<input type="text" class="form-control" name="setting[customer_identifier]" value="{{ settings.customer_identifier }}" />
-					</div>
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Pdf skin" %}</label>
+				<div class="col-xs-9">
+					<select name="setting[skin_pdf_id]" class="form-control">
+						{% for skin_pdf in skin_pdfs %}
+						<option value="{{ skin_pdf.id }}" {% if skin_pdf.id==settings.skin_pdf_id %}selected{% endif %}>
+							{{ skin_pdf.description }}</option>
+						{% endfor %}
+					</select>
 				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Customer contact identifier" %}</label>
-					<div class="col-xs-9">
-						<input type="text" class="form-control" name="setting[customer_contact_identifier]" value="{{ settings.customer_contact_identifier }}" />
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-
 			</div>
-		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Bookkeeping" %}</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Start fiscal year" %}</label>
-					<div class="col-xs-9">
-						<select name="setting[bookkeeping_start_month]" class="form-control">
-							{% for i in 1..12 %}
-								<option value="{{ i }}" {% if settings.bookkeeping_start_month == i %}selected{% endif %}>{{ ('01-' ~ i ~ '-1990')|date('F') }}</option>
-							{% endfor %}
-						</select>
-
-					</div>
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "VAT calculation" %}</label>
-					<div class="col-xs-9">
-						<select name="setting[bookkeeping_vat_period]" class="form-control">
-							<option value="month" {% if settings.bookkeeping_vat_period == 'month' %}selected{% endif %}>{% trans "Monthly" %}</option>
-							<option value="quarter" {% if settings.bookkeeping_vat_period == 'quarter' %}selected{% endif %}>{% trans "Quarterly" %}</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Centralization account customer" %}</label>
-					<div class="col-xs-9">
-						<input type="text" class="form-control" name="setting[expertm.centralization_account_customer]" value="{{ settings['expertm.centralization_account_customer'] }}">
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Centralization account sale" %}</label>
-					<div class="col-xs-9">
-						<input type="text" class="form-control" name="setting[expertm.centralization_account_sale]" value="{{ settings['expertm.centralization_account_sale'] }}">
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-
 			</div>
+
 		</div>
+	</div>
 
 
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Coda files" %}</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Fetch CODA files from" %} <a href="https://codabox.tigron.net" target="new">https://codabox.tigron.net</a></label>
-					<div class="col-xs-9">
-						<input type="checkbox" data-group-cls="btn-group-xs" id="chk_enable_codabox" name="setting[enable_codabox]" {% if settings.enable_codabox %}checked{% endif %} onchange="toggle_codabox();">
-					</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">{% trans "Object indentifiers" %}</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Customer identifier" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" name="setting[customer_identifier]"
+						value="{{ settings.customer_identifier }}" />
 				</div>
-
-				<div class="form-group codabox_option hidden">
-					<label class="col-xs-3 control-label">{% trans "API Key" %}</label>
-					<div class="col-xs-9">
-						<input type="text" class="form-control" name="setting[tigron_api_key]" value="{{ settings.tigron_api_key }}" />
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3">
-						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-					</div>
-				</div>
-
 			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Customer contact identifier" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" name="setting[customer_contact_identifier]"
+						value="{{ settings.customer_contact_identifier }}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+				</div>
+			</div>
+
 		</div>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-heading">{% trans "Bookkeeping" %}</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Start fiscal year" %}</label>
+				<div class="col-xs-9">
+					<select name="setting[bookkeeping_start_month]" class="form-control">
+						{% for i in 1..12 %}
+						<option value="{{ i }}" {% if settings.bookkeeping_start_month==i %}selected{% endif %}>{{
+							('01-' ~ i ~ '-1990')|date('F') }}</option>
+						{% endfor %}
+					</select>
+
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "VAT calculation" %}</label>
+				<div class="col-xs-9">
+					<select name="setting[bookkeeping_vat_period]" class="form-control">
+						<option value="month" {% if settings.bookkeeping_vat_period=='month' %}selected{% endif %}>{%
+							trans "Monthly" %}</option>
+						<option value="quarter" {% if settings.bookkeeping_vat_period=='quarter' %}selected{% endif %}>
+							{% trans "Quarterly" %}</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Centralization account customer" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" name="setting[expertm.centralization_account_customer]"
+						value="{{ settings['expertm.centralization_account_customer'] }}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Centralization account sale" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" name="setting[expertm.centralization_account_sale]"
+						value="{{ settings['expertm.centralization_account_sale'] }}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
 
 
-		<script type="text/javascript">
-			function toggle_codabox() {
-				if ($('#chk_enable_codabox').is(':checked')) {
-					$('.codabox_option').removeClass('hidden');
-				} else {
-					$('.codabox_option').addClass('hidden');
-				}
+	<div class="panel panel-default">
+		<div class="panel-heading">{% trans "Coda files" %}</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label class="col-xs-3 control-label">{% trans "Fetch CODA files from" %} <a
+						href="https://codabox.tigron.net" target="new">https://codabox.tigron.net</a></label>
+				<div class="col-xs-9">
+					<input type="checkbox" data-group-cls="btn-group-xs" id="chk_enable_codabox"
+						name="setting[enable_codabox]" {% if settings.enable_codabox %}checked{% endif %}
+						onchange="toggle_codabox();">
+				</div>
+			</div>
+
+			<div class="form-group codabox_option hidden">
+				<label class="col-xs-3 control-label">{% trans "API Key" %}</label>
+				<div class="col-xs-9">
+					<input type="text" class="form-control" name="setting[tigron_api_key]"
+					value="{{ settings.tigron_api_key }}" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-xs-9 col-xs-offset-3">
+					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+		function toggle_codabox() {
+			if ($('#chk_enable_codabox').is(':checked')) {
+				$('.codabox_option').removeClass('hidden');
+			} else {
+				$('.codabox_option').addClass('hidden');
 			}
-			toggle_codabox();
+		}
+		toggle_codabox();
+	</script>
+
+
+	<script type="text/javascript" src="/dropzone/dist/dropzone.js"></script>
+	<script type="text/javascript" src="/handlebars/handlebars.min.js"></script>
+	<script type="text/x-handlebars-template" id="document-file-template">
+			<div class="file">
+				<input type="hidden" name="setting[file_id]" value="((file.id))" />
+				<span>
+					<strong>((file.name))</strong>
+				</span>
+				[ ((file.human_size)) ]
+				<a href="javascript:void(0);" onclick="remove_file($(this).parents('.file'));" title="{% trans "Delete file" %}">
+					<span class="glyphicon glyphicon-remove"></span>
+				</a>
+			</div>
 		</script>
+	<script type="text/javascript">
 
+		Dropzone.autoDiscover = false;
+		$('#document-dropzone').dropzone({
+			url: '/setting/configuration?action=add_file',
+			paramName: 'file',
+			parallelUploads: 1,
+			createImageThumbnails: false,
+			acceptedFiles: '.pdf',
+			init: function () {
+				this.on('success', function (file, responseText) {
+					var source = $("#document-file-template").html();
+					Handlebars.setDelimiter('(', ')');
+					var template = Handlebars.compile(source);
+					if ($('#document-file').find('.file').length == 1) {
+						$("#document-file").html('');
+						$('#document-file').addClass('hide');
+					}
 
+					try {
+						response = jQuery.parseJSON(responseText);
+						$("#document-file").append(template(response));
+						$('#document-dropzone').hide();
+						$('#document-file').find('.help-block').remove();
+						$('#document-file').closest('.form-group').removeClass('has-error');
+						$('#document-file').removeClass('hide');
+					}
+					catch (e) {
+						$('#document-file').html(e);
+						$('#document-file').removeClass('hide');
+					}
+				});
 
-	</form>
+				this.on("error", function (file) {
+					if(file.type != "application/pdf")
+					{
+						alert("please enter correct file format");
+        				this.removeFile(file);
+					}
+    			});
+
+				this.on('uploadprogress', function (file, progress) {
+					$(this.element).find('.progress-bar').css('width', progress + '%');
+				});
+
+				this.on('complete', function () {
+					$(this.element).find('.progress-bar').css('width', '100%');
+					$(this.element).find('.progress').fadeOut();
+				});
+
+				this.on('addedfile', function () {
+					$(this.element).find('.progress').show();
+				});
+			}
+		});
+
+		if ($('#document-file').find('.file').length == 1) {
+			$('#document-dropzone').hide();
+			$('#document-file').removeClass('hide');
+		}
+
+		function remove_file(object) {
+			object.remove();
+			$('#document-dropzone').show();
+			$('#document-file').addClass('hide');
+		}
+	</script>
+</form>
 
 {% endblock content %}

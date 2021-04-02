@@ -356,7 +356,6 @@ class Invoice {
 		if ($invoice_method === null) {
 			$invoice_method = $this->customer_contact->invoice_method;
 		}
-
 		$invoice_method->send($this);
 	}
 

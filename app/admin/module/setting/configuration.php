@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Module Setting Configuration
  *
@@ -47,6 +48,9 @@ class Web_Module_Setting_Configuration extends Module {
 			if (!isset($_POST['setting']['enable_codabox'])) {
 				$_POST['setting']['enable_codabox'] = false;
 			}
+			if (!isset($_POST['setting']['file_id'])) {
+				$_POST['setting']['file_id'] = false;
+			}
 
 			foreach ($_POST['setting'] as $key => $value) {
 				try {
@@ -63,7 +67,12 @@ class Web_Module_Setting_Configuration extends Module {
 			Session::Redirect('/setting/configuration');
 		}
 
-		$template->assign('settings', Setting::get_as_array());
+		$settings = Setting::get_as_array();
+		$template->assign('settings', $settings);
+		if (isset($settings['file_id']) && $settings['file_id'] != 0 && $settings['file_id'] != "") {
+			$file = File::get_by_id((int)$settings['file_id']);
+			$template->assign('file', $file);
+		}
 
 		Skin_Email::synchronize();
 		$skin_emails = Skin_Email::get_all();
@@ -72,6 +81,26 @@ class Web_Module_Setting_Configuration extends Module {
 		Skin_Pdf::synchronize();
 		$skin_pdfs = Skin_Pdf::get_all();
 		$template->assign('skin_pdfs', $skin_pdfs);
+	}
+
+
+	/**
+	 * Add file (ajax)
+	 *
+	 * @access public
+	 */
+	public function display_add_file() {
+		$this->template = false;
+
+		if (!isset($_FILES['file'])) {
+			echo json_encode(['error' => true]);
+			return;
+		}
+
+		$file = \Skeleton\File\File::upload($_FILES['file']);
+		$file->expire();
+
+		echo json_encode(['file' => $file->get_info(true)]);
 	}
 
 	/**
