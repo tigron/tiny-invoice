@@ -6895,16 +6895,16 @@
         },
         {
             "name": "tigron/skeleton-object",
-            "version": "v0.2.10",
+            "version": "v0.2.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-object.git",
-                "reference": "073ea216761d131b36631958a099d85dca9d701e"
+                "reference": "1392fc37ecf381a7e562f34bb51070c0304147af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-object/zipball/073ea216761d131b36631958a099d85dca9d701e",
-                "reference": "073ea216761d131b36631958a099d85dca9d701e",
+                "url": "https://api.github.com/repos/tigron/skeleton-object/zipball/1392fc37ecf381a7e562f34bb51070c0304147af",
+                "reference": "1392fc37ecf381a7e562f34bb51070c0304147af",
                 "shasum": ""
             },
             "require": {
@@ -6931,7 +6931,7 @@
                 }
             ],
             "description": "Tigron Skeleton object traits",
-            "time": "2020-12-18T14:41:17+00:00"
+            "time": "2021-06-25T12:50:41+00:00"
         },
         {
             "name": "tigron/skeleton-package-api",
