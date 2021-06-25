@@ -43,6 +43,14 @@ class Document_Incoming_Creditnote extends Document {
 			}
 		}
 
+		if (isset($this->price_incl) and !is_numeric($this->price_incl)) {
+			$errors['price_incl'] = 'incorrect';
+		}
+
+		if (isset($this->price_excl) and !is_numeric($this->price_excl)) {
+			$errors['price_excl'] = 'incorrect';
+		}
+
 		$errors = array_merge($errors, $parent_errors);
 
 		if (count($errors) > 0) {

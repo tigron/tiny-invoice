@@ -125,6 +125,14 @@ class Document_Incoming_Invoice extends Document {
 			}
 		}
 
+		if (isset($this->price_incl) and !is_numeric($this->price_incl)) {
+			$errors['price_incl'] = 'incorrect';
+		}
+
+		if (isset($this->price_excl) and !is_numeric($this->price_excl)) {
+			$errors['price_excl'] = 'incorrect';
+		}
+
 		if (isset($this->price_incl) AND isset($this->price_excl)) {
 			if ($this->price_incl < $this->price_excl) {
 				$errors['price_incl'] = 'incorrect';
