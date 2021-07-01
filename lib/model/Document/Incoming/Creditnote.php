@@ -51,6 +51,21 @@ class Document_Incoming_Creditnote extends Document {
 			$errors['price_excl'] = 'incorrect';
 		}
 
+		if (!empty($this->supplier_id) and !empty($this->supplier_identifier) and !empty($this->price_excl)) {
+			$supplier = Supplier::get_by_id($this->supplier_id);
+			$invoices = self::get_by_supplier_supplier_identifier($supplier, $this->supplier_identifier);
+			foreach ($invoices as $key => $invoice) {
+				if ($invoice->id == $this->id) {
+					unset($invoices[$key]);
+				}
+			}
+
+			if (count($invoices) > 0) {
+				$errors['supplier_identifier'] = 'unique';
+			}
+		}
+		
+
 		$errors = array_merge($errors, $parent_errors);
 
 		if (count($errors) > 0) {
@@ -105,6 +120,25 @@ class Document_Incoming_Creditnote extends Document {
 	 */
 	public function get_balance() {
 		return $this->price_incl - $this->get_transaction_amount();
+	}
+
+	/**
+	 * Get by Supplier supplier_identifier
+	 *
+	 * @access public
+	 * @param Supplier $supplier
+	 * @param string $supplier_identifier
+	 */
+	public static function get_by_supplier_supplier_identifier(Supplier $supplier, $supplier_identifier) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT document_id FROM document_incoming_creditnote WHERE supplier_id=? AND supplier_identifier=?', [ $supplier->id, $supplier_identifier]);
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
+		}
+
+		return $items;
 	}
 
 	/**

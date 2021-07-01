@@ -555,12 +555,12 @@
 								<optgroup label="{% trans "Other" %}">
 									{% for country in countries['european'] %}
 										{% if country.id == settings.country_id %}
-											<option value="{{ country.id }}" selected>{{ country.name }}</option>
+											<option value="{{ country.id }}">{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 										{% endif %}
 									{% endfor %}
 									{% for country in countries['european'] %}
 										{% if country.id == env.session.invoice.customer_contact.country_id and country.id != settings.country_id %}
-											<option value="{{ country.id }}">{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
+											<option value="{{ country.id }}" selected>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 										{% endif %}
 									{% endfor %}
 									<option value="-1">{% trans "Outside Europe" %}</option>
@@ -876,7 +876,7 @@
 				$('#invoice-items tr').each(function() {
 					price = $(this).find('.price').val();
 					qty = $(this).find('.qty').val();
-					
+
 					if (price != parseFloat(price)) {
 						$('#total').text('');
 						return;
@@ -886,17 +886,17 @@
 						$('#total').text('');
 						return;
 					}
-					
+
 					price = price.replace(',', '.');
 					qty = qty.replace(',', '.');
-					
-					
+
+
 
 					if (price != '' && qty != '') {
 						total += parseFloat(price)*parseFloat(qty);
 					}
 				});
-				
+
 				if (isNaN(total.toFixed(2))) {
 					$('#total').text('');
 				} else {
