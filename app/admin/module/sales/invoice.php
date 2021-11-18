@@ -271,8 +271,27 @@ class Web_Module_Sales_Invoice extends Module {
 		$invoice = Invoice::get_by_id($_GET['id']);
 
 		if (isset($_POST['invoice'])) {
-			$invoice->send_reminder_mail = $_POST['invoice']['send_reminder_mail'];
-			$invoice->save();
+			// Clean checkbox
+			if (isset($_POST['invoice']['send_reminder_mail']) && $_POST['invoice']['send_reminder_mail'] == 'on'){
+				$_POST['invoice']['send_reminder_mail'] = true;
+			} else {
+				$_POST['invoice']['send_reminder_mail'] = false;
+			}
+
+			$invoice->load_array($_POST['invoice']);
+			// If reference is changed
+			if($invoice->is_dirty('reference')){
+				if($invoice->paid) {
+					throw new Exception("Not able to change a paid invoice");
+				}
+				// Regenerate invoice
+				$invoice->file->delete();
+				$invoice->file_id = 0;
+				$invoice->save();
+				$invoice->get_pdf();
+			} else {
+				$invoice->save();
+			}
 
 			Session::set_sticky('message', 'updated');
 			Session::redirect('/sales/invoice?action=edit&id=' . $invoice->id);
