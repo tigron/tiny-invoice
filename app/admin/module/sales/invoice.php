@@ -280,13 +280,17 @@ class Web_Module_Sales_Invoice extends Module {
 
 			$invoice->load_array($_POST['invoice']);
 			// If reference is changed
-			if($invoice->is_dirty('reference')){
-				if($invoice->paid) {
+			if ($invoice->is_dirty('reference')){
+				if ($invoice->paid) {
 					throw new Exception("Not able to change a paid invoice");
 				}
 				// Regenerate invoice
-				$invoice->file->delete();
-				$invoice->file_id = 0;
+				try {
+					$invoice->file->delete();
+					$invoice->file_id = 0;
+				} catch (\Exception $e) {
+					// It could be no file is created yet
+				}
 				$invoice->save();
 				$invoice->get_pdf();
 			} else {
