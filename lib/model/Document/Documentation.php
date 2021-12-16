@@ -44,7 +44,7 @@ class Document_Documentation extends Document {
 			}
 		}
 
-		if ($this->customer_id == 0 and $this->supplier_id == 0) {
+		if (empty($this->customer_id) and empty($this->supplier_id)) {
 			$errors['customer_id'] = true;
 			$errors['supplier_id'] = true;
 		}

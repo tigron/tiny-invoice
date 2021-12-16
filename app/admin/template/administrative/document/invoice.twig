@@ -114,8 +114,7 @@
 			<form action="/administrative/document/invoice?action=export" method="post" class="form-inline">
 			<input type="hidden" name="hash" value="{{ pager.create_options_hash() }}" />
 
-			{{ base.pager_count(pager.item_count) }}  - {% trans "Total:" %} &euro; {{ pager.get_sum('document_incoming_invoice.price_incl') }}
-
+			{{ base.pager_count(pager.item_count) }}  - {% trans "VAT incl." %} &euro; {{ pager.get_sum('document_incoming_invoice.price_incl')|number_format(2, ',', '.')  }} &nbsp; | &nbsp; {% trans "VAT excl." %} &euro; {{ pager.get_sum('document_incoming_invoice.price_excl')|number_format(2, ',', '.') }}
 			<div class="pull-right">
 				<a href="/administrative/document/invoice/pay" title="">
 					<span class="glyphicon glyphicon-plus-sign"></span>

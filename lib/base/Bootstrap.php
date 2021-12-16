@@ -50,6 +50,7 @@ class Bootstrap {
 		}
 		$autoloader->add_include_path($root_path . '/lib/model/');
 		$autoloader->add_include_path($root_path . '/lib/base/');
+		$autoloader->add_include_path($root_path . '/lib/console/');
 		$autoloader->register();
 
 		/**

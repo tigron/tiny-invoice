@@ -103,7 +103,7 @@
 								{% if not invoice.paid %}
 									<input class="form-control-static col-xs-5" type="text" name="invoice[reference]" value="{{ invoice.reference }}"></input>
 								{% else %}
-									<p class="form-control-static">{{ invoice.reference }}</p>	
+									<p class="form-control-static">{{ invoice.reference }}</p>
 								{% endif %}
 							</div>
 						</div>
@@ -114,14 +114,14 @@
 								{% if not invoice.paid %}
 									<input class="form-control-static col-xs-5" type="text" name="invoice[internal_reference]" value="{{ invoice.internal_reference }}"></input>
 								{% else %}
-									<p class="form-control-static">{{ invoice.reference }}</p>
+									<p class="form-control-static">{{ invoice.internal_reference }}</p>
 								{% endif %}
 							</div>
 						</div>
 						{% if not invoice.paid %}
 							<div class="form-group">
 								<div class="col-xs-9 col-xs-offset-3">
-									<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>					
+									<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 								</div>
 							</div>
 						{% endif %}
@@ -1067,7 +1067,7 @@
 						<i class="fa fa-file"></i> {% trans "Export invoices" %}
 					</a>
 				</div>
-				{{ base.pager_count(pager.item_count) }} (&euro;{{ pager.get_sum('price_incl')|number_format }})
+				{{ base.pager_count(pager.item_count) }}  - {% trans "VAT incl." %} &euro; {{ pager.get_sum('price_incl')|number_format(2, ',', '.')  }} &nbsp; | &nbsp; {% trans "VAT excl." %} &euro; {{ pager.get_sum('price_excl')|number_format(2, ',', '.') }}
 			</div>
 			<div class="panel-body">
 			{% for invoice in pager.items %}

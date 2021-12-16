@@ -13,7 +13,9 @@ class Invoice {
 		get_info as trait_get_info;
 	}
 	use \Skeleton\Object\Save;
-	use \Skeleton\Object\Delete;
+	use \Skeleton\Object\Delete {
+		delete as trait_delete;
+	}
 	use \Skeleton\Pager\Page;
 
 	/**
@@ -31,6 +33,52 @@ class Invoice {
 			$number++;
 		}
 		$this->number = $number;
+	}
+
+	/**
+	 * Delete the invoice
+	 *
+	 * @access public
+	 */
+	public function delete() {
+		$is_last = $this->is_last();
+
+		$balances = Bank_Account_Statement_Transaction_Balance::get_by_linked_object($this);
+		foreach ($balances as $balance) {
+			$balance->delete();
+		}
+		$invoice_vats = $this->get_invoice_vat();
+		foreach ($invoice_vats as $invoice_vat) {
+			$invoice_vat->delete();
+		}
+		$invoice_items = $this->get_invoice_items();
+		foreach ($invoice_items as $invoice_item) {
+			$invoice_item->delete();
+		}
+		$transfers = $this->get_transfers();
+		foreach ($transfers as $transfer) {
+			$transfer->delete();
+		}
+		try {
+			$file = $this->file;
+		} catch (\Exception $e) {
+			$file = null;
+		}
+		
+		$this->file_id = null;
+		$this->save();
+
+		if ($file !== null) {
+			$file->delete();
+		}
+				
+		$this->trait_delete();
+
+		if ($is_last) {
+			// If this is the last invoice, rollback the auto-increment
+			$db = Database::get();
+			$db->query('ALTER TABLE `invoice` AUTO_INCREMENT=' . $this->id);
+		}
 	}
 
 	/**
@@ -375,6 +423,21 @@ class Invoice {
 	}
 
 	/**
+	 * Is this the last invoice
+	 *
+	 * @access private
+	 * @return boolean $last
+	 */
+	public function is_last() {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM invoice ORDER BY id DESC LIMIT 1', []);
+		if ($id === $this->id) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Get expired invoices for which the customer should receive a reminder
 	 *
 	 * @access public
@@ -450,6 +513,22 @@ class Invoice {
 			$invoices[] = self::get_by_id($id);
 		}
 		return $invoices;
+	}
+
+	/**
+	 * Get by number
+	 *
+	 * @access public
+	 * @param int $number
+	 * @return Invoice $invoice
+	 */
+	public static function get_by_number($number) {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM invoice WHERE number=?', [ $number ]);
+		if ($id === null) {
+			throw new \Exception('Invoice with number ' . $number . ' not found');
+		}
+		return self::get_by_id($id);
 	}
 
 	/**
