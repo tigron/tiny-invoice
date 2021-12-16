@@ -17,4 +17,5 @@ use \Skeleton\Console\Application;
 
 $application = new Application();
 $application->add_commands();
+$application->add(new \Invoice_Delete());
 $application->run(); 
