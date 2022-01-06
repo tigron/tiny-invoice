@@ -166,6 +166,9 @@
 					</div>
 				</div>
 			</div>
+			{% if document.classname == 'Document_Incoming_Invoice' or document.classname == 'Document_Incoming_Creditnote' %}
+				{% include 'administrative/document/modal.supplier_select.twig' with {'id': 'modal-supplier-select', 'supplier': document.supplier } %}
+			{% endif %}
 
 			{% if document.preview_file_id > 0 %}
 			<div class="col-xs-5">
@@ -501,7 +504,17 @@
 					</a>
 				</td>
 				<td width="20">
-					<a href="/administrative/document?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
+					{% set href = '/administrative/document' %}
+					{% if document.classname == 'Document_Incoming_Invoice' %}
+						{% set href = '/administrative/document/invoice' %}
+					{% elseif document.classname == 'Document_Incoming_Creditnote' %}
+						{% set href = '/administrative/document/creditnote' %}
+					{% elseif document.classname == 'Document_Contract' %}
+						{% set href = '/administrative/document/contract' %}
+					{% elseif document.classname == 'Document_Documentation' %}
+						{% set href = '/administrative/document/documentation' %}
+					{% endif %}
+					<a href="{{ href }}?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
 						<span class="glyphicon glyphicon-pencil"></span>
 					</a>
 				</td>
@@ -644,7 +657,8 @@
 		</script>
 	{% endif %}
 
-	{% if action == 'edit' %}
+
+
 		<script type="text/javascript">
 
 			var suppliers = new Bloodhound({
@@ -690,9 +704,9 @@
 				$('.customer_id').val(data.id);
 			});
 		</script>
-	{% endif %}
 
-	{% include 'administrative/document/modal.supplier_select.twig' with {'id': 'modal-supplier-select', 'supplier': document.supplier } %}
+
+
 
 {% endblock javascript %}
 

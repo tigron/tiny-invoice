@@ -30,6 +30,8 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 	 * @access public
 	 */
 	public function display() {
+		$template = Template::get();
+
 		$pager = new Pager('document');
 
 		if (isset($_POST['advanced']) and $_POST['advanced'] == 1) {
@@ -116,7 +118,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 			Session::redirect('/administrative/document/invoice');
 		}
 
-		$template = Template::get();
+
 		$conditions = $pager->get_conditions();
 		if (isset($conditions['document_tag.tag_id'])) {
 			$tag_ids = $conditions['document_tag.tag_id'][0]->get_value();
@@ -126,11 +128,15 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 			}
 			$template->assign('selected_tags', $selected_tags);
 		}
+		if (isset($conditions['document_incoming_invoice.supplier_id'])) {
+			$values = $conditions['document_incoming_invoice.supplier_id'][0]->get_value();
+			$supplier_id = array_shift($values);
+			$supplier = Supplier::get_by_id($supplier_id);
+			$template->assign('selected_supplier', $supplier);
+		}
 
 		$template->assign('pager', $pager);
 		$template->assign('tags', Tag::get_all());
-		$template->assign('suppliers', Supplier::get_all('company'));
-
 	}
 
 	/**
