@@ -390,7 +390,7 @@ class Web_Module_Administrative_Document extends Module {
 		$document->supplier = $supplier;
 		$document->save();
 
-		Session::redirect('/administrative/document?action=edit&id=' . $_GET['id']);
+		Session::redirect($this->get_module_path() . '?action=edit&id=' . $document->id);
 	}
 
 	/**

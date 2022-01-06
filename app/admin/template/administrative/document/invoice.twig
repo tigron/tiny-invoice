@@ -18,21 +18,22 @@
 		});
 	</script>
 
-	{% if action == 'edit' %}
-		{% block breadcrumb %}
-		<ul class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</li></a>
-			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-			<li><a href="/administrative/document/invoice">{% trans "Incoming Invoices" %}</a></li>
-			<li class="active">{% trans "Edit Incoming Invoice" %}</li>
-		</ul>
-		{% endblock breadcrumb %}
-	{% endif %}
-	<ol class="breadcrumb">
-		<li><a href="/">{% trans "Home" %}</a></li>
-		<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-		<li class="active">{% trans "Incoming invoices" %}</li>
-	</ol>
+	{% block breadcrumb %}
+		{% if action == 'edit' %}
+			<ul class="breadcrumb">
+				<li><a href="/">{% trans "Home" %}</li></a>
+				<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
+				<li><a href="/administrative/document/invoice">{% trans "Incoming Invoices" %}</a></li>
+				<li class="active">{% trans "Edit Incoming Invoice" %}</li>
+			</ul>
+		{% else %}
+			<ol class="breadcrumb">
+				<li><a href="/">{% trans "Home" %}</a></li>
+				<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
+				<li class="active">{% trans "Incoming invoices" %}</li>
+			</ol>
+		{% endif %}
+	{% endblock breadcrumb %}
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -61,14 +62,10 @@
 				</div>
 
 				<div class="form-group form-advanced {% if env.sticky_session.advanced is not defined %}hide{% endif %}">
-					<label class="col-xs-3 control-label">{% trans "Supplier" %}</label>
+					<label for="supplier_id" class="control-label col-xs-3">{% trans "Supplier" %}</label>
 					<div class="col-xs-9">
-						<select name="supplier_id" class="form-control">
-							<option value="0">{% trans "Any" %}</option>
-							{% for supplier in suppliers %}
-								<option value="{{ supplier.id }}" {% if pager.has_condition('document_incoming_invoice.supplier_id', supplier.id) %}selected{% endif %}>{{ supplier.company }}</option>
-							{% endfor %}
-						</select>
+						<input type="text" name="supplier" value="{{ selected_supplier.company }}" class="form-control typeahead autocomplete_supplier" placeholder="{% trans "Search supplier" %}..."/>
+						<input type="hidden" class="supplier_id" name="supplier_id" value="{% if selected_supplier is defined %}{{ selected_supplier.id }}{% endif %}"/>
 					</div>
 				</div>
 

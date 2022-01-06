@@ -4,45 +4,20 @@
 
 {% block body %}
 
-	<form class="form-horizontal form-condensed" method="post" action="/administrative/document?action=edit_supplier&id={{ document.id }}" id="form-supplier-select-modal">
+	<form class="form-horizontal form-condensed" method="post" action="?action=edit_supplier&id={{ document.id }}" id="form-supplier-select-modal">
 		<div class="form-group">
 			<label for="supplier_id" class="control-label col-xs-3">{% trans "Supplier" %}</label>
 			<div class="col-xs-9">
-				<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier_modal" placeholder="{% trans "Search supplier" %}..."/>
-				<input type="hidden" class="modal_supplier_id" name="document[supplier_id]" value=""/>
+				<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" placeholder="{% trans "Search supplier" %}..."/>
+				<input type="hidden" class="supplier_id" name="document[supplier_id]" value=""/>
 			</div>
 		</div>
 	</form>
 
-	<script type="text/javascript">
-
-        var suppliers = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: '/administrative/supplier?action=ajax_search&search=%QUERY'
-        });
-
-        suppliers.initialize();
-
-        $('.autocomplete_supplier_modal').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 2
-        },{
-            name:	'supplier',
-            displayKey: 'value',
-            source:	suppliers.ttAdapter()
-        });
-        $('.autocomplete_supplier_modal').on('typeahead:selected typeahead:autocompleted', function(e,data) {
-            $('#form-supplier-select-modal .modal_supplier_id').val(data.id);
-            $("#autocomplete_supplier_btn_modal").removeClass("hide");
-        });
-
-	</script>
 
 {% endblock body %}
 
 {% block footer %}
 	<button type="submit" class="btn btn-primary" form="form-supplier-select-modal" id="btn_submit_supplier">{% trans "Save" %}</button>
-	<button type="button" class="btn btn-default" data-dismiss="modal" id="autocomplete_supplier_btn_modal">{% trans "Cancel" %}</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal" id="autocomplete_supplier_btn">{% trans "Cancel" %}</button>
 {% endblock footer %}
