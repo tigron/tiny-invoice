@@ -617,11 +617,11 @@
 					<tbody>
 			{% endif %}
 
-			<tr {% if queue.next_run >= queue.stop_after and queue.stop_after != '0000-00-00 00:00:00' %}class="warning"{% endif %}>
+			<tr {% if queue.next_run >= queue.stop_after and queue.stop_after is not null %}class="warning"{% endif %}>
 				<td>{{ queue.id }}</td>
 				<td>{{ queue.created|date("d/m/Y") }}</td>
 				<td>{{ queue.next_run|date("d/m/Y") }}</td>
-				<td>{% if queue.stop_after == '0000-00-00 00:00:00' %}<i>{% trans "never" %}</i>{% else %}{{ queue.next_run|date("d/m/Y") }}{% endif %}</td>
+				<td>{% if queue.stop_after is null %}<i>{% trans "never" %}</i>{% else %}{{ queue.next_run|date("d/m/Y") }}{% endif %}</td>
 				<td><a href="/administrative/customer/detail?id={{  queue.customer.id }}">{{ queue.customer.get_display_name() }}</a></td>
 				<td>{{ queue.customer_contact.get_display_name() }}</td>
 				<td>{{ queue.name|truncate(50, true) }}</td>
