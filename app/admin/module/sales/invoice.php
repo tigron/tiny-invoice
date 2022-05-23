@@ -42,6 +42,7 @@ class Web_Module_Sales_Invoice extends Module {
 		$pager->add_sort_permission('price_incl');
 		$pager->add_sort_permission('price_excl');
 		$pager->add_sort_permission('paid');
+		$pager->add_join('invoice_item', 'invoice_id', 'invoice.id');
 		$pager->set_direction('desc');
 
 		if (isset($_POST['search'])) {

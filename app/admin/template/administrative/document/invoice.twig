@@ -111,7 +111,7 @@
 			<form action="/administrative/document/invoice?action=export" method="post" class="form-inline">
 			<input type="hidden" name="hash" value="{{ pager.create_options_hash() }}" />
 
-			{{ base.pager_count(pager.item_count) }}  - {% trans "VAT incl." %} &euro; {{ pager.get_sum('document_incoming_invoice.price_incl')|number_format(2, ',', '.')  }} &nbsp; | &nbsp; {% trans "VAT excl." %} &euro; {{ pager.get_sum('document_incoming_invoice.price_excl')|number_format(2, ',', '.') }}
+			{{ base.pager_count(pager.item_count) }}  - {% trans "VAT excl." %} &euro; {{ pager.get_sum('document_incoming_invoice.price_excl')|number_format(2, ',', '.') }} &nbsp; | &nbsp;  {% trans "VAT incl." %} &euro; {{ pager.get_sum('document_incoming_invoice.price_incl')|number_format(2, ',', '.')  }}
 			<div class="pull-right">
 				<a href="/administrative/document/invoice/pay" title="">
 					<span class="glyphicon glyphicon-plus-sign"></span>
@@ -123,8 +123,6 @@
 			</div>
 			</form>
 		</div>
-
-
 
 		<div class="panel-body">
 		{% for document in pager.items %}
@@ -139,8 +137,9 @@
 					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
 					<th>{{ pager.create_header('Supplier'|trans, 'supplier.company')|raw }}
 					<th>{% trans "Tags" %}</th>
+					<th class="text-right">{{ pager.create_header('Price excl'|trans, 'document_incoming_invoice.price_excl')|raw }}</th>
+					<th class="text-right">{{ pager.create_header('Price incl'|trans, 'document_incoming_invoice.price_incl')|raw }}</th>
 					<th>{{ pager.create_header('Paid'|trans, 'document_incoming_invoice.paid')|raw }}</th>
-					<th class="text-right">{{ pager.create_header('Price'|trans, 'document_incoming_invoice.price_incl')|raw }}</th>
 					<th width="30">&nbsp;</th>
 					<th colspan="3">&nbsp;</th>
 				</tr>
@@ -168,15 +167,18 @@
 				{% endfor %}
 
 			</td>
+			<td class="text-right">
+				&euro;{{ document.price_excl }}
+			</td>
+			<td class="text-right">
+				&euro;{{ document.price_incl }}
+			</td>
 			<td>
 				{% if document.paid %}
 					<span class="label label-success">{% trans "Yes" %}</span>
 				{% else %}
 					<span class="label label-danger">{% trans "No" %}</span>
 				{% endif %}
-			</td>
-			<td class="text-right">
-				&euro;{{ document.price_incl }}
 			</td>
 			<td>&nbsp;</td>
 			<td width="20">
