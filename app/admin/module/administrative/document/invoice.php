@@ -109,6 +109,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 		$pager->add_sort_permission('document_incoming_invoice.expiration_date');
 		$pager->add_sort_permission('supplier.company');
 		$pager->add_sort_permission('document_incoming_invoice.price_incl');
+		$pager->add_sort_permission('document_incoming_invoice.price_excl');
 
 		$pager->set_sort('document.date');
 		$pager->set_direction('DESC');
