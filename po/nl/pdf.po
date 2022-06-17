@@ -94,7 +94,7 @@ msgid "This invoice is payable to account"
 msgstr "Deze factuur dient te worden betaald op rekening"
 
 msgid "Total"
-msgstr ""
+msgstr "Totaal"
 
 msgid "Total to pay"
 msgstr "Totaal te betalen"

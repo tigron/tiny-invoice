@@ -1067,7 +1067,7 @@
 						<i class="fa fa-file"></i> {% trans "Export invoices" %}
 					</a>
 				</div>
-				{{ base.pager_count(pager.item_count) }}  - {% trans "VAT incl." %} &euro; {{ pager.get_sum('price_incl')|number_format(2, ',', '.')  }} &nbsp; | &nbsp; {% trans "VAT excl." %} &euro; {{ pager.get_sum('price_excl')|number_format(2, ',', '.') }}
+				{{ base.pager_count(pager.item_count) }}  - &nbsp; {% trans "VAT excl." %} &euro; {{ pager.get_sum('price_excl')|number_format(2, ',', '.') }} | {% trans "VAT incl." %} &euro; {{ pager.get_sum('price_incl')|number_format(2, ',', '.')  }} &nbsp;
 			</div>
 			<div class="panel-body">
 			{% for invoice in pager.items %}
