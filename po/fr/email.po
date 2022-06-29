@@ -2,8 +2,8 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: email-fr.1475852058\n"
-"PO-Revision-Date: 2016-10-07 16:54+0200\n"
+"Project-Id-Version: email-fr.1656507972\n"
+"PO-Revision-Date: 2022-06-29 15:06+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,10 +15,13 @@ msgstr ""
 msgid "Adobe Acrobat can be downloaded from the following URL:"
 msgstr ""
 
+msgid "Bank"
+msgstr ""
+
 msgid "BIC"
 msgstr ""
 
-msgid "Bank"
+msgid "Dear customer"
 msgstr ""
 
 msgid "Description"
@@ -27,19 +30,37 @@ msgstr ""
 msgid "E"
 msgstr ""
 
+msgid "Expiration date"
+msgstr ""
+
 msgid "Hello"
 msgstr ""
 
 msgid "IBAN"
 msgstr ""
 
+msgid "If you recently paid the invoices, you can ignore this email. It can take up to a week for your payment to be processed."
+msgstr ""
+
+msgid "In attachment you'll find the unpaid invoices."
+msgstr ""
+
 msgid "Invoice"
+msgstr ""
+
+msgid "Invoice reminder"
 msgstr ""
 
 msgid "Message"
 msgstr ""
 
 msgid "New invoice"
+msgstr ""
+
+msgid "Nr"
+msgstr ""
+
+msgid "Overview of expiring incoming invoices"
 msgstr ""
 
 msgid "P"
@@ -52,6 +73,9 @@ msgid "Please keep in mind that we did not yet receive a payment for this order.
 msgstr ""
 
 msgid "Price excl."
+msgstr ""
+
+msgid "Price incl."
 msgstr ""
 
 msgid "Product"
@@ -72,15 +96,30 @@ msgstr ""
 msgid "Subtotal"
 msgstr ""
 
+msgid "Supplier"
+msgstr ""
+
+msgid "The following incoming invoices need your attention."
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
 msgid "Total to pay"
 msgstr ""
 
 msgid "Unit price"
 msgstr ""
 
+msgid "Unpaid invoices"
+msgstr ""
+
 msgid "VAT"
 msgstr ""
 
 msgid "W"
+msgstr ""
+
+msgid "We noticed that you have one or more unpaid invoices."
 msgstr ""
 

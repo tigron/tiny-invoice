@@ -2,18 +2,18 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: pdf-nl.1600782534\n"
-"PO-Revision-Date: 2020-09-22 15:48+0200\n"
+"Project-Id-Version: pdf-nl.1656507546\n"
+"PO-Revision-Date: 2022-06-29 14:59+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
 
 msgid "Already paid"
-msgstr "Reeds betaald"
+msgstr ""
 
 msgid "An overview of the outstanding invoices can be found below."
-msgstr "Een overzicht van de openstaande facturen kan u hieronder vinden."
+msgstr ""
 
 msgid "Bank"
 msgstr "Bank"
@@ -25,13 +25,13 @@ msgid "Creditnote"
 msgstr ""
 
 msgid "Customer"
-msgstr "Klant"
+msgstr ""
 
 msgid "Date"
-msgstr "Datum"
+msgstr ""
 
 msgid "Dear"
-msgstr "Beste"
+msgstr ""
 
 msgid "Description"
 msgstr "Omschrijving"
@@ -40,37 +40,37 @@ msgid "Expiration date"
 msgstr "Vervaldag"
 
 msgid "For your payments, please use the following information"
-msgstr "Om te betalen, gelieve de volgende informatie te gebruiken"
+msgstr ""
 
 msgid "IBAN"
 msgstr "IBAN"
 
 msgid "If you have any questions about this letter, you can contact us by phone on"
-msgstr "Indien u vragen heeft over deze brief, kan u ons contacteren per telefoon"
+msgstr ""
 
 msgid "Invoice"
 msgstr "Factuur"
 
 msgid "Invoice is PAID"
-msgstr "Factuur is BETAALD"
+msgstr ""
 
 msgid "Invoice number"
-msgstr "Factuurnummer"
+msgstr ""
 
 msgid "Message"
 msgstr "Bericht"
 
 msgid "or via email on"
-msgstr "of per email op"
+msgstr ""
 
 msgid "Our records indicate that one or more invoices are still unpaid."
-msgstr "Uit onze administratie blijkt dat één of meerdere facturen nog steeds onbetaald zijn."
+msgstr ""
 
 msgid "Outstanding"
-msgstr "Openstaand"
+msgstr ""
 
 msgid "Page"
-msgstr "Pagina"
+msgstr ""
 
 msgid "Price"
 msgstr "Prijs"
@@ -79,9 +79,6 @@ msgid "Qty"
 msgstr "Hoeveelheid"
 
 msgid "Reference"
-msgstr "Referentie"
-
-msgid "Reverse charge"
 msgstr ""
 
 msgid "Structured message"
@@ -91,7 +88,7 @@ msgid "Subtotal"
 msgstr "Subtotaal"
 
 msgid "This invoice is payable to account"
-msgstr "Deze factuur dient te worden betaald op rekening"
+msgstr ""
 
 msgid "Total"
 msgstr "Totaal"
@@ -106,14 +103,14 @@ msgid "VAT"
 msgstr "BTW"
 
 msgid "VAT customer"
-msgstr "BTW klant"
+msgstr ""
 
 msgid "We hereby ask for your attention for the following."
-msgstr "We vragen u uw aandacht voor het volgende."
+msgstr ""
 
 msgid "We kindly ask you to pay the total outstanding amount within 14 days."
-msgstr "We vragen u beleefd om het openstaande bedrag binnen 14 dagen te betalen."
+msgstr ""
 
 msgid "With kind regards"
-msgstr "Met vriendelijke groeten"
+msgstr ""
 

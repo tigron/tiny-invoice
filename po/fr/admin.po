@@ -2,12 +2,15 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: admin-fr.1600782533\n"
-"PO-Revision-Date: 2020-09-22 15:48+0200\n"
+"Project-Id-Version: admin-fr.1656506757\n"
+"PO-Revision-Date: 2022-06-29 14:45+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
+
+msgid " Delete file"
+msgstr ""
 
 msgid "#"
 msgstr ""
@@ -264,10 +267,10 @@ msgstr ""
 msgid "Bookkeeping account"
 msgstr ""
 
-msgid "Bookkeeping accounts"
+msgid "Bookkeeping Accounts"
 msgstr ""
 
-msgid "Bookkeeping Accounts"
+msgid "Bookkeeping accounts"
 msgstr ""
 
 msgid "Cancel"
@@ -316,6 +319,9 @@ msgid "Company"
 msgstr ""
 
 msgid "Company settings"
+msgstr ""
+
+msgid "Conditions file"
 msgstr ""
 
 msgid "Configuration"
@@ -387,10 +393,10 @@ msgstr ""
 msgid "Credit note number"
 msgstr ""
 
-msgid "Credit Notes"
+msgid "Credit notes"
 msgstr ""
 
-msgid "Credit notes"
+msgid "Credit Notes"
 msgstr ""
 
 msgid "Creditnote settings"
@@ -459,10 +465,10 @@ msgstr ""
 msgid "Document details"
 msgstr ""
 
-msgid "Document Management"
+msgid "Document management"
 msgstr ""
 
-msgid "Document management"
+msgid "Document Management"
 msgstr ""
 
 msgid "Document type"
@@ -484,6 +490,9 @@ msgid "Download PDF"
 msgstr ""
 
 msgid "Drag and Drop file"
+msgstr ""
+
+msgid "Drag and Drop file or click here"
 msgstr ""
 
 msgid "Edit Bank Account"
@@ -681,10 +690,10 @@ msgstr ""
 msgid "IBAN"
 msgstr ""
 
-msgid "ID"
+msgid "Id"
 msgstr ""
 
-msgid "Id"
+msgid "ID"
 msgstr ""
 
 msgid "Identifier"
@@ -738,10 +747,10 @@ msgstr ""
 msgid "Incoming invoice"
 msgstr ""
 
-msgid "Incoming Invoices"
+msgid "Incoming invoices"
 msgstr ""
 
-msgid "Incoming invoices"
+msgid "Incoming Invoices"
 msgstr ""
 
 msgid "Internal reference"
@@ -882,10 +891,10 @@ msgstr ""
 msgid "Mailscanner"
 msgstr ""
 
-msgid "Mailscanner settings"
+msgid "Mailscanner Settings"
 msgstr ""
 
-msgid "Mailscanner Settings"
+msgid "Mailscanner settings"
 msgstr ""
 
 msgid "Make all documents available via API"
@@ -1048,6 +1057,9 @@ msgid "Once obtained, the component needs to be copied into the 'lib/component' 
 msgstr ""
 
 msgid "Only expose documents with tag"
+msgstr ""
+
+msgid "only pdf"
 msgstr ""
 
 msgid "or click here"
@@ -1236,13 +1248,13 @@ msgstr ""
 msgid "Receive expired invoice overview"
 msgstr ""
 
-msgid "Recurring Invoice Queue"
-msgstr ""
-
 msgid "Recurring Invoice queue"
 msgstr ""
 
 msgid "Recurring invoice queue"
+msgstr ""
+
+msgid "Recurring Invoice Queue"
 msgstr ""
 
 msgid "Reference"
@@ -1539,10 +1551,10 @@ msgstr ""
 msgid "To register your smartphone, open this application on your smartphone."
 msgstr ""
 
-msgid "To/from"
+msgid "To/From"
 msgstr ""
 
-msgid "To/From"
+msgid "To/from"
 msgstr ""
 
 msgid "toggle all"
@@ -1638,16 +1650,22 @@ msgstr ""
 msgid "Variable $transaction is available."
 msgstr ""
 
-msgid "Vat"
+msgid "VAT"
 msgstr ""
 
-msgid "VAT"
+msgid "Vat"
 msgstr ""
 
 msgid "VAT Bound"
 msgstr ""
 
 msgid "VAT calculation"
+msgstr ""
+
+msgid "VAT excl."
+msgstr ""
+
+msgid "VAT incl."
 msgstr ""
 
 msgid "VAT mode"

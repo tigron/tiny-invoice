@@ -2,8 +2,8 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: email-nl.1570705811\n"
-"PO-Revision-Date: 2019-10-10 13:10+0200\n"
+"Project-Id-Version: email-nl.1656507972\n"
+"PO-Revision-Date: 2022-06-29 15:06+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -60,6 +60,9 @@ msgstr "Nieuwe factuur"
 msgid "Nr"
 msgstr "Nr"
 
+msgid "Overview of expiring incoming invoices"
+msgstr "Overzicht van de te vervallen inkomende facturen"
+
 msgid "P"
 msgstr "T"
 
@@ -68,12 +71,6 @@ msgstr "Betalings gegevens"
 
 msgid "Please keep in mind that we did not yet receive a payment for this order. You can find all the necessary payment information below, as well as on the invoice."
 msgstr "We hebben voor deze bestelling nog geen betaling ontvangen. U kan de betaalgegevens hieronder vinden, alsook op het factuur."
-
-msgid "Powered by"
-msgstr ""
-
-msgid "Price"
-msgstr "Prijs"
 
 msgid "Price excl."
 msgstr "Prijs excl BTW"
@@ -99,6 +96,15 @@ msgstr "Gestructureerde mededeling"
 msgid "Subtotal"
 msgstr "Subtotaal"
 
+msgid "Supplier"
+msgstr ""
+
+msgid "The following incoming invoices need your attention."
+msgstr "De volgend inkomende facturen moeten bekeken worden."
+
+msgid "Total"
+msgstr "Totaal"
+
 msgid "Total to pay"
 msgstr "Totaal te betalen"
 
@@ -116,3 +122,4 @@ msgstr "W"
 
 msgid "We noticed that you have one or more unpaid invoices."
 msgstr "We hebben gemerkt dat u één of meerdere onbetaalde facturen heeft."
+

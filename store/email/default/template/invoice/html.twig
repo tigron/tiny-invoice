@@ -92,7 +92,7 @@
 			</tr>
 			{% endfor %}
 			<tr>
-				<td align="right" colspan="3" style="font-weight: bold">{% trans "Total to pay" %}:</td>
+				<td align="right" colspan="3" style="font-weight: bold">{% if invoice.paid == 0 %}{% trans "Total to pay" %}{% else %}{% trans "Total" %}{% endif %}:</td>
 				<td style="font-weight: bold">&euro; {{ invoice.get_price_incl()|number_format }}</td>
 			</tr>
 		{% endif %}
