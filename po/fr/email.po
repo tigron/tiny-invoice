@@ -2,8 +2,8 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: email-fr.1656507972\n"
-"PO-Revision-Date: 2022-06-29 15:06+0200\n"
+"Project-Id-Version: email-fr.1656512486\n"
+"PO-Revision-Date: 2022-06-29 16:21+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -101,6 +101,9 @@ msgstr ""
 
 msgid "The following incoming invoices need your attention."
 msgstr ""
+
+msgid "This invoice has already been paid, so no further payment is required."
+msgstr "Cette facture a déjà été payée, donc il n'y a pas de paiement à effectuer."
 
 msgid "Total"
 msgstr ""

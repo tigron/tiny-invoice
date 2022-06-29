@@ -22,7 +22,9 @@
 	{% endblock intro %}
 
 	{% block payment_info %}
-		{% if invoice.paid == 0 %}
+		{% if invoice.paid == 1 %}
+			<p>{% trans "This invoice has already been paid, so no further payment is required." %}</p>
+		{% elseif invoice.paid == 0 %}
 			<p>{% trans "Please keep in mind that we did not yet receive a payment for this order. You can find all the necessary payment information below, as well as on the invoice." %}</p>
 
 			<br />
