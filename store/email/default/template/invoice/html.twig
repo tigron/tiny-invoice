@@ -22,7 +22,9 @@
 	{% endblock intro %}
 
 	{% block payment_info %}
-		{% if invoice.paid == 0 %}
+		{% if invoice.paid == 1 %}
+			<p>{% trans "This invoice has already been paid, so no further payment is required." %}</p>
+		{% elseif invoice.paid == 0 %}
 			<p>{% trans "Please keep in mind that we did not yet receive a payment for this order. You can find all the necessary payment information below, as well as on the invoice." %}</p>
 
 			<br />
@@ -92,7 +94,7 @@
 			</tr>
 			{% endfor %}
 			<tr>
-				<td align="right" colspan="3" style="font-weight: bold">{% trans "Total to pay" %}:</td>
+				<td align="right" colspan="3" style="font-weight: bold">{% if invoice.paid == 0 %}{% trans "Total to pay" %}{% else %}{% trans "Total" %}{% endif %}:</td>
 				<td style="font-weight: bold">&euro; {{ invoice.get_price_incl()|number_format }}</td>
 			</tr>
 		{% endif %}

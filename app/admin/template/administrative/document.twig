@@ -683,6 +683,10 @@
 				$("#autocomplete_supplier_btn").removeClass("hide");
 			});
 
+			$(".autocomplete_supplier").keydown(function() {
+				$(this).parents().find('.supplier_id').val("")
+			});		
+
 			var customers = new Bloodhound({
 				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
 				queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -703,6 +707,10 @@
 			$('.autocomplete_customer').on('typeahead:selected typeahead:autocompleted', function(e,data) {
 				$('.customer_id').val(data.id);
 			});
+
+			$(".autocomplete_customer").keydown(function() {
+				$(this).parents().find('.supplier_id').val("")
+			});		
 		</script>
 
 

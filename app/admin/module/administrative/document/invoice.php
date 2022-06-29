@@ -10,7 +10,7 @@
 require_once dirname(__FILE__) . '/../document.php';
 
 use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Web\Module;
+use \Skeleton\Database\Database;
 use \Skeleton\Core\Web\Session;
 use \Skeleton\Pager\Web\Pager;
 
@@ -31,7 +31,7 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 	 */
 	public function display() {
 		$template = Template::get();
-
+		$db = Database::get();
 		$pager = new Pager('document');
 
 		if (isset($_POST['advanced']) and $_POST['advanced'] == 1) {
@@ -79,9 +79,16 @@ class Web_Module_Administrative_Document_Invoice extends Web_Module_Administrati
 
 		if (isset($_POST['accounting_identifier'])) {
 			if ($_POST['accounting_identifier'] == 'empty') {
-				$pager->add_condition('document_incoming_invoice.accounting_identifier', '=', '');
+				$sql = "SELECT document_id
+						FROM  document_incoming_invoice
+						WHERE 1 
+						AND accounting_identifier = ''
+						OR accounting_identifier IS NULL";
+				$ids = $db->get_column($sql);
+				$pager->add_condition('document.id', 'IN', $ids);
 			} elseif ($_POST['accounting_identifier'] == 'not_empty') {
 				$pager->add_condition('document_incoming_invoice.accounting_identifier', '!=', '');
+				$pager->add_condition('document_incoming_invoice.accounting_identifier', "IS NOT", NULL);
 			} else {
 				$pager->clear_condition('document_incoming_invoice.accounting_identifier');
 			}

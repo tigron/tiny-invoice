@@ -98,6 +98,7 @@ class Bootstrap {
 		\Skeleton\I18n\Config::$po_directory = $root_path . '/po/';
 		\Skeleton\I18n\Config::$cache_directory = $root_path . '/tmp/languages/';
 		\Skeleton\I18n\Config::$additional_template_paths['pdf'] = $root_path . '/store/pdf/';
+		\Skeleton\I18n\Config::$additional_template_paths['email'] = $root_path . '/store/email/default';
 
 		/**
 		 * Initialize the template caching path
