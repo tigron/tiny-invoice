@@ -38,7 +38,7 @@
 
 		"fxp/composer-asset-plugin": "^1.4.6",
 		"swiftmailer/swiftmailer": "6.2.3",
-		"dompdf/dompdf": "^0.8.5",
+		"dompdf/dompdf": "^2.0.0",
 		"filp/whoops": "^2.7.1",
 		"codelicious/php-coda-parser": "^2.1",
 		"ext-imap": "*",
