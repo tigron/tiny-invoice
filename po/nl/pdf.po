@@ -10,10 +10,10 @@ msgstr ""
 "Language: nl\n"
 
 msgid "Already paid"
-msgstr ""
+msgstr "Reeds betaald"
 
 msgid "An overview of the outstanding invoices can be found below."
-msgstr ""
+msgstr "Een overzicht van de openstaande facturen kan u hieronder vinden."
 
 msgid "Bank"
 msgstr "Bank"
@@ -22,16 +22,16 @@ msgid "BIC"
 msgstr "BIC"
 
 msgid "Creditnote"
-msgstr ""
+msgstr "Creditnota"
 
 msgid "Customer"
-msgstr ""
+msgstr "Klant"
 
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 msgid "Dear"
-msgstr ""
+msgstr "Beste"
 
 msgid "Description"
 msgstr "Omschrijving"
@@ -40,37 +40,37 @@ msgid "Expiration date"
 msgstr "Vervaldag"
 
 msgid "For your payments, please use the following information"
-msgstr ""
+msgstr "Om te betalen, gelieve de volgende informatie te gebruiken"
 
 msgid "IBAN"
 msgstr "IBAN"
 
 msgid "If you have any questions about this letter, you can contact us by phone on"
-msgstr ""
+msgstr "Indien u vragen heeft over deze brief, kan u ons contacteren per telefoon"
 
 msgid "Invoice"
 msgstr "Factuur"
 
 msgid "Invoice is PAID"
-msgstr ""
+msgstr "Factuur is BETAALD"
 
 msgid "Invoice number"
-msgstr ""
+msgstr "Factuurnummer"
 
 msgid "Message"
 msgstr "Bericht"
 
 msgid "or via email on"
-msgstr ""
+msgstr "of per email op"
 
 msgid "Our records indicate that one or more invoices are still unpaid."
-msgstr ""
+msgstr "Uit onze administratie blijkt dat één of meerdere facturen nog steeds onbetaald zijn."
 
 msgid "Outstanding"
-msgstr ""
+msgstr "Openstaand"
 
 msgid "Page"
-msgstr ""
+msgstr "Pagina"
 
 msgid "Price"
 msgstr "Prijs"
@@ -79,7 +79,7 @@ msgid "Qty"
 msgstr "Hoeveelheid"
 
 msgid "Reference"
-msgstr ""
+msgstr "Referentie"
 
 msgid "Structured message"
 msgstr "Gestructureerde mededeling"
@@ -88,7 +88,7 @@ msgid "Subtotal"
 msgstr "Subtotaal"
 
 msgid "This invoice is payable to account"
-msgstr ""
+msgstr "Deze factuur dient te worden betaald op rekening"
 
 msgid "Total"
 msgstr "Totaal"
@@ -103,14 +103,14 @@ msgid "VAT"
 msgstr "BTW"
 
 msgid "VAT customer"
-msgstr ""
+msgstr "BTW klant"
 
 msgid "We hereby ask for your attention for the following."
-msgstr ""
+msgstr "We vragen u uw aandacht voor het volgende."
 
 msgid "We kindly ask you to pay the total outstanding amount within 14 days."
-msgstr ""
+msgstr "We vragen u beleefd om het openstaande bedrag binnen 14 dagen te betalen."
 
 msgid "With kind regards"
-msgstr ""
+msgstr "Met vriendelijke groeten"
 
