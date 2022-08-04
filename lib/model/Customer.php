@@ -146,4 +146,22 @@ class Customer {
 		$id = $db->get_one('SELECT id FROM customer WHERE uuid=?', [ $uuid ]);
 		return self::get_by_id($id);
 	}
+
+	/**
+	 * Get by Country vat
+	 *
+	 * @access public
+	 * @param Country $country
+	 * @param string $vat
+	 * @return array $customers
+	 */
+	public static function get_by_country_vat(Country $country, $vat) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM customer WHERE country_id=? AND vat=?', [ $country->id, $vat ]);
+		$customers = [];
+		foreach ($ids as $id) {
+			$customers[] = self::get_by_id($id);
+		}
+		return $customers;
+	}
 }
