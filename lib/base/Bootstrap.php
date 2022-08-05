@@ -33,13 +33,8 @@ class Bootstrap {
 		/**
 		 * Get the config
 		 */
-		if (!file_exists($root_path . '/config/Config.php')) {
-			echo 'Please create your Config.php file' . "\n";
-			exit(1);
-		}
-
-		require_once $root_path . '/config/Config.php';
-		$config = Config::Get();
+		\Skeleton\Core\Config::include_directory($root_path . '/config');
+		$config = \Skeleton\Core\Config::Get();
 
 		/**
 		 * Register the autoloader
@@ -66,6 +61,7 @@ class Bootstrap {
 		$database = \Skeleton\Database\Database::Get($config->database, true);
 		\Skeleton\Database\Config::$query_log = false;
 		\Skeleton\Database\Config::$query_counter = true;
+		\Skeleton\Database\Config::$auto_discard = true;		
 
 		/**
 		 * Initialize the file store
@@ -78,13 +74,6 @@ class Bootstrap {
 		\Skeleton\File\Picture\Config::$tmp_dir = $root_path . '/tmp/picture/';
 		\Skeleton\File\Picture\Config::add_resize_configuration('document_preview', 328, 600);
 		\Skeleton\File\Picture\Config::add_resize_configuration('incoming_preview', 240, 600);
-
-		/**
-		 * Initialize the application directory
-		 */
-		\Skeleton\Core\Config::$application_dir = $root_path . '/app/';
-		\Skeleton\Core\Config::$asset_dir = $root_path . '/lib/external/assets/';
-		\Skeleton\Core\Config::$tmp_dir = $root_path . '/tmp/';
 
 		/**
 		 * Initialize the error handler

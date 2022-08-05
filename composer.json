@@ -1,42 +1,53 @@
 {
 	"config": {
 		"vendor-dir": "lib/external/packages",
-		"fxp-asset": {
-			"installer-paths": {
-				"npm-asset-library": "lib/external/assets",
-				"bower-asset-library": "lib/external/assets"
-			}
+		"allow-plugins": {
+			"composer/installers": true,
+			"oomphinc/composer-installers-extender": true,
+			"fxp/composer-asset-plugin": false
 		}
 	},
+	"extra": {
+	   "installer-types": ["bower-asset", "npm-asset"],
+	   "installer-paths": {
+		   "lib/external/assets/composer/{$name}/": ["type:bower-asset", "type:npm-asset"]
+	   }
+	},
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://asset-packagist.org"
+		}
+	],
 	"name": "tigron/skeleton",
 	"description": "Tigron Skeleton",
 	"type": "project",
 	"require": {
 		"ext-soap": "*",
 
-		"tigron/skeleton-database": "^0.2.3",
-		"tigron/skeleton-object": "^0.2.4",
-		"tigron/skeleton-file": "0.4.1",
-		"tigron/skeleton-file-picture": "0.2.11",
-		"tigron/skeleton-file-pdf": "^0.2.4",
-		"tigron/skeleton-i18n": "^2.1.0",
-		"tigron/skeleton-pager": "^0.1.24",
-		"tigron/skeleton-template-twig": "^2.0.1",
-		"tigron/skeleton-core": "^1.0.9",
-		"tigron/skeleton-error": "^0.1.4",
-		"tigron/skeleton-template": "~0.1.3",
-		"tigron/skeleton-email": "^0.2.8",
+		"tigron/skeleton-database": "^0.3.10",
+		"tigron/skeleton-object": "^1.0.1",
+		"tigron/skeleton-file": "^2.0.4",
+		"tigron/skeleton-file-picture": "0.2.12",
+		"tigron/skeleton-file-pdf": "^0.2.8",
+		"tigron/skeleton-i18n": "^3.0.3",
+		"tigron/skeleton-pager": "^2.0.9",
+		"tigron/skeleton-template-twig": "^2.0.12",
+		"tigron/skeleton-core": "^2.0.10",
+		"tigron/skeleton-error": "^0.2.5",
+		"tigron/skeleton-template": "~0.1.5",
+		"tigron/skeleton-email": "^0.3.7",
 		"tigron/skeleton-console": "^2.0.1",
-		"tigron/skeleton-migrate": "^0.1.12",
-		"tigron/skeleton-package-api": "^0.1.1",
-		"tigron/skeleton-package-crud": "^0.1.3",
-		"tigron/skeleton-transaction": "0.5.*",
+		"tigron/skeleton-migrate": "^0.1.16",
+		"tigron/skeleton-package-api": "^1.0.1",
+		"tigron/skeleton-package-crud": "^2.0.0",
+		"tigron/skeleton-transaction": "1.1.2",
 		"tigron/skeleton-package-openapi": "dev-master",
 		"tigron/codabox-gateway": "^0.0.1",
 		"tigron/sepa-payments": "0.0.5",
 		"tigron/click-post": "^0.0.3",
 
-		"fxp/composer-asset-plugin": "^1.4.6",
+		"oomphinc/composer-installers-extender": "^2.0",
 		"swiftmailer/swiftmailer": "6.2.3",
 		"dompdf/dompdf": "^2.0.0",
 		"filp/whoops": "^2.7.1",
@@ -51,13 +62,12 @@
 
 		"bower-asset/moment": "2.10.*",
 		"bower-asset/tigron-datetimepicker": "0.*",
-		"bower-asset/eonasdan-bootstrap-datetimepicker": "dev-master",
 		"bower-asset/tigron-confirm-modal": "^0.0.3",
 		"bower-asset/dropzone": "~4.0",
 		"bower-asset/autosize": "^4.0",
 		"bower-asset/jquery-zoom": "dev-master",
 		"bower-asset/handlebars": "^4.7",
-		"bower-asset/bootstrap-multiselect": "dev-master",
+		"bower-asset/bootstrap-multiselect": "^0.9.15",
 		"bower-asset/jquery-ui": "*",
 		"bower-asset/bootstrap-checkbox": "*",
 		"bower-asset/bootstrap": "^3.4",

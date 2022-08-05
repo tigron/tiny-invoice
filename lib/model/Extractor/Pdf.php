@@ -152,6 +152,8 @@ class Extractor_Pdf {
 		}
 		$this->last_used = date('Y-m-d H:i:s');
 		$this->save();
+		$seta_document->cleanUp();
+		unset($seta_document);
 		return true;
 	}
 

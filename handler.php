@@ -7,6 +7,8 @@
  */
 ini_set('display_errors', '1');
 
-require_once 'config/global.php';
+require_once 'lib/base/Bootstrap.php';
+Bootstrap::boot();
 
 \Skeleton\Core\Web\Handler::Run();
+

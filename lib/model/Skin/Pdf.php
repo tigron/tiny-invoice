@@ -18,7 +18,7 @@ class Skin_Pdf {
 	 *
 	 * @access public
 	 */
-	public function synchronize() {
+	public static function synchronize() {
 		$pdf_path = dirname(__FILE__) . '/../../../store/pdf';
 		$content = scandir($pdf_path);
 		foreach ($content as $key => $value) {

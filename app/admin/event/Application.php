@@ -20,7 +20,7 @@ class Application extends \Skeleton\Core\Event {
 	 *
 	 * @access public
 	 */
-	public function bootstrap(\Skeleton\Core\Web\Module $module) {
+	public function bootstrap(\Skeleton\Core\Application\Web\Module $module) {
 		$this->start = microtime(true);
 
 		// Bootsprap the application
@@ -63,7 +63,7 @@ class Application extends \Skeleton\Core\Event {
 	 *
 	 * @access private
 	 */
-	public function teardown(\Skeleton\Core\Web\Module $module = null) {
+	public function teardown(\Skeleton\Core\Application\Web\Module $module = null) {
 		$database = Database::get();
 		$queries = $database->query_counter;
 

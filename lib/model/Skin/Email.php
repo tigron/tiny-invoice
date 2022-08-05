@@ -18,7 +18,7 @@ class Skin_Email {
 	 *
 	 * @access public
 	 */
-	public function synchronize() {
+	public static function synchronize() {
 		$email_path = dirname(__FILE__) . '/../../../store/email';
 		$content = scandir($email_path);
 		foreach ($content as $key => $value) {
