@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "775b834d4587a274ccc5017dc82d210a",
+    "content-hash": "a76508f725a3f41d805c8eda72570fa4",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -98,56 +98,16 @@
         },
         {
             "name": "bower-asset/bootstrap",
-            "version": "v3.4.1",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
+                "reference": "edf9c40956d19e6ab3f9151bfe0dfac6be06fa21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/68b0d231a13201eb14acd3dc84e51543d16e5f7e",
-                "reference": "68b0d231a13201eb14acd3dc84e51543d16e5f7e"
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.9.1,<4.0"
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "bower-asset/bootstrap-checkbox",
-            "version": "v2.0.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:vsn4ik/bootstrap-checkbox.git",
-                "reference": "81b944f64e7fde0b71d2593c997f11ab84eb3c19"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vsn4ik/bootstrap-checkbox/zipball/81b944f64e7fde0b71d2593c997f11ab84eb3c19",
-                "reference": "81b944f64e7fde0b71d2593c997f11ab84eb3c19"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/bootstrap-multiselect",
-            "version": "v0.9.15",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/davidstutz/bootstrap-multiselect.git",
-                "reference": "4749da211e6d39644ef164cd709cfeae5ccba579"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/davidstutz/bootstrap-multiselect/zipball/4749da211e6d39644ef164cd709cfeae5ccba579",
-                "reference": "4749da211e6d39644ef164cd709cfeae5ccba579"
-            },
-            "require": {
-                "bower-asset/bootstrap": ">=2.3.2",
-                "bower-asset/jquery": ">=1.11.0"
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/edf9c40956d19e6ab3f9151bfe0dfac6be06fa21",
+                "reference": "edf9c40956d19e6ab3f9151bfe0dfac6be06fa21"
             },
             "type": "bower-asset"
         },
@@ -175,16 +135,16 @@
         },
         {
             "name": "bower-asset/codemirror",
-            "version": "6.0.1",
+            "version": "6.65.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/codemirror.git",
-                "reference": "1d03ae0b32a244ab102c87de4586eb21c451d6de"
+                "reference": "e90054a9063d3ceece4869563681901d5acd5003"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/codemirror/zipball/1d03ae0b32a244ab102c87de4586eb21c451d6de",
-                "reference": "1d03ae0b32a244ab102c87de4586eb21c451d6de"
+                "url": "https://api.github.com/repos/components/codemirror/zipball/e90054a9063d3ceece4869563681901d5acd5003",
+                "reference": "e90054a9063d3ceece4869563681901d5acd5003"
             },
             "type": "bower-asset"
         },
@@ -217,28 +177,6 @@
                 "reference": "d8ef7a82e6ab5447c1f2d9512c8e1bfd4de5ac9e"
             },
             "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/eonasdan-bootstrap-datetimepicker",
-            "version": "4.17.49",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:Eonasdan/bootstrap-datetimepicker.git",
-                "reference": "5b97d5b89e4bcbded740efed7dfb1f3ec4c745a2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Eonasdan/bootstrap-datetimepicker/zipball/5b97d5b89e4bcbded740efed7dfb1f3ec4c745a2",
-                "reference": "5b97d5b89e4bcbded740efed7dfb1f3ec4c745a2"
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.8.3",
-                "bower-asset/moment": ">=2.10.5"
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
         },
         {
             "name": "bower-asset/font-awesome",
@@ -366,24 +304,6 @@
             "type": "bower-asset"
         },
         {
-            "name": "bower-asset/moe-font-sourcesanspro",
-            "version": "1.3.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:SiqiLu/moe-font-sourcesanspro.git",
-                "reference": "f688d825b0ff0dc71df326040c9afbf2fef3a9bf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/SiqiLu/moe-font-sourcesanspro/zipball/f688d825b0ff0dc71df326040c9afbf2fef3a9bf",
-                "reference": "f688d825b0ff0dc71df326040c9afbf2fef3a9bf"
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
             "name": "bower-asset/moment",
             "version": "2.10.6",
             "source": {
@@ -432,64 +352,6 @@
             ]
         },
         {
-            "name": "bower-asset/tigron-datetimepicker",
-            "version": "0.0.7",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:tigron/datetimepicker.git",
-                "reference": "a75a7ebef7e1aa60b3fc6408cc61b77c2fc5b89d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tigron/datetimepicker/zipball/a75a7ebef7e1aa60b3fc6408cc61b77c2fc5b89d",
-                "reference": "a75a7ebef7e1aa60b3fc6408cc61b77c2fc5b89d"
-            },
-            "require": {
-                "bower-asset/eonasdan-bootstrap-datetimepicker": ">=4.0"
-            },
-            "type": "bower-asset",
-            "license": [
-                "MIT"
-            ]
-        },
-        {
-            "name": "bower-asset/typeahead.js",
-            "version": "v0.11.1",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:twitter/typeahead.js.git",
-                "reference": "588440f66559714280628a4f9799f0c4eb880a4a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twitter/typeahead.js/zipball/588440f66559714280628a4f9799f0c4eb880a4a",
-                "reference": "588440f66559714280628a4f9799f0c4eb880a4a"
-            },
-            "require": {
-                "bower-asset/jquery": ">=1.7"
-            },
-            "type": "bower-asset"
-        },
-        {
-            "name": "bower-asset/typeahead.js-bootstrap-css",
-            "version": "1.2.1",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:bassjobsen/typeahead.js-bootstrap-css.git",
-                "reference": "f90a99e33cc1ec86944c12e71cca4d48d5ae9607"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bassjobsen/typeahead.js-bootstrap-css/zipball/f90a99e33cc1ec86944c12e71cca4d48d5ae9607",
-                "reference": "f90a99e33cc1ec86944c12e71cca4d48d5ae9607"
-            },
-            "require": {
-                "bower-asset/bootstrap": "~3.3",
-                "bower-asset/typeahead.js": "~0.11"
-            },
-            "type": "bower-asset"
-        },
-        {
             "name": "bower-asset/urijs",
             "version": "v1.19.11",
             "source": {
@@ -509,26 +371,26 @@
         },
         {
             "name": "brick/math",
-            "version": "0.9.3",
+            "version": "0.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae"
+                "reference": "459f2781e1a08d52ee56b0b1444086e038561e3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/ca57d18f028f84f777b2168cd1911b0dee2343ae",
-                "reference": "ca57d18f028f84f777b2168cd1911b0dee2343ae",
+                "url": "https://api.github.com/repos/brick/math/zipball/459f2781e1a08d52ee56b0b1444086e038561e3f",
+                "reference": "459f2781e1a08d52ee56b0b1444086e038561e3f",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.1 || ^8.0"
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.2",
-                "phpunit/phpunit": "^7.5.15 || ^8.5 || ^9.0",
-                "vimeo/psalm": "4.9.2"
+                "phpunit/phpunit": "^9.0",
+                "vimeo/psalm": "4.25.0"
             },
             "type": "library",
             "autoload": {
@@ -553,19 +415,15 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/math/issues",
-                "source": "https://github.com/brick/math/tree/0.9.3"
+                "source": "https://github.com/brick/math/tree/0.10.2"
             },
             "funding": [
                 {
                     "url": "https://github.com/BenMorel",
                     "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/brick/math",
-                    "type": "tidelift"
                 }
             ],
-            "time": "2021-08-15T20:50:18+00:00"
+            "time": "2022-08-10T22:54:19+00:00"
         },
         {
             "name": "codelicious/php-coda-parser",
@@ -814,16 +672,16 @@
         },
         {
             "name": "ddeboer/imap",
-            "version": "1.13.1",
+            "version": "1.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ddeboer/imap.git",
-                "reference": "8b772d04b1deadb5df13782fb78c4b648f77496e"
+                "reference": "c2e4d723fa065bc6750a1169e9af48ef27ecddc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ddeboer/imap/zipball/8b772d04b1deadb5df13782fb78c4b648f77496e",
-                "reference": "8b772d04b1deadb5df13782fb78c4b648f77496e",
+                "url": "https://api.github.com/repos/ddeboer/imap/zipball/c2e4d723fa065bc6750a1169e9af48ef27ecddc2",
+                "reference": "c2e4d723fa065bc6750a1169e9af48ef27ecddc2",
                 "shasum": ""
             },
             "require": {
@@ -833,13 +691,12 @@
                 "php": "^8.0.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^v3.4.0",
-                "laminas/laminas-mail": "^2.15.1",
-                "malukenho/mcbumpface": "^1.1.5",
-                "phpstan/phpstan": "^1.3.3",
-                "phpstan/phpstan-phpunit": "^1.0.0",
-                "phpstan/phpstan-strict-rules": "^1.1.0",
-                "phpunit/phpunit": "^9.5.11"
+                "friendsofphp/php-cs-fixer": "^v3.9.5",
+                "laminas/laminas-mail": "^2.16.0",
+                "phpstan/phpstan": "^1.8.2",
+                "phpstan/phpstan-phpunit": "^1.1.1",
+                "phpstan/phpstan-strict-rules": "^1.3.0",
+                "phpunit/phpunit": "^9.5.21"
             },
             "type": "library",
             "autoload": {
@@ -873,7 +730,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ddeboer/imap/issues",
-                "source": "https://github.com/ddeboer/imap/tree/1.13.1"
+                "source": "https://github.com/ddeboer/imap/tree/1.14.0"
             },
             "funding": [
                 {
@@ -885,7 +742,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-10T10:53:05+00:00"
+            "time": "2022-08-06T05:11:35+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1359,23 +1216,25 @@
         },
         {
             "name": "khanamiryan/qrcode-detector-decoder",
-            "version": "1.0.5.2",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/khanamiryan/php-qrcode-detector-decoder.git",
-                "reference": "04fdd58d86a387065f707dc6d3cc304c719910c1"
+                "reference": "45326fb83a2a375065dbb3a134b5b8a5872da569"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/khanamiryan/php-qrcode-detector-decoder/zipball/04fdd58d86a387065f707dc6d3cc304c719910c1",
-                "reference": "04fdd58d86a387065f707dc6d3cc304c719910c1",
+                "url": "https://api.github.com/repos/khanamiryan/php-qrcode-detector-decoder/zipball/45326fb83a2a375065dbb3a134b5b8a5872da569",
+                "reference": "45326fb83a2a375065dbb3a134b5b8a5872da569",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.6"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7 | ^7.5 | ^8.0 | ^9.0"
+                "phpunit/phpunit": "^5.7 | ^7.5 | ^8.0 | ^9.0",
+                "rector/rector": "^0.13.6",
+                "symplify/easy-coding-standard": "^11.0"
             },
             "type": "library",
             "autoload": {
@@ -1408,9 +1267,9 @@
             ],
             "support": {
                 "issues": "https://github.com/khanamiryan/php-qrcode-detector-decoder/issues",
-                "source": "https://github.com/khanamiryan/php-qrcode-detector-decoder/tree/1.0.5.2"
+                "source": "https://github.com/khanamiryan/php-qrcode-detector-decoder/tree/1.0.6"
             },
-            "time": "2021-07-13T18:46:38+00:00"
+            "time": "2022-06-29T09:25:13+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -1778,11 +1637,75 @@
             "time": "2022-08-04T09:53:51+00:00"
         },
         {
-            "name": "npm-asset/jquery",
-            "version": "2.2.4",
+            "name": "npm-asset/bootstrap",
+            "version": "5.2.0",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/jquery/-/jquery-2.2.4.tgz"
+                "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-5.2.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/classnames",
+            "version": "2.3.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/classnames/-/classnames-2.3.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/core-js",
+            "version": "3.24.1",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/core-js/-/core-js-3.24.1.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/feather-icons",
+            "version": "4.29.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/feather-icons/-/feather-icons-4.29.0.tgz"
+            },
+            "require": {
+                "npm-asset/classnames": ">=2.2.5,<3.0.0",
+                "npm-asset/core-js": ">=3.1.3,<4.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/flatpickr",
+            "version": "4.6.13",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/flatpickr/-/flatpickr-4.6.13.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/jquery",
+            "version": "3.6.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/jquery/-/jquery-3.6.0.tgz"
             },
             "type": "npm-asset",
             "license": [
@@ -1799,6 +1722,33 @@
             "type": "npm-asset",
             "license": [
                 "Apache-2.0"
+            ]
+        },
+        {
+            "name": "npm-asset/select2",
+            "version": "4.1.0-RC.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/select2/-/select2-4.1.0-rc.0.tgz"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "npm-asset/select2-bootstrap-5-theme",
+            "version": "1.3.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/select2-bootstrap-5-theme/-/select2-bootstrap-5-theme-1.3.0.tgz"
+            },
+            "require": {
+                "npm-asset/bootstrap": ">=5.1.3,<6.0.0"
+            },
+            "type": "npm-asset",
+            "license": [
+                "MIT"
             ]
         },
         {
@@ -2914,20 +2864,20 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "4.3.1",
+            "version": "4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "8505afd4fea63b81a85d3b7b53ac3cb8dc347c28"
+                "reference": "373f7bacfcf3de038778ff27dcce5672ddbf4c8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/8505afd4fea63b81a85d3b7b53ac3cb8dc347c28",
-                "reference": "8505afd4fea63b81a85d3b7b53ac3cb8dc347c28",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/373f7bacfcf3de038778ff27dcce5672ddbf4c8a",
+                "reference": "373f7bacfcf3de038778ff27dcce5672ddbf4c8a",
                 "shasum": ""
             },
             "require": {
-                "brick/math": "^0.8 || ^0.9",
+                "brick/math": "^0.8 || ^0.9 || ^0.10",
                 "ext-ctype": "*",
                 "ext-json": "*",
                 "php": "^8.0",
@@ -2943,7 +2893,6 @@
                 "doctrine/annotations": "^1.8",
                 "ergebnis/composer-normalize": "^2.15",
                 "mockery/mockery": "^1.3",
-                "moontoast/math": "^1.1",
                 "paragonie/random-lib": "^2",
                 "php-mock/php-mock": "^2.2",
                 "php-mock/php-mock-mockery": "^1.3",
@@ -2992,7 +2941,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/uuid/issues",
-                "source": "https://github.com/ramsey/uuid/tree/4.3.1"
+                "source": "https://github.com/ramsey/uuid/tree/4.4.0"
             },
             "funding": [
                 {
@@ -3004,7 +2953,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-27T21:42:02+00:00"
+            "time": "2022-08-05T17:58:37+00:00"
         },
         {
             "name": "sabberworm/php-css-parser",
@@ -6616,16 +6565,16 @@
         },
         {
             "name": "tigron/skeleton-core",
-            "version": "v2.0.10",
+            "version": "v2.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tigron/skeleton-core.git",
-                "reference": "0ce0945a25108348e58bf082992225c5d46ffc70"
+                "reference": "444a7ed287bb861ea50d470ec906c0fbcfad28ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/0ce0945a25108348e58bf082992225c5d46ffc70",
-                "reference": "0ce0945a25108348e58bf082992225c5d46ffc70",
+                "url": "https://api.github.com/repos/tigron/skeleton-core/zipball/444a7ed287bb861ea50d470ec906c0fbcfad28ac",
+                "reference": "444a7ed287bb861ea50d470ec906c0fbcfad28ac",
                 "shasum": ""
             },
             "suggest": {
@@ -6650,9 +6599,9 @@
             "description": "Core functionality for Skeleton",
             "support": {
                 "issues": "https://github.com/tigron/skeleton-core/issues",
-                "source": "https://github.com/tigron/skeleton-core/tree/v2.0.10"
+                "source": "https://github.com/tigron/skeleton-core/tree/v2.0.11"
             },
-            "time": "2022-07-06T14:48:22+00:00"
+            "time": "2022-08-12T15:00:20+00:00"
         },
         {
             "name": "tigron/skeleton-database",
@@ -7622,16 +7571,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.4.1",
+            "version": "v3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "e939eae92386b69b49cfa4599dd9bead6bf4a342"
+                "reference": "e07cdd3d430cd7e453c31b36eb5ad6c0c5e43077"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e939eae92386b69b49cfa4599dd9bead6bf4a342",
-                "reference": "e939eae92386b69b49cfa4599dd9bead6bf4a342",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e07cdd3d430cd7e453c31b36eb5ad6c0c5e43077",
+                "reference": "e07cdd3d430cd7e453c31b36eb5ad6c0c5e43077",
                 "shasum": ""
             },
             "require": {
@@ -7682,7 +7631,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.4.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.4.2"
             },
             "funding": [
                 {
@@ -7694,7 +7643,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-17T05:48:52+00:00"
+            "time": "2022-08-12T06:47:24+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -7757,13 +7706,14 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "RC",
     "stability-flags": {
         "tigron/skeleton-package-openapi": 20,
         "bower-asset/jquery-zoom": 20,
         "bower-asset/jquery-mask-plugin": 0,
         "bower-asset/codemirror": 0,
-        "bower-asset/urijs": 0
+        "bower-asset/urijs": 0,
+        "npm-asset/select2": 5
     },
     "prefer-stable": false,
     "prefer-lowest": false,

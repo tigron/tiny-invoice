@@ -1,0 +1,134 @@
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="offcanvasRightLabel">{% trans "Invoice" %} {{ invoice.number }}</h5>
+		<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body">
+		<h6>{% trans "Details" %}</h6>
+		<table class="table table-sm table-borderless table-striped">
+			<tr>
+				<th>{% trans "Invoice number" %}</th>
+				<td>{{ invoice.number }}</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Created" %}</th>
+				<td>{{ invoice.created|date }}</td>
+			</tr>
+			<tr>
+				<th>{% trans "Price excl VAT" %}</th>
+				<td>{{ "€%.2f"|format(invoice.get_price_excl()) }}</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Price incl VAT" %}</th>
+				<td>{{ "€%.2f"|format(invoice.get_price_incl()) }}</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Expiration date" %}</th>
+				<td>{{ invoice.expiration_date|date }}</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Paid" %}</th>
+				<td>
+					{% if invoice.paid %}
+						<span class="badge text-bg-success">{% trans "Yes" %}</span>
+					{% else %}
+						<span class="badge text-bg-danger">{% trans "No" %}</span>
+					{% endif %}
+				</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Download PDF" %}</th>
+				<td>
+					<a href="/sales/invoice?action=download&id={{ invoice.id }}">
+						<i data-feather="download"></i>	invoice_{{ invoice.number }}.pdf
+					</a>
+				</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Reminder mails" %}</th>
+				<td>
+					<div class="form-check form-switch">
+						<input type="checkbox" class="form-check-input" role="switch" name="invoice[send_reminder_mail]" {% if invoice.send_reminder_mail %}checked{% endif %} onchange="set_reminder(this);">
+					</div>
+				</td>
+			</tr>
+
+			<script type="text/javascript">
+				function set_reminder(element) {
+					if ($(element).is(':checked')) {
+						data = {
+							'send_reminder_mail': 1
+						};
+					} else {
+						data = {
+							'send_reminder_mail': 0
+						};
+					}
+					$.post('/sales/invoice?action=set_reminder&id={{ invoice.id }}', data, function(response) {
+
+					});
+				}
+
+			</script>
+
+			<tr>
+				<th>{% trans "VAT Calculation" %}</th>
+				<td>
+					{% if invoice.vat_mode == 'group' %}
+						{% trans "Per group" %}
+					{% else %}
+						{% trans "Per line" %}
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+
+		<hr>
+		<h6>{% trans "Actions" %}</h6>
+		{% for invoice_method in invoice_methods %}
+			<a class="btn btn-primary" href="/sales/invoice?action=send&id={{ invoice.id }}&invoice_method_id={{ invoice_method.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to send the invoice via" %} {{ invoice_method.name }}?">
+				<i class="{{ invoice_method.icon }}"></i> {% trans "Send invoice" %} ({{ invoice_method.name }})
+			</a>
+		{% endfor %}
+
+		<hr>
+
+	  	<h6>{% trans "References" %}</h6>
+		<form action="/sales/invoice?action=edit&id={{ invoice.id }}" method="post">
+			<div class="row">
+				<label class="col-form-label">{% trans "Customer reference" %}</label>
+				<div class="col-xs-9">
+					<input class="form-control col-xs-5" type="text" name="invoice[reference]" value="{{ invoice.reference }}" {% if invoice.paid %}disabled{% endif %}>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-form-label">{% trans "Internal reference" %}</label>
+				<div class="col-xs-9">
+					<input class="form-control col-xs-5" type="text" name="invoice[internal_reference]" value="{{ invoice.internal_reference }}" {% if invoice.paid %}disabled{% endif %}>
+				</div>
+			</div>
+			{% if not invoice.paid %}
+				<div class="row">
+					<div class="offset-xs-3">
+						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+					</div>
+				</div>
+			{% endif %}
+		</form>
+		<hr>
+		<h6>{% trans "Logs" %}</h6>
+		{% set logs = invoice.get_logs() %}
+		{% for log in logs %}
+			<p class="text-muted p-0 m-0">{{ log.created|date }}: {{ log.get_content() }}</p>
+		{% endfor %}
+
+
+	</div>
+</div>

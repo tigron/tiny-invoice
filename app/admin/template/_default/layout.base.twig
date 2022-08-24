@@ -8,35 +8,37 @@
 
 	<title>{% if settings.company is not empty %}{{ settings.company }} - {% endif %}Tiny Invoice</title>
 
-	<link type="text/css" href="/typeahead.js-bootstrap-css/typeaheadjs.css" rel="stylesheet">
 	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="handheld, all">
-	<link rel="stylesheet" href="/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+	<link rel="stylesheet" href="/flatpickr/dist/flatpickr.min.css" type="text/css" media="handheld, all">
+	<link rel="stylesheet" href="/select2/dist/css/select2.min.css" type="text/css">
+	<link rel="stylesheet" href="/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css" />
+
+
 	<link rel="stylesheet" href="/bootstrap-select/dist/css/bootstrap-select.css" />
 	<link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/codemirror/lib/codemirror.css">
-	<link rel="stylesheet" href="/bootstrap.multilevel.navbar.css" type="text/css" media="handheld, all">
-	<link rel="stylesheet" href="/source-sans-pro.css">
+	<link rel="stylesheet" href="/style.css">
 
 
 
-	<link rel="stylesheet" href="/style.css?v=20220106" type="text/css" media="handheld, all">
+
 
 	<script type="text/javascript" src="/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/feather-icons/dist/feather.min.js"></script>
+	<script type="text/javascript" src="/flatpickr/dist/flatpickr.min.js"></script>
+	<script type="text/javascript" src="/select2/dist/js/select2.full.min.js"></script>
+
 	<script type="text/javascript" src="/jquery.selectareas.min.js"></script>
 	<script type="text/javascript" src="/moment/min/moment.min.js"></script>
 	<script type="text/javascript" src="/tigron-confirm-modal/js/bootstrap.confirm-modal.js"></script>
-	<script type="text/javascript" src="/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-	<script type="text/javascript" src="/tigron-datetimepicker/js/tigron-datetimepicker.js"></script>
 	<script type="text/javascript" src="/jquery-zoom/jquery.zoom.min.js"></script>
 	<script type="text/javascript" src="/handlebars/handlebars.min.js"></script>
 	<script type="text/javascript" src="/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 	<script type="text/javascript" src="/autosize/dist/autosize.min.js"></script>
 	<script type="text/javascript" src="/jquery-ui/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/bootstrap-checkbox/js/bootstrap-checkbox.js"></script>
+	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script type="text/javascript" src="/jquery-mask-plugin/dist/jquery.mask.min.js"></script>
 	<script type="text/javascript" src="/urijs/src/URI.js"></script>
-	<script type="text/javascript" src="/typeahead.js/dist/typeahead.bundle.min.js"></script>
 
 	<!-- Syntax check in extractor editor -->
 	<script type="text/javascript" src="/codemirror/lib/codemirror.js"></script>
@@ -53,8 +55,18 @@
 	{% endapply %}
 </head>
 <body>
-	{% include '_default/nav_bar.twig' %}
-	<div class="container-fluid">{% block content %}{% endblock content %}</div>
+
+
+	<div class="container-fluid">
+		<div class="row">
+			{% include '_default/sidebar.twig' %}
+			<main class="col">
+				<div class="container-fluid pt-3">
+				{% block content %}{% endblock content %}
+				</div>
+			</main>
+		</div>
+	</div>
 
 	{% apply spaceless %}
 		{% block javascript %}{% endblock %}

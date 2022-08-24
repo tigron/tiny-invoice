@@ -7,11 +7,11 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('#toggle-advanced').click(function() {
-				if ($('.form-advanced').first().hasClass('hide')) {
-					$('.form-advanced').removeClass('hide')
+				if ($('.form-advanced').first().hasClass('visually-hidden')) {
+					$('.form-advanced').removeClass('visually-hidden')
 					$('#input_advanced').val(1);
 				} else {
-					$('.form-advanced').addClass('hide')
+					$('.form-advanced').addClass('visually-hidden')
 					$('#input_advanced').val(0);
 				}
 			});
@@ -20,23 +20,63 @@
 
 	{% block breadcrumb %}
 		{% if action == 'edit' %}
-			<ul class="breadcrumb">
-				<li><a href="/">{% trans "Home" %}</li></a>
-				<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-				<li><a href="/administrative/document/invoice">{% trans "Incoming Invoices" %}</a></li>
-				<li class="active">{% trans "Edit Incoming Invoice" %}</li>
-			</ul>
+			<div class="row">
+				<div class="col">
+					<h4>{% trans "Documents" %}</h4>
+				</div>
+				<div class="col">
+					<div class="float-end">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item">
+									<a href="/administrative/document">
+										{% trans "Documents" %}
+									</a>
+								</li>
+
+								<li class="breadcrumb-item">
+									<a href="/administrative/document/invoice">
+										{% trans "Incoming Invoices" %}
+									</a>
+								</li>
+
+								<li class="breadcrumb-item active">
+									{% trans "Edit Incoming Invoice" %} {{ document.id }}
+								</li>
+							</ol>
+						</nav>
+					</div>
+				</div>
+			</div>			
 		{% else %}
-			<ol class="breadcrumb">
-				<li><a href="/">{% trans "Home" %}</a></li>
-				<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-				<li class="active">{% trans "Incoming invoices" %}</li>
-			</ol>
+			<div class="row">
+				<div class="col">
+					<h4>{% trans "Incoming invoices" %}</h4>
+				</div>
+				<div class="col">
+					<div class="float-end">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item">
+									<a href="/administrative/document">
+										{% trans "Documents" %}
+									</a>
+								</li>
+
+								<li class="breadcrumb-item active">
+									{% trans "Incoming Invoices" %}
+								</li>
+							</ol>
+						</nav>
+					</div>
+				</div>
+			</div>	
+
 		{% endif %}
 	{% endblock breadcrumb %}
 
-	<div class="panel panel-default">
-		<div class="panel-heading">
+	<div class="card mb-3">
+		<div class="card-header">
 			{% trans "Filter" %}
 			<div class="pull-right">
 				<a href="#" id="toggle-advanced">
@@ -44,34 +84,34 @@
 				</a>
 			</div>
 		</div>
-		<div class="panel-body">
-			<form method="post" action="{{ env.module.get_path() }}" class="form-horizontal">
+		<div class="card-body">
+			<form method="post" action="{{ env.module.get_path() }}">
 				<input type="hidden" id="input_advanced" name="advanced" value="{% if env.sticky_session.advanced %}1{% else %}0{% endif %}">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3">
+					<label class="col-2 col-form-label">{% trans "Search" %}</label>
+					<div class="col-9">
 						<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 					</div>
 				</div>
 
-				<div class="form-group form-advanced {% if env.sticky_session.advanced is not defined %}hide{% endif %}">
-					<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
+					<label class="col-2 col-form-label">{% trans "Tags" %}</label>
+					<div class="col-9">
 						<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 					</div>
 				</div>
 
-				<div class="form-group form-advanced {% if env.sticky_session.advanced is not defined %}hide{% endif %}">
-					<label for="supplier_id" class="control-label col-xs-3">{% trans "Supplier" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
+					<label for="supplier_id" class="col-2 col-form-label">{% trans "Supplier" %}</label>
+					<div class="col-9">
 						<input type="text" name="supplier" value="{{ selected_supplier.company }}" class="form-control typeahead autocomplete_supplier" placeholder="{% trans "Search supplier" %}..."/>
 						<input type="hidden" class="supplier_id" name="supplier_id" value="{% if selected_supplier is defined %}{{ selected_supplier.id }}{% endif %}"/>
 					</div>
 				</div>
 
-				<div class="form-group form-advanced {% if env.sticky_session.advanced is not defined %}hide{% endif %}">
-					<label class="col-xs-3 control-label">{% trans "Paid" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
+					<label class="col-2 col-form-label">{% trans "Paid" %}</label>
+					<div class="col-9">
 						<select name="paid" class="form-control">
 							<option value="-1">{% trans "All" %}</option>
 							<option value="1" {% if pager.has_condition('document_incoming_invoice.paid', 1) %}selected{% endif %}>{% trans "Yes" %}</option>
@@ -79,10 +119,10 @@
 						</select>
 					</div>
 				</div>
-				
-				<div class="form-group form-advanced {% if env.sticky_session.advanced is not defined %}hide{% endif %}">
-					<label class="col-xs-3 control-label">{% trans "Booking status" %}</label>
-					<div class="col-xs-9">
+
+				<div class="row mb-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
+					<label class="col-2 control-label">{% trans "Booking status" %}</label>
+					<div class="col-9">
 						<select name="accounting_identifier" class="form-control">
 							<option value="all">{% trans "Any" %}</option>
 							<option value="not_empty" {% if pager.has_condition('document_incoming_invoice.accounting_identifier', '!=', '') %}selected{% endif %}>{% trans "Booked" %}</option>
@@ -92,7 +132,7 @@
 				</div>
 
 				<div class="form-group">
-					<div class="col-xs-3 col-xs-offset-3">
+					<div class="col-3 offset-2">
 						<button class="btn btn-primary">
 							{% trans "Search" %}
 						</button>
@@ -106,25 +146,25 @@
 		{{ base.display_flash_message(env.sticky_session.message, 'document') }}
 	{% endif %}
 
-	<div class="panel panel-default">
-		<div class="panel-heading">
+	<div class="card mb-3">
+		<div class="card-header">
 			<form action="/administrative/document/invoice?action=export" method="post" class="form-inline">
 			<input type="hidden" name="hash" value="{{ pager.create_options_hash() }}" />
 
 			{{ base.pager_count(pager.item_count) }}  - {% trans "VAT excl." %} &euro; {{ pager.get_sum('document_incoming_invoice.price_excl')|number_format(2, ',', '.') }} &nbsp; | &nbsp;  {% trans "VAT incl." %} &euro; {{ pager.get_sum('document_incoming_invoice.price_incl')|number_format(2, ',', '.')  }}
 			<div class="pull-right">
 				<a href="/administrative/document/invoice/pay" title="">
-					<span class="glyphicon glyphicon-plus-sign"></span>
-					{% trans "Pay invoices" %}
+					<i data-feather="dollar-sign"></i> {% trans "Pay invoices" %}
 				</a> -
 				<a href="#" onclick="$(this).closest('form').submit();">
-					<i class="fa fa-file"></i> {% trans "Export invoices" %}
+					<i data-feather="download"></i>
+					{% trans "Export invoices" %}
 				</a>
 			</div>
 			</form>
 		</div>
 
-		<div class="panel-body">
+		<div class="card-body">
 		{% for document in pager.items %}
 		{% if loop.first %}
 			<table class="table table-hover table-striped table-condensed table-responsive">
@@ -133,7 +173,7 @@
 					<th>{{ pager.create_header('#'|trans, 'document.id')|raw }}</th>
 					<th>{{ pager.create_header('Date'|trans, 'document.date')|raw }}</th>
 					<th>{{ pager.create_header('Accounting ID'|trans, 'document_incoming_invoice.accounting_identifier')|raw }}</th>
-					<th>{{ pager.create_header('Expiration date'|trans, 'document_incoming_invoice.expiration_date')|raw }}</th>
+					<th>{{ pager.create_header('Expires'|trans, 'document_incoming_invoice.expiration_date')|raw }}</th>
 					<th>{{ pager.create_header('Title'|trans, 'title')|raw }}</th>
 					<th>{{ pager.create_header('Supplier'|trans, 'supplier.company')|raw }}
 					<th>{% trans "Tags" %}</th>
@@ -163,7 +203,7 @@
 				{% endfor %}
 
 				{% for document_tag in document_tags %}
-					{{ document_tag.name }}{% if not loop.last %}, {% endif %}
+					<span class="badge rounded-pill text-bg-primary">{{ document_tag.name }}</span>
 				{% endfor %}
 
 			</td>
@@ -183,17 +223,17 @@
 			<td>&nbsp;</td>
 			<td width="20">
 				<a href="/administrative/document?action=download&id={{ document.id }}">
-					<span class="glyphicon glyphicon-download"></span>
+					<i data-feather="download"></i>
 				</a>
 			</td>
 			<td width="20">
 				<a href="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
-					<span class="glyphicon glyphicon-pencil"></span>
+					<i data-feather="edit"></i>
 				</a>
 			</td>
 			<td width="20">
 				<a href="{{ env.module.get_module_path() }}?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
-					<span class="glyphicon glyphicon-remove"></span>
+					<i data-feather="trash"></i>
 				</a>
 			</td>
 		</tr>

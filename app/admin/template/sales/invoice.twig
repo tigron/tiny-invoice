@@ -6,293 +6,157 @@
 
 	{% if action == 'edit' %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
-			<li class="active">{% trans "Details" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Invoices" %}</h4>
+			</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/sales/invoice">
+									{% trans "Invoices" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Invoice" %} {{ invoice.number }}
+							</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		{% include 'sales/invoice/offcanvas.twig' %}
 
 		{% if env.sticky_session.message == 'updated' %}
-			<div class="alert alert-success alert-dismissable">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<div class="alert alert-success alert-dismissible fade show" role="alert">
 				{{ "Invoice successfully updated and regenerated" }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
 		{% endif %}
 
 		<div class="row">
-			<div class="col-xs-6" id="invoice-details">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Details" %}</div>
-					<div class="panel-body">
-						<dl class="dl-horizontal">
-							<dt>{% trans "Invoice number" %}</dt>
-							<dd>{{ invoice.number }}</dd>
-
-							<dt>{% trans "Created" %}</dt>
-							<dd>{{ invoice.created|datetime }}</dd>
-
-							<dt>{% trans "Price excl VAT" %}</dt>
-							<dd>{{ "€%.2f"|format(invoice.get_price_excl()) }}</dd>
-
-							<dt>{% trans "Price incl VAT" %}</dt>
-							<dd>{{ "€%.2f"|format(invoice.get_price_incl()) }}</dd>
-
-							<dt>{% trans "Expiration date" %}</dt>
-							<dd>{{ invoice.expiration_date|datetime }}</dd>
-
-							<dt>{% trans "Paid" %}</dt>
-							<dd>
-								{% if invoice.paid %}
-									<span class="glyphicon glyphicon-ok"></span> {% trans "Yes" %}
-								{% else %}
-									<span class="glyphicon glyphicon-remove"></span> {% trans "No" %}
-								{% endif %}
-							</dd>
-							<dt>{% trans "Download PDF" %}</dt>
-							<dd>
-								<a href="/sales/invoice?action=download&id={{ invoice.id }}"><i class="fa fa-file-pdf-o"></i> invoice_{{ invoice.number }}.pdf</a>
-							</dd>
-						</dl>
-					</div>
-				</div>
+			<div class="col-md-4" id="invoice-customer">
+				<address>
+					<div class="text-muted">{% trans "Customer" %}</div>
+					<strong>{{ invoice.customer.get_display_name() }}</strong><br>
+					{{ invoice.customer.street }} {{ invoice.customer.housenumber }}<br>
+					{{ invoice.customer.zipcode }} {{ invoice.customer.city }}<br>
+					{{ attribute(invoice.customer.country, 'text_' ~ env.language.name_short ~ '_name') }}<br>
+					<a href="mailto:{{ invoice.customer.email }}">{{ invoice.customer.email }}</a>
+				</address>
 			</div>
 
-			<div class="col-xs-6" id="invoice-settings">
-				<form class="form-horizontal form-condensed" action="/sales/invoice?action=edit&id={{ invoice.id }}" method="post">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Invoice settings" %}</div>
-					<div class="panel-body">
-						<div class="form-group">
-							<label class="control-label col-md-3">{% trans "Send reminder mails" %}</label>
-							<div class="col-xs-9">
-								<p class="form-control-static">
-									<input type="checkbox" name="invoice[send_reminder_mail]" data-group-cls="btn-group-xs" {% if invoice.send_reminder_mail %}checked{% endif %} onchange="set_reminder(this);">
-								</p>
-							</div>
-						</div>
+			<div class="col-md-4" id="invoice-contact">
+				<address>
+					<div class="text-muted">{% trans "Invoice to" %}</div>
+					<strong>{{ invoice.customer_contact.get_display_name() }}</strong><br>
+					{{ invoice.customer_contact.street }} {{ invoice.customer_contact.housenumber }}<br>
+					{{ invoice.customer_contact.zipcode }} {{ invoice.customer_contact.city }}<br>
+					{{ attribute(invoice.customer_contact.country, 'text_' ~ env.language.name_short ~ '_name') }}<br>
+					<a href="mailto:{{ invoice.customer_contact.email }}">{{ invoice.customer_contact.email }}</a><br>
+					{{ invoice.customer_contact.get_vat_formatted() }}
+				</address>
+			</div>
 
-						{% for invoice_method in invoice_methods %}
-						<div class="form-group">
-							<label class="col-xs-3 control-label">{% trans "Send invoice" %} ({{ invoice_method.name }})</label>
-							<div class="col-xs-9">
-								<p class="form-control-static">
-									<a href="/sales/invoice?action=send&id={{ invoice.id }}&invoice_method_id={{ invoice_method.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to send the invoice via" %} {{ invoice_method.name }}?">
-										<i class="{{ invoice_method.icon }}"></i> {% trans "send" %}
-									</a>
-								</p>
-							</div>
-						</div>
-						{% endfor %}
+			<div class="col-md-4">
+				<strong>{% trans "Invoice number" %}: </strong>{{ invoice.number }}<br>
+				<strong>{% trans "Paid" %}: </strong>
+					{% if invoice.paid %}
+						<span class="badge text-bg-success">{% trans "Yes" %}</span>
+					{% else %}
+						<span class="badge text-bg-danger">{% trans "No" %}</span>
+					{% endif %}
+				<br>
 
-						<div class="form-group">
-							<label class="col-xs-3 control-label">{% trans "VAT mode" %}</label>
-							<div class="col-xs-9">
-								<p class="form-control-static">
-									{% if invoice.vat_mode == 'group' %}
-										{% trans "Per group" %}
-									{% else %}
-										{% trans "Per line" %}
-									{% endif %}
-								</p>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="col-xs-3 control-label">{% trans "Reference" %}</label>
-							<div class="col-xs-9">
-								{% if not invoice.paid %}
-									<input class="form-control-static col-xs-5" type="text" name="invoice[reference]" value="{{ invoice.reference }}"></input>
-								{% else %}
-									<p class="form-control-static">{{ invoice.reference }}</p>
-								{% endif %}
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="col-xs-3 control-label">{% trans "Internal reference" %}</label>
-							<div class="col-xs-9">
-								{% if not invoice.paid %}
-									<input class="form-control-static col-xs-5" type="text" name="invoice[internal_reference]" value="{{ invoice.internal_reference }}"></input>
-								{% else %}
-									<p class="form-control-static">{{ invoice.internal_reference }}</p>
-								{% endif %}
-							</div>
-						</div>
-						{% if not invoice.paid %}
-							<div class="form-group">
-								<div class="col-xs-9 col-xs-offset-3">
-									<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-								</div>
-							</div>
-						{% endif %}
-					</div>
-				</div>
-				</form>
+				<button class="mt-3 btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+					{% trans "More information" %} >>
+				</button>
 			</div>
 		</div>
 
-		<script type="text/javascript">
-			$(function () {
-				$('[data-toggle="tooltip"]').tooltip()
-				})
+		<hr>
 
-			function set_reminder(element) {
-				if ($(element).is(':checked')) {
-					data = {
-						'send_reminder_mail': 1
-					};
-				} else {
-					data = {
-						'send_reminder_mail': 0
-					};
-				}
-				$.post('/sales/invoice?action=set_reminder&id={{ invoice.id }}', data, function(response) {
+		<table class="table table-striped table-hover table-condensed">
+			<thead>
+				<tr>
+					<th>{% trans "Product" %}</th>
+					<th width="50%">{% trans "Description" %}</th>
+					<th width="95">{% trans "VAT" %}</th>
+					<th width="95">{% trans "Qty" %}</th>
+					<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Item ex. VAT" %}</th>
+					<th class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Item inc. VAT" %}</th>
+					<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Total ex. VAT" %}</th>
+					<th class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Total inc. VAT" %}</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for invoice_item in invoice.get_invoice_items() %}
 
-				});
-			}
+				<tr>
+					<td>{% if invoice_item.product_type_id is defined %}{{ invoice_item.product_type.name }}{% else %}<i>{% trans "Unknown" %}</i>{% endif %}</td>
+					<td>{{ invoice_item.description|nl2br }}</td>
+					<td>{{ invoice_item.vat_rate_value|number_format }}%</td>
+					<td>{{ invoice_item.qty|number_format }}</td>
+					<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ (invoice_item.qty != 0 ? invoice_item.get_price_excl()/invoice_item.qty : invoice_item.price_excl)|number_format }}</td>
+					<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ (invoice_item.qty != 0 ? invoice_item.get_price_incl()/invoice_item.qty : invoice_item.price_incl)|number_format }}</td>
+					<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
+					<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ invoice_item.get_price_incl()|number_format }}</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td colspan="6"><strong>{% trans "Total" %}</strong></td>
+				<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_excl()|number_format }}</strong></td>
+				<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_incl()|number_format }}</strong></td>
+			</tr>
+			</tbody>
+		</table>
 
-		</script>
+		<table class="table table-striped table-hover table-condensed">
+			<thead>
+				<th>{% trans "VAT Rate" %}</th>
+				<th class="text-right" width="95">{% trans "Base" %}</th>
+				<th class="text-right" width="95">{% trans "VAT" %}</th>
+			</thead>
+			<tbody>
+			{% set vat_total = 0 %}
+			{% for invoice_vat in invoice.get_invoice_vat() %}
+				{% set vat_total = vat_total + invoice_vat.vat %}
+				<tr>
+					<td>{{ invoice_vat.vat_rate.name }} ({{ invoice_vat.rate }}%)</td>
+					<td class="text-right">&euro;{{ invoice_vat.base }}</td>
+					<td class="text-right">&euro;{{ invoice_vat.vat }}</td>
+				</tr>
+			{% endfor %}
+			</tbody>
+			<tr>
+				<td colspan="2"><strong>{% trans "Total" %}</strong></td>
+				<td class="text-right"><strong>&euro;{{ vat_total|number_format }}</strong></td>
+			</tr>
+		</table>
 
-		<div class="row">
-			<div class="col-md-6" id="invoice-customer">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Customer" %}</div>
-					<div class="panel-body">
-						<dl class="dl-horizontal">
-							<dt>{% trans "Name" %}</dt>
-							<dd>
-								<a href="/administrative/customer/detail?id={{ invoice.customer.id }}" title="">
-									{{ invoice.customer.firstname }} {{ invoice.customer.lastname }}
-								</a>
-							</dd>
-
-							<dt>{% trans "Company" %}</dt>
-							<dd>{{ invoice.customer.company }}</dd>
-
-							<dt>{% trans "Address" %}</dt>
-							<dd>{{ invoice.customer.street }} {{ invoice.customer.housenumber }}</dd>
-
-							<dt>&nbsp;</dt>
-							<dd>{{ invoice.customer.zipcode }} {{ invoice.customer.city }}</dd>
-
-							<dt>&nbsp;</dt>
-							<dd>{{ attribute(invoice.customer.country, 'text_' ~ env.language.name_short ~ '_name') }}</dd>
-
-							<dt>{% trans "Email" %}</dt>
-							<dd>{{ invoice.customer.email }}</dd>
-						</dl>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-6" id="invoice-contact">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Invoice contact" %}</div>
-					<div class="panel-body">
-						<dl class="dl-horizontal">
-							<dt>{% trans "Name" %}</dt>
-							<dd>{{ invoice.customer_contact.firstname }} {{ invoice.customer_contact.lastname }}</dd>
-
-							<dt>{% trans "Company" %}</dt>
-							<dd>{{ invoice.customer_contact.company }}</dd>
-
-							<dt>{% trans "Address" %}</dt>
-							<dd>{{ invoice.customer_contact.street }} {{ invoice.customer_contact.housenumber }}</dd>
-
-							<dt>&nbsp;</dt>
-							<dd>{{ invoice.customer_contact.zipcode }} {{ invoice.customer_contact.city }}</dd>
-
-							<dt>&nbsp;</dt>
-							<dd>{{ attribute(invoice.customer_contact.country, 'text_' ~ env.language.name_short ~ '_name') }}</dd>
-
-							<dt>{% trans "Email" %}</dt>
-							<dd>{{ invoice.customer_contact.email }}</dd>
-
-							<dt>{% trans "VAT" %}</dt>
-							<dd>{{ invoice.customer_contact.get_vat_formatted() }}</dd>
-						</dl>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Invoice details" %}</div>
-			<div class="panel-body">
-				<table class="table table-striped table-hover table-condensed">
-					<thead>
-						<tr>
-							<th>{% trans "Product" %}</th>
-							<th width="50%">{% trans "Description" %}</th>
-							<th width="95">{% trans "VAT" %}</th>
-							<th width="95">{% trans "Qty" %}</th>
-							<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Item ex. VAT" %}</th>
-							<th class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Item inc. VAT" %}</th>
-							<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Total ex. VAT" %}</th>
-							<th class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Total inc. VAT" %}</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% for invoice_item in invoice.get_invoice_items() %}
-
-						<tr>
-							<td>{% if invoice_item.product_type_id is defined %}{{ invoice_item.product_type.name }}{% else %}<i>{% trans "Unknown" %}</i>{% endif %}</td>
-							<td>{{ invoice_item.description|nl2br }}</td>
-							<td>{{ invoice_item.vat_rate_value|number_format }}%</td>
-							<td>{{ invoice_item.qty|number_format }}</td>
-							<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ (invoice_item.qty != 0 ? invoice_item.get_price_excl()/invoice_item.qty : invoice_item.price_excl)|number_format }}</td>
-							<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ (invoice_item.qty != 0 ? invoice_item.get_price_incl()/invoice_item.qty : invoice_item.price_incl)|number_format }}</td>
-							<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
-							<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ invoice_item.get_price_incl()|number_format }}</td>
-						</tr>
-					{% endfor %}
-					<tr>
-						<td colspan="6"><strong>{% trans "Total" %}</strong></td>
-						<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_excl()|number_format }}</strong></td>
-						<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_incl()|number_format }}</strong></td>
-					</tr>
-					</tbody>
-				</table>
-
-				<table class="table table-striped table-hover table-condensed">
-					<thead>
-						<th>{% trans "Rate" %}</th>
-						<th class="text-right" width="95">{% trans "Base" %}</th>
-						<th class="text-right" width="95">{% trans "VAT" %}</th>
-					</thead>
-					<tbody>
-					{% set vat_total = 0 %}
-					{% for invoice_vat in invoice.get_invoice_vat() %}
-						{% set vat_total = vat_total + invoice_vat.vat %}
-						<tr>
-							<td>{{ invoice_vat.vat_rate.name }} ({{ invoice_vat.rate }}%)</td>
-							<td class="text-right">&euro;{{ invoice_vat.base }}</td>
-							<td class="text-right">&euro;{{ invoice_vat.vat }}</td>
-						</tr>
-					{% endfor %}
-					</tbody>
-					<tr>
-						<td colspan="2"><strong>{% trans "Total" %}</strong></td>
-						<td class="text-right"><strong>&euro;{{ vat_total|number_format }}</strong></td>
-					</tr>
-				</table>
-			</div>
-		</div>
+		<hr>
 
 		{% include 'sales/invoice/modal.transfer.twig' with {id: 'add_transfer', 'invoice': invoice}  %}
 
 		<div class="row">
-			<div class="col-xs-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						{% trans "Payments" %}
-						<div class="pull-right">
-							<a href="#add_transfer" data-toggle="modal">
-								<span class="glyphicon glyphicon-plus-sign"></span> {% trans "Add Payment" %}
-							</a>
+			<div class="col-12">
+				<div class="card text-bg-light">
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+							<h5>{% trans "Payments" %}</h5>
+						</div>
+						<div class="col">
+							<div class="pull-right">
+								<a href="#add_transfer" data-bs-toggle="modal">
+									<i data-feather="plus"></i> {% trans "Add Payment" %}
+								</a>
+							</div>
 						</div>
 					</div>
-					<div class="panel-body">
 					{% for transfer in invoice.get_transfers() %}
 						{% if loop.first %}
 							<table class="table table-hover table-alternate">
@@ -345,28 +209,7 @@
 					{% else %}
 						<p>{% trans "No payments added yet" %}</p>
 					{% endfor %}
-					</div>
 				</div>
-			</div>
-		</div>
-
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Logs" %}</div>
-			<div class="panel-body">
-				<dl class="dl-horizontal">
-				{% set logs = invoice.get_logs() %}
-				{% for log in logs %}
-
-					{% if loop.first %}
-					<dt>{% trans "Logs" %}</dt>
-					{% else %}
-					<dt>&nbsp;</dt>
-					{% endif %}
-
-					<dd>{{ log.created|datetime }}: {{ log.get_content() }}</dd>
-
-				{% endfor %}
-				</dl>
 			</div>
 		</div>
 
@@ -381,632 +224,111 @@
 
 	{% elseif action == 'create_step1' %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
-			<li>{% trans "Create invoice" %}</li>
-			<li class="active">{% trans "Select customer" %}</li>
-		</ol>
-
-		{% if errors is defined %}
-		<div class="alert alert-danger">
-			{% trans "Please select a customer." %}
-		</div>
-		{% endif %}
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				{% trans "Select customer" %}
-			</div>
-			<div class="panel-body">
-				<form method="post" action="/sales/invoice?action=create_step1" class="form-horizontal" id="invoice-create-step1">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Customer" %}</label>
-						<div class="col-xs-9">
-							<input type="text" id="autocomplete_customer" name="customer" class="form-control typeahead" value="{% if env.session.invoice.customer_id > 0 %}{{ env.session.invoice.customer.firstname }} {{ env.session.invoice.customer.lastname }}{% endif %}" placeholder="{% trans "Search customer" %}...">
-							<input type="hidden" id="customer_id" name="customer_id" value="{% if env.session.invoice.customer_id > 0 %}{{ env.session.invoice.customer.id }}{% endif %}">
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
-							<button class="btn btn-primary">
-								{% trans "Next" %}
-							</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
+		{% include 'sales/invoice/create/step1.twig' %}
 
 	{% elseif action == 'create_step2' %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
-			<li>{% trans "Create invoice" %}</li>
-			<li class="active">{% trans "Select invoice contact" %}</li>
-		</ol>
-
-		{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact', 'redirect': '/sales/invoice?action=create_step2'} %}
-
-		{% if errors is defined %}
-		<div class="alert alert-danger">
-			{% trans "Please select an invoice contact." %}
-		</div>
-		{% endif %}
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				{% trans "Select a invoice contact" %}
-			</div>
-			<div class="panel-body">
-				<div class="row">
-				{% for customer_contact in customer_contacts %}
-					<div class="col-xs-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
-						<div class="panel panel-default">
-							<div class="panel-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
-								<div class="actions hide">
-									<a href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
-										<span class="glyphicon glyphicon-pencil"></span>
-									</a>
-									<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
-										<span class="glyphicon glyphicon-remove"></span>
-									</a>
-								</div>
-
-								<div class="pull-left">
-									<input type="radio" name="customer_contact" />
-								</div>
-
-								{{ base.customer_contact(customer_contact, settings) }}
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-					<div class="col-xs-3">
-						<div class="panel panel-default customer_contact">
-							<div class="panel-body text-center">
-								<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="0">
-									{% trans "Create new" %}
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<form method="post" action="/sales/invoice?action=create_step2" id="invoice-create-step2">
-					<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
-					<button class="btn btn-primary pull-right">
-						{% trans "Next" %}
-					</button>
-				</form>
-			</div>
-		</div>
-
-		<script type="text/javascript">
-
-			$('.customer_contact').on({
-				mouseenter: function() {
-					$(this).find('.actions').toggleClass('hide');
-				},
-				mouseleave: function() {
-					$(this).find('.actions').toggleClass('hide');
-				},
-				click: function() {
-					$('.customer_contact').find('input[type=radio]').prop('checked', false);
-					$('.customer_contact').find('.panel-body').removeClass('bg-info');
-					$(this).find('.panel-body').first().addClass('bg-info');
-					$('#invoice-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
-					$(this).find('input[type=radio]').prop('checked', true);
-				}
-			});
-
-			function delete_contact(id) {
-				$.get('/sales/invoice/contact?action=delete&id=' + id, function(data) {
-					if(data['status'] == 1) {
-						$('#customer-contact-' + id).remove();
-						$('#invoice-create-step2 input').val('');
-					} else {
-						alert('Error deleting contact');
-					}
-				}, 'json');
-			}
-
-		</script>
+		{% include 'sales/invoice/create/step2.twig' %}
 
 	{% elseif action == 'create_step3' %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
-			<li>{% trans "Create invoice" %}</li>
-			<li class="active">{% trans "Add items" %}</li>
-		</ol>
+		{% include 'sales/invoice/create/step3.twig' %}
 
-		{% if errors[-1] is defined %}
-			<div class="alert alert-danger">{% trans "The price must be greater than €0" %}</div>
-		{% elseif errors is defined %}
-			<div class="alert alert-danger">
-				{{ errors|print_r }}
+	{% elseif action == 'export' %}
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Invoices" %}</h4>
 			</div>
-		{% endif %}
-
-		<form method="post" action="/sales/invoice?action=create_step3" class="form-horizontal">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{% trans "Additional info" %}
-				</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Reference" %}</label>
-						<div class="col-xs-9">
-							<input type="text" class="form-control" id="reference" name="invoice[reference]" value="{{ env.session.invoice.reference }}">
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Internal reference" %}</label>
-						<div class="col-xs-9">
-							<input type="text" class="form-control" id="internal_reference" name="invoice[internal_reference]" value="{{ env.session.invoice.internal_reference }}">
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
-						<div class="col-xs-9">
-							<select name="invoice[expiration_date]" class="form-control">
-								<option value="+14 days">2 {% trans "weeks" %}</option>
-								<option value="+1 month" selected>1 {% trans "month" %}</option>
-								<option value="+60 days">60 {% trans "days" %}</option>
-								<option value="+90 days">90 {% trans "days" %}</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "VAT mode" %}</label>
-						<div class="col-xs-9">
-							<select name="invoice[vat_mode]" class="form-control" onchange="javascript:toggle_vat_mode(this);">
-								<option value="group">{% trans "Per group" %}</option>
-								<option value="line">{% trans "Per line" %}</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Service delivery in" %}</label>
-						<div class="col-xs-9">
-							<select name="invoice[service_delivery_to_country_id]" class="form-control multiselect" onchange="set_vat_regime();" id="vat_regime" data-company-country-id="{{ settings.country_id }}">
-								<optgroup label="{% trans "Other" %}">
-									{% for country in countries['european'] %}
-										{% if country.id == settings.country_id %}
-											<option value="{{ country.id }}">{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
-										{% endif %}
-									{% endfor %}
-									{% for country in countries['european'] %}
-										{% if country.id == env.session.invoice.customer_contact.country_id and country.id != settings.country_id %}
-											<option value="{{ country.id }}" selected>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
-										{% endif %}
-									{% endfor %}
-									<option value="-1">{% trans "Outside Europe" %}</option>
-								</optgroup>
-
-								<optgroup label="{% trans "Europe" %}">
-								{% for country in countries['european'] %}
-									<option value="{{ country.id }}" >{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
-								{% endfor %}
-								</optgroup>
-							</select>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Send invoice" %} ({{ env.session.invoice.customer_contact.invoice_method.name }})</label>
-						<div class="col-xs-9">
-							<input type="checkbox" data-group-cls="btn-group-xs" name="send_invoice" />
-						</div>
-					</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/sales/invoice">
+									{% trans "Invoices" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Export invoices" %}
+							</li>
+						</ol>
+					</nav>
 				</div>
 			</div>
+		</div>
 
-			<script type="text/javascript">
-
-				$(function() {
-					set_vat_regime();
-				});
-
-				function set_vat_regime() {
-					delivery_in_country_id = $('#vat_regime').val();
-					company_country_id = $('#vat_regime').data('company-country-id');
-
-					{% if env.session.invoice.customer_contact.vat != '' %}
-						customer_valid_vat = true;
-					{% else %}
-						customer_valid_vat = false;
-					{% endif %}
-
-					if (delivery_in_country_id == company_country_id) {
-						$('.vat_regime_customer_country').addClass('hide');
-						$('.vat_regime_company_country').removeClass('hide');
-						$('.vat_regime_none').addClass('hide');
-						return;
-					}
-
-					if (delivery_in_country_id == -1) {
-						$('.vat_regime_customer_country').addClass('hide');
-						$('.vat_regime_company_country').addClass('hide');
-						$('.vat_regime_none').removeClass('hide');
-						return;
-					}
-
-					if (customer_valid_vat) {
-						$('.vat_regime_customer_country').addClass('hide');
-						$('.vat_regime_company_country').addClass('hide');
-						$('.vat_regime_none').removeClass('hide');
-						return;
-					}
-
-					$('.vat_regime_customer_country').removeClass('hide');
-					$('.vat_regime_company_country').addClass('hide');
-					$('.vat_regime_none').addClass('hide');
-				}
-
-			</script>
-
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{% trans "Add items" %}
-				</div>
-				<div class="panel-body">
-					<table class="table table-hover table-striped table-condensed">
-						<thead>
-							<tr>
-								<th>{% trans "Product definition" %}</th>
-								<th width="50%">{% trans "Description" %}</th>
-								<th width="10%">{% trans "Qty" %}</th>
-								<th width="10%">
-									<span id="price_header_line" class="hide">{% trans "Price incl VAT" %}</span>
-									<span id="price_header_group">{% trans "Price excl VAT" %}</span>
-								</th>
-								<th>&nbsp;</th>
-								<th>&nbsp;</th>
-							</tr>
-						</thead>
-						<tbody id="invoice-items">
-
-							{% for invoice_item in env.post.invoice_item %}
-							<tr>
-								<td>
-									<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-control">
-										{% for product_type in product_types %}
-											<option value="{{ product_type.id }}" {% if product_type.id == invoice_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
-										{% endfor %}
-									</select>
-								</td>
-								<td>
-									<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_item.invoice_queue_id }}">
-									<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_item.description }}</textarea>
-								</td>
-								<td>
-									<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_item.qty }}">
-								</td>
-								<td>
-									<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_item.price }}">
-								</td>
-								<td>
-
-									<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
-										<option value="0">{% trans "No VAT" %} (0%)</option>
-										{% set selected = false %}
-										{% for vat_rate in customer_vat_rates %}
-											<option {% if selected == false and vat_rate.vat == invoice_queue_item.vat %}{% set selected = true %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-										{% endfor %}
-									</select>
-
-									<select name="invoice_item[{{ loop.index }}][company_vat_rate_id]" class="form-control vat_regime_company_country">
-										<option {% if (selected == false and vat_rate.vat == invoice_queue_item.vat) or (invoice_item.company_vat_rate_id is defined and invoice_item.company_vat_rate_id == 0) %}{% set selected = true %}selected{% endif %} value="0">{% trans "No VAT" %} (0%)</option>
-										{% for vat_rate in company_vat_rates %}
-											<option {% if (vat_rate.vat_rate_id == 1 and invoice_item.company_vat_rate_id is not defined) or (invoice_item.company_vat_rate_id is defined and vat_rate.vat_rate_id == invoice_item.company_vat_rate_id) %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-										{% endfor %}
-									</select>
-
-									<span class="vat_regime_none">
-										<p class="form-control-static">
-											{% trans "No VAT" %}
-										</p>
-									</span>
-
-								</td>
-								<td>
-									<div class="form-control-static">
-										<a href="javascript:void(0);" onclick="remove_item($(this));">
-											<span class="glyphicon glyphicon-remove"></span>
-										</a>
-									</div>
-								</td>
-							</tr>
-							{% endfor %}
-
-							{% if env.post.invoice_item is not defined %}
-								{% for invoice_queue_item in invoice_queue_items %}
-								<tr>
-									<td>
-										<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-control">
-											{% for product_type in product_types %}
-												<option value="{{ product_type.id }}" {% if product_type.id == invoice_queue_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
-											{% endfor %}
-										</select>
-									</td>
-									<td>
-										<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_queue_item.id }}">
-										<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_queue_item.description }}</textarea>
-									</td>
-									<td>
-										<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_queue_item.qty }}">
-									</td>
-									<td>
-										<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_queue_item.price }}">
-									</td>
-									<td>
-
-										<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
-											<option value="0">{% trans "No VAT" %} (0%)</option>
-											{% set selected = false %}
-											{% for vat_rate in customer_vat_rates %}
-												<option {% if selected == false and vat_rate.id == invoice_queue_item.vat_rate_id %}{% set selected = true %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-											{% endfor %}
-										</select>
-
-										<select name="invoice_item[{{ loop.index }}][company_vat_rate_id]" class="form-control vat_regime_company_country">
-											<option {% if selected == false and vat_rate.id == invoice_queue_item.vat_rate_id %}{% set selected = true %}selected{% endif %} value="0">{% trans "No VAT" %} (0%)</option>
-											{% for vat_rate in company_vat_rates %}
-												<option {% if vat_rate.vat_rate_id == invoice_queue_item.vat_rate_id %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-											{% endfor %}
-										</select>
-
-										<span class="vat_regime_none">
-											<p class="form-control-static">
-												{% trans "No VAT" %}
-											</p>
-										</span>
-
-									</td>
-									<td>
-										<div class="form-control-static">
-											<a href="javascript:void(0);" onclick="remove_item($(this));">
-												<span class="glyphicon glyphicon-remove"></span>
-											</a>
-										</div>
-									</td>
-								</tr>
+		<form method="post" action="/sales/invoice?action=export">
+		<div class="card text-bg-light">
+			<div class="card-body">
+				<div class="row mb-3">
+					<label class="col-3 col-form-label">{% trans "Export invoices" %}</label>
+					<div class="col-xs-9">
+						<select name="months[]" class="form-control multiselect" multiple="multiple">
+						{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
+							<optgroup label="{{ year }}">
+								{% for month in 1..12 %}
+									{% if year < "now"|date("Y") or ( month <= "now"|date("m") and year >= "now"|date("Y") ) %}
+										<option value="{{ year }}-{{ "%02d"|format(month) }}">{{ (year~'-'~month~'-01')|date("F Y") }}</option>
+									{% endif %}
 								{% endfor %}
-							{% endif %}
+							</optgroup>
+						{% endfor %}
+						</select>
+					</div>
+				</div>
 
-							<tr>
-								<td class="text-right grand-total" colspan="4">{% trans "Total excl VAT" %}</td>
-								<td id="total" class="grand-total">&nbsp;</td>
-								<td>&nbsp;</td>
-							</tr>
+				<div class="row mb-3">
+					<label class="col-3 col-form-label">{% trans "Export format" %}</label>
+					<div class="col-xs-4">
+						<select name="export_format" class="form-control">
+							<option value="Export_Expertm_Invoice">Expert/M</option>
+							<option value="Export_Excel_Invoice">Excel</option>
+						</select>
+					</div>
+				</div>
 
-						</tbody>
-					</table>
-
-					<div class="text-right">
-						<button type="button" onclick="javascript:add_item({})" class="btn btn-default">
-							<span class="glyphicon glyphicon-plus"></span> {% trans "Add item" %}
+				<div class="row mb-3">
+					<div class="col-9 col-offset-3">
+						<button type="submit" class="btn btn-primary">
+							{% trans "Download" %}
 						</button>
 					</div>
 				</div>
 			</div>
-
-			<div class="text-right">
-				<button type="submit" class="btn btn-primary">
-					{% trans "Save" %} <span class="glyphicon glyphicon-arrow-right"></span>
-				</button>
-			</div>
-		</form>
-
-		<script type="text/x-handlebars-template" id="new-invoice-item-tmpl">
-
-			<tr>
-				<td>
-					<select name="invoice_item[((nr))][product_type_id]" class="form-control">
-						{% for product_type in product_types %}
-							<option value="{{ product_type.id }}">{{ product_type.name }}</option>
-						{% endfor %}
-					</select>
-				</td>
-				<td>
-					<input type="hidden" name="invoice_item[((nr))][invoice_queue_id]" value="((invoice_queue_id))">
-					<textarea class="form-control autogrow" name="invoice_item[((nr))][description]">((description))</textarea>
-				</td>
-				<td>
-					<input type="text" class="form-control qty" name="invoice_item[((nr))][qty]" value="((qty))">
-				</td>
-				<td>
-					<input type="text" class="form-control price" name="invoice_item[((nr))][price]" value="((price))">
-				</td>
-				<td>
-					<select name="invoice_item[((nr))][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
-						<option value="0">{% trans "No VAT" %} (0%)</option>
-						{% for vat_rate in customer_vat_rates %}
-							<option {% if vat_rate.vat_rate_id == 1 %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-						{% endfor %}
-					</select>
-
-					<select name="invoice_item[((nr))][company_vat_rate_id]" class="form-control vat_regime_company_country">
-						<option value="0">{% trans "No VAT" %} (0%)</option>
-						{% for vat_rate in company_vat_rates %}
-							<option {% if vat_rate.vat_rate_id == 1 %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-						{% endfor %}
-					</select>
-
-					<span class="vat_regime_none">
-						<p class="form-control-static">
-							{% trans "No VAT" %}
-						</p>
-					</span>
-				</td>
-				<td>
-					<div class="form-control-static">
-						<a href="javascript:void(0);" onclick="remove_item($(this));">
-							<span class="glyphicon glyphicon-remove"></span>
-						</a>
-					</div>
-				</td>
-			</tr>
-		</script>
-		<script type="text/javascript">
-			function add_item(data) {
-
-				items = $('#invoice-items').find('tr input[name*="qty"]');
-				ids = [];
-				items.each(function(){
-					id = parseInt($(this).prop('name').match(/\d+/));
-					ids.push(id);
-				});
-
-				nr = ids.length == 0 ? 0 : ids.max()+1;
-				$.extend(data, {'nr': nr});
-
-				var source = $("#new-invoice-item-tmpl").html();
-				Handlebars.setDelimiter('(',')');
-				var template = Handlebars.compile(source);
-				$('#invoice-items').find('tr:last').before(template(data));
-				autosize($('.autogrow'));
-				set_vat_regime();
-				check_total_price();
-			}
-
-			function remove_item(obj) {
-				if($('#invoice-items').find('tr').length > 1) {
-					obj.parents('tr').remove();
-				}
-				check_total_price();
-			}
-
-			function toggle_vat_mode(element) {
-				if ($(element).val() == 'group') {
-					$('#price_header_group').show();
-					$('#price_header_line').hide();
-				} else {
-					$('#price_header_group').hide();
-					$('#price_header_line').removeClass('hide');
-					$('#price_header_line').show();
-				}
-			}
-
-			function check_total_price() {
-				total = 0;
-				$('#invoice-items tr').each(function() {
-					price = $(this).find('.price').val();
-					qty = $(this).find('.qty').val();
-
-					if (price != parseFloat(price)) {
-						$('#total').text('');
-						return;
-					}
-
-					if (qty != parseFloat(qty)) {
-						$('#total').text('');
-						return;
-					}
-
-					price = price.replace(',', '.');
-					qty = qty.replace(',', '.');
-
-
-
-					if (price != '' && qty != '') {
-						total += parseFloat(price)*parseFloat(qty);
-					}
-				});
-
-				if (isNaN(total.toFixed(2))) {
-					$('#total').text('');
-				} else {
-					$('#total').text('€' + total.toFixed(2));
-				}
-			}
-
-			$(document).ready(function() {
-				check_total_price();
-			});
-
-			$(document).on('change keyup paste', '.price' ,function() {
-				check_total_price();
-			});
-		</script>
-	{% elseif action == 'export' %}
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/invoice">{% trans "Invoices" %}</a></li>
-			<li class="active">{% trans "Export invoices" %}</li>
-		</ol>
-
-		<form class="form-horizontal" method="post" action="/sales/invoice?action=export">
-		<div class="well">
-			<div class="form-group">
-				<label class="col-xs-3 control-label">{% trans "Export invoices" %}</label>
-				<div class="col-xs-9">
-					<select name="months[]" class="form-control multiselect" multiple="multiple">
-					{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
-						<optgroup label="{{ year }}">
-							{% for month in 1..12 %}
-								{% if year < "now"|date("Y") or ( month <= "now"|date("m") and year >= "now"|date("Y") ) %}
-									<option value="{{ year }}-{{ "%02d"|format(month) }}">{{ (year~'-'~month~'-01')|date("F Y") }}</option>
-								{% endif %}
-							{% endfor %}
-						</optgroup>
-					{% endfor %}
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="col-xs-3 control-label">{% trans "Export format" %}</label>
-				<div class="col-xs-4">
-					<select name="export_format" class="form-control">
-						<option value="Export_Expertm_Invoice">Expert/M</option>
-						<option value="Export_Excel_Invoice">Excel</option>
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-xs-9 col-xs-offset-3">
-					<button type="submit" class="btn btn-primary">
-						{% trans "Download" %}
-					</button>
-				</div>
-			</div>
 		</div>
 		</form>
 
+		<script type="text/javascript">
+		$('select').select2({
+		  theme: "bootstrap-5",
+		  closeOnSelect: false
+		});
+		</script>
+
 	{% else %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li class="active">{% trans "Invoices" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Invoices" %}</h4>
+			</div>
+		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card panel-default">
+			<div class="card-header">
 				{% trans "Filter" %}
 			</div>
-			<div class="panel-body">
-				<form method="post" action="/sales/invoice" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-9">
+			<div class="card-body">
+				<form method="post" action="/sales/invoice">
+					<div class="row mb-3">
+						<label class="col-2 col-form-label text-end">{% trans "Search" %}</label>
+						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Paid" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3">
+						<label class="col-sm-2 col-form-label text-end">{% trans "Paid" %}</label>
+						<div class="col-sm-9">
 							<select name="paid" class="form-control">
 								<option value=""> - - </option>
 								<option value="0"{% if pager.has_condition('paid', 0) %} selected{% endif %}>{% trans "Unpaid" %}</option>
@@ -1017,21 +339,15 @@
 
 					{% set conditions = pager.get_conditions() %}
 
-					<div class="form-group">
-						<label class="control-label col-xs-3">{% trans "Date" %}</label>
-						<div class="col-xs-9">
-							<div class="form-inline">
-								<div class="form-group" style="position: relative">
-									<input type="text" class="form-control datepicker" name="date_start" id="date_start" value="{{ conditions['invoice.created'].0.get_value().0 }}" placeholder="{% trans "From" %}">
-								</div>
-								<div class="form-group" style="position: relative">
-									<input type="text" class="form-control datepicker" name="date_end" id="date_end" value="{{ conditions['invoice.created'].0.get_value().1 }}" placeholder="{% trans "To" %}">
-								</div>
-							</div>
+					<div class="row mb-3">
+						<label class="col-sm-2 col-form-label text-end">{% trans "Date" %}</label>
+						<div class="col-sm-9">
+							<input type="text" name="date" class="form-control" id="invoice_date" >
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+
+					<div class="row">
+						<div class="col-sm-3 offset-sm-2">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
 							</button>
@@ -1040,6 +356,14 @@
 				</form>
 			</div>
 		</div>
+		<script type="text/javascript">
+			flatpickr( $('#invoice_date'), {
+				mode: 'range',
+				altInput: true,
+				altFormat: "F j, Y",
+				defaultDate: [ '{{ conditions['invoice.created'].0.get_value().0 }}', '{{ conditions['invoice.created'].1.get_value().0 }}' ]
+			});
+		</script>
 
 		{% if env.sticky_session.message is defined %}
 			{% if env.sticky_session.message == 'invoice_sent' %}
@@ -1055,42 +379,43 @@
 			</div>
 		{% endif %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card mt-3">
+			<div class="card-header">
 				<div class="pull-right">
 					<a href="/sales/invoice?action=create_step1" title="">
+						<i data-feather="plus"></i>
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						{% trans "Add invoice" %}
 					</a>
-					-
+
 					<a href="/sales/invoice?action=export" title="{% trans "Export invoices" %}">
-						<i class="fa fa-file"></i> {% trans "Export invoices" %}
+						<i data-feather="file-text"></i> {% trans "Export invoices" %}
 					</a>
 				</div>
 				{{ base.pager_count(pager.item_count) }}  - &nbsp; {% trans "VAT excl." %} &euro; {{ pager.get_sum('price_excl')|number_format(2, ',', '.') }} | {% trans "VAT incl." %} &euro; {{ pager.get_sum('price_incl')|number_format(2, ',', '.')  }} &nbsp;
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 			{% for invoice in pager.items %}
 			{% if loop.first %}
-				<table class="table table-hover table-striped table-condensed table-responsive" id="invoice-list">
-				<thead>
-					<tr>
-						<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
-						<th width="10%">{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
-						<th>{{ pager.create_header('Customer'|trans, 'customer.lastname')|raw }}</th>
-						<th width="10%" class="text-right">{{ pager.create_header('Price excl'|trans, 'price_excl')|raw }}</th>
-						<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
-						<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
-						<th width="30"></th>
-						<th width="30"></th>
-					</tr>
-				</thead>
-				<tbody>
+				<table class="table table-hover table-striped table-responsive" id="invoice-list">
+					<thead>
+						<tr>
+							<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>
+							<th width="10%">{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+							<th>{{ pager.create_header('Customer'|trans, 'customer.lastname')|raw }}</th>
+							<th width="10%" class="text-right">{{ pager.create_header('Price excl'|trans, 'price_excl')|raw }}</th>
+							<th width="10%" class="text-right">{{ pager.create_header('Price incl'|trans, 'price_incl')|raw }}</th>
+							<th width="10%">{{ pager.create_header('Paid'|trans, 'paid')|raw }}</th>
+							<th width="30"></th>
+							<th width="30"></th>
+						</tr>
+					</thead>
+					<tbody>
 			{% endif %}
 
 			<tr {% if invoice.is_expired() %}class="warning"{% endif %}>
 				<td>
-					<a href="/sales/invoice?action=edit&id={{ invoice.id }}" title="">
+					<a href="/sales/invoice?action=edit&id={{ invoice.id }}" title="{% trans "Invoice" %} {{ invoice.number }}">
 						{{ invoice.number }}
 					</a>
 				</td>
@@ -1104,25 +429,25 @@
 				<td class="text-right">€{{ invoice.get_price_incl()|number_format }}</td>
 				<td>
 				{% if invoice.paid %}
-					<span class="label label-success">{% trans "Yes" %}</span>
+					<span class="badge text-bg-success">{% trans "Yes" %}</span>
 				{% else %}
-					<span class="label label-danger">{% trans "No" %}</span>
+					<span class="badge text-bg-danger">{% trans "No" %}</span>
 				{% endif %}
 				</td>
 				<td>
 					<a href="/sales/invoice?action=download&id={{ invoice.id }}">
-						<span class="glyphicon glyphicon-download"></span>
+						<i data-feather="download"></i>
 					</a>
 				</td>
 				<td class="text-right">
 					<a href="/sales/invoice?action=edit&id={{ invoice.id }}" title="">
-						<span class="glyphicon glyphicon-pencil"></span>
+						<i data-feather="edit"></i>
 					</a>
 				</td>
 			</tr>
 
 			{% if loop.last %}
-				</tbody>
+					</tbody>
 				</table>
 
 				{{ pager.links|raw }}
@@ -1139,45 +464,3 @@
 	{% endif %}
 
 {% endblock content %}
-
-{% block javascript %}
-
-	{% if action == 'create_step1' %}
-		<script type="text/javascript" src="/bloodhound.min.js"></script>
-		<script type="text/javascript" src="/typeahead.min.js"></script>
-		<script type="text/javascript">
-
-			var customers = new Bloodhound({
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				remote: '/administrative/customer?action=ajax_search&search=%QUERY'
-			});
-
-			customers.initialize();
-
-			$('#autocomplete_customer').typeahead({
-				hint: true,
-				highlight: true,
-				minLength: 2
-			},{
-				name:	'customer',
-				displayKey: 'value',
-				source:	customers.ttAdapter()
-			});
-			$('#autocomplete_customer').on('typeahead:selected typeahead:autocompleted', function(e,data) {
-				$('#customer_id').val(data.id);
-			});
-		</script>
-	{% elseif action == 'create_step3' %}
-		<script type="text/javascript" src="/handlebars/handlebars.js"></script>
-	{% endif %}
-
-{% endblock javascript %}
-
-{% block head %}
-
-	{% if action == 'create_step1' %}
-		<link rel="stylesheet" type="text/css" href="/typeahead.css">
-	{% endif %}
-
-{% endblock head %}

@@ -8,7 +8,7 @@ return [
 	 */
 	'application_dir' => dirname(__FILE__) . '/../app/',
 	'asset_paths' => [
-		dirname(__FILE__) . '/../lib/external/assets/',
+		dirname(__FILE__) . '/../lib/external/assets/composer/',
 	],
 	'tmp_dir' => dirname(__FILE__) . '/../tmp/',
 	'lib_dir' => dirname(__FILE__) . '/../lib/',

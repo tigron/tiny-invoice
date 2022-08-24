@@ -1,0 +1,79 @@
+<div class="d-flex flex-column bg-dark" style="width: 280px;" id="sidebar">
+
+	<a href="/" class="d-flex w-100 mb-3 mt-3 justify-content-center">
+		<img src="/logo.svg" width="180px">
+	</a>
+	<hr>
+	<ul class="nav nav-pills flex-column mb-auto" id="menu">
+		<li class="nav-item">
+			<a href="#menu_sales" data-bs-toggle="collapse" class="nav-link">
+				<span class="ms-1 d-sm-inline">{% trans "Sales" %}</span>
+			</a>
+
+			<div class="collapse show" id="menu_sales">
+				<ul class="nav flex-column">
+					<li class="w-100">
+						<a href="/sales/invoice" class="nav-link {% if env.module.get_name() == 'sales_invoice' %}active{% endif %}">
+							{% trans "Invoices" %}
+						</a>
+					</li>
+					<li class="w-100">
+						<a href="/sales/creditnote" class="nav-link {% if env.module.get_name() == 'sales_creditnote' %}active{% endif %}">
+							{% trans "Credit notes" %}
+						</a>
+					</li>
+					<li class="w-100">
+						<a href="/sales/invoice/queue" class="nav-link {% if env.module.get_name() == 'sales_invoice_queue' %}active{% endif %}">
+							{% trans "Invoice queue" %}
+						</a>
+					</li>
+					<li class="w-100">
+						<a href="#" class="nav-link"> <span class="d-none d-sm-inline">Item</span> 2 </a>
+					</li>
+				</ul>
+			</div>
+		</li>
+
+		<li class="nav-item">
+			<a href="#menu_documents" data-bs-toggle="collapse" class="nav-link">
+				<span class="ms-1 d-sm-inline">{% trans "Documents" %}</span>
+			</a>
+			<div class="collapse" id="menu_documents">
+				<ul class="nav flex-column">
+					<li class="w-100">
+						<a href="/administrative/document" class="nav-link">
+							{% trans "All documents" %}
+						</a>
+					</li>
+					<li class="w-100">
+						<a href="/administrative/document/contract" class="nav-link">
+							{% trans "Contracts" %}
+						</a>
+					</li>
+					<li class="w-100">
+						<a href="/administrative/document/documentation" class="nav-link">
+							{% trans "Documentation" %}
+						</a>
+					</li>
+					<li class="w-100">
+						<a href="/administrative/document/invoice" class="nav-link">
+							{% trans "Incoming invoices" %}
+						</a>
+					</li>
+					<li class="w-100">
+						<a href="/administrative/document/creditnote" class="nav-link">
+							{% trans "Incoming creditnotes" %}
+						</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+
+
+
+
+
+
+</div>
+

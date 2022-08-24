@@ -1,0 +1,440 @@
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Invoices" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/invoice">
+							{% trans "Invoices" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Create new invoice" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+{% if errors[-1] is defined %}
+	<div class="alert alert-danger">{% trans "The price must be greater than €0" %}</div>
+{% elseif errors is defined %}
+	<div class="alert alert-danger">
+		{{ errors|print_r }}
+	</div>
+{% endif %}
+
+<form method="post" action="/sales/invoice?action=create_step3">
+	<div class="card mb-3">
+		<div class="card-header">
+			{% trans "Additional info" %}
+		</div>
+		<div class="card-body">
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Reference" %}</label>
+				<div class="col-9">
+					<input type="text" class="form-control" id="reference" name="invoice[reference]" value="{{ env.session.invoice.reference }}">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Internal reference" %}</label>
+				<div class="col-9">
+					<input type="text" class="form-control" id="internal_reference" name="invoice[internal_reference]" value="{{ env.session.invoice.internal_reference }}">
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Expiration date" %}</label>
+				<div class="col-9">
+					<select name="invoice[expiration_date]" class="form-control">
+						<option value="+14 days">2 {% trans "weeks" %}</option>
+						<option value="+1 month" selected>1 {% trans "month" %}</option>
+						<option value="+60 days">60 {% trans "days" %}</option>
+						<option value="+90 days">90 {% trans "days" %}</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "VAT mode" %}</label>
+				<div class="col-9">
+					<select name="invoice[vat_mode]" class="form-control" onchange="javascript:toggle_vat_mode(this);">
+						<option value="group">{% trans "Per group" %}</option>
+						<option value="line">{% trans "Per line" %}</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Service delivery in" %}</label>
+				<div class="col-9">
+					<select name="invoice[service_delivery_to_country_id]" class="form-control multiselect" onchange="set_vat_regime();" id="vat_regime" data-company-country-id="{{ settings.country_id }}">
+						<optgroup label="{% trans "Other" %}">
+							{% for country in countries['european'] %}
+								{% if country.id == settings.country_id %}
+									<option value="{{ country.id }}">{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
+								{% endif %}
+							{% endfor %}
+							{% for country in countries['european'] %}
+								{% if country.id == env.session.invoice.customer_contact.country_id and country.id != settings.country_id %}
+									<option value="{{ country.id }}" selected>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
+								{% endif %}
+							{% endfor %}
+							<option value="-1">{% trans "Outside Europe" %}</option>
+						</optgroup>
+
+						<optgroup label="{% trans "Europe" %}">
+						{% for country in countries['european'] %}
+							<option value="{{ country.id }}" >{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
+						{% endfor %}
+						</optgroup>
+					</select>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-3 text-end">
+					<label class="form-check-label">{% trans "Send invoice" %} ({{ env.session.invoice.customer_contact.invoice_method.name }})</label>
+				</div>
+				<div class="col-9">
+					<div class="form-check form-switch form-check-inline">
+
+						<input type="checkbox" class="form-check-input" name="send_invoice" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+
+		$(function() {
+			set_vat_regime();
+		});
+
+		function set_vat_regime() {
+			delivery_in_country_id = $('#vat_regime').val();
+			company_country_id = $('#vat_regime').data('company-country-id');
+
+			{% if env.session.invoice.customer_contact.vat != '' %}
+				customer_valid_vat = true;
+			{% else %}
+				customer_valid_vat = false;
+			{% endif %}
+
+			if (delivery_in_country_id == company_country_id) {
+				$('.vat_regime_customer_country').addClass('visually-hidden');
+				$('.vat_regime_company_country').removeClass('visually-hidden');
+				$('.vat_regime_none').addClass('visually-hidden');
+				return;
+			}
+
+			if (delivery_in_country_id == -1) {
+				$('.vat_regime_customer_country').addClass('visually-hidden');
+				$('.vat_regime_company_country').addClass('visually-hidden');
+				$('.vat_regime_none').removeClass('visually-hidden');
+				return;
+			}
+
+			if (customer_valid_vat) {
+				$('.vat_regime_customer_country').addClass('visually-hidden');
+				$('.vat_regime_company_country').addClass('visually-hidden');
+				$('.vat_regime_none').removeClass('visually-hidden');
+				return;
+			}
+
+			$('.vat_regime_customer_country').removeClass('visually-hidden');
+			$('.vat_regime_company_country').addClass('visually-hidden');
+			$('.vat_regime_none').addClass('visually-hidden');
+		}
+
+	</script>
+
+	<div class="card mb-3">
+		<div class="card-header">
+			{% trans "Add items" %}
+		</div>
+		<div class="card-body">
+			<table class="table table-hover table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>{% trans "Product definition" %}</th>
+						<th width="50%">{% trans "Description" %}</th>
+						<th width="10%">{% trans "Qty" %}</th>
+						<th width="10%">
+							<span id="price_header_line" class="visually-hidden">{% trans "Price incl VAT" %}</span>
+							<span id="price_header_group">{% trans "Price excl VAT" %}</span>
+						</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="invoice-items">
+
+					{% for invoice_item in env.post.invoice_item %}
+					<tr>
+						<td>
+							<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-control">
+								{% for product_type in product_types %}
+									<option value="{{ product_type.id }}" {% if product_type.id == invoice_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
+								{% endfor %}
+							</select>
+						</td>
+						<td>
+							<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_item.invoice_queue_id }}">
+							<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_item.description }}</textarea>
+						</td>
+						<td>
+							<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_item.qty }}">
+						</td>
+						<td>
+							<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_item.price }}">
+						</td>
+						<td>
+
+							<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
+								<option value="0">{% trans "No VAT" %} (0%)</option>
+								{% set selected = false %}
+								{% for vat_rate in customer_vat_rates %}
+									<option {% if selected == false and vat_rate.vat == invoice_queue_item.vat %}{% set selected = true %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+								{% endfor %}
+							</select>
+
+							<select name="invoice_item[{{ loop.index }}][company_vat_rate_id]" class="form-control vat_regime_company_country">
+								<option {% if (selected == false and vat_rate.vat == invoice_queue_item.vat) or (invoice_item.company_vat_rate_id is defined and invoice_item.company_vat_rate_id == 0) %}{% set selected = true %}selected{% endif %} value="0">{% trans "No VAT" %} (0%)</option>
+								{% for vat_rate in company_vat_rates %}
+									<option {% if (vat_rate.vat_rate_id == 1 and invoice_item.company_vat_rate_id is not defined) or (invoice_item.company_vat_rate_id is defined and vat_rate.vat_rate_id == invoice_item.company_vat_rate_id) %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+								{% endfor %}
+							</select>
+
+							<span class="vat_regime_none">
+								<p class="form-control-static">
+									{% trans "No VAT" %}
+								</p>
+							</span>
+
+						</td>
+						<td>
+							<div class="form-control-static">
+								<a href="javascript:void(0);" onclick="remove_item($(this));">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+
+					{% if env.post.invoice_item is not defined %}
+						{% for invoice_queue_item in invoice_queue_items %}
+						<tr>
+							<td>
+								<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-control">
+									{% for product_type in product_types %}
+										<option value="{{ product_type.id }}" {% if product_type.id == invoice_queue_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
+									{% endfor %}
+								</select>
+							</td>
+							<td>
+								<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_queue_item.id }}">
+								<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_queue_item.description }}</textarea>
+							</td>
+							<td>
+								<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_queue_item.qty }}">
+							</td>
+							<td>
+								<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_queue_item.price }}">
+							</td>
+							<td>
+
+								<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
+									<option value="0">{% trans "No VAT" %} (0%)</option>
+									{% set selected = false %}
+									{% for vat_rate in customer_vat_rates %}
+										<option {% if selected == false and vat_rate.id == invoice_queue_item.vat_rate_id %}{% set selected = true %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+									{% endfor %}
+								</select>
+
+								<select name="invoice_item[{{ loop.index }}][company_vat_rate_id]" class="form-control vat_regime_company_country">
+									<option {% if selected == false and vat_rate.id == invoice_queue_item.vat_rate_id %}{% set selected = true %}selected{% endif %} value="0">{% trans "No VAT" %} (0%)</option>
+									{% for vat_rate in company_vat_rates %}
+										<option {% if vat_rate.vat_rate_id == invoice_queue_item.vat_rate_id %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+									{% endfor %}
+								</select>
+
+								<span class="vat_regime_none">
+									<p class="form-control-static">
+										{% trans "No VAT" %}
+									</p>
+								</span>
+
+							</td>
+							<td>
+								<div class="form-control-static">
+									<a href="javascript:void(0);" onclick="remove_item($(this));">
+										<span class="glyphicon glyphicon-remove"></span>
+									</a>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+					{% endif %}
+
+					<tr>
+						<td class="text-right grand-total" colspan="4">{% trans "Total excl VAT" %}</td>
+						<td id="total" class="grand-total">&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+
+				</tbody>
+			</table>
+
+			<div class="text-right">
+				<button type="button" onclick="javascript:add_item({})" class="btn btn-light">
+					<i data-feather="plus"></i> {% trans "Add item" %}
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="text-right">
+		<button type="submit" class="btn btn-primary">
+			{% trans "Save" %} <span class="glyphicon glyphicon-arrow-right"></span>
+		</button>
+	</div>
+</form>
+
+<script type="text/x-handlebars-template" id="new-invoice-item-tmpl">
+
+	<tr>
+		<td>
+			<select name="invoice_item[((nr))][product_type_id]" class="form-control">
+				{% for product_type in product_types %}
+					<option value="{{ product_type.id }}">{{ product_type.name }}</option>
+				{% endfor %}
+			</select>
+		</td>
+		<td>
+			<input type="hidden" name="invoice_item[((nr))][invoice_queue_id]" value="((invoice_queue_id))">
+			<textarea class="form-control autogrow" name="invoice_item[((nr))][description]">((description))</textarea>
+		</td>
+		<td>
+			<input type="text" class="form-control qty" name="invoice_item[((nr))][qty]" value="((qty))">
+		</td>
+		<td>
+			<input type="text" class="form-control price" name="invoice_item[((nr))][price]" value="((price))">
+		</td>
+		<td>
+			<select name="invoice_item[((nr))][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
+				<option value="0">{% trans "No VAT" %} (0%)</option>
+				{% for vat_rate in customer_vat_rates %}
+					<option {% if vat_rate.vat_rate_id == 1 %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+				{% endfor %}
+			</select>
+
+			<select name="invoice_item[((nr))][company_vat_rate_id]" class="form-control vat_regime_company_country">
+				<option value="0">{% trans "No VAT" %} (0%)</option>
+				{% for vat_rate in company_vat_rates %}
+					<option {% if vat_rate.vat_rate_id == 1 %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+				{% endfor %}
+			</select>
+
+			<span class="vat_regime_none">
+				<p class="form-control-static">
+					{% trans "No VAT" %}
+				</p>
+			</span>
+		</td>
+		<td>
+			<div class="form-control-static">
+				<a href="javascript:void(0);" onclick="remove_item($(this));">
+					<span class="glyphicon glyphicon-remove"></span>
+				</a>
+			</div>
+		</td>
+	</tr>
+</script>
+<script type="text/javascript">
+	function add_item(data) {
+
+		items = $('#invoice-items').find('tr input[name*="qty"]');
+		ids = [];
+		items.each(function(){
+			id = parseInt($(this).prop('name').match(/\d+/));
+			ids.push(id);
+		});
+
+		nr = ids.length == 0 ? 0 : ids.max()+1;
+		$.extend(data, {'nr': nr});
+
+		var source = $("#new-invoice-item-tmpl").html();
+		Handlebars.setDelimiter('(',')');
+		var template = Handlebars.compile(source);
+		$('#invoice-items').find('tr:last').before(template(data));
+		autosize($('.autogrow'));
+		set_vat_regime();
+		check_total_price();
+	}
+
+	function remove_item(obj) {
+		if($('#invoice-items').find('tr').length > 1) {
+			obj.parents('tr').remove();
+		}
+		check_total_price();
+	}
+
+	function toggle_vat_mode(element) {
+		if ($(element).val() == 'group') {
+			$('#price_header_group').show();
+			$('#price_header_line').addClass('visually-hidden');
+		} else {
+			$('#price_header_group').addClass('visually-hidden');
+			$('#price_header_line').removeClass('visually-hidden');
+			$('#price_header_line').show();
+		}
+	}
+
+	function check_total_price() {
+		total = 0;
+		$('#invoice-items tr').each(function() {
+			price = $(this).find('.price').val();
+			qty = $(this).find('.qty').val();
+
+			if (price != parseFloat(price)) {
+				$('#total').text('');
+				return;
+			}
+
+			if (qty != parseFloat(qty)) {
+				$('#total').text('');
+				return;
+			}
+
+			price = price.replace(',', '.');
+			qty = qty.replace(',', '.');
+
+
+
+			if (price != '' && qty != '') {
+				total += parseFloat(price)*parseFloat(qty);
+			}
+		});
+
+		if (isNaN(total.toFixed(2))) {
+			$('#total').text('');
+		} else {
+			$('#total').text('€' + total.toFixed(2));
+		}
+	}
+
+	$(document).ready(function() {
+		check_total_price();
+	});
+
+	$(document).on('change keyup paste', '.price' ,function() {
+		check_total_price();
+	});
+</script>

@@ -2,11 +2,11 @@
 
 	<hr>
 
-	<div class="form-group {% if 'supplier_id' in errors|keys %}has-error{% endif %}">
-		<label class="col-xs-3 control-label">
+	<div class="row mb-3 {% if 'supplier_id' in errors|keys %}has-error{% endif %}">
+		<label class="col-3 col-form-label">
 			{% trans "Supplier" %}
 		</label>
-		<div class="col-xs-5">
+		<div class="col-5">
 			{% if document.supplier is not defined %}
 				<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" placeholder="{% trans "Search supplier" %}..."/>   {# TODO fix width #}
 				<input type="hidden" class="supplier_id" name="document[supplier_id]" value=""/>
@@ -41,38 +41,38 @@
 		</div>
 	</div>
 
-	<div class="form-group{% if 'supplier_identifier' in errors|keys %} has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Supplier identifier" %}</label>
-		<div class="col-xs-5">
+	<div class="row mb-3{% if 'supplier_identifier' in errors|keys %} has-error{% endif %}">
+		<label class="col-3 col-form-label">{% trans "Supplier identifier" %}</label>
+		<div class="col-5">
 			<input type="text" name="document[supplier_identifier]" class="form-control" value="{{ document.supplier_identifier }}" data-toggle="popover" title="{% trans "Already in use" %}" data-content="{% trans "This identifier is already used for another invoice." %}" onchange="check_supplier_identifier();" />
 		</div>
 		{{ form.invalid_input('supplier_identifier', errors) }}
 	</div>
 
-	<div class="form-group{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Accounting identifier" %}</label>
-		<div class="col-xs-5">
+	<div class="row mb-3{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
+		<label class="col-3 col-form-label">{% trans "Accounting identifier" %}</label>
+		<div class="col-5">
 			<input type="text" name="document[accounting_identifier]" class="form-control" value="{{ document.accounting_identifier }}"/>
 		</div>
 		{{ form.invalid_input('accounting_identifier', errors) }}
 	</div>
 
-	<div class="form-group{% if 'price_excl' in errors|keys %} has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Price excl VAT" %}</label>
-		<div class="col-xs-5">
+	<div class="row mb-3{% if 'price_excl' in errors|keys %} has-error{% endif %}">
+		<label class="col-3 col-form-label">{% trans "Price excl VAT" %}</label>
+		<div class="col-5">
 			<div class="input-group">
-				<span class="input-group-addon">&euro;</span>
+				<span class="input-group-text">&euro;</span>
 				<input type="text" name="document[price_excl]" onchange="check_vat();" class="form-control" value="{{ document.price_excl }}" >
 			</div>
 			{{ form.invalid_input('price_excl', errors) }}
 		</div>
 	</div>
 
-	<div class="form-group{% if 'price_incl' in errors|keys %} has-error{% endif %}">
-		<label class="col-xs-3 control-label">{% trans "Price incl VAT" %}</label>
-		<div class="col-xs-5">
+	<div class="row mb-3{% if 'price_incl' in errors|keys %} has-error{% endif %}">
+		<label class="col-3 col-form-label">{% trans "Price incl VAT" %}</label>
+		<div class="col-5">
 			<div class="input-group">
-				<span class="input-group-addon">&euro;</span>
+				<span class="input-group-text">&euro;</span>
 				<input type="text" name="document[price_incl]" onchange="check_vat();" data-toggle="popover" title="{% trans "VAT problem" %}" data-content="{% trans "The VAT amount seems to be incorrect" %}" class="form-control" value="{{ document.price_incl }}" >
 			</div>
 			{{ form.invalid_input('price_incl', errors) }}
@@ -123,9 +123,9 @@
 
 	</script>
 
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Payment message" %}</label>
-		<div class="col-xs-9">
+	<div class="row mb-3">
+		<label class="col-3 col-form-label">{% trans "Payment message" %}</label>
+		<div class="col-9">
 			<div class="radio">
 				<label><input type="radio" name="payment_message_type" value="payment_message_type_structured" {% if document.payment_message == '' %}checked{% endif %}>{% trans "Structured message" %}</label>
 			</div>
@@ -135,22 +135,22 @@
 		</div>
 	</div>
 
-	<div class="form-group {% if 'payment_structured_message' in errors|keys %} has-error{% endif %}" id="payment_message_type_structured">
-		<div class="col-xs-9 col-xs-offset-3">
+	<div class="row mb-3 {% if 'payment_structured_message' in errors|keys %} has-error{% endif %}" id="payment_message_type_structured">
+		<div class="col-9 col-offset-3">
 			<input type="text" class="form-control" name="document[payment_structured_message]" value="{{ document.payment_structured_message }}" />
 		</div>
 	</div>
 
 
-	<div class="form-group" id="payment_message_type_free">
-		<div class="col-xs-9 col-xs-offset-3">
+	<div class="row mb-3" id="payment_message_type_free">
+		<div class="col-9 col-offset-3">
 			<textarea name="document[payment_message]" class="form-control autogrow">{{ document.payment_message }}</textarea>
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Paid" %}</label>
-		<div class="col-xs-9">
+	<div class="row mb-3">
+		<label class="col-3 col-form-label">{% trans "Paid" %}</label>
+		<div class="col-9">
 			<input type="checkbox" name="document[paid]" id="paid" data-group-cls="btn-group-xs" {% if document.paid %}checked{% endif %}/>
 		</div>
 	</div>
@@ -170,7 +170,7 @@
 			$('#payment_message_type_structured').hide();
 			$('#payment_message_type_free').hide();
 
-			if ( $('input[name=payment_message_type]').parents('.form-group').is(':visible') ){
+			if ( $('input[name=payment_message_type]').parents('.row mb-3').is(':visible') ){
 				$('#' + value).show();
 			}
 		}

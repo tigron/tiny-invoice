@@ -1,0 +1,100 @@
+{% import '_default/macro.base.twig' as base %}
+
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Invoices" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/invoice">
+							{% trans "Invoices" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Create new invoice" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact', 'redirect': '/sales/invoice?action=create_step2', 'modal_size': 'lg'} %}
+
+{% if errors is defined %}
+<div class="alert alert-danger">
+	{% trans "Please select an invoice contact." %}
+</div>
+{% endif %}
+
+		<div class="row">
+		{% for customer_contact in customer_contacts %}
+			<div class="col-3">
+				<div class="card customer_contact" data-customer-contact-id="{{ customer_contact.id }}">
+					<div class="card-body">
+						<span class="badge bg-secondary actions visually-hidden">
+							<a href="#manage-customer-contact" class="text-white" data-bs-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
+								<i data-feather="edit"></i>
+							</a>
+							<a href="javascript:void(0);" class="text-white" onclick="delete_contact({{ customer_contact.id }})">
+								<i data-feather="trash-2"></i>
+							</a>
+						</span>					
+
+						{{ base.customer_contact(customer_contact, settings) }}
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+			<div class="col-3">
+				<div class="card ">
+					<div class="card-body text-center customer_contact h-100">
+						<a class="btn btn-primary" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="0">
+							{% trans "Create new" %}
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<form method="post" action="/sales/invoice?action=create_step2" id="invoice-create-step2">
+			<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
+			<button class="btn btn-primary pull-right">
+				{% trans "Next" %}
+			</button>
+		</form>
+
+
+<script type="text/javascript">
+
+	$('.customer_contact').on({
+		mouseenter: function() {
+			$(this).find('.actions').toggleClass('visually-hidden');
+		},
+		mouseleave: function() {
+			$(this).find('.actions').toggleClass('visually-hidden');
+		},
+		click: function() {
+			$('.customer_contact').find('input[type=radio]').prop('checked', false);
+			$('.customer_contact.card').removeClass('border-primary');
+			$(this).addClass('border-primary');
+			$('#invoice-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
+			$('input[name=customer_contact_id]').val( $(this).data('customer-contact-id') );
+		}
+	});
+
+	function delete_contact(id) {
+		$.get('/administrative/customer/contact?action=delete&id=' + id, function(data) {
+			if(data['status'] == 1) {
+				$('#customer-contact-' + id).remove();
+				$('#invoice-create-step2 input').val('');
+			} else {
+				alert('Error deleting contact');
+			}
+		}, 'json');
+	}
+
+</script>

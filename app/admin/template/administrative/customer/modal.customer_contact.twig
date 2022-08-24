@@ -6,130 +6,130 @@
 
 {% block body %}
 
-	<div class="alert alert-danger hide">
+	<div class="alert alert-danger visually-hidden">
 		{% trans "Some fields were not filled in correctly" %}. {% trans "Please correct them" %}.
 	</div>
 
-	<form class="form-horizontal form-condensed" method="post" id="invoice-contact-form">
+	<form method="post" id="invoice-contact-form">
 		<input type="hidden" name="customer_contact[customer_id]" id="customer_id" value="">
 
-		<div class="form-group{% if 'alias' in errors|keys %} has-error{% endif %}">
-			<label for="alias" class="control-label col-xs-3">{% trans "Alias" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'alias' in errors|keys %} has-error{% endif %}">
+			<label for="alias" class="col-form-label col-3 text-end">{% trans "Alias" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[alias]" id="alias" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'company' in errors|keys %} has-error{% endif %}">
-			<label for="company" class="control-label col-xs-3">{% trans "Company" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'company' in errors|keys %} has-error{% endif %}">
+			<label for="company" class="col-form-label col-3 text-end">{% trans "Company" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[company]" id="company" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'firstname' in errors|keys %} has-error{% endif %}">
-			<label for="firstname" class="control-label col-xs-3">{% trans "Firstname" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'firstname' in errors|keys %} has-error{% endif %}">
+			<label for="firstname" class="col-form-label col-3 text-end">{% trans "Firstname" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[firstname]" id="firstname" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'lastname' in errors|keys %} has-error{% endif %}">
-			<label for="lastname" class="control-label col-xs-3">{% trans "Lastname" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'lastname' in errors|keys %} has-error{% endif %}">
+			<label for="lastname" class="col-form-label col-3 text-end">{% trans "Lastname" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[lastname]" id="lastname" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'street' in errors|keys %} has-error{% endif %}">
-			<label for="street" class="control-label col-xs-3">{% trans "Street" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'street' in errors|keys %} has-error{% endif %}">
+			<label for="street" class="col-form-label col-3 text-end">{% trans "Street" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[street]" id="street" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'housenumber' in errors|keys %} has-error{% endif %}">
-			<label for="housenumber" class="control-label col-xs-3">{% trans "Housenumber" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'housenumber' in errors|keys %} has-error{% endif %}">
+			<label for="housenumber" class="col-form-label col-3 text-end">{% trans "Housenumber" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[housenumber]" id="housenumber" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'city' in errors|keys %} has-error{% endif %}">
-			<label for="city" class="control-label col-xs-3">{% trans "City" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'city' in errors|keys %} has-error{% endif %}">
+			<label for="city" class="col-form-label col-3 text-end">{% trans "City" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[city]" id="city" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'zipcode' in errors|keys %} has-error{% endif %}">
-			<label for="zipcode" class="control-label col-xs-3">{% trans "Zip code" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'zipcode' in errors|keys %} has-error{% endif %}">
+			<label for="zipcode" class="col-form-label col-3 text-end">{% trans "Zip code" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[zipcode]" id="zipcode" class="form-control" value="">
 			</div>
 
 		</div>
 
-		<div class="form-group {% if 'country_id' in errors|keys %} has-error{% endif %}">
-			<label for="country_id" class="control-label col-xs-3">{% trans "Country" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'country_id' in errors|keys %} has-error{% endif %}">
+			<label for="country_id" class="col-form-label col-3 text-end">{% trans "Country" %}</label>
+			<div class="col-9">
 				<select id="country_id" name="customer_contact[country_id]" class="form-control"></select>
 			</div>
 		</div>
 
-		<div class="form-group{% if 'email' in errors|keys %} has-error{% endif %}">
-			<label for="email" class="control-label col-xs-3">{% trans "Email" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'email' in errors|keys %} has-error{% endif %}">
+			<label for="email" class="col-form-label col-3 text-end">{% trans "Email" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[email]" id="email" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'phone' in errors|keys %} has-error{% endif %}">
-			<label for="phone" class="control-label col-xs-3">{% trans "Phone" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'phone' in errors|keys %} has-error{% endif %}">
+			<label for="phone" class="col-form-label col-3 text-end">{% trans "Phone" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[phone]" id="phone" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'mobile' in errors|keys %} has-error{% endif %}">
-			<label for="mobile" class="control-label col-xs-3">{% trans "Mobile" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'mobile' in errors|keys %} has-error{% endif %}">
+			<label for="mobile" class="col-form-label col-3 text-end">{% trans "Mobile" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[mobile]" id="mobile" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'fax' in errors|keys %} has-error{% endif %}">
-			<label for="fax" class="control-label col-xs-3">{% trans "Fax" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'fax' in errors|keys %} has-error{% endif %}">
+			<label for="fax" class="col-form-label col-3 text-end">{% trans "Fax" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[fax]" id="fax" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'vat' in errors|keys %} has-error{% endif %}">
-			<label for="vat" class="control-label col-xs-3">{% trans "Vat" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'vat' in errors|keys %} has-error{% endif %}">
+			<label for="vat" class="col-form-label col-3 text-end">{% trans "Vat" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[vat]" id="vat" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group{% if 'reference' in errors|keys %} has-error{% endif %}">
-			<label for="reference" class="control-label col-xs-3">{% trans "Reference" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1{% if 'reference' in errors|keys %} has-error{% endif %}">
+			<label for="reference" class="col-form-label col-3 text-end">{% trans "Reference" %}</label>
+			<div class="col-9">
 				<input type="text" name="customer_contact[reference]" id="reference" class="form-control" value="">
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label for="language_id" class="control-label col-xs-3">{% trans "Language" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1">
+			<label for="language_id" class="col-form-label col-3 text-end">{% trans "Language" %}</label>
+			<div class="col-9">
 				{{ form.select_language(languages, 'customer_contact[language_id]', 'language_id', 0) }}
 			</div>
 		</div>
 
 		{% if settings.enable_click_post %}
-			<div class="form-group">
-				<label class="col-xs-3 control-label">{% trans "Invoice method" %}</label>
-				<div class="col-xs-9">
+			<div class="row mb-1">
+				<label class="col-3 col-form-label text-end">{% trans "Invoice method" %}</label>
+				<div class="col-9">
 					<select name="customer_contact[invoice_method_id]" class="form-control" id="invoice_method_id">
 						<option value="1">{% trans "Mail" %}</option>
 						<option value="2">{% trans "Click & Post" %}</option>
@@ -138,9 +138,9 @@
 			</div>
 		{% endif %}
 
-		<div class="form-group">
-			<label class="col-xs-3 control-label">{% trans "VAT Bound" %}</label>
-			<div class="col-xs-9">
+		<div class="row mb-1">
+			<label class="col-3 col-form-label text-end">{% trans "VAT Bound" %}</label>
+			<div class="col-9">
 				<select name="customer_contact[vat_bound]" class="form-control" id="vat_bound">
 					<option value="-1">{% trans "Automatic" %}</option>
 					<option value="0">{% trans "No" %}</option>
@@ -285,8 +285,9 @@
 				if ("id" in data) {
 					window.location = '{{ redirect|raw }}';
 				} else {
-					$('.alert').removeClass('hide');
+					$('.alert').removeClass('visually-hidden');
 					$.each(data, function(key, value) {
+						$('#invoice-contact-form #' + key).addClass('is-invalid');					
 						$('#invoice-contact-form #' + key).parents('.form-group').addClass('has-error');
 					});
 				}
@@ -302,5 +303,5 @@
 
 {% block footer %}
 	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
-	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
 {% endblock footer %}

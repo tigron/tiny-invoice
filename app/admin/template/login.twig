@@ -8,47 +8,48 @@
 
 	<title>{% if settings.company is not empty %}{{ settings.company }} - {% endif %}Tiny Invoice</title>
 
-	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="handheld, all">
-	<link rel="stylesheet" href="/style.css" type="text/css" media="handheld, all">
+	<link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css" type="text/css" media="handheld, all">	
 
 	<script type="text/javascript" src="/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
-<body id="login">
-	<div id="login-wrapper">
+<body>
+	<div class="container">
+		<div class="row">
 
+			<div class="col-4 offset-4 pt-3">
+				<img src="/logo.svg" width="100%" />
+				{% if error %}
+					<div class="alert alert-danger">
+						{% trans "Username and/or password is incorrect" %}
+					</div>
+				{% endif %}
 
-		<div id="login-content">
-			<img src="/logo.svg" width="100%" />
-			{% if error %}
-				<div class="alert alert-danger">
-					{% trans "Username and/or password is incorrect" %}
-				</div>
-			{% endif %}
+				<p class="login-box-msg">{% trans "Sign in to start your session" %}</p>
 
-			<p class="login-box-msg">{% trans "Sign in to start your session" %}</p>
+				<form action="/login" method="post">
+					<div class="row mb-1">
+						<input type="text" name="username" class="form-control" placeholder="{% trans "Username" %}" />
+					</div>
+					<div class="row mb-1">
+						<input type="password" name="password" class="form-control" placeholder="{% trans "Password" %}" />
+					</div>
 
-			<form action="/login" method="post">
-				<div class="form-group">
-					<input type="text" name="username" class="form-control" placeholder="{% trans "Username" %}" />
-				</div>
-				<div class="form-group">
-					<input type="password" name="password" class="form-control" placeholder="{% trans "Password" %}" />
-				</div>
+					<hr />
 
-				<hr />
+					<div class="row">
+						<button type="submit" class="btn btn-primary pull-right mb-1">
+							{% trans "Login" %} <span class="glyphicon glyphicon-arrow-right"></span>
+						</button>
 
-				<div class="form-group">
-					<button type="submit" class="btn btn-primary pull-right">
-						{% trans "Login" %} <span class="glyphicon glyphicon-arrow-right"></span>
-					</button>
+						<a href="/mobile" class="btn btn-outline-secondary">
+							<span class="glyphicon glyphicon-phone"></span> {% trans "Mobile interface" %}
+						</a>
+					</div>
+				</form>
+			</div>
 
-					<a href="/mobile" class="btn btn-default">
-						<span class="glyphicon glyphicon-phone"></span> {% trans "Mobile interface" %}
-					</a>
-				</div>
-			</form>
 		</div>
 	</div>
 

@@ -94,17 +94,36 @@ class Customer extends Module {
 
 		$pager = new Pager('customer');
 		$pager->add_sort_permission('lastname');
-		$pager->set_search($_GET['search']);
+		if (isset($_GET['q'])) {
+			$pager->set_search($_GET['q']);
+		}
+		if (isset($_GET['page'])) {
+			$_GET['p'] = $_GET['page'];
+		}	
+		$pager->add_sort_permission('company');
+		$pager->set_sort('company');
 		$pager->page();
 
 		$data = [];
 		foreach ($pager->items as $customer) {
 			$data[] = [
 				'id' => $customer->id,
-				'value' => $customer->get_display_name(),
+				'text' => $customer->get_display_name(),
 			];
 		}
-		echo json_encode($data);
+
+		$page_count = ceil($pager->item_count / \Skeleton\Pager\Config::$items_per_page);
+
+		$result = [
+			'results' => $data,
+			'pagination' => [
+				'more' => false,
+			]
+		];
+		if ($pager->get_page() < $page_count) {
+			$result['pagination']['more'] = true;
+		}
+		echo json_encode($result);
 	}
 
 	/**

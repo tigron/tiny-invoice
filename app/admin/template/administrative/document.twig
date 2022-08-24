@@ -8,11 +8,27 @@
 	{% if action == 'edit' %}
 
 		{% block breadcrumb %}
-		<ul class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</li></a>
-			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-			<li class="active">{% trans "Edit Document" %}</li>
-		</ul>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Documents" %}</h4>
+			</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/administrative/document">
+									{% trans "Documents" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Edit Document" %} {{ document.id }}
+							</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>		
 		{% endblock breadcrumb %}
 
 		{% if errors is defined %}
@@ -35,23 +51,23 @@
 			</div>
 		{% endif %}
 
-		<div class="row">
-			<div class="{% if document.preview_file_id > 0 %}col-xs-7{% else %}col-xs-12{% endif %}">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Document details" %}</div>
-					<div class="panel-body">
-						<form class="form-horizontal form-condensed" action="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" method="post">
-							<div class="form-group {% if 'title' in errors|keys %}has-error{% endif %}">
-								<label class="col-xs-3 control-label">{% trans "Title" %}</label>
-								<div class="col-xs-9">
+		<div class="row mb-3">
+			<div class="{% if document.preview_file_id > 0 %}col-7{% else %}col-12{% endif %}">
+				<div class="card">
+					<div class="card-header">{% trans "Document details" %}</div>
+					<div class="card-body">
+						<form action="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" method="post">
+							<div class="row mb-3 {% if 'title' in errors|keys %}has-error{% endif %}">
+								<label class="col-3 col-form-label">{% trans "Title" %}</label>
+								<div class="col-9">
 									<input type="text" class="form-control" name="document[title]" value="{{ document.title }}" />
 									{{ form.invalid_input('title', errors) }}
 								</div>
 							</div>
 
-							<div class="form-group">
-								<label class="col-xs-3 control-label">{% trans "Document type" %}</label>
-								<div class="col-xs-9">
+							<div class="row mb-3">
+								<label class="col-3 col-form-label">{% trans "Document type" %}</label>
+								<div class="col-9">
 									<select name="document[classname]" class="form-control" onchange="show_classname_fields()" id="slc_classname">
 										<option value="Document" {% if document.classname == 'Document' %}selected{% endif %}>
 											{% trans "Standard document" %}
@@ -72,9 +88,9 @@
 								</div>
 							</div>
 
-							<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
-								<label for="file_id" class="col-xs-3 control-label">{% trans "File" %}</label>
-								<div class="col-xs-9">
+							<div class="row mb-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
+								<label for="file_id" class="col-3 col-form-label">{% trans "File" %}</label>
+								<div class="col-9">
 									<div id="document-file" class="form-control-static">
 										{% if document.file_id > 0 %}
 											<div class="file">
@@ -108,33 +124,33 @@
 								</div>
 							</div>
 
-							<div class="form-group">
-								<label class="col-xs-3 control-label">{% trans "Date" %}</label>
-								<div class="col-xs-9">
+							<div class="row mb-3">
+								<label class="col-3 col-form-label">{% trans "Date" %}</label>
+								<div class="col-9">
 									<input type="text" class="form-control datepicker" name="document[date]" value="{{ document.date|date }}" />
 								</div>
 							</div>
 
 							<div class="classname_fields classname_document_incoming_invoice classname_document_incoming_creditnote">
-								<div class="form-group{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
-									<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
-									<div class="col-xs-9">
+								<div class="row mb-3{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
+									<label class="col-3 col-form-label">{% trans "Expiration date" %}</label>
+									<div class="col-9">
 										<input type="text" class="form-control datepicker" name="document[expiration_date]" value="{{ document.expiration_date }}">
 										{{ form.invalid_input('expiration_date', errors) }}
 									</div>
 								</div>
 							</div>
 
-							<div class="form-group">
-								<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
-								<div class="col-xs-9">
+							<div class="row mb-3">
+								<label class="col-3 col-form-label">{% trans "Tags" %}</label>
+								<div class="col-9">
 									<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 								</div>
 							</div>
 
-							<div class="form-group">
-								<label class="col-xs-3 control-label">{% trans "Description" %}</label>
-								<div class="col-xs-9">
+							<div class="row mb-3">
+								<label class="col-3 col-form-label">{% trans "Description" %}</label>
+								<div class="col-9">
 									<textarea class="form-control autogrow" name="document[description]">{{ document.description }}</textarea>
 								</div>
 							</div>
@@ -152,8 +168,8 @@
 							</div>
 
 							<hr>
-							<div class="form-group">
-								<div class="col-xs-9 col-xs-offset-3">
+							<div class="row mb-3">
+								<div class="col-9 col-offset-3">
 									<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 									<a href="/administrative/document?action=delete&id={{ document.id }}" class="btn btn-danger" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?" >{% trans "Delete" %}</a>
 									{% if settings.setasign_pdf_extractor %}
@@ -171,9 +187,9 @@
 			{% endif %}
 
 			{% if document.preview_file_id > 0 %}
-			<div class="col-xs-5">
-				<div class="panel panel-default">
-					<div class="panel-heading">
+			<div class="col-5">
+				<div class="card">
+					<div class="card-header">
 						{% trans "Preview" %}
 
 						{% if settings.setasign_pdf_extractor %}
@@ -190,7 +206,7 @@
 						</span>
 						{% endif %}
 					</div>
-					<div class="panel-body text-center zoom">
+					<div class="card-body text-center zoom">
 						<img src="/picture?id={{ document.preview_file_id }}&size=document_preview" />
 					</div>
 				</div>
@@ -201,10 +217,10 @@
 
 		{% if document.classname == 'Document_Incoming_Invoice' or document.classname == 'Document_Incoming_Creditnote' %}
 		<div class="row">
-			<div class="col-xs-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Payments" %}</div>
-					<div class="panel-body">
+			<div class="col-12">
+				<div class="card mb-3">
+					<div class="card-header">{% trans "Payments" %}</div>
+					<div class="card-body">
 					{% for balance in document.get_bank_account_statement_transaction_balances() %}
 						{% set transaction = balance.bank_account_statement_transaction %}
 						{% if loop.first %}
@@ -292,11 +308,27 @@
 
 	{% elseif action == 'add' %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-			<li class="active">{% trans "Add document" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Documents" %}</h4>
+			</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/administrative/document">
+									{% trans "Documents" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Add Document" %}
+							</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>	
 
 		{% if errors is defined %}
 			<div class="alert alert-danger">
@@ -306,27 +338,38 @@
 
 		<form class="form form-horizontal form-condensed" method="post" action="/administrative/document?action=add">
 
-			<div class="panel panel-default">
-				<div class="panel-body">
+			<div class="card">
+				<div class="card-body">
 
-					<div class="form-group{% if 'title' in errors|keys %} has-error{% endif %}">
-						<label for="title" class="col-xs-3 control-label">{% trans "Title" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3{% if 'title' in errors|keys %} has-error{% endif %}">
+						<label for="title" class="col-3 col-form-label text-end">{% trans "Title" %}</label>
+						<div class="col-9">
 							<input type="text" name="document[title]" id="title" class="form-control" value="{{ document.title }}">
 							{{ form.invalid_input('title', errors) }}
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
-						<div class="col-xs-9">
-							<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
+					<div class="row mb-3">
+						<label class="col-3 col-form-label text-end">{% trans "Tags" %}</label>
+						<div class="col-9">
+							<select name="tag_ids" class="form-select autocomplete_tag"></select>						
 						</div>
 					</div>
 
-					<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
-						<label for="file_id" class="col-xs-3 control-label">{% trans "File" %}</label>
-						<div class="col-xs-9">
+<script type="text/javascript">
+$('.autocomplete_tag').select2({
+	theme: "bootstrap-5",
+	ajax: {
+		url: '//administrative/tag?action=ajax_search',
+		dataType: 'json'
+	    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+	}
+});
+</script>					
+
+					<div class="row mb-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
+						<label for="file_id" class="col-3 col-form-label text-end">{% trans "File" %}</label>
+						<div class="col-9">
 							<div id="document-file" class="form-control-static hide">
 								{% if document.file_id > 0 %}
 									<div class="file">
@@ -360,8 +403,8 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
 							</button>
@@ -374,27 +417,28 @@
 
 	{% else %}
 		{% block pager %}
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li class="active">{% trans "Documents" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Documents" %}</h4>
+			</div>
+		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card mb-3">
+			<div class="card-header">
 				{% trans "Filter" %}
 			</div>
-			<div class="panel-body">
-				<form method="post" action="/administrative/document" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-9">
+			<div class="card-body">
+				<form method="post" action="/administrative/document">
+					<div class="row mb-3">
+						<label class="col-2 col-form-label text-end">{% trans "Search" %}</label>
+						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Type" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3">
+						<label class="col-2 col-form-label text-end">{% trans "Type" %}</label>
+						<div class="col-9">
 							<select name="type" class="form-control">
 								<option value=""> - - - </option>
 								<option value="Document" {% if pager.has_condition('classname', 'Document') %}selected{% endif %}>
@@ -416,15 +460,15 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3">
+						<label class="col-2 col-form-label text-end">{% trans "Tags" %}</label>
+						<div class="col-9">
 							<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-2 offset-2">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
 							</button>
@@ -438,18 +482,18 @@
 			{{ base.display_flash_message(env.sticky_session.message, 'document') }}
 		{% endif %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				<div class="pull-right">
 					<a href="/administrative/document?action=add" title="">
-						<span class="glyphicon glyphicon-plus-sign"></span>
+						<i data-feather="plus"></i>
 						{% trans "Add document" %}
 					</a>
 				</div>
 
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 			{% for document in pager.items %}
 			{% if loop.first %}
 				<table class="table table-hover table-striped table-condensed table-responsive">
@@ -494,12 +538,13 @@
 					{% endfor %}
 
 					{% for document_tag in document_tags %}
-						{{ document_tag.name }}{% if not loop.last %}, {% endif %}
+						<span class="badge rounded-pill text-bg-primary">{{ document_tag.name }}</span>
 					{% endfor %}
 
 				</td>
 				<td width="20">
 					<a href="/administrative/document?action=download&id={{ document.id }}">
+						<i data-feather="download"></i>
 						<span class="glyphicon glyphicon-download"></span>
 					</a>
 				</td>
@@ -515,12 +560,12 @@
 						{% set href = '/administrative/document/documentation' %}
 					{% endif %}
 					<a href="{{ href }}?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
-						<span class="glyphicon glyphicon-pencil"></span>
+						<i data-feather="edit"></i>
 					</a>
 				</td>
 				<td width="20">
 					<a href="/administrative/document?action=delete&id={{ document.id }}" title="{% trans "Delete document" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?">
-						<span class="glyphicon glyphicon-remove"></span>
+						<i data-feather="trash"></i>
 					</a>
 				</td>
 			</tr>
@@ -546,32 +591,6 @@
 {% endblock content %}
 
 {% block javascript %}
-	<script type="text/javascript" src="/bootstrap-tokenfield.min.js"></script>
-	<script type="text/javascript" src="/bloodhound.min.js"></script>
-	<script type="text/javascript" src="/typeahead.min.js"></script>
-	<script type="text/javascript">
-
-		var tags = new Bloodhound({
-			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-			queryTokenizer: Bloodhound.tokenizers.whitespace,
-			remote: '/administrative/tag?action=ajax_search&search=%QUERY'
-		});
-
-		tags.initialize();
-
-		$('.autocomplete-tag').tokenfield({
-			typeahead: [null, { source: tags.ttAdapter(), displayKey: 'label' }]
-		});
-
-		$('.autocomplete-tag').tokenfield('setTokens', [{% for selected_tag in selected_tags %}{ value: "{{ selected_tag.id }}", label: "{{ selected_tag.name }}" }{% if not loop.last %},{% endif %}{% endfor %}]);
-
-		$('.autocomplete-tag').on('tokenfield:createtoken', function(e) {
-			if (e.attrs['value'] == e.attrs['label']) {
-				return false;
-			}
-		});
-
-	</script>
 
 	{% if action == 'add' or action == 'edit' %}
 
@@ -613,7 +632,7 @@
 							$("#document-file").append(template(response));
 							$('#document-dropzone').hide();
 							$('#document-file').find('.help-block').remove();
-							$('#document-file').closest('.form-group').removeClass('has-error');
+							$('#document-file').closest('.row mb-3').removeClass('has-error');
 							$('#document-file').removeClass('hide');
 						}
 						catch (e) {
@@ -656,66 +675,6 @@
 
 		</script>
 	{% endif %}
-
-
-
-		<script type="text/javascript">
-
-			var suppliers = new Bloodhound({
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				remote: '/administrative/supplier?action=ajax_search&search=%QUERY'
-			});
-
-			suppliers.initialize();
-
-			$('.autocomplete_supplier').typeahead({
-				hint: true,
-				highlight: true,
-				minLength: 2
-			},{
-				name:	'supplier',
-				displayKey: 'value',
-				source:	suppliers.ttAdapter()
-			});
-			$('.autocomplete_supplier').on('typeahead:selected typeahead:autocompleted', function(e,data) {
-				$('.supplier_id').val(data.id);
-				$("#autocomplete_supplier_btn").removeClass("hide");
-			});
-
-			$(".autocomplete_supplier").keydown(function() {
-				$(this).parents().find('.supplier_id').val("")
-			});		
-
-			var customers = new Bloodhound({
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				remote: '/administrative/customer?action=ajax_search&search=%QUERY'
-			});
-
-			customers.initialize();
-
-			$('.autocomplete_customer').typeahead({
-				hint: true,
-				highlight: true,
-				minLength: 2
-			},{
-				name:	'customer',
-				displayKey: 'value',
-				source:	customers.ttAdapter()
-			});
-			$('.autocomplete_customer').on('typeahead:selected typeahead:autocompleted', function(e,data) {
-				$('.customer_id').val(data.id);
-			});
-
-			$(".autocomplete_customer").keydown(function() {
-				$(this).parents().find('.supplier_id').val("")
-			});		
-		</script>
-
-
-
-
 {% endblock javascript %}
 
 {% block head %}

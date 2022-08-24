@@ -6,10 +6,16 @@ $(document).ready(function(){
 	$('form input[type="text"]:first').focus();
 
 	/**
+	 * Feather icons
+	 */
+	feather.replace()
+
+
+	/**
 	 * Auto hide dismissable alerts
 	 */
 	window.setTimeout(function() {
-			$(".alert-dismissable").animate({height: 0, opacity: 0}, 500, function() {
+			$(".alert-dismissible").animate({height: 0, opacity: 0}, 500, function() {
 				$(this).remove();
 			});
 		}, 3000
@@ -19,21 +25,6 @@ $(document).ready(function(){
 	 * Initialize confirm modal
 	 */
 	$('a[data-confirm-message],button[data-confirm-message],input[data-confirm-message]').confirmModal();
-
-	/**
-	 * Initialize datetimepicker
-	 */
-	$('.datepicker').tigronDatetimepicker({
-	    'format': 'DD/MM/YYYY',
-		'extraFormats': [ 'YYYY-MM-DD' ],
-	    'postFormat': 'YYYY-MM-DD'
-	});
-
-	/**
-	 * Initialize multiselect
-	 */
-	$('.multiselect').selectpicker({
-	});
 
 	/**
 	 * Initialize autogrow
@@ -48,8 +39,6 @@ $(document).ready(function(){
 			jump_to_page($(this));
 		}
 	});
-
-	$(':checkbox:not(.original)').checkboxpicker();
 
 });
 

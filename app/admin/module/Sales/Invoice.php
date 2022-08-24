@@ -51,19 +51,10 @@ class Invoice extends Module {
 			$pager->set_search($_POST['search']);
 		}
 
-		if (isset($_POST['date_start']) AND $_POST['date_start'] != '' AND $_POST['date_end'] == '') {
-			$pager->add_condition('created', '>=', date('Y-m-d H:i:s', strtotime($_POST['date_start'] . ' 00:00:00')));
-		} elseif (isset($_POST['date_end']) AND $_POST['date_end'] != '' AND $_POST['date_start'] == '') {
-			$pager->add_condition('created', '<=', date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59')));
-		} elseif (isset($_POST['date_start']) AND $_POST['date_start'] != '' AND isset($_POST['date_end']) AND $_POST['date_end'] != '') {
-			$pager->add_condition(
-					'created',
-					'BETWEEN',
-					[
-						date('Y-m-d H:i:s', strtotime($_POST['date_start'] . ' 00:00:00')),
-						date('Y-m-d H:i:s', strtotime($_POST['date_end'] . ' 23:59:59'))
-					]
-			);
+		if (isset($_POST['date']) AND !empty($_POST['date'])) {
+			list($date_start, $date_end) = explode(' to ', $_POST['date']);
+			$pager->add_condition('created', '>=', date('Y-m-d H:i:s', strtotime($date_start)));
+			$pager->add_condition('created', '<=', date('Y-m-d H:i:s', strtotime($date_end)));
 		}
 
 		if (isset($_POST['paid']) AND $_POST['paid'] != '') {
@@ -118,6 +109,10 @@ class Invoice extends Module {
 	 * @access public
 	 */
 	public function display_create_step2() {
+		if (!isset($_SESSION['invoice'])) {
+			Session::redirect('/sales/invoice?action=create_step1');
+		}
+		print_r($_POST);
 		$template = Template::get();
 		if (isset($_POST['customer_contact_id'])) {
 			if ($_POST['customer_contact_id'] == '') {
@@ -130,7 +125,6 @@ class Invoice extends Module {
 		}
 
 		$customer_contacts = $_SESSION['invoice']->customer->get_active_customer_contacts();
-
 		$template->assign('customer_contacts', $customer_contacts);
 		$template->assign('customer', $_SESSION['invoice']->customer);
 		$template->assign('languages', \Language::get_all());

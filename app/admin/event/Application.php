@@ -56,6 +56,9 @@ class Application extends \Skeleton\Core\Event {
 
 		// Assign settings to template. Used for company information in header
 		$template->assign('settings', \Setting::get_as_array());
+
+		\Skeleton\Pager\Config::$links_template = '@skeleton-pager\bootstrap5\links.twig';
+		\Skeleton\Pager\Config::$header_template = '@skeleton-pager\bootstrap5\header.twig';
 	}
 
 	/**
