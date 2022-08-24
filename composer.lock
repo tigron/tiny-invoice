@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "775b834d4587a274ccc5017dc82d210a",
+    "content-hash": "21c353ad439e8fb5aa63b0ce382b69bc",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -175,16 +175,16 @@
         },
         {
             "name": "bower-asset/codemirror",
-            "version": "6.0.1",
+            "version": "5.59.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/components/codemirror.git",
-                "reference": "1d03ae0b32a244ab102c87de4586eb21c451d6de"
+                "reference": "66328a0b2ba9d7f23b208b8f94c2d16cd78158b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/components/codemirror/zipball/1d03ae0b32a244ab102c87de4586eb21c451d6de",
-                "reference": "1d03ae0b32a244ab102c87de4586eb21c451d6de"
+                "url": "https://api.github.com/repos/components/codemirror/zipball/66328a0b2ba9d7f23b208b8f94c2d16cd78158b3",
+                "reference": "66328a0b2ba9d7f23b208b8f94c2d16cd78158b3"
             },
             "type": "bower-asset"
         },
@@ -7762,7 +7762,6 @@
         "tigron/skeleton-package-openapi": 20,
         "bower-asset/jquery-zoom": 20,
         "bower-asset/jquery-mask-plugin": 0,
-        "bower-asset/codemirror": 0,
         "bower-asset/urijs": 0
     },
     "prefer-stable": false,
