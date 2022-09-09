@@ -203,16 +203,17 @@ class Invoice extends Module {
 				} else {
 					$invoice_item->price_incl = $invoice_item->price;
 				}
-
-				$invoice_item->calculate_prices();
+				
+				try{
+					$invoice_item->calculate_prices(false);
+					$total_price += $invoice_item->get_price_excl();
+				} catch (\TypeError $e) {}
 
 				if ($invoice_item->validate($item_errors) === false) {
 					$errors[$row] = $item_errors;
 				} else {
 					$invoice_items[] = $invoice_item;
 				}
-
-				$total_price += $invoice_item->get_price_excl();
 			}
 
 			if ($total_price == 0) {
@@ -221,6 +222,9 @@ class Invoice extends Module {
 
 			if (count($errors) > 0) {
 				$template->assign('errors', $errors);
+				if(!empty($total_price)) {
+					$template->assign('total_price', $total_price);
+				}
 				$_SESSION['invoice']->reference = $_POST['invoice']['reference'];
 				$_SESSION['invoice']->internal_reference = $_POST['invoice']['internal_reference'];
 			} else {
@@ -251,7 +255,6 @@ class Invoice extends Module {
 
 				Session::redirect('/sales/invoice');
 			}
-
 		}
 
 		$invoice_queue_items = \Invoice_Queue::get_unprocessed_by_customer_contact($_SESSION['invoice']->customer_contact);

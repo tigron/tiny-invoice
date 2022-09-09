@@ -528,7 +528,7 @@
 			<div class="alert alert-danger">{% trans "The price must be greater than €0" %}</div>
 		{% elseif errors is defined %}
 			<div class="alert alert-danger">
-				{{ errors|print_r }}
+				{% trans 'Something went wrong, please check the all the input fields' %}.
 			</div>
 		{% endif %}
 
@@ -684,18 +684,17 @@
 										{% endfor %}
 									</select>
 								</td>
-								<td>
+								<td {% if errors[loop.index].description is defined %} class="has-error"{% endif %}>
 									<input type="hidden" name="invoice_item[{{ loop.index }}][invoice_queue_id]" value="{{ invoice_item.invoice_queue_id }}">
 									<textarea class="form-control autogrow" name="invoice_item[{{ loop.index }}][description]">{{ invoice_item.description }}</textarea>
 								</td>
-								<td>
+								<td {% if errors[loop.index].qty is defined %} class="has-error"{% endif %}>
 									<input type="text" class="form-control qty" name="invoice_item[{{ loop.index }}][qty]" value="{{ invoice_item.qty }}">
 								</td>
-								<td>
+								<td {% if errors[loop.index].price_excl is defined %} class="has-error"{% endif %}>
 									<input type="text" class="form-control price" name="invoice_item[{{ loop.index }}][price]" value="{{ invoice_item.price }}">
 								</td>
 								<td>
-
 									<select name="invoice_item[{{ loop.index }}][customer_vat_rate_id]" class="form-control vat_regime_customer_country">
 										<option value="0">{% trans "No VAT" %} (0%)</option>
 										{% set selected = false %}
@@ -785,7 +784,7 @@
 
 							<tr>
 								<td class="text-right grand-total" colspan="4">{% trans "Total excl VAT" %}</td>
-								<td id="total" class="grand-total">&nbsp;</td>
+								<td id="total" class="grand-total">{% if total_price is not empty %} €{{ total_price|number_format }} {% else %} &nbsp; {% endif %}</td>
 								<td>&nbsp;</td>
 							</tr>
 
@@ -877,6 +876,14 @@
 				autosize($('.autogrow'));
 				set_vat_regime();
 				check_total_price();
+
+				$('input.price').mask('AAAAAAAAAAAAAASAA', {'translation': {
+						A: {pattern: /\d/, optional: true},
+						S: {pattern: /\./, optional: true}
+						}, placeholder: "0.00"
+					});
+
+				$('input.qty').mask("0#", {placeholder: "0"});
 			}
 
 			function remove_item(obj) {
@@ -931,7 +938,13 @@
 			}
 
 			$(document).ready(function() {
-				check_total_price();
+				$('input.price').mask('AAAAAAAAAAAAAASAA', {'translation': {
+						A: {pattern: /\d/, optional: true},
+						S: {pattern: /\./, optional: true}
+						}, placeholder: "0.00"
+					});
+
+				$('input.qty').mask("0#", {placeholder: "0"});
 			});
 
 			$(document).on('change keyup paste', '.price' ,function() {
