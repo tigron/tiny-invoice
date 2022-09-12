@@ -86,7 +86,7 @@ class Invoice extends \Skeleton\Package\Api\Web\Module\Call {
 	 * @access public
 	 * @return array $ids ids of incoming_invoices
 	 */
-	public function call_getAll() {
+	public static function call_getAll() {
 		return \Document_Incoming_Invoice::get_all_ids();
 	}
 }
