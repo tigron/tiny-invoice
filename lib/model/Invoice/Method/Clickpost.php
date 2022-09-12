@@ -82,7 +82,7 @@ class Invoice_Method_Clickpost extends Invoice_Method {
 		$transport->add_variable('Cover', 'N');
 		$transport->add_variable('BothSided', 'N');
 		$transport->add_variable('MaxRetry', 3);
-		$config = Config::get();
+		$config = \Skeleton\Core\Config::Get();
 		if ($config->debug) {
 			// Don't send if we are in debug mode
 			return;

@@ -1,15 +1,15 @@
 {% extends "_default/layout.base.twig" %}
 
 {% block header_js %}
-    {% embed "@skeleton-package-crud/javascript.twig" %}{% endembed %}
+    {% embed "@skeleton-package-crud/bootstrap3/javascript.twig" %}{% endembed %}
 {% endblock header_js %}
 
 {% block header_css %}
-    {% embed "@skeleton-package-crud/css.twig" %}{% endembed %}
+    {% embed "@skeleton-package-crud/bootstrap3/css.twig" %}{% endembed %}
 {% endblock header_css %}
 
 {% block content %}
-    {% embed "@skeleton-package-crud/content.twig" with {'object_name': 'Exports'|trans} %}
+    {% embed "@skeleton-package-crud/bootstrap3/content.twig" with {'object_name': 'Exports'|trans} %}
 		{% block page_pager_breadcrumb %}
 			{{ parent() }}
 			{% if env.sticky_session.message == 'updated' %}

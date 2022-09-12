@@ -3,8 +3,8 @@
 ini_set('memory_limit', '512M');
 ini_set('display_errors', 1);
 
-include __DIR__ . '/../../config/global.php';
-
+include __DIR__ . '/../../lib/base/Bootstrap.php';
+Bootstrap::boot();
 /**
  * This is the Skeleton Console Application
  *
@@ -18,4 +18,4 @@ use \Skeleton\Console\Application;
 $application = new Application();
 $application->add_commands();
 $application->add(new \Invoice_Delete());
-$application->run(); 
+$application->run();

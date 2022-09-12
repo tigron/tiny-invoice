@@ -102,6 +102,7 @@ class Mailscanner {
 			throw new Exception('No attachments for this mail');
 		}
 
+		$incomings = [];
 
 		foreach ($attachments as $attachment) {
 			$filename = $attachment->getFilename();
@@ -139,6 +140,10 @@ class Mailscanner {
 				$incoming_page->save();
 				$incoming_page->create_preview();
 			}
+			$incomings[] = $incoming;
+		}
+		if (count($incomings) == 0) {
+			throw new Exception('No documents processed');
 		}
 	}
 }

@@ -61,7 +61,7 @@ class Vat_Check {
 	 * @param Country $country
 	 */
 	public static function check_syntax($number, Country $country) {
-		$config = Config::Get();
+		$config = \Skeleton\Core\Config::Get();
 		$regexps = $config->regexp_vat;
 
 		if (isset($regexps[$country->vat])) {

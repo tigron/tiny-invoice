@@ -6,10 +6,12 @@
  * @author Gerry Demaret <gerry@tigron.be>
  */
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Web\Module;
+namespace App\Admin\Module;
 
-class Web_Module_403 extends Module {
+use \Skeleton\Core\Web\Template;
+use \Skeleton\Core\Application\Web\Module;
+
+class 403 extends Module {
 	/**
 	 * Login required ?
 	 * Default = yes

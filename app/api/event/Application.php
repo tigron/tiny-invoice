@@ -20,7 +20,7 @@ class Application extends \Skeleton\Core\Event {
 	 *
 	 * @access public
 	 */
-	public function bootstrap(\Skeleton\Core\Web\Module $module) {
+	public function bootstrap(\Skeleton\Core\Application\Web\Module $module) {
 		try {
 			$api_keys = \Setting::get_by_name('api_keys')->value;
 		} catch (Exception $e) {

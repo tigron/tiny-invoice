@@ -1,11 +1,11 @@
 {% extends "_default/layout.base.twig" %}
 
 {% block header_js %}
-    {% embed "@skeleton-package-crud/javascript.twig" %}{% endembed %}
+    {% embed "@skeleton-package-crud/bootstrap3/javascript.twig" %}{% endembed %}
 {% endblock header_js %}
 
 {% block header_css %}
-    {% embed "@skeleton-package-crud/css.twig" %}{% endembed %}
+    {% embed "@skeleton-package-crud/bootstrap3/css.twig" %}{% endembed %}
 {% endblock header_css %}
 
 {% block content %}
@@ -28,7 +28,7 @@
 			{% trans "The PDF Extractor has now been enabled." %} {% trans "Please refresh the page to start creating extractors." %}
 		</div>
 	{% else %}
-		{% embed "@skeleton-package-crud/content.twig" with {'object_name': 'Extractor'|trans} %}
+		{% embed "@skeleton-package-crud/bootstrap3/content.twig" with {'object_name': 'Extractor'|trans} %}
 			{% block form_edit %}
 				<div class="form-group">
 					<label class="col-xs-3 control-label">{% trans "Name" %}</label>
