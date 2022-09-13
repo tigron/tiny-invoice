@@ -51,7 +51,9 @@
 					{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
 						<optgroup label="{{ year }}">
 							{% for bank_account_statement in bank_account.get_bank_account_statements_by_year(year) %}
-								<option value="{{ bank_account_statement.id }}">{{ bank_account_statement.sequence }} ({{ bank_account_statement.original_situation_date|date }} - {{ bank_account_statement.new_situation_date|date }})</option>
+								<option value="{{ bank_account_statement.id }}" {% if bank_account_statement.original_situation_date|date('Y') == 2021 %}selected{% endif %}>
+									{{ bank_account_statement.sequence }} ({{ bank_account_statement.original_situation_date|date }} - {{ bank_account_statement.new_situation_date|date }})
+								</option>
 								{% endfor %}
 						</optgroup>
 					{% endfor %}

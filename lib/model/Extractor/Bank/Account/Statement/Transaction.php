@@ -60,7 +60,7 @@ class Extractor_Bank_Account_Statement_Transaction {
 
 		if ( $return === false && $error ) {
 			$exception = new Extractor_Eval_Exception();
-			$exception->line = $error['line'];
+			$exception->line = (int)$error['line'];
 			$exception->setMessage($error['message']);
 			throw $exception;
 		}

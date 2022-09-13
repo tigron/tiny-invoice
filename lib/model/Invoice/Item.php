@@ -98,7 +98,7 @@ class Invoice_Item {
 	 * @return decimal $price_excl
 	 */
 	public function get_price_excl() {
-		return $this->price_excl * $this->qty;
+		return round($this->price_excl * $this->qty, 2);
 	}
 
 	/**
