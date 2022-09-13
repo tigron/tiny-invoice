@@ -216,15 +216,8 @@ class Invoice extends Module {
 				}
 			}
 
-			if ($total_price == 0) {
-				$errors[-1] = 'free';
-			}
-
 			if (count($errors) > 0) {
 				$template->assign('errors', $errors);
-				if(!empty($total_price)) {
-					$template->assign('total_price', $total_price);
-				}
 				$_SESSION['invoice']->reference = $_POST['invoice']['reference'];
 				$_SESSION['invoice']->internal_reference = $_POST['invoice']['internal_reference'];
 			} else {
@@ -234,11 +227,9 @@ class Invoice extends Module {
 				$invoice->internal_reference = $_POST['invoice']['internal_reference'];
 				$invoice->vat_mode = $_POST['invoice']['vat_mode'];
 				$invoice->generate_number();
-				$invoice->save();
 
 				foreach ($invoice_items as $invoice_item) {
-					$invoice->add_invoice_item($invoice_item);
-
+					$invoice->add_invoice_item($invoice_item, false);
 					if (!empty($invoice_item->invoice_queue_id)) {
 						$invoice_queue = \Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
 						$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
@@ -246,14 +237,21 @@ class Invoice extends Module {
 					}
 				}
 
-				if (isset($_POST['send_invoice'])) {
-					$invoice->schedule_send();
+				$invoice_errors = [];
+				if ($invoice->validate($invoice_errors) === false){
+					$template->assign('invoice_errors', $invoice_errors);
+				} else {
+					$invoice->expiration_date = date('YmdHis', strtotime($_POST['invoice']['expiration_date']));
+					$invoice->save();
+					if (isset($_POST['send_invoice'])) {
+						$invoice->schedule_send();
+					}
+
+					unset($_SESSION['invoice']);
+					\Log::create('add', $invoice);
+	
+					Session::redirect('/sales/invoice');
 				}
-
-				unset($_SESSION['invoice']);
-				\Log::create('add', $invoice);
-
-				Session::redirect('/sales/invoice');
 			}
 		}
 

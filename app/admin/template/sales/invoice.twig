@@ -524,7 +524,7 @@
 			<li class="active">{% trans "Add items" %}</li>
 		</ol>
 
-		{% if errors[-1] is defined %}
+		{% if invoice_errors is defined %}
 			<div class="alert alert-danger">{% trans "The price must be greater than €0" %}</div>
 		{% elseif errors is defined %}
 			<div class="alert alert-danger">
@@ -866,7 +866,7 @@
 					ids.push(id);
 				});
 
-				nr = ids.length == 0 ? 0 : ids.max()+1;
+				nr = ids.length == 0 ? 1 : ids.max()+1;
 				$.extend(data, {'nr': nr});
 
 				var source = $("#new-invoice-item-tmpl").html();
