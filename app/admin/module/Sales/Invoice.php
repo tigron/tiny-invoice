@@ -161,7 +161,6 @@ class Invoice extends Module {
 				}
 
 				$invoice_item->load_array($item);
-
 				if ($_POST['invoice']['service_delivery_to_country_id'] == \Setting::get_by_name('country_id')->value) {
 					// Vat in country of company
 					if ($item['company_vat_rate_id'] != 0) {
@@ -204,6 +203,7 @@ class Invoice extends Module {
 					$invoice_item->price_incl = $invoice_item->price;
 				}
 				
+
 				try{
 					$invoice_item->calculate_prices(false);
 					$total_price += $invoice_item->get_price_excl();
@@ -216,15 +216,15 @@ class Invoice extends Module {
 				}
 			}
 
-			if ($total_price == 0) {
-				$errors[-1] = 'free';
-			}
-
-			if (count($errors) > 0) {
-				$template->assign('errors', $errors);
-				if(!empty($total_price)) {
-					$template->assign('total_price', $total_price);
+			if (count($errors) > 0 || $total_price == 0) {
+				if (count($errors)) {
+					$template->assign('errors', $errors);
 				}
+
+				if ($total_price == 0) {
+					$template->assign('total_price_error', true);
+				}
+				
 				$_SESSION['invoice']->reference = $_POST['invoice']['reference'];
 				$_SESSION['invoice']->internal_reference = $_POST['invoice']['internal_reference'];
 			} else {
@@ -234,26 +234,32 @@ class Invoice extends Module {
 				$invoice->internal_reference = $_POST['invoice']['internal_reference'];
 				$invoice->vat_mode = $_POST['invoice']['vat_mode'];
 				$invoice->generate_number();
-				$invoice->save();
-
-				foreach ($invoice_items as $invoice_item) {
-					$invoice->add_invoice_item($invoice_item);
-
-					if (!empty($invoice_item->invoice_queue_id)) {
-						$invoice_queue = \Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
-						$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
-						$invoice_queue->save();
+					
+				$invoice_errors = [];
+				if ($invoice->validate($invoice_errors) === false){
+					$template->assign('invoice_errors', $invoice_errors);
+				} else {
+					$invoice->expiration_date = date('YmdHis', strtotime($_POST['invoice']['expiration_date']));
+					$invoice->save();
+					
+					foreach ($invoice_items as $invoice_item) {
+						$invoice->add_invoice_item($invoice_item);
+						if (!empty($invoice_item->invoice_queue_id)) {
+							$invoice_queue = \Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
+							$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
+							$invoice_queue->save();
+						}
 					}
+				
+					if (isset($_POST['send_invoice'])) {
+						$invoice->schedule_send();
+					}
+
+					unset($_SESSION['invoice']);
+					\Log::create('add', $invoice);
+	
+					Session::redirect('/sales/invoice');
 				}
-
-				if (isset($_POST['send_invoice'])) {
-					$invoice->schedule_send();
-				}
-
-				unset($_SESSION['invoice']);
-				\Log::create('add', $invoice);
-
-				Session::redirect('/sales/invoice');
 			}
 		}
 

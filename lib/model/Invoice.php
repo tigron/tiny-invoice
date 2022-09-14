@@ -104,13 +104,14 @@ class Invoice {
 	 *
 	 * @access public
 	 * @param Invoice_Item $invoice_item
+	 * @param Bool $validate
+	 * 
 	 */
-	public function add_invoice_item(Invoice_Item $invoice_item) {
+	public function add_invoice_item(Invoice_Item $invoice_item, Bool $validate = true) {
 		$invoice_item->invoice_id = $this->id;
 		$invoice_item->save();
 
 		$price_excl = 0;
-
 		foreach ($this->get_invoice_items() as $invoice_item) {
 			$price_excl += $invoice_item->get_price_excl();
 		}
@@ -118,7 +119,7 @@ class Invoice {
 		$this->price_excl = $price_excl;
 		$this->generate_invoice_vat();
 		$this->price_incl = $this->get_price_incl();
-		$this->save();
+		$this->save($validate);
 
 		if (!is_null($invoice_item->invoice_queue_id)) {
 			$invoice_queue = Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
@@ -435,6 +436,36 @@ class Invoice {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Validate data
+	 *
+	 * @access public
+	 * @param array $errors
+	 * @return bool $validated
+	 */
+	public function validate(&$errors = null) {
+		$errors = [];
+		$required_fields = ['number'];
+		foreach ($required_fields as $required_field) {
+			if (!isset($this->details[$required_field]) OR $this->details[$required_field] === '') {
+				$errors[$required_field] = 'required';
+			}
+		}
+
+		$max_length_fieds = ['reference', 'internal_reference'];
+		foreach ($max_length_fieds as $max_length_fied) {
+			if (strlen($this->details[$max_length_fied]) > 64) {
+				$errors[$max_length_fied] = 'too_long';
+			}
+		}
+
+		if (count($errors) > 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
