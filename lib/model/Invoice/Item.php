@@ -86,8 +86,8 @@ class Invoice_Item {
 		// Check if we have numeric values
 		$numeric_values = ['qty', 'price_incl', 'price_excl'];
 		foreach ($numeric_values as $numeric_value) {
-			if (!is_numeric($this->details[$required_field])) {
-				$errors[$required_field] = 'non-numeric';
+			if (!is_numeric($this->details[$numeric_value])) {
+				$errors[$numeric_value] = 'non-numeric';
 			}
 		}
 		

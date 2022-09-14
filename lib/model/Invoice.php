@@ -112,7 +112,6 @@ class Invoice {
 		$invoice_item->save();
 
 		$price_excl = 0;
-
 		foreach ($this->get_invoice_items() as $invoice_item) {
 			$price_excl += $invoice_item->get_price_excl();
 		}
@@ -121,6 +120,7 @@ class Invoice {
 		$this->generate_invoice_vat();
 		$this->price_incl = $this->get_price_incl();
 		$this->save($validate);
+
 		if (!is_null($invoice_item->invoice_queue_id)) {
 			$invoice_queue = Invoice_Queue::get_by_id($invoice_item->invoice_queue_id);
 			$invoice_queue->processed_to_invoice_item_id = $invoice_item->id;
@@ -459,15 +459,6 @@ class Invoice {
 			if (strlen($this->details[$max_length_fied]) > 64) {
 				$errors[$max_length_fied] = 'too_long';
 			}
-		}
-
-		$total_price = 0;
-		foreach($this->get_invoice_items() as $invoice_item) {
-			$total_price += $invoice_item->get_price_excl();
-		}
-
-		if ($total_price == 0) {
-			$errors[] = 'free';
 		}
 
 		if (count($errors) > 0) {

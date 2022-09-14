@@ -516,7 +516,6 @@
 		</script>
 
 	{% elseif action == 'create_step3' %}
-
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="/sales/invoice" title="">{% trans "Invoices" %}</a></li>
@@ -525,11 +524,13 @@
 		</ol>
 
 		{% if invoice_errors is defined %}
-			<div class="alert alert-danger">{% trans "The price must be greater than €0" %}</div>
+			<div class="alert alert-danger">{% trans "Some of the invoice info is incorrect" %}.</div>
 		{% elseif errors is defined %}
 			<div class="alert alert-danger">
-				{% trans 'Something went wrong, please check the all the input fields' %}.
+				{% trans 'Something went wrong, please check the item input fields' %}.
 			</div>
+		{% elseif total_price_error %}
+			<div class="alert alert-danger">{% trans "The price must be greater than €0" %}.</div>
 		{% endif %}
 
 		<form method="post" action="/sales/invoice?action=create_step3" class="form-horizontal">
@@ -540,14 +541,14 @@
 				<div class="panel-body">
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Reference" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-9 {% if invoice_errors.reference is defined %}has-error{% endif %}">
 							<input type="text" class="form-control" id="reference" name="invoice[reference]" value="{{ env.session.invoice.reference }}">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Internal reference" %}</label>
-						<div class="col-xs-9">
+						<div class="col-xs-9 {% if invoice_errors.internal_reference is defined %}has-error{% endif %}">
 							<input type="text" class="form-control" id="internal_reference" name="invoice[internal_reference]" value="{{ env.session.invoice.internal_reference }}">
 						</div>
 					</div>
