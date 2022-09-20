@@ -878,13 +878,11 @@
 				set_vat_regime();
 				check_total_price();
 
-				$('input.price').mask('AAAAAAAAAAAAAASAA', {'translation': {
-						A: {pattern: /\d/, optional: true},
-						S: {pattern: /\./, optional: true}
-						}, placeholder: "0.00"
-					});
-
-				$('input.qty').mask("0#", {placeholder: "0"});
+				$('input.price, input.qty').mask('AAAAAAAAAAAAAASAA', {'translation': {
+					A: {pattern: /\d/, optional: true},
+					S: {pattern: /\./, optional: true}
+					}, placeholder: "0.00"
+				});
 			}
 
 			function remove_item(obj) {
