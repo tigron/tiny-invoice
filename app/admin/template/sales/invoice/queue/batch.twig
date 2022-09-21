@@ -1,0 +1,149 @@
+{% extends "_default/layout.base.twig" %}
+
+{% import '_default/macro.base.twig' as base %}
+
+{% block content %}
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Invoice Queue" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/invoice/queue">
+							{% trans "Invoice queue" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Batch process" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+
+{% for customer_contact in customer_contacts %}
+	{% if loop.first %}
+		<form method="post" action="/sales/invoice/queue?action=process_batch">
+		<table class="table table-alternate table-hover">
+			<thead>
+				<tr>
+					<th width="120">
+						<div class="form-check form-switch">
+							<input class="form-check-input" onchange="toggle_all();" type="checkbox" role="switch">
+						</div>
+					</th>
+					<th>{% trans "Customer" %}</th>
+					<th>{% trans "Customer contact " %}</th>
+					<th>{% trans "Number of items" %}</th>
+					<th class="text-right">{% trans "Total price" %} ({% trans "excl VAT" %})</th>
+				</tr>
+			</thead>
+			<tbody>
+
+	{% endif %}
+
+	{% set invoice_queue = customer_contact.get_outstanding_invoice_queue() %}
+	{% set total_price = 0 %}
+	{% for invoice_queue_item in invoice_queue %}
+		{% set total_price = total_price + invoice_queue_item.price*invoice_queue_item.qty %}
+	{% endfor %}
+
+	<tr data-price="{{ total_price }}">
+		<td>
+			<div class="form-check form-switch">
+				<input class="form-check-input" name="customer_contact[{{ customer_contact.id }}]" onchange="calculate_sum();" type="checkbox" role="switch">
+			</div>		
+		</td>
+		<td>
+			<a href="/administrative/customer?action=edit&id={{ customer_contact.customer_id }}">
+				{{ customer_contact.customer.get_display_name() }}
+			</a>
+		</td>
+		<td>
+			{{ customer_contact.get_display_name() }}
+		</td>
+		<td>
+			{{ invoice_queue|length }}</td>
+		</td>
+		<td class="text-right">
+			&euro;{{ total_price }}
+		</td>
+	</tr>
+
+	{% if loop.last %}
+			</tbody>
+		</table>
+
+		<div class="card text-bg-light">
+			<div class="card-body">
+				<div class="row mb-3">
+					<label class="col-3 col-form-label text-end">{% trans "Total amount" %}</label>
+					<div class="col-9">
+						<input type="text" readonly class="form-control-plaintext" id="total_amount" value="&euro;0">
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<label class="col-3 col-form-label text-end">{% trans "Expiration date" %}</label>
+					<div class="col-9">
+						<select name="invoice[expiration_date]" class="form-control">
+							<option value="+14 days">2 {% trans "weeks" %}</option>
+							<option value="+1 month" selected>1 {% trans "month" %}</option>
+							<option value="+60 days">60 {% trans "days" %}</option>
+							<option value="+90 days">90 {% trans "days" %}</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<label class="col-3 col-form-label text-end">{% trans "Send invoice" %}</label>
+					<div class="col-9">
+						<div class="form-check form-switch">
+							<input class="form-check-input" name="send_invoice" type="checkbox" role="switch">
+						</div>		
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-9 offset-3">
+						<button type="submit" class="btn btn-primary">
+							{% trans "Create invoices" %}
+						</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		</form>
+	{% endif %}
+{% else %}
+	<div class="alert alert-info">{% trans "There are no invoice queue items to be invoiced" %}</div>
+{% endfor %}
+
+
+<script type="text/javascript">
+	function toggle_all() {
+		if ($('th input[type=checkbox]').is(':checked')) {
+			$('td input[type=checkbox]').prop('checked', true);
+		} else {
+			$('td input[type=checkbox]').prop('checked', false);
+		}
+		calculate_sum();
+	}
+
+	function calculate_sum() {
+		total = 0;
+		$('tbody tr').each(function() {
+			if ( $(this).find('input[type=checkbox]').is(':checked') ){
+				total += Math.round( parseFloat( $(this).data('price') ) * 100) / 100;
+			}
+		});
+		$('#total_amount').val('€' + Math.round(total*100)/100 );
+	}
+</script>
+{% endblock content %}

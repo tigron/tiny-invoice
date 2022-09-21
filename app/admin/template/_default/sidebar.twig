@@ -5,12 +5,61 @@
 	</a>
 	<hr>
 	<ul class="nav nav-pills flex-column mb-auto" id="menu">
+		<li class="dropdown">
+			<a href="#menu_administration" data-bs-toggle="collapse" class="nav-link">
+				<span class="ms-1 d-sm-inline">{% trans "Administration" %}</span>
+			</a>
+
+			{% set modules = [ 'administrative_user', 'administrative_user_detail', 'administrative_user_mobile', 'administrative_role', 'administrative_customer', 'administrative_supplier', 'administrative_supplier_detail', 'administrative_supplier_document', 'export' ] %}
+
+			<div class="collapse {% if env.module.get_name() in modules %}show{% endif %}" id="menu_administration">
+				<ul class="nav flex-column">
+					{% if env.session.user.has_permission('admin.user') %}
+						<li class="w-100">
+							<a href="/administrative/user" class="nav-link {% if env.module.get_name() starts with 'administrative_user' %}active{% endif %}">
+								{% trans "Users" %}
+							</a>
+						</li>
+						<li class="w-100">
+							<a href="/administrative/role" class="nav-link {% if env.module.get_name() == 'administrative_role' %}active{% endif %}">
+								{% trans "Roles" %}
+							</a>
+						</li>
+					{% endif %}
+					{% if env.session.user.has_permission('admin.customer') %}
+						<li class="w-100">
+							<a href="/administrative/customer" class="nav-link {% if env.module.get_name() == 'administrative_customer' %}active{% endif %}">
+								{% trans "Customers" %}
+							</a>
+						</li>
+					{% endif %}
+					{% if env.session.user.has_permission('admin.supplier') %}
+						<li class="w-100">
+							<a href="/administrative/supplier" class="nav-link {% if env.module.get_name() starts with 'administrative_supplier' %}active{% endif %}">
+								{% trans "Suppliers" %}
+							</a>
+						</li>
+					{% endif %}
+					{% if env.session.user.has_permission('admin.export') %}
+						<li class="w-100">
+							<a href="/export" class="nav-link  {% if env.module.get_name() == 'export' %}active{% endif %}">
+								{% trans "Exports" %}
+							</a>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+		</li>
+
+
 		<li class="nav-item">
 			<a href="#menu_sales" data-bs-toggle="collapse" class="nav-link">
 				<span class="ms-1 d-sm-inline">{% trans "Sales" %}</span>
 			</a>
 
-			<div class="collapse show" id="menu_sales">
+			{% set modules = [ 'sales_invoice', 'sales_creditnote', 'sales_invoice_queue', 'sales_invoice_queue_recurring', 'sales_product_type' ] %}
+
+			<div class="collapse {% if env.module.get_name() in modules %}show{% endif %}" id="menu_sales">
 				<ul class="nav flex-column">
 					<li class="w-100">
 						<a href="/sales/invoice" class="nav-link {% if env.module.get_name() == 'sales_invoice' %}active{% endif %}">
@@ -28,7 +77,14 @@
 						</a>
 					</li>
 					<li class="w-100">
-						<a href="#" class="nav-link"> <span class="d-none d-sm-inline">Item</span> 2 </a>
+						<a href="/sales/invoice/queue/recurring" class="nav-link {% if env.module.get_name() == 'sales_invoice_queue_recurring' %}active{% endif %}">
+							{% trans "Recurring Invoice queue" %}
+						</a>
+					</li>
+					<li class="w-100">
+						<a href="/sales/product/type" class="nav-link {% if env.module.get_name() == 'sales_product_type' %}active{% endif %}">
+							{% trans "Product Definitions" %}
+						</a>
 					</li>
 				</ul>
 			</div>
@@ -38,42 +94,104 @@
 			<a href="#menu_documents" data-bs-toggle="collapse" class="nav-link">
 				<span class="ms-1 d-sm-inline">{% trans "Documents" %}</span>
 			</a>
-			<div class="collapse" id="menu_documents">
+
+			{% set modules = [ 'administrative_document', 'administrative_document_contract', 'administrative_document_documentation', 'administrative_document_invoice', 'administrative_document_creditnote' ] %}
+
+			<div class="collapse {% if env.module.get_name() in modules %}show{% endif %}" id="menu_documents">
 				<ul class="nav flex-column">
 					<li class="w-100">
-						<a href="/administrative/document" class="nav-link">
+						<a href="/administrative/document" class="nav-link {% if env.module.get_name() == 'administrative_document' %}active{% endif %}">
 							{% trans "All documents" %}
 						</a>
 					</li>
 					<li class="w-100">
-						<a href="/administrative/document/contract" class="nav-link">
+						<a href="/administrative/document/contract" class="nav-link {% if env.module.get_name() == 'administrative_document_contract' %}active{% endif %}">
 							{% trans "Contracts" %}
 						</a>
 					</li>
 					<li class="w-100">
-						<a href="/administrative/document/documentation" class="nav-link">
+						<a href="/administrative/document/documentation" class="nav-link {% if env.module.get_name() == 'administrative_document_documentation' %}active{% endif %}">
 							{% trans "Documentation" %}
 						</a>
 					</li>
 					<li class="w-100">
-						<a href="/administrative/document/invoice" class="nav-link">
+						<a href="/administrative/document/invoice" class="nav-link {% if env.module.get_name() == 'administrative_document_invoice' %}active{% endif %}">
 							{% trans "Incoming invoices" %}
 						</a>
 					</li>
 					<li class="w-100">
-						<a href="/administrative/document/creditnote" class="nav-link">
+						<a href="/administrative/document/creditnote" class="nav-link {% if env.module.get_name() == 'administrative_document_creditnote' %}active{% endif %}">
 							{% trans "Incoming creditnotes" %}
 						</a>
 					</li>
 				</ul>
 			</div>
 		</li>
+
+		{% if env.session.user.has_permission('admin.bookkeeping') %}
+			<li class="nav-item">
+				<a href="#menu_bookkeeping" data-bs-toggle="collapse" class="nav-link">
+					<span class="ms-1 d-sm-inline">{% trans "Bookkeeping" %}</span>
+				</a>
+
+				{% set modules = [ 'bookkeeping_account', 'bookkeeping_account_detail', 'bookkeeping_account_transaction', 'financial_account', 'financial_account_transaction' ] %}
+
+				<div class="collapse {% if env.module.get_name() in modules %}show{% endif %}" id="menu_bookkeeping">
+					<ul class="nav flex-column">
+						<li class="w-100">
+							<a href="/bookkeeping/account" class="nav-link {% if env.module.get_name() starts with 'bookkeeping_account' %}active{% endif %}">
+								{% trans "Bookkeeping accounts" %}
+							</a>
+						</li>
+
+						<li class="w-100">
+							<a href="/financial/account" class="nav-link {% if env.module.get_name() starts with 'financial_account' %}active{% endif %}">
+								{% trans "Bank accounts" %}
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+		{% endif %}
+
+		{% if env.session.user.has_permission('admin.setting') %}
+			<li class="nav-item">
+				<a href="#menu_settings" data-bs-toggle="collapse" class="nav-link">
+					<span class="ms-1 d-sm-inline">{% trans "Settings" %}</span>
+				</a>
+
+				{% set modules = [ 'setting_configuration', 'setting_company', 'setting_mailscanner', 'setting_api'] %}
+
+				<div class="collapse {% if env.module.get_name() in modules %}show{% endif %}" id="menu_settings">
+					<ul class="nav flex-column">
+						<li class="w-100">
+							<a href="/setting/configuration" class="nav-link {% if env.module.get_name() == 'setting_configuration' %}active{% endif %}">
+								{% trans "Configuration" %}
+							</a>
+						</li>
+
+						<li class="w-100">
+							<a href="/setting/company" class="nav-link {% if env.module.get_name() == 'setting_company' %}active{% endif %}">
+								{% trans "Company" %}
+							</a>
+						</li>
+
+						<li class="w-100">
+							<a href="/setting/mailscanner" class="nav-link {% if env.module.get_name() == 'setting_mailscanner' %}active{% endif %}">
+								{% trans "Mailscanner" %}
+							</a>
+						</li>
+
+						<li class="w-100">
+							<a href="/setting/api" class="nav-link {% if env.module.get_name() == 'setting_api' %}active{% endif %}">
+								{% trans "Api settings" %}
+							</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+		{% endif %}
 	</ul>
-
-
-
-
-
 
 </div>
 

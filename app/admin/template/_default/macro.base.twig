@@ -23,6 +23,25 @@
 
 {% endmacro display_flash_message %}
 
+{% macro alert(type, message, hide = false) %}
+    <div class="alert alert-{{ type }} {% if hide %}d-none{% endif %}" role="alert">
+        <div class="alert-icon">
+            {% if type == "primary" or type == "secondary" or type == "info" %}
+                <i class="align-middle" data-feather="info"></i>
+            {% elseif type == "success" %}
+                <i class="align-middle" data-feather="check-circle"></i>
+            {% elseif type == "danger" or type == "warning" %}
+                <i class="align-middle" data-feather="alert-triangle"></i>
+            {% endif %}
+        </div>
+        <div class="alert-message">
+            {{ message }}
+        </div>
+    </div>
+{% endmacro %}
+
+
+
 {% macro pager_count(item_count) %}
 
 	{{ item_count }}

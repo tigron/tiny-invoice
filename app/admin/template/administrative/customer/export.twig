@@ -1,0 +1,51 @@
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Customers" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/administrative/customer">
+							{% trans "Customer" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Export customers" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+<form class="form-horizontal" method="post" action="/administrative/customer?action=export">
+	<div class="card text-bg-light">
+		<div class="card-body">
+			<div class="row mb-3">
+				<label class="col-form-label col-3 text-end">{% trans "Total number of customers" %}</label>
+				<div class="col-9">
+					<p class="form-control-plaintext" id="total_amount">{{ pager.item_count }}</p>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-form-label col-3 text-end">{% trans "Export format" %}</label>
+				<div class="col-4">
+					<select name="export_format" class="form-control">
+						<option value="Export_Expertm_User">Expert/M</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-9 offset-3">
+					<button type="submit" class="btn btn-primary">
+						{% trans "Download" %}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

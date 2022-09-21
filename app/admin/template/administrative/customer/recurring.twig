@@ -6,11 +6,11 @@
 
 	{% for invoice_queue_recurring_group in pager.items %}
 		{% if loop.first %}
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<table class="table table-striped table-hover table-condensed">
 					<thead>
 						<tr>
@@ -29,7 +29,7 @@
 			<td>&euro;{{ invoice_queue_recurring_group.get_total_price() }}</td>
 			<td>
 				<a href="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}">
-					<span class="glyphicon glyphicon-pencil"></span>
+					<i data-feather="edit"></i>
 				</a>
 			</td>
 		</tr>

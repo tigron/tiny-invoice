@@ -1,6 +1,6 @@
-<div class="panel panel-default">
-	<div class="panel-heading">Fingerprint {{ fingerprint.id }}</div>
-	<div class="panel-body">
+<div class="card">
+	<div class="card-header">Fingerprint {{ fingerprint.id }}</div>
+	<div class="card-body">
 		<pre>{{ fingerprint.extract_content() }}</pre>
 
 		<a class="btn btn-danger" onclick="$('img').selectAreas('remove', {{ fingerprint.sort }});">{% trans "Delete" %}</a>

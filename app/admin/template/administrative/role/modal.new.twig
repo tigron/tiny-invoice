@@ -3,14 +3,14 @@
 {% block header %}{% trans "Create new role" %}{% endblock header %}
 
 {% block body %}
-	<div class="alert alert-danger hide">
+	<div class="alert alert-danger d-none">
 		{% trans "Some fields were not filled in correctly" %}. {% trans "Please correct them" %}.
 	</div>
 	<form class="form-horizontal" method="post">
 		<input type="hidden" name="action" value="add" >
-		<div class="form-group">
-			<label class="control-label col-xs-4">{% trans "Name" %}</label>
-			<div class="col-xs-8">
+		<div class="row mb-3">
+			<label class="col-form-label col-4 text-end">{% trans "Name" %}</label>
+			<div class="col-8">
 				<input type="text" name="role[name]" id="name" class="form-control" />
 			</div>
 		</div>
@@ -20,6 +20,6 @@
 {% endblock body %}
 
 {% block footer %}
+	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Cancel" %}</button>
 	<button type="submit" class="btn btn-primary" onclick="$(this).parents('.modal-content').find('form').submit();">{% trans "Save" %}</button>
-	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
 {% endblock footer %}

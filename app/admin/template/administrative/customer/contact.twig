@@ -11,12 +11,12 @@
 
 <div class="row">
 	{% for customer_contact in customer_contacts %}
-		<div class="col-xs-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
-			<div class="panel panel-default panel-link">
-				<div class="panel-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
+		<div class="col-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
+			<div class="card panel-link">
+				<div class="card-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
 					<div class="actions hide">
 						<a href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
-							<span class="glyphicon glyphicon-pencil"></span>
+							<i data-feather="edit"></i>
 						</a>
 						<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
 							<span class="glyphicon glyphicon-remove"></span>
@@ -28,9 +28,9 @@
 			</div>
 		</div>
 	{% endfor %}
-	<div class="col-xs-3 customer_contact">
-		<div class="panel panel-default">
-			<div class="panel-body text-center">
+	<div class="col-3 customer_contact">
+		<div class="card">
+			<div class="card-body text-center">
 				<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
 					{% trans "Create new" %}
 				</a>
@@ -50,8 +50,8 @@
 		},
 		click: function() {
 			$('.customer_contact').find('input[type=radio]').prop('checked', false);
-			$('.customer_contact').find('.panel-body').removeClass('bg-info');
-			$(this).find('.panel-body').first().addClass('bg-info');
+			$('.customer_contact').find('.card-body').removeClass('bg-info');
+			$(this).find('.card-body').first().addClass('bg-info');
 			$('input[name=customer_contact_id]').val($(this).prop('id').replace('customer-contact-', ''));
 			$(this).find('input[type=radio]').prop('checked', true);
 		}

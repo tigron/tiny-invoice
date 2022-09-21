@@ -9,11 +9,12 @@
 
 namespace App\Admin\Module;
 
-use Skeleton\Package\Crud\Web\Module\Crud;
+use \Skeleton\Core\Application\Web\Module;
+use \Skeleton\Core\Web\Template;
 use Skeleton\Pager\Web\Pager;
 use Skeleton\Core\Web\Session;
 
-class Export extends Crud {
+class Export extends Module {
 
     /**
      * The template
@@ -22,13 +23,12 @@ class Export extends Crud {
      */
     public $template = 'export.twig';
 
-    /**
-     * Get the pager object
-     *
-     * @access public
-     * @return Pager $pager
-     */
-    public function get_pager() {
+	/**
+	 * Display method
+	 *
+	 * @access public
+	 */
+	public function display() {
     	$pager = new Pager('export');
     	$pager->add_sort_permission('created');
     	$pager->add_sort_permission('id');
@@ -36,8 +36,10 @@ class Export extends Crud {
     	$pager->set_sort('id');
     	$pager->set_direction('desc');
     	$pager->page();
-    	return $pager;
-    }
+
+		$template = Template::get();
+		$template->assign('pager', $pager);
+	}
 
 	/**
 	 * Export scheduled

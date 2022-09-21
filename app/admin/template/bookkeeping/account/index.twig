@@ -2,24 +2,49 @@
 
 {% block content %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/bookkeeping/account">{% trans "Bookkeeping Accounts" %}</a></li>
-			<li class="active">{% trans "Edit bookkeeping account" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Bookkeeping accounts" %}</h4>
+			</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/bookkeeping/account">
+									{% trans "Bookkeeping Accounts" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Edit bookkeeping account" %} {{ bookkeeping_account.number }}
+							</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>
 
-		<ul class="nav nav-tabs">
-			<li {% if env.module.get_name() == 'bookkeeping_account_detail' %}class="active"{% endif %}>
-				<a href="/bookkeeping/account/detail?id={{ bookkeeping_account.id }}">{% trans "Details" %}</a>
-			</li>
+		<div class="card">
+			<div class="card-header">
+				<ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs">
+					<li class="nav-item">
+						<a href="/bookkeeping/account/detail?id={{ bookkeeping_account.id }}" class="nav-link {% if env.module.get_name() == 'bookkeeping_account_detail' %}active{% endif %}">
+							{% trans "Details" %}
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="/bookkeeping/account/transaction?id={{ bookkeeping_account.id }}" class="nav-link {% if env.module.get_name() == 'bookkeeping_account_transaction' %}active{% endif %}">
+							{% trans "Transactions" %}
+						</a>
+					</li>
+				</ul>
+			</div>
 
-			<li {% if env.module.get_name() == 'bookkeeping_account_transaction' %}class="active"{% endif %}>
-				<a href="/bookkeeping/account/transaction?id={{ bookkeeping_account.id }}">{% trans "Transactions" %}</a>
-			</li>
-		</ul>
-
-		<div class="tab-content">
-			{% block tab %}{% endblock tab %}
+			<div class="card-body tab-content">
+				<div class="tab-pane show active">
+					{% block tab %}{% endblock tab %}
+				</div>
+			</div>
 		</div>
 
 {% endblock content %}

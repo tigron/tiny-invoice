@@ -8,44 +8,44 @@
 		{% trans "Some fields were not filled in correcty." %} {% trans "Please correct them in order to continue." %}
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Name" %}</label>
-		<div class="col-xs-8">
+	<div class="row mb-3">
+		<label class="col-4 control-label">{% trans "Name" %}</label>
+		<div class="col-8">
 			<input type="text" class="form-control" name="bank_account[name]" value="{{ bank_account.name }}" />
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Description" %}</label>
-		<div class="col-xs-8">
+	<div class="row mb-3">
+		<label class="col-4 control-label">{% trans "Description" %}</label>
+		<div class="col-8">
 			<input type="text" class="form-control" name="bank_account[description]" value="{{ bank_account.description }}" />
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Number" %}</label>
-		<div class="col-xs-8">
+	<div class="row mb-3">
+		<label class="col-4 control-label">{% trans "Number" %}</label>
+		<div class="col-8">
 			<input type="text" class="form-control" name="bank_account[number]" value="{{ bank_account.number }}" />
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "BIC" %}</label>
-		<div class="col-xs-8">
+	<div class="row mb-3">
+		<label class="col-4 control-label">{% trans "BIC" %}</label>
+		<div class="col-8">
 			<input type="text" class="form-control" name="bank_account[bic]" value="{{ bank_account.bic }}" />
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Alias" %}</label>
-		<div class="col-xs-8">
+	<div class="row mb-3">
+		<label class="col-4 control-label">{% trans "Alias" %}</label>
+		<div class="col-8">
 			<input type="text" class="form-control" name="bank_account[alias]" value="{{ bank_account.alias }}" />
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Bookkeeping account" %}</label>
-		<div class="col-xs-8">
+	<div class="row mb-3">
+		<label class="col-4 control-label">{% trans "Bookkeeping account" %}</label>
+		<div class="col-8">
 			<select name="bank_account[bookkeeping_account_id]" class="form-control">
 				<option value="0">{% trans "Please select an account" %}</option>
 				{% for bookkeeping_account in bookkeeping_accounts %}
@@ -57,9 +57,9 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Make default for payment" %}</label>
-		<div class="col-xs-8">
+	<div class="row mb-3">
+		<label class="col-4 control-label">{% trans "Make default for payment" %}</label>
+		<div class="col-8">
 			<input type="checkbox" data-group-cls="btn-group-xs"  name="bank_account[default_for_payment]" {% if bank_account.default_for_payment %}checked{% endif %}>
 		</div>
 	</div>
@@ -73,7 +73,7 @@
 	function validate_bank_account_new() {
 		data = $('#frm_add_account').serialize();
 
-		$('.form-group').removeClass('has-error');
+		$('.row mb-3').removeClass('has-error');
 		$('#frm_add_account .alert').addClass('hide');
 		$.post('/financial/account?action=validate', data, function (data) {
 			if (data.length === 0) {
@@ -83,7 +83,7 @@
 			}
 			$('#frm_add_account .alert').removeClass('hide');
 			$.each(data, function(key, value) {
-				$('#frm_add_account input[name="bank_account[' + key + ']"], #frm_add_account select[name="bank_account[' + key + ']"]').parents('.form-group').addClass('has-error');
+				$('#frm_add_account input[name="bank_account[' + key + ']"], #frm_add_account select[name="bank_account[' + key + ']"]').parents('.row mb-3').addClass('has-error');
 			});
 
 			return false;

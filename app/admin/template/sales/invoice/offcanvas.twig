@@ -103,15 +103,15 @@
 		<form action="/sales/invoice?action=edit&id={{ invoice.id }}" method="post">
 			<div class="row">
 				<label class="col-form-label">{% trans "Customer reference" %}</label>
-				<div class="col-xs-9">
-					<input class="form-control col-xs-5" type="text" name="invoice[reference]" value="{{ invoice.reference }}" {% if invoice.paid %}disabled{% endif %}>
+				<div class="col-9">
+					<input class="form-control col-5" type="text" name="invoice[reference]" value="{{ invoice.reference }}" {% if invoice.paid %}disabled{% endif %}>
 				</div>
 			</div>
 
 			<div class="row mb-3">
 				<label class="col-form-label">{% trans "Internal reference" %}</label>
-				<div class="col-xs-9">
-					<input class="form-control col-xs-5" type="text" name="invoice[internal_reference]" value="{{ invoice.internal_reference }}" {% if invoice.paid %}disabled{% endif %}>
+				<div class="col-9">
+					<input class="form-control col-5" type="text" name="invoice[internal_reference]" value="{{ invoice.internal_reference }}" {% if invoice.paid %}disabled{% endif %}>
 				</div>
 			</div>
 			{% if not invoice.paid %}

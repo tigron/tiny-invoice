@@ -7,45 +7,59 @@
 
 	{% if action == 'edit' %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/product/type">{% trans "Product definitions" %}</a></li>
-			<li class="active">{% trans "Edit Product definition" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Product definitions" %}</h4>
+			</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/sales/product/type">
+									{% trans "Product definitions" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Product definition" %} {{ product_type.name }}
+							</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>
 
 		{% if errors is defined %}
-			<div class="alert alert-danger">
-				{% trans "The form contains mistakes. Please correct them." %}
-			</div>
+			{{ base.alert('danger', "The form contains mistakes. Please correct them."|trans) }}
 		{% elseif env.sticky_session.message is defined %}
-			{{ base.display_flash_message(env.sticky_session.message, 'user') }}
+			{{ base.alert('success', 'Product definition saved successfully.'|trans) }}
 		{% endif %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{% trans "Details" %}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<form class="form form-horizontal form-condensed" method="post" action="/sales/product/type?action=edit&id={{ product_type.id }}">
-					<div class="form-group{% if 'name' in errors|keys %} has-error{% endif %}">
-						<label for="username" class="col-xs-3 control-label">{% trans "Name" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3{% if 'name' in errors|keys %} has-error{% endif %}">
+						<label for="username" class="col-form-label col-3 text-end">{% trans "Name" %}</label>
+						<div class="col-9">
 							<input type="text" name="product_type[name]" id="name" class="form-control" value="{{ product_type.name }}">
 							{{ form.invalid_input('name', errors) }}
 						</div>
 					</div>
 
-					<div class="form-group{% if 'name' in errors|keys %} has-error{% endif %}">
-						<label for="username" class="col-xs-3 control-label">{% trans "Identifier" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3{% if 'name' in errors|keys %} has-error{% endif %}">
+						<label for="username" class="col-form-label col-3 text-end">{% trans "Identifier" %}</label>
+						<div class="col-9">
 							<input type="text" name="product_type[identifier]" id="name" class="form-control" value="{{ product_type.identifier }}">
 							{{ form.invalid_input('name', errors) }}
 						</div>
 					</div>
 
 
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
 							</button>
@@ -58,42 +72,56 @@
 
 	{% elseif action == 'add' %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/product/type">{% trans "Product definitions" %}</a></li>
-			<li class="active">{% trans "Add Product definition" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Product definitions" %}</h4>
+			</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/sales/product/type">
+									{% trans "Product definitions" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Add product definition" %}
+							</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>
 
 		{% if errors is defined %}
-			<div class="alert alert-danger">
-				{% trans "The form contains mistakes. Please correct them." %}
-			</div>
+			{{ base.alert('danger', "The form contains mistakes. Please correct them."|trans)  }}
 		{% endif %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{% trans "Details" %}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<form class="form form-horizontal form-condensed" method="post" action="/sales/product/type?action=add">
-					<div class="form-group{% if 'name' in errors|keys %} has-error{% endif %}">
-						<label for="username" class="col-xs-3 control-label">{% trans "Name" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3{% if 'name' in errors|keys %} has-error{% endif %}">
+						<label for="username" class="col-form-label col-3 text-end">{% trans "Name" %}</label>
+						<div class="col-9">
 							<input type="text" name="product_type[name]" id="name" class="form-control" value="{{ env.post.product_type.name }}">
 							{{ form.invalid_input('name', errors) }}
 						</div>
 					</div>
 
-					<div class="form-group{% if 'name' in errors|keys %} has-error{% endif %}">
-						<label for="username" class="col-xs-3 control-label">{% trans "Identifier" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3{% if 'name' in errors|keys %} has-error{% endif %}">
+						<label for="username" class="col-form-label col-3 text-end">{% trans "Identifier" %}</label>
+						<div class="col-9">
 							<input type="text" name="product_type[identifier]" id="name" class="form-control" value="{{ env.post.product_type.identifier }}">
 							{{ form.invalid_input('name', errors) }}
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
 							</button>
@@ -112,20 +140,20 @@
 		</ol>
 
 		<form class="form-horizontal" method="post" action="/sales/product/type">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{% trans "Filter" %}
 			</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="control-label col-xs-3">{% trans "Search" %}</label>
-					<div class="col-xs-9">
+			<div class="card-body">
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
+					<div class="col-9">
 						<input type="text" class="form-control" name="search" value="{{ pager.get_search() }}"/>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<div class="controls col-xs-offset-3 col-xs-9">
+				<div class="row mb-3">
+					<div class="controls offset-3 col-9">
 						<button class="btn btn-primary" type="submit">
 							{% trans "Search" %}
 						</button>
@@ -135,18 +163,18 @@
 		</div>
 		</form>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				<div class="pull-right">
 					<a href="/sales/product/type?action=add">
-						<span class="glyphicon glyphicon-plus-sign"></span>
+						<i data-feather="plus"></i>
 						{% trans "Add product definition" %}
 					</a>
 				</div>
 
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				{% for product_type in pager.items %}
 					{% if loop.first %}
 					<table class="table table-striped table-hover table-condensed">
@@ -166,7 +194,7 @@
 
 						<td>
 							<a href="/sales/product/type?id={{ product_type.id }}&action=edit">
-								<span class="glyphicon glyphicon-pencil"></span>
+								<i data-feather="edit"></i>
 							</a>
 						</td>
 						<td>

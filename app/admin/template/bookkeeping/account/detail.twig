@@ -13,19 +13,19 @@
 	{% endif %}
 
 
-	<form class="form form-horizontal form-condensed" method="post" action="/bookkeeping/account/detail?id={{ bookkeeping_account.id }}">
-		<div class="form-group {% if 'number' in errors|keys %} has-error{% endif %}">
-			<label class="col-xs-3 control-label">{% trans "Number" %}</label>
-			<div class="col-xs-5"><input type="text" name="bookkeeping_account[number]" class="form-control" value="{{ bookkeeping_account.number }}"/></div>
+	<form method="post" action="/bookkeeping/account/detail?id={{ bookkeeping_account.id }}">
+		<div class="row mb-3 {% if 'number' in errors|keys %} has-error{% endif %}">
+			<label class="col-form-label col-3 text-end">{% trans "Number" %}</label>
+			<div class="col-5"><input type="text" name="bookkeeping_account[number]" class="form-control" value="{{ bookkeeping_account.number }}"/></div>
 		</div>
 
-		<div class="form-group">
-			<label class="col-xs-3 control-label">{% trans "Name" %}</label>
-			<div class="col-xs-5"><input type="text" name="bookkeeping_account[name]" class="form-control" value="{{ bookkeeping_account.name }}"/></div>
+		<div class="row mb-3">
+			<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
+			<div class="col-5"><input type="text" name="bookkeeping_account[name]" class="form-control" value="{{ bookkeeping_account.name }}"/></div>
 		</div>
 
-		<div class="form-group">
-			<div class="col-xs-3 col-xs-offset-3">
+		<div class="row mb-3">
+			<div class="col-3 offset-3">
 				<button class="btn btn-primary">
 					{% trans "Save" %}
 				</button>

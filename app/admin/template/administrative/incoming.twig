@@ -35,9 +35,9 @@
 				<div id="sortable" class="row">
 			{% endif %}
 
-				<div class="col-xs-2" id="page_{{ incoming_page.id }}">
-					<div class="panel panel-default">
-						<div class="panel-heading">
+				<div class="col-2" id="page_{{ incoming_page.id }}">
+					<div class="card">
+						<div class="card-header">
 							<span class="drag-handle">
 								<i class="fa fa-arrows-alt"></i>
 							</span>
@@ -47,7 +47,7 @@
 								<a href="/administrative/incoming?action=rotate_page&id={{ incoming_page.id }}" alt="{% trans "Rotate clockwise" %}"><i class="fa fa-repeat"></i></a>
 							</span>
 						</div>
-						<div class="panel-body zoom">
+						<div class="card-body zoom">
 							{% if incoming_page.preview_file_id > 0 %}
 								<img src="/picture?id={{ incoming_page.preview_file_id }}" class="hide"/>
 								<img src="/picture?id={{ incoming_page.preview_file_id }}&size=incoming_preview" />
@@ -78,14 +78,14 @@
 				 * Make panels the same height
 				 */
 				highest = 0;
-				$('.panel-body').each(function() {
+				$('.card-body').each(function() {
 					height = $(this).height();
 					if (height > highest) {
 						highest = height;
 					}
 				});
 
-				$('.panel-body').height(highest);
+				$('.card-body').height(highest);
 
 				/**
 				 * Make panel selectable
@@ -105,7 +105,7 @@
 //				$('.btn.btn-danger').on('click',
 
 				$('#sortable').sortable({
-					handle: ".panel-heading"
+					handle: ".card-header"
 				});
 
 				activate_convert_button();
@@ -150,20 +150,20 @@
 			{{ base.display_flash_message(env.sticky_session.message, 'incoming') }}
 		{% endif %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{% trans "Filter" %}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<form method="post" action="/administrative/incoming" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3">
+						<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
+						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
 							</button>
@@ -173,11 +173,11 @@
 			</div>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 			{% for incoming in pager.items %}
 				{% if loop.first %}
 					<table class="table table-hover table-striped table-condensed table-responsive">
@@ -198,7 +198,7 @@
 						<td>{{ incoming.subject }}</td>
 						<td width="20">
 							<a href="/administrative/incoming?action=edit&id={{ incoming.id }}" title="{% trans "Edit incoming" %}">
-								<span class="glyphicon glyphicon-pencil"></span>
+								<i data-feather="edit"></i>
 							</a>
 						</td>
 						<td width="20">

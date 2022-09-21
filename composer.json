@@ -62,7 +62,7 @@
 		"ramsey/uuid": "^4.0.1",
 
 		"bower-asset/moment": "2.10.*",
-		"bower-asset/tigron-confirm-modal": "^0.0.3",
+		"bower-asset/tigron-confirm-modal": "^0.0.10",
 		"bower-asset/dropzone": "~4.0",
 		"bower-asset/autosize": "^4.0",
 		"bower-asset/jquery-zoom": "dev-master",

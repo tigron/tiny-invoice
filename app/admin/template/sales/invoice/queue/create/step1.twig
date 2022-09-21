@@ -1,0 +1,36 @@
+<ol class="breadcrumb">
+	<li><a href="/">{% trans "Home" %}</a></li>
+	<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+	<li>{% trans "Create invoice queue item" %}</li>
+	<li class="active">{% trans "Select customer" %}</li>
+</ol>
+
+{% if errors is defined %}
+<div class="alert alert-danger">
+	{% trans "Please select a customer." %}
+</div>
+{% endif %}
+
+<div class="card">
+	<div class="card-header">
+		{% trans "Select customer" %}
+	</div>
+	<div class="card-body">
+		<form method="post" action="/sales/invoice/queue?action=create_step1" class="form-horizontal" id="invoice-queue-create-step1">
+			<div class="row mb-3">
+				<label class="col-form-label col-3 text-end">{% trans "Customer" %}</label>
+				<div class="col-6">
+					<input type="text" id="autocomplete_customer" name="customer" class="form-control typeahead" value="{% if customer is defined %}{{ customer.firstname }} {{ customer.lastname }}{% endif %}" placeholder="{% trans "Search customer..." %}">
+					<input type="hidden" id="customer_id" name="customer_id" value="{% if customer is defined %}{{ customer.id }}{% endif %}">
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-3 offset-3">
+					<button class="btn btn-primary">
+						{% trans "Next" %}
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

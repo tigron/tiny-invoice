@@ -30,14 +30,14 @@
 	{% else %}
 		{% embed "@skeleton-package-crud/bootstrap3/content.twig" with {'object_name': 'Extractor'|trans} %}
 			{% block form_edit %}
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Name" %}</label>
-					<div class="col-xs-9"><input type="text" class="form-control" name="object[name]" value="{{ object.name }}" /></div>
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
+					<div class="col-9"><input type="text" class="form-control" name="object[name]" value="{{ object.name }}" /></div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Document" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Document" %}</label>
+					<div class="col-9">
 						<p class="form-control-static">
 							<span>
 								<a href="/administrative/document?action=edit&id={{ object.document_id }}">
@@ -46,19 +46,19 @@
 							</span>
 							{% if object.document.file_id > 0 %}
 								<a href="/administrative/document?action=download&id={{ object.document.id }}">
-									<span class="glyphicon glyphicon-download"></span>
+									<i data-feather="download"></i>
 								</a>
 							{% endif %}
 							<a href="javascript:void(0);" data-toggle="modal" data-target="#select_document">
-								<span class="glyphicon glyphicon-pencil"></span>
+								<i data-feather="edit"></i>
 							</a>
 						</p>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Fingerprints" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Fingerprints" %}</label>
+					<div class="col-9">
 						<p class="form-control-static">
 						{% set count = object.get_extractor_pdf_fingerprints()|length %}
 						{% if count == 1 %}
@@ -74,30 +74,30 @@
 
 			{% block page_edit_footer %}
 				<div class="row">
-					<div class="col-xs-6">
+					<div class="col-6">
 						<pre>
 						{{ object.extract_content() }}
 						</pre>
 					</div>
 
-					<div class="col-xs-6">
+					<div class="col-6">
 						<div class="alert alert-danger hide" id="eval_error"></div>
-						<div class="form-group">
+						<div class="row mb-3">
 							<textarea class="form-control autogrow code" id="eval">{{ object.eval }}</textarea>
 						</div>
-						<div class="form-group">
+						<div class="row mb-3">
 							<button type="button" class="btn btn-primary" onclick="run_eval();">{% trans "Run" %}</button>
 						</div>
 
-						<div class="form-group hide" id="parsed_content">
-							<div class="panel panel-default">
-								<div class="panel-heading">{% trans "Data" %}</div>
-								<div class="panel-body" id="data"></div>
+						<div class="row mb-3 hide" id="parsed_content">
+							<div class="card">
+								<div class="card-header">{% trans "Data" %}</div>
+								<div class="card-body" id="data"></div>
 							</div>
 
-							<div class="panel panel-default">
-								<div class="panel-heading">{% trans "Output" %}</div>
-								<div class="panel-body" id="output"></div>
+							<div class="card">
+								<div class="card-header">{% trans "Output" %}</div>
+								<div class="card-body" id="output"></div>
 							</div>
 						</div>
 					</div>

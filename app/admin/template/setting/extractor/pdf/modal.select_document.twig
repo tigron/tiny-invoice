@@ -7,9 +7,9 @@
 	<form action="/setting/extractor/pdf?action=change_document&id={{ env.get.id }}" method="post" class="form-horizontal">
 
 
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Name" %}</label>
-		<div class="col-xs-8">
+	<div class="row mb-3">
+		<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
+		<div class="col-8">
 			<input type="text" id="autocomplete_document" class="form-control"/>
 			<input type="hidden" name="document_id" class="form-control"/>
 		</div>

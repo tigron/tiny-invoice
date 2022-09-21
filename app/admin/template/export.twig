@@ -1,41 +1,90 @@
 {% extends "_default/layout.base.twig" %}
 
-{% block header_js %}
-    {% embed "@skeleton-package-crud/bootstrap3/javascript.twig" %}{% endembed %}
-{% endblock header_js %}
-
-{% block header_css %}
-    {% embed "@skeleton-package-crud/bootstrap3/css.twig" %}{% endembed %}
-{% endblock header_css %}
+{% import '_default/macro.base.twig' as base %}
 
 {% block content %}
-    {% embed "@skeleton-package-crud/bootstrap3/content.twig" with {'object_name': 'Exports'|trans} %}
-		{% block page_pager_breadcrumb %}
-			{{ parent() }}
-			{% if env.sticky_session.message == 'updated' %}
-				<div class="alert alert-success">
-					{% trans "A new export has been added." %} {% trans "You can find it in the list below." %}
-				</div>
+
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Exports" %}</h4>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="card-header">
+				{% trans "Filter" %}
+			</div>
+			<div class="card-body">
+				<form method="post" action="/export">
+					<div class="row mb-3">
+						<label class="col-2 col-form-label text-end">{% trans "Search" %}</label>
+						<div class="col-9">
+							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-3 offset-sm-2">
+							<button class="btn btn-primary">
+								{% trans "Search" %}
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		{% if env.sticky_session.message == 'updated' %}
+			<div class="alert alert-success">
+				{% trans "A new export has been added." %} {% trans "You can find it in the list below." %}
+			</div>
+		{% endif %}
+
+		<div class="card mt-3">
+			<div class="card-header">
+				{{ base.pager_count(pager.item_count) }}
+			</div>
+			<div class="card-body">
+			{% for export in pager.items %}
+			{% if loop.first %}
+				<table class="table table-hover table-striped table-responsive" id="invoice-list">
+					<thead>
+						<tr>
+							<th>{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
+							<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
+							<th>{{ pager.create_header('Filename'|trans, 'file.name')|raw }}</th>
+							<th width="20">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
 			{% endif %}
-		{% endblock page_pager_breadcrumb %}
 
-		{% block pager_table_head %}
-			<th>{{ pager.create_header('ID'|trans, 'id')|raw }}</th>
-			<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
-			<th>{{ pager.create_header('Filename'|trans, 'file.name')|raw }}</th>
-			<th width="20">&nbsp;</th>
-		{% endblock pager_table_head %}
+			<tr {% if invoice.is_expired() %}class="warning"{% endif %}>
+				<td>{{ export.id }}</td>
+				<td>{{ export.created }}</td>
+				<td>{{ export.file.name }}</td>
+				<td>
+					<a href="/file?id={{ export.file_id }}">
+						<i data-feather="download"></i>
+					</a>
+				</td>
+			</tr>
 
-		{% block pager_table_row %}
-			<td>{{ object.id }}</td>
-			<td>{{ object.created }}</td>
-			<td>{{ object.file.name }}</td>
-			<td>
-				<a href="/file?id={{ object.file_id }}">
-					<i class="fa fa-download" aria-hidden="true"></i>
-				</a>
-			</td>
-		{% endblock %}
+			{% if loop.last %}
+					</tbody>
+				</table>
 
-    {% endembed %}
+				{{ pager.links|raw }}
+			{% endif %}
+
+			{% else %}
+
+				<p><em>{% trans "No exports created." %}</em></p>
+
+			{% endfor %}
+			</div>
+		</div>
+
+
 {% endblock content %}
+

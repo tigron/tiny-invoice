@@ -20,28 +20,28 @@
 		<li class="active">{% trans "Contracts" %}</li>
 	</ol>
 
-	<div class="panel panel-default">
-		<div class="panel-heading">
+	<div class="card">
+		<div class="card-header">
 			{% trans "Filter" %}
 		</div>
-		<div class="panel-body">
+		<div class="card-body">
 			<form method="post" action="{{ env.module.get_path() }}" class="form-horizontal">
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
+					<div class="col-9">
 						<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Tags" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Tags" %}</label>
+					<div class="col-9">
 						<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
 					</div>
 				</div>
 
-				<div class="form-group">
-					<div class="col-xs-3 col-xs-offset-3">
+				<div class="row mb-3">
+					<div class="col-3 offset-3">
 						<button class="btn btn-primary">
 							{% trans "Search" %}
 						</button>
@@ -55,11 +55,11 @@
 		{{ base.display_flash_message(env.sticky_session.message, 'document') }}
 	{% endif %}
 
-	<div class="panel panel-default">
-		<div class="panel-heading">
+	<div class="card">
+		<div class="card-header">
 			{{ base.pager_count(pager.item_count) }}
 		</div>
-		<div class="panel-body">
+		<div class="card-body">
 		{% for document in pager.items %}
 		{% if loop.first %}
 			<table class="table table-hover table-striped table-condensed table-responsive">
@@ -102,12 +102,12 @@
 			</td>
 			<td width="20">
 				<a href="/administrative/document?action=download&id={{ document.id }}">
-					<span class="glyphicon glyphicon-download"></span>
+					<i data-feather="download"></i>
 				</a>
 			</td>
 			<td width="20">
 				<a href="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" title="{% trans "Edit document" %}">
-					<span class="glyphicon glyphicon-pencil"></span>
+					<i data-feather="edit"></i>
 				</a>
 			</td>
 			<td width="20">

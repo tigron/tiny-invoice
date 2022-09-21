@@ -19,23 +19,23 @@
 		{% endif %}
 
 		<form class="form form-horizontal form-condensed" method="post" action="/bookkeeping/account?action=add">
-			<div class="panel panel-default">
-				<div class="panel-heading">
+			<div class="card">
+				<div class="card-header">
 					{% trans "Details" %}
 				</div>
-				<div class="panel-body">
-					<div class="form-group {% if 'number' in errors|keys %} has-error{% endif %}">
-						<label class="col-xs-3 control-label">{% trans "Number" %}</label>
-						<div class="col-xs-5"><input type="text" name="bookkeeping_account[number]" class="form-control" value="{{ env.post.bookkeeping_account.number }}"/></div>
+				<div class="card-body">
+					<div class="row mb-3 {% if 'number' in errors|keys %} has-error{% endif %}">
+						<label class="col-form-label col-3 text-end">{% trans "Number" %}</label>
+						<div class="col-5"><input type="text" name="bookkeeping_account[number]" class="form-control" value="{{ env.post.bookkeeping_account.number }}"/></div>
 					</div>
 
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Name" %}</label>
-						<div class="col-xs-5"><input type="text" name="bookkeeping_account[name]" class="form-control" value="{{ env.post.bookkeeping_account.name }}"/></div>
+					<div class="row mb-3">
+						<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
+						<div class="col-5"><input type="text" name="bookkeeping_account[name]" class="form-control" value="{{ env.post.bookkeeping_account.name }}"/></div>
 					</div>
 
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
 							</button>
@@ -53,20 +53,20 @@
 			<li class="active">{% trans "Bookkeeping Accounts" %}</li>
 		</ol>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{% trans "Filter" %}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<form method="post" action="/bookkeeping/account" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-5">
+					<div class="row mb-3">
+						<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
+						<div class="col-5">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
 							</button>
@@ -80,17 +80,17 @@
 			{{ base.display_flash_message(env.sticky_session.message, 'bookkeeping_account') }}
 		{% endif %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				<div class="pull-right">
 					<a href="/bookkeeping/account?action=add" title="">
-						<span class="glyphicon glyphicon-plus-sign"></span>
+						<i data-feather="plus"></i>
 						{% trans "Add bookkeeping_account" %}
 					</a>
 				</div>
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 			{% for bookkeeping_account in pager.items %}
 			{% if loop.first %}
 				<table class="table table-hover table-striped table-condensed table-responsive">
@@ -109,7 +109,7 @@
 				<td>{{ bookkeeping_account.name }}</td>
 				<td>
 					<a href="/bookkeeping/account/detail?id={{ bookkeeping_account.id }}" title="">
-						<span class="glyphicon glyphicon-pencil"></span>
+						<i data-feather="edit"></i>
 					</a>
 				</td>
 			</tr>

@@ -1,0 +1,96 @@
+<ol class="breadcrumb">
+	<li><a href="/">{% trans "Home" %}</a></li>
+	<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+	<li>{% trans "Create invoice queue item" %}</li>
+	<li class="active">{% trans "Select invoice contact" %}</li>
+</ol>
+
+{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact'} %}
+
+{% if errors is defined %}
+<div class="alert alert-danger">
+	{% trans "Please select an invoice contact." %}
+</div>
+{% endif %}
+
+<div class="card">
+	<div class="card-header">
+		{% trans "Select a invoice contact" %}
+	</div>
+	<div class="card-body">
+
+		<div class="row">
+		{% for customer_contact in customer_contacts %}
+			<div class="col-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
+				<div class="card">
+					<div class="card-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
+						<div class="actions hide">
+							<a href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
+								<i data-feather="edit"></i>
+							</a>
+							<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
+								<span class="glyphicon glyphicon-remove"></span>
+							</a>
+
+						</div>
+
+						{% if customer_contact.company != '' %}{{ customer_contact.company }}<br>{% endif %}
+						{{ customer_contact.firstname }} {{ customer_contact.lastname }}<br>
+						{{ customer_contact.street }} {{ customer_contact.housenumber }}<br>
+						{{ customer_contact.zipcode }} {{ customer_contact.city }}<br>
+						{{ attribute(customer_contact.country, 'text_' ~ env.language.name_short ~ '_name') }}
+						{% if customer_contact.vat != '' %}<br>{{ customer_contact.get_vat_formatted() }}{% endif %}
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+			<div class="col-3">
+				<div class="card">
+					<div class="card-body text-center">
+						<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
+							{% trans "Create new" %}
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<form method="post" action="/sales/invoice/queue?action=create_step2" id="invoice-queue-create-step2">
+			<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
+			<button class="btn btn-primary">
+				{% trans "Next" %}
+			</button>
+		</form>
+
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	$('.customer_contact').on({
+		mouseenter: function() {
+			$(this).find('.actions').toggleClass('hide');
+		},
+		mouseleave: function() {
+			$(this).find('.actions').toggleClass('hide');
+		},
+		click: function() {
+			$('.customer_contact').find('.card-body').removeClass('bg-info');
+			$(this).find('.card-body').first().addClass('bg-info');
+			$('#invoice-queue-create-step2 input').val($(this).prop('id').replace('customer-contact-', ''));
+		}
+	});
+
+	function delete_contact(id) {
+		$.get('/sales/invoice/contact?action=delete&id=' + id, function(data) {
+			if(data['status'] == 1) {
+				$('#customer-contact-' + id).remove();
+				$('#invoice-queue-create-step2 input').val('');
+			} else {
+				alert('Error deleting contact');
+			}
+		}, 'json');
+	}
+
+</script>
+

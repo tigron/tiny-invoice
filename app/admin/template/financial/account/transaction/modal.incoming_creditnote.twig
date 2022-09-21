@@ -27,9 +27,9 @@
 
 <h5>2. {% trans "Search invoices" %}</h5>
 	<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_incoming_creditnotes">
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Search invoice" %}</label>
-		<div class="col-xs-6">
+	<div class="row mb-3">
+		<label class="col-form-label col-3 text-end">{% trans "Search invoice" %}</label>
+		<div class="col-6">
 			<div class="input-group">
 				<input type="text" name="search" id="txt_search_incoming_creditnotes" class="form-control" value="{{ transaction.get_message() }}" />
 				<span class="input-group-btn">
@@ -60,16 +60,16 @@
 		{% trans "There is a problem with the amounts you have entered." %} {% trans "The total amount cannot exceed the amount of the transaction" %}.
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Current transaction balance" %}</label>
-		<div class="col-xs-3">
+	<div class="row mb-3">
+		<label class="col-form-label col-3 text-end">{% trans "Current transaction balance" %}</label>
+		<div class="col-3">
 			<p class="form-control-static" id="transaction_balance" data-value="{{ transaction.get_balance() }}">&euro;{{ transaction.get_balance() }}</p>
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Link with credit note" %}</label>
-		<div class="col-xs-3">
+	<div class="row mb-3">
+		<label class="col-form-label col-3 text-end">{% trans "Link with credit note" %}</label>
+		<div class="col-3">
 			<div class="input-group">
 				<span class="input-group-addon">&euro;</span>
 				<input type="text" class="form-control" id="link_incoming_creditnote_amount" style="width: 143px;" name="link_incoming_creditnote_amount" value="0">
@@ -80,9 +80,9 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "Link with supplier" %}</label>
-		<div class="col-xs-4">
+	<div class="row mb-3">
+		<label class="col-form-label col-3 text-end">{% trans "Link with supplier" %}</label>
+		<div class="col-4">
 			<div class="input-group">
 				<span class="input-group-addon">&euro;</span>
 				<input type="text" class="form-control" id="link_supplier_amount" style="width: 143px;" name="link_supplier_amount" value="0">
@@ -90,15 +90,15 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-xs-3 control-label">{% trans "New transaction balance" %}</label>
-		<div class="col-xs-3">
+	<div class="row mb-3">
+		<label class="col-form-label col-3 text-end">{% trans "New transaction balance" %}</label>
+		<div class="col-3">
 			<p class="form-control-static" id="new_transaction_balance"><b>&euro;{{ transaction.get_balance() }}</b></p>
 		</div>
 	</div>
 
-	<div class="form-group">
-		<div class="col-xs-9 col-xs-offset-3">
+	<div class="row mb-3">
+		<div class="col-9 offset-3">
 			<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 		</div>
 	</div>

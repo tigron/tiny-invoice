@@ -1,6 +1,8 @@
 
 <div class="alert alert-info" id="alert-register">
-	{% trans "To register your smartphone, open this application on your smartphone." %} {% trans "On the login screen choose for mobile application." %}
+	<div class="alert-message">
+		{% trans "To register your smartphone, open this application on your smartphone." %} {% trans "On the login screen choose for mobile application." %}
+	</div>
 </div>
 <center>
 	<img src="/administrative/user/mobile?action=qr&code={{ mobile.token }}" />
@@ -8,7 +10,7 @@
 
 <script type="text/javascript">
 	poller = setInterval(poll, 1000);
-	
+
 	function poll() {
 		$.get('/administrative/user/mobile?id=3&action=poll&mobile_id={{ mobile.id }}', function(response) {
 			if (response) {
@@ -20,5 +22,5 @@
 
 	$('#add-mobile').on('hide.bs.modal', function () {
 		clearInterval(poller);
-	});	
+	});
 </script>

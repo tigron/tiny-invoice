@@ -1,12 +1,12 @@
 html {
   height: -webkit-fill-available;
+  font-size: 0.83em;
 }
 
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
   overflow-y: scroll;
-  font-size: 0.90em;
   font-weight: 400;
 }
 
@@ -28,6 +28,7 @@ main.col > .container-fluid {
 a {
 	text-decoration: none;
 }
+
 a:not(.btn):hover {
 /*	text-decoration: underline;*/
 }
@@ -54,6 +55,7 @@ a:not(.btn):hover {
 #sidebar ul li a.active {
 	background: rgba(59,125,221,.6);
 	background-color: #6ec7f0;
+	background-color: #0d6efd;
     color: #fff;
 }
 
@@ -112,3 +114,20 @@ a:not(.btn):hover {
 .customer_contact.card {
 	cursor: pointer;
 }
+
+.alert-icon {
+	padding: 0.95rem;
+	padding-right: 0px;
+}
+.alert-message {
+	padding: 0.96rem;
+}
+.alert {
+	display: flex;
+	padding: 0;
+}
+
+.card-link {
+	cursor: pointer;
+}
+

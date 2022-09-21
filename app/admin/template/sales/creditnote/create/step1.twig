@@ -1,0 +1,60 @@
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Credit notes" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/creditnote">
+							{% trans "Credit Notes" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Create new credit note" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+
+{% if errors is defined %}
+<div class="alert alert-danger">
+	{% trans "Please select an invoice." %}
+</div>
+{% endif %}
+
+<div class="card">
+	<div class="card-header">
+		{% trans "Select customer" %}
+	</div>
+	<div class="card-body">
+		<form method="post" action="/sales/creditnote?action=create_step1" id="invoice-create-step1">
+			<div class="mb-3">
+				<label class="col-3 form-label">{% trans "Invoice number" %}</label>
+				<select name="invoice_id" class="form-select autocomplete_invoice"></select>
+			</div>
+
+			<div class="row mb-3">
+				<div class="col-3 offset-3">
+					<button class="btn btn-primary">
+						{% trans "Next" %}
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+$('.autocomplete_invoice').select2({
+	theme: "bootstrap-5",
+	ajax: {
+		url: '/sales/creditnote?action=ajax_search',
+		dataType: 'json'
+    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+	}
+});
+</script>

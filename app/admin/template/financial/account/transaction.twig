@@ -4,20 +4,37 @@
 
 {% block content %}
 	{% if action == 'edit' %}
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
-			<li>
-				<a href="/financial/account/transaction?bank_account_id={{ transaction.bank_account_statement.bank_account_id }}">
-					{% trans "Bank Account" %} &quot;{% if transaction.bank_account_statement.bank_account.alias is not empty %}{{ transaction.bank_account_statement.bank_account.alias }}{% else %}{{ transaction.bank_account_statement.bank_account.description }}{% endif %}&quot;
-				</a>
-			</li>
-			<li class="active">{% trans "Edit transaction" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Bank accounts" %}</h4>
+			</div>
+			{% set bank_account = transaction.bank_account_statement.bank_account %}
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/financial/account">
+									{% trans "Bank accounts" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item">
+								<a href="/financial/account/transaction?bank_account_id={{ bank_account.id }}">
+									{% trans "Bank account" %} &quot;{% if bank_account.alias is not empty %}{{ bank_account.alias }}{% else %}{{ bank_account.description }}{% endif %}&quot;
+								</a>
+							</li>		
+							<li class="breadcrumb-item active">
+								{% trans "Edit transaction" %} #{{ transaction.id }}
+							</li>					
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>
 
 		<form class="form-horizontal form-condensed">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card mb-3">
+			<div class="card-header">
 				{% trans "Transaction details" %}
 
 				<span class="pull-right">
@@ -26,14 +43,14 @@
 					</a>
 				</span>
 			</div>
-			<div class="panel-body" style="max-height: 400px; overflow-y: scroll;" id="transaction-list">
+			<div class="card-body" style="max-height: 400px; overflow-y: scroll;" id="transaction-list">
 				{% set bank_account_statement = transaction.bank_account_statement %}
 				<table class="table">
 					<tr>
 						<td colspan="2">
 							<h5><strong>{% trans "Situation on" %} {{ bank_account_statement.original_situation_date|date }}</strong></h5>
 						</td>
-						<td width="200" class="text-right">
+						<td width="200" class="text-end">
 							<h4>
 							{% if bank_account_statement.original_situation_balance > 0 %}
 								+
@@ -55,17 +72,17 @@
 							{% set active = false %}
 						{% endif %}
 
-						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
+						<tr {% if active %}class="table-primary"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
 							<td rowspan="3" width="100">
 								<strong>{{ bank_account_statement_transaction.date|date }}</strong> <br />
 								{% if bank_account_statement_transaction.balanced %}
-									<span class="label label-success">{% trans "Balanced" %}</span>
+									<span class="badge text-bg-success">{% trans "Balanced" %}</span>
 								{% else %}
-									<span class="label label-danger">{% trans "Unbalanced" %}</span>
+									<span class="badge text-bg-danger">{% trans "Unbalanced" %}</span>
 								{% endif %}
 							</td>
 							<td><strong>{{ bank_account_statement_transaction.other_account_name }}</strong></td>
-							<td rowspan="2" class="text-right">
+							<td rowspan="2" class="text-end">
 								{% if bank_account_statement_transaction.amount > 0 %}
 									<h4 class="text-success">+
 								{% else %}
@@ -74,11 +91,11 @@
 								{{ bank_account_statement_transaction.amount|number_format }}&nbsp; <small>EUR</small></h4></td>
 						</tr>
 
-						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
+						<tr {% if active %}class="table-primary"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
 							<td>{{ bank_account_statement_transaction.other_account_number|iban_to_human_format }}</td>
 						</tr>
 
-						<tr {% if active %}class="info"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
+						<tr {% if active %}class="table-primary"{% endif %} {% if not active %}data-href="{{ href }}"{% endif %}>
 							<td colspan="2"><pre>{{ bank_account_statement_transaction.get_message() }}</pre></td>
 						</tr>
 
@@ -88,7 +105,7 @@
 						<td colspan="2">
 							<h5>{% trans "Situation on" %} {{ bank_account_statement.new_situtation_date|date }}</h5>
 						</td>
-						<td width="200" class="text-right">
+						<td width="200" class="text-end">
 							<h4>
 							{% if bank_account_statement.new_situation_balance > 0 %}
 								+
@@ -104,7 +121,7 @@
 		</div>
 
 		<script type="text/javascript">
-			position = $('#transaction-list .table tr.info').offset();
+			position = $('#transaction-list .table tr.table-primary').offset();
 			console.log(position);
 			$("#transaction-list").scrollTop(position.top-300);
 
@@ -119,8 +136,8 @@
 		{% include "financial/account/transaction/modal.incoming_creditnote.twig" with {id: 'modal_incoming_creditnote', modal_size: 'lg'} %}
 		{% include "financial/account/transaction/modal.bookkeeping_account.twig" with {id: 'modal_bookkeeping_account', modal_size: 'lg'} %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{% trans "Bookings" %}
 				<div class="pull-right dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Add booking" %} <b class="caret"></b></a>
@@ -154,16 +171,14 @@
 					</ul>
 				</div>
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				{% if transaction.balanced %}
-					<div class="alert alert-success">
-						{% trans "This transaction is correctly linked." %}
-					</div>
+					{{ base.alert('success', "This transaction is correctly linked."|trans) }}
 				{% endif %}
 				{% set balances = transaction.get_bank_account_statement_transaction_balances() %}
 
 				{% if not transaction.balanced %}
-					<div class="alert alert-danger">{% trans "This transaction is not booked yet" %}</div>
+					{{ base.alert('danger', "This transaction is not booked yet"|trans) }}
 				{% endif %}
 
 				{% for balance in balances %}
@@ -179,7 +194,7 @@
 						<tbody>
 						<tr>
 							<td>{% trans "Payment" %} {{ transaction.id }}</td>
-							<td class="text-right">&euro;{{ transaction.amount|number_format }}</td>
+							<td class="text-end">&euro;{{ transaction.amount|number_format }}</td>
 							<td>&nbsp;</td>
 						</tr>
 					{% endif %}
@@ -206,7 +221,7 @@
 								{{ balance.linked_object_classname }} {{ balance.linked_object_id }}
 							{% endif %}
 						</td>
-						<td class="text-right">&euro;{{ (balance.amount*-1)|number_format }}</td>
+						<td class="text-end">&euro;{{ (balance.amount*-1)|number_format }}</td>
 						<td>
 							<a href="/financial/account/transaction?action=delete_balance&id={{ balance.id }}" title="{% trans "Delete booking" %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to remove this booking" %}?">
 								<span class="glyphicon glyphicon-remove"></span>
@@ -218,7 +233,7 @@
 						{% if balances|length > 0 %}
 							<tr>
 								<th>{% trans "Balance" %}</th>
-								<th class="text-right">&euro;{{ transaction.get_balance()|number_format }}</th>
+								<th class="text-end">&euro;{{ transaction.get_balance()|number_format }}</th>
 								<th>&nbsp;</th>
 							</tr>
 						{% endif %}
@@ -255,7 +270,7 @@
 			<tr data-price="{{ transaction.amount }}" data-id="{{ transaction.id }}">
 				<td><input type="checkbox" data-group-cls="btn-group-xs" onchange="calculate_sum();"/></td>
 				<td>{{ transaction.date|date }}</td>
-				<td class="text-right">{{ transaction.amount }}</td>
+				<td class="text-end">{{ transaction.amount }}</td>
 				<td>{{ transaction.get_message() }}</td>
 				<td>{{ transaction.other_account_name }}</td>
 				<td class="status"></td>
@@ -265,15 +280,15 @@
 					</tbody>
 				</table>
 				<div class="well">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Total amount" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3">
+						<label class="col-form-label col-3 text-end">{% trans "Total amount" %}</label>
+						<div class="col-9">
 							<p class="form-control-static" id="total_amount">&euro;0</p>
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="col-xs-9 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-9 offset-3">
 							<button type="submit" class="btn btn-primary" id="btn_automatic_link" onclick="automatic_link();">
 								{% trans "Link transactions" %}
 							</button>
@@ -326,31 +341,49 @@
 			}
 		</script>
 	{% else %}
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
-			<li>{% trans "Bank Account" %} &quot;{% if bank_account.alias is not empty %}{{ bank_account.alias }}{% else %}{{ bank_account.description }}{% endif %}&quot;</li>
-		</ol>
+
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Bank accounts" %}</h4>
+			</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/financial/account">
+									{% trans "Bank accounts" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Bank account" %} &quot;{% if bank_account.alias is not empty %}{{ bank_account.alias }}{% else %}{{ bank_account.description }}{% endif %}&quot;
+							</li>							
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>
+
 
 		{% include "financial/account/tabs.twig" %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card mb-3">
+			<div class="card-header">
 				{% trans "Filter" %}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<form method="post" action="/financial/account/transaction?bank_account_id={{ bank_account.id }}" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3">
+						<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
+						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
 					{% set conditions = pager.get_conditions() %}
 
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Bank Account Statement" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3">
+						<label class="col-form-label col-3 text-end">{% trans "Bank Account Statement" %}</label>
+						<div class="col-9">
 							<select name="bank_account_statement" class="form-control">
 								<option value="-1">{% trans "All" %}</option>
 								{% for bank_account_statement in bank_account.get_bank_account_statements() %}
@@ -362,9 +395,9 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Balanced" %}</label>
-						<div class="col-xs-9">
+					<div class="row mb-3">
+						<label class="col-form-label col-3 text-end">{% trans "Balanced" %}</label>
+						<div class="col-9">
 							<select name="balanced" class="form-control">
 								<option value="-1">{% trans "Any" %}</option>
 								<option value="0" {% if pager.has_condition('bank_account_statement_transaction.balanced', 0) %}selected{% endif %}>{% trans "No" %}</option>
@@ -373,8 +406,8 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
 							</button>
@@ -384,11 +417,11 @@
 			</div>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 			{% for transaction in pager.items %}
 				{% if loop.first %}
 					<table class="table table-hover table-striped table-condensed table-responsive">
@@ -410,12 +443,12 @@
 					<td>{{ transaction.id }}</td>
 					<td>{{ transaction.date|date }}</td>
 					<td>{{ transaction.bank_account_statement.sequence }}</td>
-					<td class="text-right" style="padding-right: 10px;">&euro;{{ transaction.amount|number_format }}</td>
+					<td class="text-end" style="padding-right: 10px;">&euro;{{ transaction.amount|number_format }}</td>
 					<td>{{ transaction.get_message|truncate(80) }}</td>
 					<td>{{ transaction.other_account_name }}</td>
 					<td>
 						<a href="/financial/account/transaction?action=edit&bank_account_id={{ bank_account.id }}&id={{ transaction.id }}" title="">
-							<span class="glyphicon glyphicon-pencil"></span>
+							<i data-feather="edit"></i>
 						</a>
 					</td>
 				</tr>

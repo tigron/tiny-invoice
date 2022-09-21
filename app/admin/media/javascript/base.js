@@ -40,6 +40,22 @@ $(document).ready(function(){
 		}
 	});
 
+
+
+
+	$('select[multiple=multiple]').select2({
+		theme: "bootstrap-5",
+		closeOnSelect: false,
+		minimumResultsForSearch: Infinity
+	});	
+
+	$('select[multiple!=multiple]').select2({
+		theme: "bootstrap-5",
+		closeOnSelect: true,
+		minimumResultsForSearch: Infinity
+	});
+
+
 });
 
 // function to change delimiters (to prevent twig collision)

@@ -10,9 +10,9 @@
 			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
 			<li>{% trans "Import" %}</li>
 		</ol>
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Import bank transactions" %}</div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header">{% trans "Import bank transactions" %}</div>
+			<div class="card-body">
 				<div class="alert alert-success">
 					{% trans "Successfully imported the bank transactions" %}
 				</div>
@@ -25,59 +25,74 @@
 			</div>
 		</div>
 	{% elseif action == 'export' %}
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/financial/account">{% trans "Bank accounts" %}</a></li>
-			<li>{% trans "Export" %}</li>
-		</ol>
-
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Bank Accounts" %}</h4>
+			</div>
+			<div class="col">
+				<div class="float-end">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item">
+								<a href="/financial/account">
+									{% trans "Bank accounts" %}
+								</a>
+							</li>
+							<li class="breadcrumb-item active">
+								{% trans "Export" %} {{ bank_account.name }}
+							</li>
+						</ol>
+					</nav>
+				</div>
+			</div>
+		</div>
 
 		<form class="form-horizontal" method="post" action="/financial/account?action=export&id={{ bank_account.id }}">
-		<div class="well">
-
-			<div class="form-group">
-				<label class="col-xs-3 control-label">{% trans "Export bank account" %}</label>
-				<div class="col-xs-9">
-					<p class="form-control-static">
-						{{ bank_account.name }}, {{ bank_account.description }} ({{ bank_account.number }})
-					</p>
+		<div class="card text-bg-light">
+			<div class="card-body">
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Export bank account" %}</label>
+					<div class="col-9">
+						<p class="form-control-plaintext">
+							{{ bank_account.name }}, {{ bank_account.description }} ({{ bank_account.number }})
+						</p>
+					</div>
 				</div>
-			</div>
 
-			<div class="form-group">
-				<label class="col-xs-3 control-label">{% trans "Export statements" %}</label>
-				<div class="col-xs-9">
-					<select name="bank_account_statement_ids[]" class="form-control multiselect" multiple="multiple">
-					{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
-						<optgroup label="{{ year }}">
-							{% for bank_account_statement in bank_account.get_bank_account_statements_by_year(year) %}
-								<option value="{{ bank_account_statement.id }}">{{ bank_account_statement.sequence }} ({{ bank_account_statement.original_situation_date|date }} - {{ bank_account_statement.new_situation_date|date }})</option>
-								{% endfor %}
-						</optgroup>
-					{% endfor %}
-					</select>
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Export statements" %}</label>
+					<div class="col-9">
+						<select name="bank_account_statement_ids[]" class="form-control" id="export_statements" multiple="multiple">
+						{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
+							<optgroup label="{{ year }}">
+								{% for bank_account_statement in bank_account.get_bank_account_statements_by_year(year) %}
+									<option value="{{ bank_account_statement.id }}">{{ bank_account_statement.sequence }} ({{ bank_account_statement.original_situation_date|date }} - {{ bank_account_statement.new_situation_date|date }})</option>
+									{% endfor %}
+							</optgroup>
+						{% endfor %}
+						</select>
+					</div>
 				</div>
-			</div>
 
-			<div class="form-group">
-				<label class="col-xs-3 control-label">{% trans "Export format" %}</label>
-				<div class="col-xs-4">
-					<select name="export_format" class="form-control">
-						<option value="Export_Expertm_Financial">Expert/M</option>
-					</select>
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Export format" %}</label>
+					<div class="col-4">
+						<select name="export_format" class="form-control select2">
+							<option value="Export_Expertm_Financial">Expert/M</option>
+						</select>
+					</div>
 				</div>
-			</div>
 
-			<div class="form-group">
-				<div class="col-xs-9 col-xs-offset-3">
-					<button type="submit" class="btn btn-primary">
-						{% trans "Download" %}
-					</button>
+				<div class="row mb-3">
+					<div class="col-9 offset-3">
+						<button type="submit" class="btn btn-primary">
+							{% trans "Download" %}
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
 		</form>
-
 
 	{% elseif action == 'import' %}
 		<ol class="breadcrumb">
@@ -87,12 +102,12 @@
 		</ol>
 
 		<form class="form-horizontal" method="post" action="/financial/account?action=import">
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Import bank transactions" %}</div>
-			<div class="panel-body">
-				<div class="form-group{% if 'file_id' in errors|keys %} has-error{% endif %}">
-					<label for="file_id" class="col-xs-3 control-label">{% trans "File" %}</label>
-					<div class="col-xs-9">
+		<div class="card">
+			<div class="card-header">{% trans "Import bank transactions" %}</div>
+			<div class="card-body">
+				<div class="row mb-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
+					<label for="file_id" class="col-form-label col-3 text-end">{% trans "File" %}</label>
+					<div class="col-9">
 						<div id="import-file" class="form-control-static hide">
 							{% if import.file_id > 0 %}
 								<div class="file">
@@ -125,8 +140,8 @@
 					</div>
 				</div>
 
-				<div class="form-group hidden form_submit">
-					<div class="col-xs-9 col-xs-offset-3">
+				<div class="row mb-3 hidden form_submit">
+					<div class="col-9 offset-3">
 						<button type="submit" class="btn btn-primary">{% trans "Start import" %}</button>
 					</div>
 				</div>
@@ -139,7 +154,7 @@
 		<script type="text/x-handlebars-template" id="import-file-template">
 			<div class="file">
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-12">
 						<input type="hidden" name="import[file_id]" value="((file.id))" />
 						<span>
 							<strong>((file.name))</strong>
@@ -151,7 +166,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-12">
 						((parser.classname))
 					</div>
 				</div>
@@ -183,7 +198,7 @@
 							$("#import-file").append(template(response));
 							$('#import-dropzone').hide();
 							$('#import-file').find('.help-block').remove();
-							$('#import-file').closest('.form-group').removeClass('has-error');
+							$('#import-file').closest('.row mb-3').removeClass('has-error');
 							$('#import-file').removeClass('hide');
 						}
 						catch (e) {
@@ -229,33 +244,31 @@ console.log(response);
 	{% else %}
 		{% include "financial/account/modal.add_account.twig" with {id: 'add_account'} %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li class="active">{% trans "Bank accounts" %}</li>
-
-			<div class="pull-right">
-				<a href="#add_account" data-toggle="modal">
-					<span class="glyphicon glyphicon-plus-sign"></span> {% trans "Add bank account" %}
-				</a>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Bank accounts" %}</h4>
 			</div>
-		</ol>
+		</div>
 
 		<div class="alert alert-info">
-			<p>
-			{% trans "Below you can find a list of all your bank accounts." %} {% trans "Click on your account to see the transactions." %} {% trans "If your account is not shown, it was not yet included in any CODA file." %} {% trans "Press import to start importing a new CODA file." %}
-			</p>
-			<br />
-			<a class="btn btn-info" href="/financial/account?action=import">{% trans "Import" %}</a>
+			<div class="alert-message">
+				<p>
+			{% trans "Below you can find a list of all your bank accounts." %} {% trans "Click on your account to see the transactions." %} {% trans "If your account is not shown, it was not yet included in any CODA file." %} {% trans "Press import to start importing a new CODA file." %} {% trans "To add a bank account manually, press 'create'." %}
+				</p>
+				<br />
+				<a class="btn btn-info text-end" href="/financial/account?action=import">{% trans "Import" %}</a>
+				<a class="btn btn-info text-end" href="#add_account" data-bs-toggle="modal">{% trans "Create" %}</a>
+			</div>
 		</div>
 
 		<div class="row">
 		{% for bank_account in bank_accounts %}
 			{% include "financial/account/modal.edit_account.twig" with {id: 'modal_edit_account_' ~ bank_account.id, bank_account: bank_account} %}
-			<div class="col-xs-3">
-				<div class="panel panel-default panel-link" data-id="{{ bank_account.id }}" href="/financial/account/transaction?bank_account_id={{ bank_account.id }}">
-					<div class="panel-body">
+			<div class="col-4 mb-3">
+				<div class="card card-link h-100" data-id="{{ bank_account.id }}" href="/financial/account/transaction?bank_account_id={{ bank_account.id }}">
+					<div class="card-body">
 						<div class="pull-right">
-							<a href="#modal_edit_account_{{ bank_account.id }}" data-toggle="modal" alt="{% trans "Settings" %}">
+							<a href="#modal_edit_account_{{ bank_account.id }}" data-bs-toggle="modal" alt="{% trans "Settings" %}">
 								<i class="fa fa-cog"></i> {% trans "Settings" %}
 							</a>&nbsp;
 
@@ -295,11 +308,11 @@ console.log(response);
 	{% endif %}
 
 	<script type="text/javascript">
-		$('.panel-link').on('click', function() {
+		$('.card-link').on('click', function() {
 			window.location = $(this).attr('href');
 		});
 
-		$('.panel-link a').on('click', function(e) {
+		$('.card-link a').on('click', function(e) {
 			e.preventDefault();
 			href = $(this).attr('href');
 			if ($(this).data('toggle') == 'modal') {

@@ -1,0 +1,181 @@
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Credit notes" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/creditnote">
+							{% trans "Credit Notes" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Create new credit note" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+<form method="post" action="/sales/creditnote?action=create_step2">
+	<div class="card">
+		<div class="card-header">
+			{% trans "Additional info" %}
+		</div>
+		<div class="card-body">
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "VAT mode" %}</label>
+				<div class="col-9">
+					{% if invoice.vat_mode == 'group' %}
+						{% set vat_mode = "Per group"|trans %}
+					{% else %}
+						{% set vat_mode = "Per line"|trans %}						
+					{% endif %}				
+					<input type="text" readonly class="form-control-plaintext" value="{{ vat_mode }}">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card mt-3 mb-3">
+		<div class="card-header">
+			{% trans "Add items" %}
+		</div>
+		<div class="card-body">
+			<table class="table table-hover table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>{% trans "Product definition" %}</th>
+						<th width="50%">{% trans "Description" %}</th>
+						<th width="10%">{% trans "Qty" %}</th>
+						<th width="10%">
+							{% if invoice.vat_mode == 'group' %}
+								{% trans "Price excl VAT" %}
+							{% else %}
+								{% trans "Price incl VAT" %}
+							{% endif %}
+						</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="creditnote-items">
+					{% for invoice_item in invoice.get_invoice_items %}
+					<tr>
+						<td>
+							<select name="creditnote_item[{{ loop.index }}][product_type_id]" class="form-control">
+								{% for product_type in product_types %}
+									<option value="{{ product_type.id }}" {% if product_type.id == invoice_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
+								{% endfor %}
+							</select>
+						</td>
+						<td>
+							<input type="hidden" name="creditnote_item[{{ loop.index }}][invoice_item_id]" value="{{ invoice_item.id }}">
+							<textarea class="form-control autogrow" name="creditnote_item[{{ loop.index }}][description]">{{ invoice_item.description }}</textarea>
+						</td>
+						<td>
+							<input type="text" class="form-control" name="creditnote_item[{{ loop.index }}][qty]" value="{{ invoice_item.qty }}">
+						</td>
+						<td>
+							<input type="text" class="form-control" name="creditnote_item[{{ loop.index }}][price]" value="{% if invoice_item.invoice.vat_mode == 'group' %}{{ invoice_item.price_excl }}{% else %}{{ invoice_item.price_incl }}{% endif %}">
+						</td>
+						<td>
+							<select name="creditnote_item[{{ loop.index }}][vat_rate_id]" class="form-control">
+								<option value="0" {% if invoice_item.vat_rate_value == 0 %}selected{% endif %}>{% trans "No VAT" %} (0%)</option>
+								{% for vat_rate in vat_rates %}
+									<option {% if invoice_item.vat_rate_id == vat_rate.id %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+								{% endfor %}
+							</select>
+						</td>
+						<td>
+							<div class="col-form-label">
+								<a href="javascript:void(0);" onclick="remove_item($(this));">
+									<i data-feather="trash-2"></i>								
+								</a>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+
+				</tbody>
+			</table>
+
+			<div class="text-right">
+				<button type="button" onclick="javascript:add_item({})" class="btn btn-light">
+					<i data-feather="plus"></i> {% trans "Add item" %}
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="text-right">
+		<button type="submit" class="btn btn-primary">
+			{% trans "Save" %} <span class="glyphicon glyphicon-arrow-right"></span>
+		</button>
+	</div>
+</form>
+
+
+<script type="text/x-handlebars-template" id="new-creditnote_item-tmpl">
+	<tr>
+		<td>
+			<select name="creditnote_item[((nr))][product_type_id]" class="form-control">
+				{% for product_type in product_types %}
+					<option value="{{ product_type.id }}">{{ product_type.name }}</option>
+				{% endfor %}
+			</select>
+		</td>
+		<td>
+			<textarea class="form-control autogrow" name="creditnote_item[((nr))][description]">((description))</textarea>
+		</td>
+		<td>
+			<input type="text" class="form-control" name="creditnote_item[((nr))][qty]" value="((qty))">
+		</td>
+		<td>
+			<input type="text" class="form-control" name="creditnote_item[((nr))][price]" value="((price))">
+		</td>
+		<td>
+			<select name="creditnote_item[((nr))][vat_rate_id]" class="form-control">
+				<option value="0">{% trans "No VAT" %} (0%)</option>
+				{% for vat_rate in vat_rates %}
+					<option value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
+				{% endfor %}
+			</select>
+		</td>
+		<td>
+			<div class="form-control-static">
+				<a href="javascript:void(0);" onclick="remove_item($(this));">
+					<i data-feather="trash-2"></i>
+				</a>
+			</div>
+		</td>
+	</tr>
+</script>
+<script type="text/javascript">
+	function add_item(data) {
+		items = $('#creditnote-items').find('tr input[name*="qty"]');
+		ids = [];
+		items.each(function(){
+			id = parseInt($(this).prop('name').match(/\d+/));
+			ids.push(id);
+		});
+
+		nr = ids.length == 0 ? 0 : ids.max()+1;
+		$.extend(data, {'nr': nr});
+
+		var source = $("#new-creditnote_item-tmpl").html();
+		Handlebars.setDelimiter('(',')');
+		var template = Handlebars.compile(source);
+		$('#creditnote-items').append(template(data));
+		$('.autogrow').autoGrow();
+	}
+
+	function remove_item(obj) {
+		if($('#creditnote-items').find('tr').length > 1) {
+			obj.parents('tr').remove();
+		}
+	}
+</script>

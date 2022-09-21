@@ -9,9 +9,9 @@
 <form action="/sales/invoice/queue/recurring?action=edit&id={{ invoice_queue_recurring_group.id }}" method="post">
 <div class="row">
 	{% for customer_contact in invoice_queue_recurring_group.customer.get_active_customer_contacts %}
-		<div class="col-xs-4 customer_contact" id="customer-contact-{{ customer_contact.id }}">
-			<div class="panel panel-default">
-				<div class="panel-body{% if invoice_queue_recurring_group.customer_contact_id == customer_contact.id %} bg-info{% endif %}">
+		<div class="col-4 customer_contact" id="customer-contact-{{ customer_contact.id }}">
+			<div class="card">
+				<div class="card-body{% if invoice_queue_recurring_group.customer_contact_id == customer_contact.id %} bg-info{% endif %}">
 					<div class="pull-left">
 						<input type="radio" name="customer_contact" {% if invoice_queue_recurring_group.customer_contact_id == customer_contact.id %}checked{% endif %}/>
 					</div>
@@ -29,8 +29,8 @@
 	$('.customer_contact').on({
 		click: function() {
 			$('.customer_contact').find('input[type=radio]').prop('checked', false);
-			$('.customer_contact').find('.panel-body').removeClass('bg-info');
-			$(this).find('.panel-body').first().addClass('bg-info');
+			$('.customer_contact').find('.card-body').removeClass('bg-info');
+			$(this).find('.card-body').first().addClass('bg-info');
 			$('#customer_contact_id').val($(this).prop('id').replace('customer-contact-', ''));
 			$(this).find('input[type=radio]').prop('checked', true);
 		}

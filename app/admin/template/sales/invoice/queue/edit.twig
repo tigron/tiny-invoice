@@ -1,0 +1,114 @@
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Invoice Queue" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/invoice/queue">
+							{% trans "Invoice queue" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Edit invoice queue item" %} #{{ invoice_queue.id }}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+{% if env.sticky_session.message is defined %}
+	{{ base.display_flash_message(env.sticky_session.message, 'invoice queue') }}
+{% endif %}
+
+{% include 'sales/invoice/queue/modal.customer_contacts.twig' with {'id': 'change_customer_contact', 'modal_size': 'lg', 'invoice_queue_group': invoice_queue } %}
+{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue?action=edit&id=' ~ invoice_queue.id, 'modal_size': 'lg'} %}
+
+
+<div class="card">
+	<div class="card-header">
+		{% trans "Invoice queue item details" %}
+	</div>
+	<div class="card-body">
+		<form method="post" action="/sales/invoice/queue?action=edit&id={{ invoice_queue.id }}" class="form-horizontal form-condensed">
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Customer" %}</label>
+				<div class="col-6">
+					<p class="form-control-plaintext">
+						<a href="/administrative/customer/detail?id={{ invoice_queue.customer_id }}">
+							{{ invoice_queue.customer.get_display_name() }}
+						</a>
+					</p>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Invoice contact" %}</label>
+				<div class="col-6">
+					<p class="form-control-plaintext">
+						{{ invoice_queue.customer_contact.get_display_name() }}
+						<a href="#change_customer_contact" data-bs-toggle="modal">
+							{% trans "Change customer contact" %}
+						</a> /
+						<a href="#manage-customer-contact" data-bs-toggle="modal" data-customer-contact-id="{{ invoice_queue.customer_contact_id }}">
+							{% trans "Modify customer contact" %}
+						</a>
+					</p>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Product definition" %}</label>
+				<div class="col-9">
+					<select name="invoice_queue[product_type_id]" class="form-control">
+						{% for product_type in product_types %}
+							<option value="{{ product_type.id }}" {% if invoice_queue.product_type_id == product_type.id %}selected{% endif %}>{{ product_type.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Description" %}</label>
+				<div class="col-6">
+					<textarea class="form-control autogrow" name="invoice_queue[description]">{{ invoice_queue.description }}</textarea>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Qty" %}</label>
+				<div class="col-4">
+					<input class="form-control" name="invoice_queue[qty]" value="{{ invoice_queue.qty }}">
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "Price excl VAT" %}</label>
+				<div class="col-4">
+					<div class="input-group">
+						<span class="input-group-text">&euro;</span>
+						<input type="text" name="invoice_queue[price]" class="form-control" value="{{ invoice_queue.price }}" >
+					</div>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-3 col-form-label text-end">{% trans "VAT" %}</label>
+				<div class="col-4">
+					<select name="invoice_queue[vat]" class="form-control">
+					{% for vat_rate in vat_rates %}
+						<option value="{{ vat_rate.vat }}"{% if vat_rate.vat_rate_id == invoice_queue.vat_rate_id %} selected{% endif %}>{{ vat_rate.vat }}%</option>
+					{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-3 offset-3">
+					<button class="btn btn-primary">
+						{% trans "Save" %}
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+

@@ -232,20 +232,37 @@ class Creditnote extends Module {
 		$this->template = null;
 
 		$pager = new Pager('invoice');
+		$pager->add_sort_permission('lastname');
+		if (isset($_GET['q'])) {
+			$pager->set_search($_GET['q'], [ 'number', 'customer.company', 'customer.firstname' ]);
+		}
+		if (isset($_GET['page'])) {
+			$_GET['p'] = $_GET['page'];
+		}	
 		$pager->add_sort_permission('number');
-		$pager->set_direction('DESC');
-		$pager->set_search($_GET['search'], [ 'number', 'price_incl', 'customer.company', 'customer.firstname' ]);
+		$pager->set_sort('number');
 		$pager->page();
 
 		$data = [];
 		foreach ($pager->items as $invoice) {
-			$name = $invoice->number . ' - ' . $invoice->customer->get_display_name() . ' - €' . $invoice->price_incl;
 			$data[] = [
 				'id' => $invoice->id,
-				'value' => $name
+				'text' => $invoice->number . ' - ' . $invoice->customer->get_display_name() . ' - €' . $invoice->price_incl,
 			];
 		}
-		echo json_encode($data);
+
+		$page_count = ceil($pager->item_count / \Skeleton\Pager\Config::$items_per_page);
+
+		$result = [
+			'results' => $data,
+			'pagination' => [
+				'more' => false,
+			]
+		];
+		if ($pager->get_page() < $page_count) {
+			$result['pagination']['more'] = true;
+		}
+		echo json_encode($result);
 	}
 
 	/**

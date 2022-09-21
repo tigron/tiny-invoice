@@ -4,43 +4,45 @@
 
 {% block content %}
 
-	<ol class="breadcrumb">
-		<li><a href="/">{% trans "Home" %}</a></li>
-		<li>{% trans "Settings" %}</li>
-		<li class="active">{% trans "Api settings" %}</li>
-	</ol>
+	<div class="row">
+		<div class="col">
+			<h4>{% trans "API settings" %}</h4>
+		</div>
+	</div>
 
-	{% if env.sticky_session.message is defined %}
-		{{ base.display_flash_message(env.sticky_session.message, 'settings') }}
-	{% endif %}
+	<form action="/setting/api" method="post">
+		<div class="card">
+			<div class="card-header">{% trans "Company settings" %}</div>
+			<div class="card-body">
+				{% if env.sticky_session.message is defined %}
+					{{ base.alert('success', 'Settings successfully updated'|trans) }}
+				{% endif %}
 
-	<form action="/setting/api" method="post" class="form-horizontal form-condensed">
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Company settings" %}</div>
-			<div class="panel-body">
-				<div class="form-group">
-					<label class="control-label col-xs-3">{% trans "API keys" %} ({% trans "1 key per line" %})</label>
-					<div class="col-xs-9">
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "API keys" %} ({% trans "1 key per line" %})</label>
+					<div class="col-9">
 						<textarea class="form-control autogrow" name="setting[api_keys]">{{ settings.api_keys }}</textarea>
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label class="col-xs-3 control-label">{% trans "Make all documents available via API" %}</label>
-					<div class="col-xs-9">
-						<input type="checkbox" name="setting[api_public_documents]" {% if settings.api_public_documents %}checked{% endif %} id="chk_api_public_documents" data-group-cls="btn-group-xs">
+				<div class="row mb-3">
+					<label class="col-form-label col-3 text-end">{% trans "Make all documents available via API" %}</label>
+					<div class="col-9">
+						<div class="form-check form-switch form-control-plaintext">
+						<input type="checkbox" name="setting[api_public_documents]" {% if settings.api_public_documents %}checked{% endif %} id="chk_api_public_documents" data-group-cls="btn-group-xs" class="form-check-input">
+						</div>
 					</div>
 				</div>
 
-				<div class="form-group" id="api_document_tag_ids">
-					<label class="col-xs-3 control-label">{% trans "Only expose documents with tag" %}</label>
-					<div class="col-xs-9">
+				<div class="row mb-3" id="api_document_tag_ids">
+					<label class="col-form-label col-3 text-end">{% trans "Only expose documents with tag" %}</label>
+					<div class="col-9">
 						<input type="text" class="form-control" name="setting[api_document_tag_ids]" id="autocomplete-tag" />
 					</div>
 				</div>
 
-				<div class="form-group">
-					<div class="col-xs-9 col-xs-offset-3">
+				<div class="row mb-3">
+					<div class="col-9 offset-3">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>
 				</div>

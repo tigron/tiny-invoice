@@ -1,0 +1,74 @@
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Credit notes" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/creditnote">
+							{% trans "Credit Notes" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Export credit notes" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+{% if errors is defined and errors|length > 0 %}
+	<div class="alert alert-danger">
+		{% trans "Please select at least one month" %}.
+	</div>
+{% endif %}
+
+<form method="post" action="/sales/creditnote?action=export">
+<div class="card text-bg-light">
+	<div class="card-body">
+		<div class="row mb-3 {% if errors.months is defined %}has-error{% endif %}">
+			<label class="col-3 col-form-label">{% trans "Export invoices" %}</label>
+			<div class="col-9">
+				<select name="months[]" class="form-control multiselect" multiple="multiple">
+				{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
+					<optgroup label="{{ year }}">
+						{% for month in 1..12 %}
+							{% if year < "now"|date("Y") or ( month <= "now"|date("m") and year >= "now"|date("Y") ) %}
+								<option value="{{ year }}-{{ "%02d"|format(month) }}">{{ (year~'-'~month~'-01')|date("F Y") }}</option>
+							{% endif %}
+						{% endfor %}
+					</optgroup>
+				{% endfor %}
+				</select>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<label class="col-3 col-form-label">{% trans "Export format" %}</label>
+			<div class="col-9">
+				<select name="export_format" class="form-control">
+					<option value="Export_Expertm_Creditnote">Expert/M</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-9 offset-3">
+				<button type="submit" class="btn btn-primary">
+					{% trans "Download" %}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+
+<script type="text/javascript">
+$('select').select2({
+  theme: "bootstrap-5",
+  closeOnSelect: false
+});
+</script>

@@ -6,13 +6,15 @@
 {% block tab %}
 
 <div class="alert alert-info">
-	<p>{% trans "Register your mobile phone to enable adding documents via your camera." %}</p>
+	<div class="alert-message">
+		<p>{% trans "Register your mobile phone to enable adding documents via your camera." %}</p>
 
-	<br />
+		<br />
 
-	<a href="#add-mobile" data-toggle="modal" class="btn btn-info">
-		{% trans "Add mobile" %}
-	</a>
+		<a href="#add-mobile" data-bs-toggle="modal" class="btn btn-info">
+			{% trans "Add mobile" %}
+		</a>
+	</div>
 </div>
 
 {% include "administrative/user/mobile/modal.new.twig" with {id: 'add-mobile'} %}
@@ -35,7 +37,7 @@
 		<td>{{ mobile.registered|datetime }}</td>
 		<td>
 			<a href="/administrative/user/mobile?id={{ user.id }}&action=delete&mobile_id={{ mobile.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to delete this mobile device?" %}">
-				<i class="fa fa-remove"></i>
+				<i data-feather="trash"></i>
 			</a>
 		</td>
 	</tr>

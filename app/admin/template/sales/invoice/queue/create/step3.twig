@@ -1,0 +1,109 @@
+
+<ol class="breadcrumb">
+	<li><a href="/">{% trans "Home" %}</a></li>
+	<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
+	<li>{% trans "Create invoice queue item" %}</li>
+	<li class="active">{% trans "Add items" %}</li>
+</ol>
+
+{% if errors is defined %}
+<div class="alert alert-danger">
+	{{ errors|print_r }}
+</div>
+{% endif %}
+
+<div class="card">
+	<div class="card-header">
+		{% trans "Add items" %}
+	</div>
+	<div class="card-body">
+		<form method="post" action="/sales/invoice/queue?action=create_step3">
+			<table class="table table-hover table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>{% trans "Product definition" %}</th>
+						<th width="50%">{% trans "Description" %}</th>
+						<th width="10%">{% trans "Qty" %}</th>
+						<th width="10%">{% trans "Price" %}</th>
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody id="invoice-queue-items"></tbody>
+			</table>
+
+			<div class="text-right">
+				<button type="button" onclick="javascript:add_item()" class="btn btn-default">
+					<span class="glyphicon glyphicon-plus"></span> {% trans "Add item" %}
+				</button>
+				<button type="submit" class="btn btn-primary">
+					{% trans "Save" %} <span class="glyphicon glyphicon-arrow-right"></span>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/x-handlebars-template" id="new-invoice-queue-item-tmpl">
+	<tr>
+		<td>
+			<select name="invoice_queue_item[((nr))][product_type_id]" class="form-control">
+				{% for product_type in product_types %}
+					<option value="{{ product_type.id }}">{{ product_type.name }}</option>
+				{% endfor %}
+			</select>
+		<td>
+			<textarea class="form-control" name="invoice_queue_item[((nr))][description]"></textarea>
+		</td>
+		<td>
+			<input type="text" class="form-control" name="invoice_queue_item[((nr))][qty]">
+		</td>
+		<td>
+			<input type="text" class="form-control" name="invoice_queue_item[((nr))][price]">
+		</td>
+		<td>
+			<select name="invoice_queue_item[((nr))][vat]" class="form-control">
+			{% for vat_rate in vat_rates %}
+				<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
+			{% endfor %}
+			</select>
+		</td>
+		<td>
+			<a href="javascript:void(0);" onclick="remove_item($(this));">
+				<span class="glyphicon glyphicon-remove"></span>
+			</a>
+		</td>
+	</tr>
+</script>
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		add_item();
+	});
+
+	function add_item() {
+
+		items = $('#invoice-queue-items').find('tr input[name*="qty"]');
+		ids = [];
+		items.each(function(){
+			id = parseInt($(this).prop('name').match(/\d+/));
+			ids.push(id);
+		});
+
+		nr = ids.length == 0 ? 0 : ids.max()+1;
+		data = {'nr': nr};
+
+		var source = $("#new-invoice-queue-item-tmpl").html();
+		Handlebars.setDelimiter('(',')');
+		var template = Handlebars.compile(source);
+		$('#invoice-queue-items').append(template(data));
+	}
+
+	function remove_item(obj) {
+		if($('#invoice-queue-items').find('tr').length > 1) {
+			obj.parents('tr').remove();
+		}
+	}
+
+</script>
+

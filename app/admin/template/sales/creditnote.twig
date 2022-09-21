@@ -4,228 +4,9 @@
 
 {% block content %}
 	{% if action == 'create_step1' %}
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/creditnote">{% trans "Credit Notes" %}</a></li>
-			<li class="active">{% trans "Add credit note" %}</li>
-		</ol>
-
-		{% if errors is defined %}
-		<div class="alert alert-danger">
-			{% trans "Please select an invoice." %}
-		</div>
-		{% endif %}
-
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				{% trans "Select customer" %}
-			</div>
-			<div class="panel-body">
-				<form method="post" action="/sales/creditnote?action=create_step1" class="form-horizontal" id="invoice-create-step1">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Invoice number" %}</label>
-						<div class="col-xs-9">
-							<input type="text" id="autocomplete_invoice" name="invoice" class="form-control typeahead" value="" placeholder="{% trans "Search invoice" %}...">
-							<input type="hidden" id="invoice_id" name="invoice_id" value="">
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
-							<button class="btn btn-primary">
-								{% trans "Next" %}
-							</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-		<script type="text/javascript" src="/bloodhound.min.js"></script>
-		<script type="text/javascript" src="/typeahead.min.js"></script>
-		<script type="text/javascript">
-
-			var invoices = new Bloodhound({
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				remote: '/sales/creditnote?action=ajax_search&search=%QUERY'
-			});
-
-			invoices.initialize();
-
-			$('#autocomplete_invoice').typeahead({
-				hint: true,
-				highlight: true,
-				minLength: 2
-			},{
-				name:	'invoice',
-				displayKey: 'value',
-				source:	invoices.ttAdapter()
-			});
-			$('#autocomplete_invoice').on('typeahead:selected typeahead:autocompleted', function(e,data) {
-				$('#invoice_id').val(data.id);
-			});
-		</script>
+		{% include 'sales/creditnote/create/step1.twig' %}	
 	{% elseif action == 'create_step2' %}
-		<form method="post" action="/sales/creditnote?action=create_step2" class="form-horizontal">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{% trans "Additional info" %}
-				</div>
-				<div class="panel-body">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "VAT mode" %}</label>
-						<div class="col-xs-9">
-							<p class="form-control-static">
-								{% if invoice.vat_mode == 'group' %}
-									{% trans "Per group" %}
-								{% else %}
-									{% trans "Per line" %}
-								{% endif %}
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					{% trans "Add items" %}
-				</div>
-				<div class="panel-body">
-					<table class="table table-hover table-striped table-condensed">
-						<thead>
-							<tr>
-								<th>{% trans "Product definition" %}</th>
-								<th width="50%">{% trans "Description" %}</th>
-								<th width="10%">{% trans "Qty" %}</th>
-								<th width="10%">
-									{% if invoice.vat_mode == 'group' %}
-										{% trans "Price excl VAT" %}
-									{% else %}
-										{% trans "Price incl VAT" %}
-									{% endif %}
-								</th>
-								<th>&nbsp;</th>
-								<th>&nbsp;</th>
-							</tr>
-						</thead>
-						<tbody id="creditnote-items">
-							{% for invoice_item in invoice.get_invoice_items %}
-							<tr>
-								<td>
-									<select name="creditnote_item[{{ loop.index }}][product_type_id]" class="form-control">
-										{% for product_type in product_types %}
-											<option value="{{ product_type.id }}" {% if product_type.id == invoice_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
-										{% endfor %}
-									</select>
-								</td>
-								<td>
-									<input type="hidden" name="creditnote_item[{{ loop.index }}][invoice_item_id]" value="{{ invoice_item.id }}">
-									<textarea class="form-control autogrow" name="creditnote_item[{{ loop.index }}][description]">{{ invoice_item.description }}</textarea>
-								</td>
-								<td>
-									<input type="text" class="form-control" name="creditnote_item[{{ loop.index }}][qty]" value="{{ invoice_item.qty }}">
-								</td>
-								<td>
-									<input type="text" class="form-control" name="creditnote_item[{{ loop.index }}][price]" value="{% if invoice_item.invoice.vat_mode == 'group' %}{{ invoice_item.price_excl }}{% else %}{{ invoice_item.price_incl }}{% endif %}">
-								</td>
-								<td>
-									<select name="creditnote_item[{{ loop.index }}][vat_rate_id]" class="form-control">
-										<option value="0" {% if invoice_item.vat_rate_value == 0 %}selected{% endif %}>{% trans "No VAT" %} (0%)</option>
-										{% for vat_rate in vat_rates %}
-											<option {% if invoice_item.vat_rate_id == vat_rate.id %}selected{% endif %} value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-										{% endfor %}
-									</select>
-								</td>
-								<td>
-									<div class="form-control-static">
-										<a href="javascript:void(0);" onclick="remove_item($(this));">
-											<span class="glyphicon glyphicon-remove"></span>
-										</a>
-									</div>
-								</td>
-							</tr>
-							{% endfor %}
-
-						</tbody>
-					</table>
-
-					<div class="text-right">
-						<button type="button" onclick="javascript:add_item({})" class="btn btn-default">
-							<span class="glyphicon glyphicon-plus"></span> {% trans "Add item" %}
-						</button>
-					</div>
-				</div>
-			</div>
-
-			<div class="text-right">
-				<button type="submit" class="btn btn-primary">
-					{% trans "Save" %} <span class="glyphicon glyphicon-arrow-right"></span>
-				</button>
-			</div>
-		</form>
-
-
-		<script type="text/x-handlebars-template" id="new-creditnote_item-tmpl">
-			<tr>
-				<td>
-					<select name="creditnote_item[((nr))][product_type_id]" class="form-control">
-						{% for product_type in product_types %}
-							<option value="{{ product_type.id }}">{{ product_type.name }}</option>
-						{% endfor %}
-					</select>
-				</td>
-				<td>
-					<textarea class="form-control autogrow" name="creditnote_item[((nr))][description]">((description))</textarea>
-				</td>
-				<td>
-					<input type="text" class="form-control" name="creditnote_item[((nr))][qty]" value="((qty))">
-				</td>
-				<td>
-					<input type="text" class="form-control" name="creditnote_item[((nr))][price]" value="((price))">
-				</td>
-				<td>
-					<select name="creditnote_item[((nr))][vat_rate_id]" class="form-control">
-						<option value="0">{% trans "No VAT" %} (0%)</option>
-						{% for vat_rate in vat_rates %}
-							<option value="{{ vat_rate.vat_rate_id }}">{{ vat_rate.vat_rate.name }} ({{ vat_rate.vat }}%)</option>
-						{% endfor %}
-					</select>
-				</td>
-				<td>
-					<div class="form-control-static">
-						<a href="javascript:void(0);" onclick="remove_item($(this));">
-							<span class="glyphicon glyphicon-remove"></span>
-						</a>
-					</div>
-				</td>
-			</tr>
-		</script>
-		<script type="text/javascript">
-			function add_item(data) {
-				items = $('#creditnote-items').find('tr input[name*="qty"]');
-				ids = [];
-				items.each(function(){
-					id = parseInt($(this).prop('name').match(/\d+/));
-					ids.push(id);
-				});
-
-				nr = ids.length == 0 ? 0 : ids.max()+1;
-				$.extend(data, {'nr': nr});
-
-				var source = $("#new-creditnote_item-tmpl").html();
-				Handlebars.setDelimiter('(',')');
-				var template = Handlebars.compile(source);
-				$('#creditnote-items').append(template(data));
-				$('.autogrow').autoGrow();
-			}
-
-			function remove_item(obj) {
-				if($('#creditnote-items').find('tr').length > 1) {
-					obj.parents('tr').remove();
-				}
-			}
-		</script>
+		{% include 'sales/creditnote/create/step2.twig' %}	
 	{% elseif action == 'edit' %}
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
@@ -238,10 +19,10 @@
 		{% endif %}
 
 		<div class="row">
-			<div class="col-xs-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Details" %}</div>
-					<div class="panel-body">
+			<div class="col-6">
+				<div class="card">
+					<div class="card-header">{% trans "Details" %}</div>
+					<div class="card-body">
 						<dl class="dl-horizontal">
 							<dt>{% trans "Credit note number" %}</dt>
 							<dd>{{ creditnote.id }}</dd>
@@ -264,15 +45,15 @@
 				</div>
 			</div>
 
-			<div class="col-xs-6" id="creditnote-settings">
+			<div class="col-6" id="creditnote-settings">
 				<form class="form-horizontal form-condensed" action="/sales/creditnote?action=edit&id={{ creditnote.id }}" method="post">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Creditnote settings" %}</div>
-					<div class="panel-body">
+				<div class="card">
+					<div class="card-header">{% trans "Creditnote settings" %}</div>
+					<div class="card-body">
 
-						<div class="form-group">
-							<label class="col-xs-3 control-label">{% trans "VAT mode" %}</label>
-							<div class="col-xs-9">
+						<div class="row mb-3">
+							<label class="col-form-label col-3 text-end">{% trans "VAT mode" %}</label>
+							<div class="col-9">
 								<p class="form-control-static">
 									{% if creditnote.vat_mode == 'group' %}
 										{% trans "Per group" %}
@@ -291,9 +72,9 @@
 
 		<div class="row">
 			<div class="col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Customer" %}</div>
-					<div class="panel-body">
+				<div class="card">
+					<div class="card-header">{% trans "Customer" %}</div>
+					<div class="card-body">
 						<dl class="dl-horizontal">
 							<dt>{% trans "Name" %}</dt>
 							<dd>
@@ -319,9 +100,9 @@
 			</div>
 
 			<div class="col-md-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">{% trans "Invoice contact" %}</div>
-					<div class="panel-body">
+				<div class="card">
+					<div class="card-header">{% trans "Invoice contact" %}</div>
+					<div class="card-body">
 						<dl class="dl-horizontal">
 							<dt>{% trans "Name" %}</dt>
 							<dd>{{ creditnote.customer_contact.firstname }} {{ creditnote.customer_contact.lastname }}</dd>
@@ -346,9 +127,9 @@
 			</div>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Invoice details" %}</div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header">{% trans "Invoice details" %}</div>
+			<div class="card-body">
 				<table class="table table-striped table-hover table-condensed">
 					<thead>
 						<tr>
@@ -406,9 +187,9 @@
 			</div>
 		</div>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Logs" %}</div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header">{% trans "Logs" %}</div>
+			<div class="card-body">
 				<dl class="dl-horizontal">
 				{% set logs = creditnote.get_logs() %}
 				{% for log in logs %}
@@ -426,76 +207,31 @@
 			</div>
 		</div>
 	{% elseif action == 'export' %}
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="/sales/creditnote">{% trans "Credit Notes" %}</a></li>
-			<li class="active">{% trans "Export credit notes" %}</li>
-		</ol>
 
-		{% if errors is defined and errors|length > 0 %}
-			<div class="alert alert-danger">
-				{% trans "Please select at least one month" %}.
-			</div>
-		{% endif %}
+		{% include 'sales/creditnote/export.twig' %}
 
-		<form class="form-horizontal" method="post" action="/sales/creditnote?action=export">
-		<div class="well">
-			<div class="form-group {% if errors.months is defined %}has-error{% endif %}">
-				<label class="col-xs-3 control-label">{% trans "Export invoices" %}</label>
-				<div class="col-xs-9">
-					<select name="months[]" class="form-control multiselect" multiple="multiple">
-					{% for year in ("now"|date("Y")).."now"|date("Y")-2 %}
-						<optgroup label="{{ year }}">
-							{% for month in 1..12 %}
-								{% if year < "now"|date("Y") or ( month <= "now"|date("m") and year >= "now"|date("Y") ) %}
-									<option value="{{ year }}-{{ "%02d"|format(month) }}">{{ (year~'-'~month~'-01')|date("F Y") }}</option>
-								{% endif %}
-							{% endfor %}
-						</optgroup>
-					{% endfor %}
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="col-xs-3 control-label">{% trans "Export format" %}</label>
-				<div class="col-xs-4">
-					<select name="export_format" class="form-control">
-						<option value="Export_Expertm_Creditnote">Expert/M</option>
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-xs-9 col-xs-offset-3">
-					<button type="submit" class="btn btn-primary">
-						{% trans "Download" %}
-					</button>
-				</div>
+	{% else %}
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Credit notes" %}</h4>
 			</div>
 		</div>
-		</form>
-	{% else %}
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li class="active">{% trans "Credit Notes" %}</li>
-		</ol>
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card">
+			<div class="card-header">
 				{% trans "Filter" %}
 			</div>
-			<div class="panel-body">
-				<form method="post" action="/sales/creditnote" class="form-horizontal">
-					<div class="form-group">
-						<label class="col-xs-3 control-label">{% trans "Search" %}</label>
-						<div class="col-xs-9">
+			<div class="card-body">
+				<form method="post" action="/sales/creditnote">
+					<div class="row mb-3">
+						<label class="col-2 col-form-label text-end">{% trans "Search" %}</label>
+						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="col-xs-3 col-xs-offset-3">
+					<div class="row mb-3">
+						<div class="col-3 offset-2">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
 							</button>
@@ -519,22 +255,22 @@
 			</div>
 		{% endif %}
 
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="card mt-3">
+			<div class="card-header">
 				<div class="pull-right">
 					<a href="/sales/creditnote?action=create_step1" title="">
-						<span class="glyphicon glyphicon-plus-sign"></span>
+						<i data-feather="plus"></i>
 						{% trans "Add credit note" %}
 					</a>
 					-
 					<a href="/sales/creditnote?action=export" title="{% trans "Export credit notes" %}">
-						<i class="fa fa-file"></i> {% trans "Export credit notes" %}
+						<i data-feather="file-text"></i> {% trans "Export credit notes" %}
 					</a>
 
 				</div>
 				{{ base.pager_count(pager.item_count) }} (&euro;{{ pager.get_sum('price_incl')|number_format }})
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 			{% for creditnote in pager.items %}
 				{% if loop.first %}
 					<table class="table table-hover table-striped table-condensed table-responsive" id="invoice-list">
@@ -569,12 +305,12 @@
 					<td class="text-right">€{{ creditnote.get_price_incl|number_format }}</td>
 					<td>
 						<a href="/sales/creditnote?action=download&id={{ creditnote.id }}">
-							<span class="glyphicon glyphicon-download"></span>
+							<i data-feather="download"></i>
 						</a>
 					</td>
 					<td class="text-right">
 						<a href="/sales/creditnote?action=edit&id={{ creditnote.id }}" title="">
-							<span class="glyphicon glyphicon-pencil"></span>
+							<i data-feather="edit"></i>
 						</a>
 					</td>
 				</tr>

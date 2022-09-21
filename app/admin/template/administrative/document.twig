@@ -28,7 +28,7 @@
 					</nav>
 				</div>
 			</div>
-		</div>		
+		</div>
 		{% endblock breadcrumb %}
 
 		{% if errors is defined %}
@@ -100,7 +100,7 @@
 													<span class="glyphicon glyphicon-remove"></span>
 												</a>
 												<a href="/administrative/document?action=download&id={{ document.id }}">
-													<span class="glyphicon glyphicon-download"></span>
+													<i data-feather="download"></i>
 												</a>
 											</div>
 										{% endif %}
@@ -169,7 +169,7 @@
 
 							<hr>
 							<div class="row mb-3">
-								<div class="col-9 col-offset-3">
+								<div class="col-9 offset-3">
 									<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 									<a href="/administrative/document?action=delete&id={{ document.id }}" class="btn btn-danger" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?" >{% trans "Delete" %}</a>
 									{% if settings.setasign_pdf_extractor %}
@@ -328,7 +328,7 @@
 					</nav>
 				</div>
 			</div>
-		</div>	
+		</div>
 
 		{% if errors is defined %}
 			<div class="alert alert-danger">
@@ -352,7 +352,7 @@
 					<div class="row mb-3">
 						<label class="col-3 col-form-label text-end">{% trans "Tags" %}</label>
 						<div class="col-9">
-							<select name="tag_ids" class="form-select autocomplete_tag"></select>						
+							<select name="tag_ids" class="form-select autocomplete_tag"></select>
 						</div>
 					</div>
 
@@ -365,7 +365,7 @@ $('.autocomplete_tag').select2({
 	    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
 	}
 });
-</script>					
+</script>
 
 					<div class="row mb-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
 						<label for="file_id" class="col-3 col-form-label text-end">{% trans "File" %}</label>
@@ -545,7 +545,6 @@ $('.autocomplete_tag').select2({
 				<td width="20">
 					<a href="/administrative/document?action=download&id={{ document.id }}">
 						<i data-feather="download"></i>
-						<span class="glyphicon glyphicon-download"></span>
 					</a>
 				</td>
 				<td width="20">
