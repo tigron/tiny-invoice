@@ -86,7 +86,8 @@
 		"bower-asset/platform": "^1.3",
 		"bower-asset/moe-font-sourcesanspro": "^1.3",
 		"npm-asset/webcam-easy": "^1.0",
-		"jschaedl/iban-validation": "^1.7"
+		"jschaedl/iban-validation": "^1.7",
+		"cocur/slugify": "^4.2"
 	},
 	"suggest": {
 		"ext-imap": "*"
