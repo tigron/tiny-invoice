@@ -20,7 +20,7 @@ class Extractor_Eval_Exception extends Exception {
 	 *
 	 * @var int $line
 	 */
-	public $line = 0;
+	public int $line = 0;
 
 	/**
 	 * Set message
