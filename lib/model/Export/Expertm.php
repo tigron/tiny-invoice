@@ -30,9 +30,45 @@ abstract class Export_Expertm extends Export {
 	 * @param string $field
 	 */
 	protected function alf($size, $field) {
-		setlocale(LC_ALL, 'en_US.UTF-8'); // Required, so that we know to what we want to translate
-		$field = iconv("UTF-8", "ASCII//TRANSLIT", $field);
+		$field = $this->clean_string($field);
+		$field = transliterator_transliterate('Latin-ASCII', $field);
 		return substr(str_pad($field, $size, ' '), 0, $size);
+	}
+
+	/**
+	 * Clean string
+	 *
+	 * @access public
+	 * @param string $string
+	 * @return string $clean_string
+	 */
+	protected function clean_string($string) {
+		$string = str_replace('.', '', $string);
+		$string = str_replace('@', '', $string);
+		$string = str_replace('&', '', $string);
+		$string = str_replace('-', '', $string);
+		$string = str_replace('_', '', $string);
+		$string = str_replace('!', '', $string);
+		$string = str_replace(',', '', $string);
+		$string = str_replace('?', '', $string);
+		$string = str_replace("\"", '', $string);
+		$string = str_replace(';', '', $string);
+		$string = str_replace('*', '', $string);
+		$string = str_replace('\'', '', $string);
+		$string = str_replace('é', 'e', $string);
+		$string = str_replace('è', 'e', $string);
+		$string = str_replace('î', 'i', $string);
+		$string = str_replace('ë', 'e', $string);
+		$string = str_replace('ä', 'a', $string);
+		$string = str_replace('â', 'a', $string);
+		$string = str_replace('à', 'a', $string);
+		$string = str_replace('ç', 'c', $string);
+		$string = str_replace('ô', 'o', $string);
+		$string = str_replace('ö', 'o', $string);
+		$string = str_replace("\r\n", ' ', $string);
+		$string = str_replace("\n", ' ', $string);
+		$string = trim($string);
+		return $string;
 	}
 
 	/**
