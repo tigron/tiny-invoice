@@ -171,7 +171,7 @@ class Queue extends Module {
 
 		}
 
-		$customer_contact = customer_contact::get_by_id($_SESSION['invoice_queue']['customer_contact_id']);
+		$customer_contact = \Customer_Contact::get_by_id($_SESSION['invoice_queue']['customer_contact_id']);
 		$template->assign('vat_rates', \Vat_Rate_Country::get_by_country($customer_contact->country));
 		$template->assign('action', 'create_step3');
 		$template->assign('product_types', \Product_Type::get_all());
