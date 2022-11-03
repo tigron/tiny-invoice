@@ -189,7 +189,7 @@
 					<div class="form-group">
 						<label class="col-xs-3 control-label">{% trans "Qty" %}</label>
 						<div class="col-xs-4">
-							<input class="form-control" name="invoice_queue[qty]" value="{{ invoice_queue.qty }}">
+							<input class="form-control qty" name="invoice_queue[qty]" value="{{ invoice_queue.qty }}">
 						</div>
 					</div>
 					<div class="form-group">
@@ -197,7 +197,7 @@
 						<div class="col-xs-4">
 							<div class="input-group">
 								<span class="input-group-addon">&euro;</span>
-								<input type="text" name="invoice_queue[price]" class="form-control" value="{{ invoice_queue.price }}" >
+								<input type="text" name="invoice_queue[price]" class="form-control price" value="{{ invoice_queue.price }}" >
 							</div>
 						</div>
 					</div>
@@ -418,10 +418,10 @@
 					<textarea class="form-control" name="invoice_queue_item[((nr))][description]"></textarea>
 				</td>
 				<td>
-					<input type="text" class="form-control" name="invoice_queue_item[((nr))][qty]">
+					<input type="text" class="form-control qty" name="invoice_queue_item[((nr))][qty]">
 				</td>
 				<td>
-					<input type="text" class="form-control" name="invoice_queue_item[((nr))][price]">
+					<input type="text" class="form-control price" name="invoice_queue_item[((nr))][price]">
 				</td>
 				<td>
 					<select name="invoice_queue_item[((nr))][vat]" class="form-control">
@@ -438,8 +438,14 @@
 			</tr>
 		</script>
 		<script type="text/javascript">
-
 			$(document).ready(function() {
+				$('input.price, input.qty').mask('dAAAAAAAAAAAAAASAA', {'translation': {
+					d: {pattern: /-|''/, optional: true},
+					A: {pattern: /\d/, optional: true},
+					S: {pattern: /\./, optional: true}
+					}, placeholder: "0.00"
+				});
+
 				add_item();
 			});
 
@@ -459,6 +465,13 @@
 				Handlebars.setDelimiter('(',')');
 				var template = Handlebars.compile(source);
 				$('#invoice-queue-items').append(template(data));
+
+				$('input.price, input.qty').mask('dAAAAAAAAAAAAAASAA', {'translation': {
+					d: {pattern: /-|''/, optional: true},
+					A: {pattern: /\d/, optional: true},
+					S: {pattern: /\./, optional: true}
+					}, placeholder: "0.00"
+				});
 			}
 
 			function remove_item(obj) {
