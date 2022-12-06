@@ -157,10 +157,6 @@ class Creditnote {
 	 * @return double $price
 	 */
 	public function get_price_incl() {
-		if (!$this->customer_contact->vat_bound()) {
-			return $this->get_price_excl();
-		}
-
 		$incl = $this->get_price_excl();
 
 		$creditnote_vats = Creditnote_Vat::get_by_creditnote($this);

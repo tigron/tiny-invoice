@@ -44,6 +44,7 @@ class Creditnote extends Module {
 		$pager->add_sort_permission('price_incl');
 		$pager->add_sort_permission('price_excl');
 		$pager->add_sort_permission('paid');
+		$pager->add_join('creditnote_item', 'creditnote_id', 'creditnote.id');
 		$pager->set_direction('desc');
 
 		if (isset($_POST['search'])) {
