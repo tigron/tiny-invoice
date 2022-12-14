@@ -61,7 +61,8 @@ class Bootstrap {
 		$database = \Skeleton\Database\Database::Get($config->database, true);
 		\Skeleton\Database\Config::$query_log = false;
 		\Skeleton\Database\Config::$query_counter = true;
-		\Skeleton\Database\Config::$auto_discard = true;		
+		\Skeleton\Database\Config::$auto_discard = true;
+		\Skeleton\Database\Config::$auto_trim = true;
 
 		/**
 		 * Initialize the file store
