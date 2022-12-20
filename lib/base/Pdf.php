@@ -145,9 +145,9 @@ class Pdf {
 
 				$dompdf = new DOMPDF();
 				$dompdf->setOptions($options);
-				$dompdf->set_base_path(dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/');
-                $dompdf->set_paper($this->configuration['size'], $this->configuration['orientation']);
-                $dompdf->load_html($html);
+				$dompdf->setBasePath(dirname(__FILE__) . '/../../store/pdf/' . $skin_pdf->path . '/media/');
+                $dompdf->setPaper($this->configuration['size'], $this->configuration['orientation']);
+                $dompdf->loadHtml($html);
                 $dompdf->render();
 
                 return File::store($filename, $dompdf->output());

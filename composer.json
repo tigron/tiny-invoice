@@ -70,7 +70,7 @@
 		"bower-asset/jquery-ui": "*",
 		"bower-asset/bootstrap": "^5.2",
 		"bower-asset/jquery-mask-plugin": "@stable",
-		"bower-asset/codemirror": "@stable",
+		"bower-asset/codemirror": "5.59.2",
 		"bower-asset/urijs": "@stable",
 		"bower-asset/bloodhound": "^1.0",
 		"bower-asset/highcharts": "^4.2",

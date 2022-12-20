@@ -201,7 +201,7 @@ class Document_Incoming_Invoice extends Document {
 	 * @access public
 	 * @return array $ids
 	 */
-	public function get_all_ids() {
+	public static function get_all_ids() {
 		$db = Database::get();
 
 		$public = false;

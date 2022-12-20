@@ -77,13 +77,20 @@ class Invoice_Item {
 	public function validate(&$errors = null) {
 		$errors = [];
 		$required_fields = ['description', 'qty', 'price_incl', 'price_excl'];
-
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] === '') {
 				$errors[$required_field] = 'required';
 			}
 		}
 
+		// Check if we have numeric values
+		$numeric_values = ['qty', 'price_incl', 'price_excl'];
+		foreach ($numeric_values as $numeric_value) {
+			if (!is_numeric($this->details[$numeric_value])) {
+				$errors[$numeric_value] = 'non-numeric';
+			}
+		}
+		
 		if (count($errors) > 0) {
 			return false;
 		} else {
@@ -98,7 +105,7 @@ class Invoice_Item {
 	 * @return decimal $price_excl
 	 */
 	public function get_price_excl() {
-		return $this->price_excl * $this->qty;
+		return round($this->price_excl * $this->qty, 2);
 	}
 
 	/**

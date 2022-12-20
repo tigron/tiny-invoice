@@ -37,7 +37,7 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 
 
 		$spreadsheet = new Spreadsheet();
-		$headers = ['Document number', 'Date', 'Accounting identifier', 'Expiration Date', 'Supplier', 'Title', 'Price excl', 'Price incl', 'Paid', 'Tags'];
+		$headers = ['Document number', 'Date', 'Accounting identifier', 'Expiration Date', 'Supplier', 'Title', 'Payment message', 'Price excl', 'Price incl', 'Paid', 'Tags'];
 
 		$worksheet = $spreadsheet->getActiveSheet();
 
@@ -55,19 +55,24 @@ class Export_Excel_Document_Invoice extends Export_Expertm {
 			$worksheet->setCellValueByColumnAndRow(4, $row, $invoice->expiration_date);
 			$worksheet->setCellValueByColumnAndRow(5, $row, $invoice->supplier->company);
 			$worksheet->setCellValueByColumnAndRow(6, $row, $invoice->title);
-			$worksheet->setCellValueByColumnAndRow(7, $row, $invoice->price_excl);
-			$worksheet->setCellValueByColumnAndRow(8, $row, $invoice->price_incl);
-			if ($invoice->paid) {
-				$worksheet->setCellValueByColumnAndRow(9, $row, 'Yes');
+			if (!empty($invoice->payment_structured_message)) {
+				$worksheet->setCellValueByColumnAndRow(7, $row, '+++' . $invoice->payment_structured_message . '+++');						
 			} else {
-				$worksheet->setCellValueByColumnAndRow(9, $row, 'No');
+				$worksheet->setCellValueByColumnAndRow(7, $row, $invoice->payment_message);
+			}
+			$worksheet->setCellValueByColumnAndRow(8, $row, $invoice->price_excl);
+			$worksheet->setCellValueByColumnAndRow(9, $row, $invoice->price_incl);
+			if ($invoice->paid) {
+				$worksheet->setCellValueByColumnAndRow(10, $row, 'Yes');
+			} else {
+				$worksheet->setCellValueByColumnAndRow(10, $row, 'No');
 			}
 			$tags = $invoice->get_tags();
 			$txt_tags = '';
 			foreach ($tags as $tag) {
 				$txt_tags .= $tag->name . ' ';
 			}
-			$worksheet->setCellValueByColumnAndRow(10, $row, $txt_tags);
+			$worksheet->setCellValueByColumnAndRow(11, $row, $txt_tags);
 		}
 
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');

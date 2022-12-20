@@ -31,7 +31,7 @@ abstract class Export_Expertm extends Export {
 	 */
 	protected function alf($size, $field) {
 		$field = $this->clean_string($field);
-		$field = iconv("UTF-8", "ASCII//TRANSLIT", $field);
+		$field = transliterator_transliterate('Latin-ASCII', $field);
 		return substr(str_pad($field, $size, ' '), 0, $size);
 	}
 

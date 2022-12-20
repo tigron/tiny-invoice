@@ -87,7 +87,7 @@ class Extractor_Pdf {
 
 		if ( $return === false && $error ) {
 			$exception = new Extractor_Eval_Exception();
-			$exception->line = $error['line'];
+			$exception->line = (int)$error['line'];
 			$exception->setMessage($error['message']);
 			throw $exception;
 		}

@@ -66,7 +66,9 @@ abstract class Export {
 	public static function get_by_id($id) {
 		$db = Database::get();
 		$classname = $db->get_one('SELECT classname FROM export WHERE id=?', [ $id ]);
-		return new $classname($id);
+		if (class_exists($classname)) {
+			return new $classname($id);
+		}
 	}
 
 
