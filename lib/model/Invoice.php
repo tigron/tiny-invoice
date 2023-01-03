@@ -64,14 +64,14 @@ class Invoice {
 		} catch (\Exception $e) {
 			$file = null;
 		}
-		
+
 		$this->file_id = null;
 		$this->save();
 
 		if ($file !== null) {
 			$file->delete();
 		}
-				
+
 		$this->trait_delete();
 
 		if ($is_last) {
@@ -105,7 +105,7 @@ class Invoice {
 	 * @access public
 	 * @param Invoice_Item $invoice_item
 	 * @param Bool $validate
-	 * 
+	 *
 	 */
 	public function add_invoice_item(Invoice_Item $invoice_item, Bool $validate = true) {
 		$invoice_item->invoice_id = $this->id;
@@ -454,10 +454,13 @@ class Invoice {
 			}
 		}
 
-		$max_length_fieds = ['reference', 'internal_reference'];
-		foreach ($max_length_fieds as $max_length_fied) {
-			if (strlen($this->details[$max_length_fied]) > 64) {
-				$errors[$max_length_fied] = 'too_long';
+		$max_length_fields = ['reference', 'internal_reference'];
+		foreach ($max_length_fields as $max_length_field) {
+			if (!isset($this->details[$max_length_field])) {
+				continue;
+			}
+			if (strlen($this->details[$max_length_field]) > 64) {
+				$errors[$max_length_field] = 'too_long';
 			}
 		}
 
