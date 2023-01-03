@@ -6,19 +6,24 @@
 {% block tab %}
 	<form class="form form-horizontal form-condensed" method="post" action="/administrative/customer/detail?action=edit&id={{ customer.id }}">
 		{% if errors is defined and errors|length == 1 and errors.vat is defined %}
-			<div class="alert alert-warning">
-				<button type="submit" class="btn btn-xs btn-warning pull-right" name="ignore_vat">
-					{% trans "Confirm VAT number" %}
-				</button>
-
-				{% trans "The VAT number could not be verified." %} {% trans "If you still want to save this VAT number, please confirm." %}
-			</div>
+			<div class="alert alert-danger" role="alert">
+				<div class="alert-icon">
+				    <i class="align-middle" data-feather="alert-triangle"></i>
+				</div>
+				<div class="alert-message">
+					{% trans "The VAT number could not be verified." %}<br />
+					{% trans "If you still want to save this VAT number, please confirm." %}<br />
+					<button type="submit" class="btn btn-xs btn-danger" name="ignore_vat">
+						{% trans "Confirm VAT number" %}
+					</button>
+				</div>
+			</div>	
 		{% elseif errors is defined %}
 			<div class="alert alert-danger">
 				{% trans "The form contains mistakes. Please correct them." %}
 			</div>
 		{% elseif env.sticky_session.message is defined %}
-			{{ base.display_flash_message(env.sticky_session.message, 'customer') }}
+			{{ base.alert('success', 'Customer successfully updated'|trans) }}
 		{% endif %}
 
 		<div class="row mb-3{% if 'company' in errors|keys %} has-error{% endif %}">
@@ -80,7 +85,7 @@
 		<div class="row mb-3{% if 'country_id' in errors|keys %} has-error{% endif %}">
 			<label for="country_id" class="col-form-label col-3 text-end">{% trans "Country" %}</label>
 			<div class="col-9">
-				<select name="customer[country_id]" class="form-control" onchange="change_country();">
+				<select name="customer[country_id]" class="form-control select2" onchange="change_country();">
 				{% for group in countries|keys  %}
 					{% if group == 'european' %}
 						<optgroup label="{% trans "European" %}">

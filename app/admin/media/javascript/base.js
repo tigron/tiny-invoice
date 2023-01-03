@@ -42,14 +42,13 @@ $(document).ready(function(){
 
 
 
-
 	$('select[multiple=multiple]').select2({
 		theme: "bootstrap-5",
 		closeOnSelect: false,
 		minimumResultsForSearch: Infinity
 	});	
 
-	$('select[multiple!=multiple]').select2({
+	$('select.select2[multiple!=multiple]').select2({
 		theme: "bootstrap-5",
 		closeOnSelect: true,
 		minimumResultsForSearch: Infinity

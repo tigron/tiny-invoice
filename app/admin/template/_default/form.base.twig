@@ -17,7 +17,7 @@
 
 {% macro invalid_input(field, errors) %}
 	{% if field in errors|keys %}
-		<div class="help-block">
+		<div class="invalid-feedback">
 			<span class="glyphicon glyphicon-exclamation-sign"></span>
 			{% if attribute(errors, field) == 'required' %}{% trans "This field is required." %}
 			{% elseif attribute(errors, field) == 'already_exists' %}{% trans "The e-mail address has already been entered before." %}

@@ -57,7 +57,7 @@ class Invoice_Method_Mail extends Invoice_Method {
 	 * @access public
 	 * @param Invoice $invoice
 	 */
-	public function send(Invoice $invoice) {
+	public function send_invoice(Invoice $invoice) {
 		$mail = new Email('invoice', $invoice->customer_contact->language);
 		if ($invoice->customer_contact->email != '') {
 			$mail->add_to($invoice->customer_contact->email, $invoice->customer_contact->firstname . ' ' . $invoice->customer_contact->lastname);
@@ -81,7 +81,7 @@ class Invoice_Method_Mail extends Invoice_Method {
 			$conditions_file = File::get_by_id($conditions_file_setting->value);
 			$mail->add_attachment($conditions_file);
 		}
-		
+
 		$mail->add_attachment($invoice->get_pdf());
 		$mail->assign('invoice', $invoice);
 
@@ -91,5 +91,47 @@ class Invoice_Method_Mail extends Invoice_Method {
 			throw new \Exception('Mail could not be sent. Error: ' . $e->getMessage());
 		}
 		Log::create('Invoice sent via email', $invoice);
+	}
+
+	/**
+	 * Send the creditnote via email
+	 *
+	 * @access public
+	 * @param Invoice $invoice
+	 */
+	public function send_creditnote(Creditnote $creditnote) {
+		$mail = new Email('creditnote', $creditnote->customer_contact->language);
+		if ($creditnote->customer_contact->email != '') {
+			$mail->add_to($creditnote->customer_contact->email, $creditnote->customer_contact->firstname . ' ' . $creditnote->customer_contact->lastname);
+		}
+		if ($creditnote->customer_contact->email == '' and $creditnote->customer->email != '') {
+			$mail->add_to($creditnote->customer->email, $creditnote->customer->firstname . ' ' . $creditnote->customer->lastname);
+		}
+		if ($creditnote->customer_contact->email != $creditnote->customer->email and $creditnote->customer->email != '') {
+			$mail->add_cc($creditnote->customer->email, $creditnote->customer->firstname . ' ' . $creditnote->customer->lastname);
+		}
+
+		try {
+			$email_from = Setting::get_by_name('email')->value;
+			$company = Setting::get_by_name('company')->value;
+			$mail->set_sender($email_from, $company);
+		} catch (Exception $e) {
+		}
+
+		$conditions_file_setting = Setting::get_by_name('file_id');
+		if (isset($conditions_file_setting->value) && $conditions_file_setting->value != 0 && $conditions_file_setting->value != "") {
+			$conditions_file = File::get_by_id($conditions_file_setting->value);
+			$mail->add_attachment($conditions_file);
+		}
+
+		$mail->add_attachment($creditnote->get_pdf());
+		$mail->assign('creditnote', $creditnote);
+
+		try {
+			$mail->send();
+		} catch (Exception $e) {
+			throw new \Exception('Mail could not be sent. Error: ' . $e->getMessage());
+		}
+		Log::create('Creditnote sent via email', $creditnote);
 	}
 }

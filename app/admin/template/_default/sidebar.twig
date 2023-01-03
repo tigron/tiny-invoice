@@ -10,7 +10,7 @@
 				<span class="ms-1 d-sm-inline">{% trans "Administration" %}</span>
 			</a>
 
-			{% set modules = [ 'administrative_user', 'administrative_user_detail', 'administrative_user_mobile', 'administrative_role', 'administrative_customer', 'administrative_supplier', 'administrative_supplier_detail', 'administrative_supplier_document', 'export' ] %}
+			{% set modules = [ 'administrative_user', 'administrative_user_detail', 'administrative_user_mobile', 'administrative_role', 'administrative_customer', 'administrative_customer_detail', 'administrative_customer_contact', 'administrative_customer_invoice', 'administrative_customer_recurring', 'administrative_customer_document', 'administrative_supplier', 'administrative_supplier_detail', 'administrative_supplier_document', 'export' ] %}
 
 			<div class="collapse {% if env.module.get_name() in modules %}show{% endif %}" id="menu_administration">
 				<ul class="nav flex-column">
@@ -28,7 +28,7 @@
 					{% endif %}
 					{% if env.session.user.has_permission('admin.customer') %}
 						<li class="w-100">
-							<a href="/administrative/customer" class="nav-link {% if env.module.get_name() == 'administrative_customer' %}active{% endif %}">
+							<a href="/administrative/customer" class="nav-link {% if env.module.get_name() starts with 'administrative_customer' %}active{% endif %}">
 								{% trans "Customers" %}
 							</a>
 						</li>

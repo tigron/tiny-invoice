@@ -11,29 +11,32 @@
 
 <div class="row">
 	{% for customer_contact in customer_contacts %}
-		<div class="col-3 customer_contact" id="customer-contact-{{ customer_contact.id }}">
-			<div class="card panel-link">
-				<div class="card-body{% if customer_contacts|length == 1 %} bg-info{% endif %}">
-					<div class="actions hide">
-						<a href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
+		<div class="col-3">
+			<div class="card customer_contact h-100" data-customer-contact-id="{{ customer_contact.id }}">
+				<div class="card-body">
+					<span class="badge bg-secondary actions visually-hidden">
+						<a href="#manage-customer-contact" class="text-white" data-bs-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contact-id="{{ customer_contact.id }}">
 							<i data-feather="edit"></i>
 						</a>
-						<a href="javascript:void(0);" onclick="delete_contact({{ customer_contact.id }})">
-							<span class="glyphicon glyphicon-remove"></span>
+						<a href="javascript:void(0);" class="text-white" onclick="delete_contact({{ customer_contact.id }})">
+							<i data-feather="trash-2"></i>
 						</a>
-					</div>
+					</span>
 
 					{{ base.customer_contact(customer_contact, settings) }}
 				</div>
 			</div>
 		</div>
 	{% endfor %}
-	<div class="col-3 customer_contact">
-		<div class="card">
-			<div class="card-body text-center">
-				<a class="btn btn-default" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="{{ customer_contacts|length }}">
-					{% trans "Create new" %}
-				</a>
+	<div class="col-3">
+		<div class="card h-100">
+			<div class="card-body d-flex h-100 w-100 text-center">
+				<div class="align-self-center w-100">
+					<a class="btn btn-primary" href="#manage-customer-contact" data-toggle="modal" data-customer-id="{{ customer.id }}" data-customer-contacts="0">
+						{% trans "Create new contact" %}
+					</a>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -43,18 +46,11 @@
 
 	$('.customer_contact').on({
 		mouseenter: function() {
-			$(this).find('.actions').toggleClass('hide');
+			$(this).find('.actions').toggleClass('visually-hidden');
 		},
 		mouseleave: function() {
-			$(this).find('.actions').toggleClass('hide');
+			$(this).find('.actions').toggleClass('visually-hidden');
 		},
-		click: function() {
-			$('.customer_contact').find('input[type=radio]').prop('checked', false);
-			$('.customer_contact').find('.card-body').removeClass('bg-info');
-			$(this).find('.card-body').first().addClass('bg-info');
-			$('input[name=customer_contact_id]').val($(this).prop('id').replace('customer-contact-', ''));
-			$(this).find('input[type=radio]').prop('checked', true);
-		}
 	});
 
 	function delete_contact(id) {

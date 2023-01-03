@@ -1,58 +1,70 @@
-{% extends "administrative/supplier.twig" %}
-
 {% import '_default/macro.base.twig' as base %}
 {% import '_default/form.base.twig' as form %}
 
-{% block tab %}
-		<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier/detail?action=edit&id={{ supplier.id }}">
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Suppliers" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/administrative/supplier">
+							{% trans "Supplier" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Add supplier" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
 
-			{% if errors is defined and errors|length == 1 and errors.vat is defined %}
-				<div class="alert alert-danger" role="alert">
-					<div class="alert-icon">
-					    <i class="align-middle" data-feather="alert-triangle"></i>
-					</div>
-					<div class="alert-message">
-						{% trans "The VAT number could not be verified." %}<br />
-						{% trans "If you still want to save this VAT number, please confirm." %}<br />
-						<button type="submit" class="btn btn-xs btn-danger" name="ignore_vat">
-							{% trans "Confirm VAT number" %}
-						</button>
-					</div>
-				</div>
-			{% elseif errors is defined %}
-				{{ base.alert('danger', 'The form contains mistakes. Please correct them.'|trans) }}
-			{% elseif env.sticky_session.message is defined %}
-				{{ base.alert('success', 'Customer successfully updated'|trans) }}			
-			{% endif %}
+{% if errors is defined %}
+<div class="alert alert-danger">
+	{% trans "The form contains mistakes. Please correct them." %}
+</div>
+{% endif %}
+
+<form class="form form-horizontal form-condensed" method="post" action="/administrative/supplier?action=add">
+	<div class="card">
+		<div class="card-header">
+			{% trans "Details" %}
+		</div>
+		<div class="card-body">
 
 			<div class="row mb-3{% if 'company' in errors|keys %} has-error{% endif %}">
 				<label for="company" class="col-form-label col-3 text-end">{% trans "Company" %}</label>
 				<div class="col-5">
-					<input type="text" name="supplier[company]" id="company" class="form-control" value="{{ supplier.company }}">
+					<input type="text" name="supplier[company]" id="company" class="form-control" value="{{ env.post.supplier.company }}">
 					{{ form.invalid_input('company', errors) }}
 				</div>
 			</div>
 
 			<div class="row mb-3">
 				<label class="col-form-label col-3 text-end">{% trans "Street" %}</label>
-				<div class="col-5"><input type="text" name="supplier[street]" class="form-control" value="{{ supplier.street }}" /></div>
+				<div class="col-5"><input type="text" name="supplier[street]" class="form-control" value="{{ env.post.supplier.street }}"/></div>
 			</div>
 
 			<div class="row mb-3">
 				<label class="col-form-label col-3 text-end">{% trans "Housenumber" %}</label>
-				<div class="col-5"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ supplier.housenumber }}"/></div>
+				<div class="col-5"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ env.post.supplier.housenumber }}"/></div>
 			</div>
+
 			<div class="row mb-3">
 				<label class="col-form-label col-3 text-end">{% trans "Zipcode" %}</label>
-				<div class="col-5"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ supplier.zipcode }}" /></div>
+				<div class="col-5"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ env.post.supplier.zipcode }}"/></div>
 			</div>
 
 			<div class="row mb-3">
 				<label class="col-form-label col-3 text-end">{% trans "City" %}</label>
-				<div class="col-5"><input type="text" name="supplier[city]" class="form-control" value="{{ supplier.city }}" /></div>
+				<div class="col-5"><input type="text" name="supplier[city]" class="form-control" value="{{ env.post.supplier.city }}"/></div>
 			</div>
 
-			<div class="row mb-3{% if 'country_id' in errors|keys %} has-error{% endif %}">
+			<div class="row mb-3 {% if 'country_id' in errors|keys %} has-error{% endif %}">
 				<label for="country_id" class="col-form-label col-3 text-end">{% trans "Country" %}</label>
 				<div class="col-5">
 					<select name="supplier[country_id]" class="form-control" onchange="change_country();">
@@ -64,7 +76,7 @@
 						{% endif %}
 
 						{% for country in countries[group] %}
-							<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if supplier.country_id == country.id %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
+							<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if env.post.supplier.country_id == country.id %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
 						{% endfor %}
 						</optgroup>
 					{% endfor %}
@@ -76,7 +88,7 @@
 				<label for="vat" class="col-form-label col-3 text-end">{% trans "Vat" %}</label>
 				<div class="col-1"><input type="text" class="form-control" id="vat_prefix" readonly value="AT" /></div>
 				<div class="col-4">
-					<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ supplier.vat }}">
+					<input type="text" name="supplier[vat]" id="vat" class="form-control" value="{{ env.post.supplier.vat }}">
 					{{ form.invalid_input('vat', errors) }}
 				</div>
 			</div>
@@ -84,15 +96,15 @@
 			<div class="row mb-3{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
 				<label for="accounting_identifier" class="col-form-label col-3 text-end">{% trans "Accounting identifier" %}</label>
 				<div class="col-5">
-					<input type="text" name="supplier[accounting_identifier]" class="form-control" value="{{ supplier.accounting_identifier }}">
+					<input type="text" name="supplier[accounting_identifier]" id="vat" class="form-control" value="{{ supplier.accounting_identifier }}">
 					{{ form.invalid_input('accounting_identifier', errors) }}
 				</div>
 			</div>
 
-			<div class="row mb-3{% if 'iban' in errors|keys %} has-error{% endif %}">
+            <div class="row mb-3{% if 'iban' in errors|keys %} has-error{% endif %}">
 				<label for="accounting_identifier" class="col-form-label col-3 text-end">{% trans "IBAN" %}</label>
 				<div class="col-5">
-					<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{{ supplier.iban }}">
+					<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{% if supplier.iban is defined %}{{ supplier.iban }}{% elseif env.post.supplier.iban is defined %}{{ env.post.supplier.iban }}{% endif %}">
 					{{ form.invalid_input('iban', errors) }}
 				</div>
 			</div>
@@ -108,7 +120,7 @@
 			<div class="row mb-3">
 			    <label class="col-form-label col-3 text-end">{% trans "Comments" %}</label>
 			    <div class="col-5">
-			        <textarea name="supplier[comment]" class="form-control">{{ supplier.comment }}</textarea>
+			        <textarea name="supplier[comment]" class="form-control">{{ env.post.supplier.comment }}</textarea>
 			    </div>
 			</div>
 
@@ -119,17 +131,19 @@
 					</button>
 				</div>
 			</div>
-		</form>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				$('input[name="supplier[iban]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000 0000 00', { placeholder: '____ ____ ____ ____ ____ ____ ____ ____ __'  });
-			});
 
-			function change_country() {
-				iso2 = $('select[name="supplier[country_id]"] option:selected').attr('data-iso2');
-				$('#vat_prefix').val(iso2);
-			}
-			change_country();
-		</script>
+		</div>
+	</div>
+</form>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('input[name="supplier[iban]"]').mask('SSAA AAAA 0000 0000 0000 0000 0000', { placeholder: '____ ____ ____ ____ ____ ____ ____'  });
+	});
 
-{% endblock tab %}
+	function change_country() {
+		iso2 = $('select[name="supplier[country_id]"] option:selected').attr('data-iso2');
+		$('#vat_prefix').val(iso2);
+	}
+	change_country();
+</script>
+

@@ -196,7 +196,7 @@ class Invoice extends Module {
 				} else {
 					$invoice_item->price_incl = $invoice_item->price;
 				}
-				
+
 
 				try{
 					$invoice_item->calculate_prices(false);
@@ -218,7 +218,7 @@ class Invoice extends Module {
 				if ($total_price == 0) {
 					$template->assign('total_price_error', true);
 				}
-				
+
 				$_SESSION['invoice']->reference = $_POST['invoice']['reference'];
 				$_SESSION['invoice']->internal_reference = $_POST['invoice']['internal_reference'];
 			} else {
@@ -228,14 +228,14 @@ class Invoice extends Module {
 				$invoice->internal_reference = $_POST['invoice']['internal_reference'];
 				$invoice->vat_mode = $_POST['invoice']['vat_mode'];
 				$invoice->generate_number();
-					
+
 				$invoice_errors = [];
 				if ($invoice->validate($invoice_errors) === false){
 					$template->assign('invoice_errors', $invoice_errors);
 				} else {
 					$invoice->expiration_date = date('YmdHis', strtotime($_POST['invoice']['expiration_date']));
 					$invoice->save();
-					
+
 					foreach ($invoice_items as $invoice_item) {
 						$invoice->add_invoice_item($invoice_item);
 						if (!empty($invoice_item->invoice_queue_id)) {
@@ -244,14 +244,14 @@ class Invoice extends Module {
 							$invoice_queue->save();
 						}
 					}
-				
+
 					if (isset($_POST['send_invoice'])) {
 						$invoice->schedule_send();
 					}
 
 					unset($_SESSION['invoice']);
 					\Log::create('add', $invoice);
-	
+
 					Session::redirect('/sales/invoice');
 				}
 			}

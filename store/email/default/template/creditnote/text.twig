@@ -1,0 +1,29 @@
+{% extends "_default/layout.base.text.twig" %}
+
+{% block content %}
+
+{% trans "New credit note" %}
+
+
+{% trans "Hello" %} {{ creditnote.invoice_contact.firstname }},
+
+{% trans "A new credit note has been created, please print this immediately. To open the credit note, you will need a PDF reader, such as Adobe Acrobat." %}
+{% trans "Adobe Acrobat can be downloaded from the following URL:" %} http://get.adobe.com/reader/
+
+{% trans "Products" %}
+{% trans "Product" %} // {% trans "VAT" %} // {% trans "Price excl." %}
+{% set creditnote_items = creditnote.get_creditnote_items() %}
+{% for creditnote_item in creditnote_items %}
+{{ creditnote_item.description|nl2br }} // {{ creditnote_item.qty }} // €{{ creditnote_item.price|number_format }} // €{{ creditnote_item.get_price_excl()|number_format }}
+{% if loop.last %}
+{% trans "Subtotal" %}: € {{ creditnote.get_price_excl()|number_format }}
+{% set vat_array = creditnote.get_vat_array() %}
+{% for key, vat_subtotal in vat_array %}
+{% trans "VAT" %} ({{ key }}%): &euro;{{ vat_subtotal|number_format }}
+{% endfor %}
+{% trans "Total" %}: &euro;{{ creditnote.get_price_incl()|number_format }}
+
+{% endif %}
+{% endfor %}
+
+{% endblock content %}

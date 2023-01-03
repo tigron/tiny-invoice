@@ -28,7 +28,15 @@ abstract class Invoice_Method {
 	 * @access public
 	 * @param Invoice $invoice
 	 */
-	abstract public function send(Invoice $invoice);
+	abstract public function send_invoice(Invoice $invoice);
+
+	/**
+	 * Send a creditnote
+	 *
+	 * @access public
+	 * @param Creditnote $creditnote
+	 */
+	abstract public function send_creditnote(Creditnote $creditnote);	
 
 	/**
 	 * Get by ID

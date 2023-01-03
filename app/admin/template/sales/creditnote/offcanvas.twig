@@ -1,0 +1,84 @@
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+	<div class="offcanvas-header">
+		<h5 class="offcanvas-title" id="offcanvasRightLabel">{% trans "Credit note" %} {{ creditnote.number }}</h5>
+		<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+	</div>
+	<div class="offcanvas-body">
+		<h6>{% trans "Details" %}</h6>
+		<table class="table table-sm table-borderless table-striped">
+			<tr>
+				<th>{% trans "Credit note number" %}</th>
+				<td>{{ creditnote.number }}</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Created" %}</th>
+				<td>{{ creditnote.created|date }}</td>
+			</tr>
+			<tr>
+				<th>{% trans "Price excl VAT" %}</th>
+				<td>{{ "€%.2f"|format(creditnote.get_price_excl()) }}</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Price incl VAT" %}</th>
+				<td>{{ "€%.2f"|format(creditnote.get_price_incl()) }}</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Expiration date" %}</th>
+				<td>{{ creditnote.expiration_date|date }}</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Paid" %}</th>
+				<td>
+					{% if invoice.paid %}
+						<span class="badge text-bg-success">{% trans "Yes" %}</span>
+					{% else %}
+						<span class="badge text-bg-danger">{% trans "No" %}</span>
+					{% endif %}
+				</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "Download PDF" %}</th>
+				<td>
+					<a href="/sales/creditnote?action=download&id={{ creditnote.id }}">
+						<i data-feather="download"></i>	invoice_{{ creditnote.number }}.pdf
+					</a>
+				</td>
+			</tr>
+
+			<tr>
+				<th>{% trans "VAT Calculation" %}</th>
+				<td>
+					{% if creditnote.vat_mode == 'group' %}
+						{% trans "Per group" %}
+					{% else %}
+						{% trans "Per line" %}
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+
+		<hr>
+		<h6>{% trans "Actions" %}</h6>
+		{% for invoice_method in invoice_methods %}
+			<a class="btn btn-primary" href="/sales/creditnote?action=send&id={{ creditnote.id }}&invoice_method_id={{ invoice_method.id }}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to send the credit note via" %} {{ invoice_method.name }}?">
+				<i class="{{ invoice_method.icon }}"></i> {% trans "Send credit note" %} ({{ invoice_method.name }})
+			</a>
+		{% endfor %}
+
+		<hr>
+
+
+		<h6>{% trans "Logs" %}</h6>
+		{% set logs = creditnote.get_logs() %}
+		{% for log in logs %}
+			<p class="text-muted p-0 m-0">{{ log.created|date }}: {{ log.get_content() }}</p>
+		{% endfor %}
+
+
+	</div>
+</div>

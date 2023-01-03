@@ -63,7 +63,7 @@
 				<div class="row mb-3">
 					<label class="col-form-label col-3 text-end">{% trans "Select permissions" %}</label>
 					<div class="col-9">
-						<select name="permission_ids[]" class="multiselect" multiple="multiple">
+						<select name="permission_ids[]" class="form-control select2" multiple="multiple">
 							{% for permission in permissions %}
 								<option value="{{ permission.id }}" {% if role.has_permission(permission) %}selected{% endif %}>
 									{% if permission.identifier == "admin.user" %}

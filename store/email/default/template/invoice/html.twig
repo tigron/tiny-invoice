@@ -75,8 +75,8 @@
 			<tr>
 				<td width="70%">{{ invoice_item.description|nl2br }}</td>
 				<td width="10%">{{ invoice_item.qty|number_format }}</td>
-				<td width="20%">&euro;{{ invoice_item.price|number_format }}</td>
-				<td width="20%">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
+				<td width="20%" style="text-align:right;">&euro;{{ invoice_item.price_excl|number_format }}</td>
+				<td width="20%" style="text-align:right;">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>				
 			</tr>
 		{% if loop.last %}
 			<tr>

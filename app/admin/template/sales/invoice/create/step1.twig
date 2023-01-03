@@ -51,10 +51,13 @@
 <script type="text/javascript">
 $('.autocomplete_customer').select2({
 	theme: "bootstrap-5",
+	closeOnSelect: true,
+	minimumResultsForSearch: 0,
 	ajax: {
 		url: '/administrative/customer?action=ajax_search',
 		dataType: 'json',
     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-	}
+	},
 });
+
 </script>

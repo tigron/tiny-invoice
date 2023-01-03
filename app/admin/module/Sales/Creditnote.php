@@ -267,6 +267,18 @@ class Creditnote extends Module {
 	}
 
 	/**
+	 * Email PDF
+	 *
+	 * @access public
+	 */
+	public function display_send() {
+		$creditnote = \Creditnote::get_by_id($_GET['id']);
+		$invoice_method = \Invoice_Method::get_by_id($_GET['invoice_method_id']);
+		$creditnote->send($invoice_method);
+		Session::redirect('/sales/creditnote?action=edit&id=' . $_GET['id']);
+	}	
+
+	/**
 	 * Secure
 	 *
 	 * @access public

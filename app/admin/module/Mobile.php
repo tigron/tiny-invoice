@@ -12,7 +12,7 @@ namespace App\Admin\Module\Mobile;
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Application\Web\Module;
 
-class Register extends Module {
+class Mobile extends Module {
 
 	/**
 	 * Login required

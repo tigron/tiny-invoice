@@ -198,13 +198,17 @@ class Creditnote {
 		return $file;
 	}
 
+
 	/**
 	 * Send
 	 *
 	 * @access public
-	 * @param Creditnote_Method $creditnote_method
+	 * @param Invoice_Method $invoice_method
 	 */
-	public function send(Creditnote_Method $creditnote_method) {
-		$creditnote_method->send($this);
+	public function send(Invoice_Method $invoice_method = null) {
+		if ($invoice_method === null) {
+			$invoice_method = $this->customer_contact->invoice_method;
+		}
+		$invoice_method->send_creditnote($this);
 	}
 }

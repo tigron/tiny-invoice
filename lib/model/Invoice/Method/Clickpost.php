@@ -27,9 +27,20 @@ class Invoice_Method_Clickpost extends Invoice_Method {
 	 * @access public
 	 * @param Invoice $invoice
 	 */
-	public function send(Invoice $invoice) {
+	public function send_invoice(Invoice $invoice) {
 		$tracking = $this->send_pdf($invoice->customer_contact, $invoice->get_pdf(), 'Invoice ' . $invoice->number);
 		Log::create('Invoice sent via Click & Post, tracking: ' . $tracking, $invoice);
+	}
+
+	/**
+	 * Send a credit note
+	 *
+	 * @access public
+	 * @param Creditnote $creditnote
+	 */
+	public function send_creditnote(Creditnote $creditnote) {
+		$tracking = $this->send_pdf($creditnote->customer_contact, $creditnote->get_pdf(), 'Credit note ' . $creditnote->number);
+		Log::create('Invoice sent via Click & Post, tracking: ' . $tracking, $creditnote);
 	}
 
 	/**
