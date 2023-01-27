@@ -33,21 +33,21 @@
 			{% trans "Additional info" %}
 		</div>
 		<div class="card-body">
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-3 col-form-label text-end">{% trans "Reference" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" id="reference" name="invoice[reference]" value="{{ env.session.invoice.reference }}">
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-3 col-form-label text-end">{% trans "Internal reference" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" id="internal_reference" name="invoice[internal_reference]" value="{{ env.session.invoice.internal_reference }}">
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-3 col-form-label text-end">{% trans "Expiration date" %}</label>
 				<div class="col-9">
 					<select name="invoice[expiration_date]" class="form-control">
@@ -59,7 +59,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-3 col-form-label text-end">{% trans "VAT mode" %}</label>
 				<div class="col-9">
 					<select name="invoice[vat_mode]" class="form-control" onchange="javascript:toggle_vat_mode(this);">
@@ -69,7 +69,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-3 col-form-label text-end">{% trans "Service delivery in" %}</label>
 				<div class="col-9">
 					<select name="invoice[service_delivery_to_country_id]" class="form-control multiselect" onchange="set_vat_regime();" id="vat_regime" data-company-country-id="{{ settings.country_id }}">
@@ -232,7 +232,7 @@
 						{% for invoice_queue_item in invoice_queue_items %}
 						<tr>
 							<td>
-								<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-control">
+								<select name="invoice_item[{{ loop.index }}][product_type_id]" class="form-select">
 									{% for product_type in product_types %}
 										<option value="{{ product_type.id }}" {% if product_type.id == invoice_queue_item.product_type_id %}selected{% endif %}>{{ product_type.name }}</option>
 									{% endfor %}
@@ -308,10 +308,9 @@
 </form>
 
 <script type="text/x-handlebars-template" id="new-invoice-item-tmpl">
-
 	<tr>
 		<td>
-			<select name="invoice_item[((nr))][product_type_id]" class="form-control">
+			<select name="invoice_item[((nr))][product_type_id]" class="form-select">
 				{% for product_type in product_types %}
 					<option value="{{ product_type.id }}">{{ product_type.name }}</option>
 				{% endfor %}

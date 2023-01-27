@@ -18,28 +18,28 @@
 	</div>
 
 	{% if bank_account.from_coda %}
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-4 col-form-label text-end">{% trans "Name" %}</label>
 			<div class="col-8">
 				<p class="form-control-plaintext">{{ bank_account.name }}</p>
 			</div>
 		</div>
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-4 col-form-label text-end">{% trans "Description" %}</label>
 			<div class="col-8">
 				<p class="form-control-plaintext">{{ bank_account.description }}</p>
 			</div>
 		</div>
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-4 col-form-label text-end">{% trans "Number" %}</label>
 			<div class="col-8">
 				<p class="form-control-plaintext">{{ bank_account.number }}</p>
 			</div>
 		</div>
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-4 col-form-label text-end">{% trans "BIC" %}</label>
 			<div class="col-8">
 				<p class="form-control-plaintext">{{ bank_account.bic }}</p>
@@ -47,28 +47,28 @@
 		</div>
 	{% else %}
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-4 col-form-label text-end">{% trans "Name" %}</label>
 			<div class="col-8">
 				<input type="text" class="form-control" name="bank_account[name]" value="{{ bank_account.name }}" />
 			</div>
 		</div>
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-4 col-form-label text-end">{% trans "Description" %}</label>
 			<div class="col-8">
 				<input type="text" class="form-control" name="bank_account[description]" value="{{ bank_account.description }}" />
 			</div>
 		</div>
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-4 col-form-label text-end">{% trans "Number" %}</label>
 			<div class="col-8">
 				<input type="text" class="form-control" name="bank_account[number]" value="{{ bank_account.number }}" />
 			</div>
 		</div>
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-4 col-form-label text-end">{% trans "BIC" %}</label>
 			<div class="col-8">
 				<input type="text" class="form-control" name="bank_account[bic]" value="{{ bank_account.bic }}" />
@@ -77,14 +77,14 @@
 
 	{% endif %}
 
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-4 col-form-label text-end">{% trans "Alias" %}</label>
 		<div class="col-8">
 			<input type="text" class="form-control" name="bank_account[alias]" value="{{ bank_account.alias }}" />
 		</div>
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-4 col-form-label text-end">{% trans "Bookkeeping account" %}</label>
 		<div class="col-8">
 			<select name="bank_account[bookkeeping_account_id]" class="form-control">
@@ -98,7 +98,7 @@
 		</div>
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-4 col-form-label text-end">{% trans "Make default for payment" %}</label>
 		<div class="col-8">
 			<input type="checkbox" data-group-cls="btn-group-xs"  name="bank_account[default_for_payment]" {% if bank_account.default_for_payment %}checked{% endif %}>
@@ -114,7 +114,7 @@
 	function validate_bank_account_{{ bank_account.id }}() {
 		data = $('#frm_edit_account_{{ bank_account.id }}').serialize();
 
-		$('.row mb-3').removeClass('has-error');
+		$('.row mb-1 mb-md-3').removeClass('has-error');
 		$('#frm_edit_account_{{ bank_account.id }} .alert').attr('hidden', true);
 		$.post('/financial/account?action=validate', data, function(data) {
 			// if (data === null) {
@@ -125,7 +125,7 @@
 			}
 			$('#frm_edit_account_{{ bank_account.id }} .alert').removeAttr('hidden');
 			$.each(data, function(key, value) {
-				$('#frm_edit_account_{{ bank_account.id }} input[name="bank_account[' + key + ']"], #frm_edit_account_{{ bank_account.id }} select[name="bank_account[' + key + ']"]').parents('.row mb-3').addClass('has-error');
+				$('#frm_edit_account_{{ bank_account.id }} input[name="bank_account[' + key + ']"], #frm_edit_account_{{ bank_account.id }} select[name="bank_account[' + key + ']"]').parents('.row mb-1 mb-md-3').addClass('has-error');
 			});
 
 			return false;

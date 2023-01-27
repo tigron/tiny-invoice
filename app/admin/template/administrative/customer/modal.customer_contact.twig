@@ -10,119 +10,137 @@
 		{% trans "Some fields were not filled in correctly" %}. {% trans "Please correct them" %}.
 	</div>
 
-	<form method="post" id="invoice-contact-form">
+	<form class="form form-horizontal form-condensed" id="invoice-contact-form" method="post">
 		<input type="hidden" name="customer_contact[customer_id]" id="customer_id" value="">
 
-		<div class="row mb-1{% if 'alias' in errors|keys %} has-error{% endif %}">
-			<label for="alias" class="col-form-label col-3 text-end">{% trans "Alias" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[alias]" id="alias" class="form-control" value="">
+		<div class="row offset-md-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[alias]" id="alias" class="form-control {% if 'alias' in errors|keys %} is-invalid {% endif %}" placeholder="{% trans "Alias" %}">
+					<label class="form-label col-2" for="alias">{% trans "Alias" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'company' in errors|keys %} has-error{% endif %}">
-			<label for="company" class="col-form-label col-3 text-end">{% trans "Company" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[company]" id="company" class="form-control" value="">
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[company]" id="company" class="form-control {% if 'company' in errors|keys %} is-invalid {% endif %}" placeholder="{% trans "Company" %}">
+					<label class="form-label col-2" for="company">{% trans "Company" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'firstname' in errors|keys %} has-error{% endif %}">
-			<label for="firstname" class="col-form-label col-3 text-end">{% trans "Firstname" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[firstname]" id="firstname" class="form-control" value="">
+		<div class="row offset-md-2">
+			<div class="col-md-6 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[firstname]" id="firstname" class="form-control {% if 'firstname' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans "Firstname" %}" %>
+					<label for="firstname" class="col-form-label">{% trans "Firstname" %}</label>
+				</div>
+			</div>
+
+			<div class="col-md-4 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[lastname]" id="lastname" class="form-control {% if 'lastname' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans "Lastname" %}">
+					<label for="lastname" class="col-form-label">{% trans "Lastname" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'lastname' in errors|keys %} has-error{% endif %}">
-			<label for="lastname" class="col-form-label col-3 text-end">{% trans "Lastname" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[lastname]" id="lastname" class="form-control" value="">
+		<div class="row offset-md-2">
+			<div class="col-md-7 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[street]" id="street" class="form-control {% if 'street' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans 'Street' %}">
+					<label for="street" class="col-form-label">{% trans "Street" %}</label>
+				</div>
+			</div>
+
+			<div class="col-md-3 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[housenumber]" id="housenumber" class="form-control {% if 'housenumber' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans 'Housenumber' %}">
+					<label for="housenumber" class="col-form-label">{% trans "Housenumber" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'street' in errors|keys %} has-error{% endif %}">
-			<label for="street" class="col-form-label col-3 text-end">{% trans "Street" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[street]" id="street" class="form-control" value="">
+		<div class="row offset-md-2">
+			<div class="col-md-5 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[zipcode]" id="zipcode" class="form-control {% if 'zipcode' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans 'Zip code' %}">
+					<label for="zipcode" class="col-form-label">{% trans "Zip code" %}</label>
+					{{ form.invalid_input('zipcode', errors) }}
+				</div>
+			</div>
+
+			<div class="col-md-5 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[city]" id="city" class="form-control {% if 'city' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans 'City' %}">
+					<label for="city" class="col-form-label">{% trans "City" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'housenumber' in errors|keys %} has-error{% endif %}">
-			<label for="housenumber" class="col-form-label col-3 text-end">{% trans "Housenumber" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[housenumber]" id="housenumber" class="form-control" value="">
+		<div class="row offset-md-2">
+			<div class="col-md-10 mt-2">
+				<div class="form-floating">
+					<select name="customer_contact[country_id]" class="form-control" id="country_id"></select>
+					<label for="{{ id }}-country-selector" class="col-form-label">{% trans "Country" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'city' in errors|keys %} has-error{% endif %}">
-			<label for="city" class="col-form-label col-3 text-end">{% trans "City" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[city]" id="city" class="form-control" value="">
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[email]" id="email" class="form-control {% if 'email' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans "Email" %}">
+					<label class="col-form-label col-2" for="email">{% trans "Email" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'zipcode' in errors|keys %} has-error{% endif %}">
-			<label for="zipcode" class="col-form-label col-3 text-end">{% trans "Zip code" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[zipcode]" id="zipcode" class="form-control" value="">
+		<div class="row offset-md-2">
+			<div class="col-md-5 mt-2">
+				<div class="form-floating">
+					<input type="tel" name="customer_contact[phone]" id="phone" data-country-code="BE" class="form-control number-validator {% if 'phone' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans "Phone" %}">
+					<label for="city" class="col-form-label">{% trans "Phone" %}</label>
+				</div>
 			</div>
 
-		</div>
-
-		<div class="row mb-1{% if 'country_id' in errors|keys %} has-error{% endif %}">
-			<label for="country_id" class="col-form-label col-3 text-end">{% trans "Country" %}</label>
-			<div class="col-9">
-				<select id="country_id" name="customer_contact[country_id]" class="form-control"></select>
-			</div>
-		</div>
-
-		<div class="row mb-1{% if 'email' in errors|keys %} has-error{% endif %}">
-			<label for="email" class="col-form-label col-3 text-end">{% trans "Email" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[email]" id="email" class="form-control" value="">
+			<div class="col-md-5 mt-2">
+				<div class="form-floating">
+					<input type="tel" name="customer_contact[mobile]" data-country-code="BE" id="mobile" class="form-control number-validator {% if 'mobile' in errors|keys %}is-invalid{% endif %}"  placeholder="{% trans "Mobile" %}">
+					<label for="city" class="col-form-label">{% trans "Mobile" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'phone' in errors|keys %} has-error{% endif %}">
-			<label for="phone" class="col-form-label col-3 text-end">{% trans "Phone" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[phone]" id="phone" class="form-control" value="">
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="input-group">
+					<span class="input-group-text" id="vat_prefix" readonly/>AT</span>
+					<div class="form-floating">
+						<input type="text" name="customer_contact[vat]" id="vat" class="form-control {% if 'vat' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans 'Vat' %}">
+						<label for="vat" class="col-form-label">{% trans 'Vat' %}</label>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'mobile' in errors|keys %} has-error{% endif %}">
-			<label for="mobile" class="col-form-label col-3 text-end">{% trans "Mobile" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[mobile]" id="mobile" class="form-control" value="">
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<input type="text" name="customer_contact[reference]" id="reference" class="form-control {% if 'reference' in errors|keys %}is-invalid{% endif %}" placeholder="{% trans "Reference" %}">
+					<label class="col-form-label col-2" for="reference">{% trans "Reference" %}</label>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-1{% if 'fax' in errors|keys %} has-error{% endif %}">
-			<label for="fax" class="col-form-label col-3 text-end">{% trans "Fax" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[fax]" id="fax" class="form-control" value="">
-			</div>
-		</div>
-
-		<div class="row mb-1{% if 'vat' in errors|keys %} has-error{% endif %}">
-			<label for="vat" class="col-form-label col-3 text-end">{% trans "Vat" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[vat]" id="vat" class="form-control" value="">
-			</div>
-		</div>
-
-		<div class="row mb-1{% if 'reference' in errors|keys %} has-error{% endif %}">
-			<label for="reference" class="col-form-label col-3 text-end">{% trans "Reference" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer_contact[reference]" id="reference" class="form-control" value="">
-			</div>
-		</div>
-
-		<div class="row mb-1">
-			<label for="language_id" class="col-form-label col-3 text-end">{% trans "Language" %}</label>
-			<div class="col-9">
-				{{ form.select_language(languages, 'customer_contact[language_id]', 'language_id', 0) }}
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<select name="customer_contact[language_id]" class="form-control" id="language_id"></select>
+					<label for="{{ id }}-language-selector" class="col-form-label">{% trans "Language" %}</label>
+				</div>
 			</div>
 		</div>
 
@@ -138,55 +156,21 @@
 			</div>
 		{% endif %}
 
-		<div class="row mb-1">
-			<label class="col-3 col-form-label text-end">{% trans "VAT Bound" %}</label>
-			<div class="col-9">
-				<select name="customer_contact[vat_bound]" class="form-control" id="vat_bound">
-					<option value="-1">{% trans "Automatic" %}</option>
-					<option value="0">{% trans "No" %}</option>
-					<option value="1">{% trans "Yes" %}</option>
-				</select>
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<select name="customer_contact[vat_bound]" class="form-control select2" id="{{ id }}">
+						<option value="-1">{% trans "Automatic" %}</option>
+						<option value="0">{% trans "No" %}</option>
+						<option value="1">{% trans "Yes" %}</option>
+					</select>
+					<label for="language_id" class="col-form-label">{% trans "Vat Bound" %}</label>
+				</div>
 			</div>
 		</div>
 	</form>
 
 	<script type="text/javascript">
-		var country_ajax = $.ajax({
-			url: '/administrative/customer/contact?action=load_countries',
-			type: 'GET',
-			dataType: 'json',
-			success: function(data) {
-				$.each(data, function(key, value) {
-					var optgroup = $('<optgroup />');
-					optgroup.attr('label', key);
-
-					$.each(value, function(key, country) {
-						var option = $('<option></option>');
-						option.val(country.id);
-						option.text(country.text_{{ env.language.name_short }}_name);
-						optgroup.append(option);
-					});
-					optgroup.appendTo($('#country_id'));
-				})
-			}
-		});
-
-		var language_ajax = $.ajax({
-			url: '/administrative/customer/contact?action=load_languages',
-			type: 'GET',
-			dataType: 'json',
-			success: function(data) {
-				$('#language_id option').remove();
-				$.each(data, function(key, language) {
-					var option = $('<option></option>');
-					option.val(language.id);
-					option.text(language.name);
-					option.appendTo($('#language_id'));
-				});
-			}
-		});
-
-
 		$('#invoice-contact-form').on('submit', function() {
 			return validate_customer_contact();
 		});
@@ -198,60 +182,44 @@
 			}
 		});
 
-
-
 		$('#manage-customer-contact').on('show.bs.modal', function (e) {
-			$.when(country_ajax, language_ajax).done(function(xhrObject1, xhrObject2) {
-				$('#invoice-contact-form input, select').val('');
-				$('#invoice-contact-form select').each(function() {
-					$(this).val($(this).find('option:first').val());
-				});
-				$('.row mb-3').removeClass('has-error');
-				current_customer_contact_id = 0;
+			var invoker = $(e.relatedTarget);
+			if(invoker.data('customer-contacts') == 0) {
+				load_customer_data(invoker.data('customer-id'));
+			} else if(invoker.data('customer-contact-id')) {
+				load_customer_contact_data(invoker.data('customer-contact-id'));
+			}
 
-				var $invoker = $(e.relatedTarget);
-
-				if($invoker.data('customer-contacts') == 0) {
-					load_customer_data($invoker.data('customer-id'));
-				} else if($invoker.data('customer-contact-id')) {
-					load_customer_contact_data($invoker.data('customer-contact-id'));
-				}
-
-				$('#invoice-contact-form #customer_id').val($invoker.data('customer-id'));
+			// //   <option value="3620194" selected="selected">select2/select2</option> // Need to pre add like that
+			$('#language_id').select2({
+				theme: 'bootstrap-5',
+				closeOnSelect: true,
+				minimumResultsForSearch: Infinity,
+				ajax: {
+					url: '/administrative/customer/contact?action=load_languages',
+					dataType: 'json'
+				},
 			});
+
+			$('#country_id').select2({
+				theme: 'bootstrap-5',
+				closeOnSelect: true,
+				minimumResultsForSearch: Infinity,
+				ajax: {
+					url: '/administrative/customer/contact?action=load_countries',
+					dataType: 'json'
+				},
+			});
+
+			select2_custom();
+
+			 $('select[name="customer_contact[country_id]"]').change(function (e) {
+				console.log('toedels');
+					e.preventDefault();
+					change_country();
+					clear_number_inputs();
+				});
 		});
-
-
-
-
-		function load_countries() {
-			$.get('/administrative/customer/contact?action=load_countries', function(data) {
-				$.each(data, function(key, value) {
-					var optgroup = $('<optgroup />');
-					optgroup.attr('label', key);
-
-					$.each(value, function(key, country) {
-						var option = $('<option></option>');
-						option.val(country.id);
-						option.text(country.text_{{ env.language.name_short }}_name);
-						optgroup.append(option);
-					});
-					optgroup.appendTo($('#country_id'));
-				});
-			}, 'json');
-		}
-
-		function load_languages() {
-			$.get('/administrative/customer/contact?action=load_languages', function(data) {
-				$('#language_id option').remove();
-				$.each(data, function(key, language) {
-					var option = $('<option></option>');
-					option.val(language.id);
-					option.text(language.name);
-					option.appendTo($('#language_id'));
-				});
-			}, 'json');
-		}
 
 		function load_customer_data(id) {
 			$.get('/administrative/customer?action=load_customer&id=' + id, function(data) {
@@ -260,7 +228,6 @@
 						$('#invoice-contact-form #' + key).val(value);
 					}
 				});
-
 			}, 'json');
 		}
 
@@ -268,27 +235,37 @@
 			$.get('/administrative/customer/contact?action=load_customer_contact&id=' + id, function(data) {
 				$.each(data, function(key, value) {
 					if($('#invoice-contact-form #' + key).length == 1) {
-						$('#invoice-contact-form #' + key).val(value);
+						// If we have a select we need to add the active option (for select2)
+						if($('#invoice-contact-form #' + key).is('select')) {
+							selected_option = $("<option>", {
+												'value': value,
+												'selected': 'selected'
+											});
+							$('#invoice-contact-form #' + key).append(selected_option);
+						} else {
+							$('#invoice-contact-form #' + key).val(value);
+						}
 					}
 				});
 
 				current_customer_contact_id = id;
 			}, 'json');
+
+			// change_country();
 		}
 
 		function validate_customer_contact() {
 			data = $('#invoice-contact-form').serialize();
 
-			$('.row mb-3').removeClass('has-error');
-
+			$('.row mb-1 mb-md-3').removeClass('has-error');
 			$.post('/administrative/customer/contact?action=manage&id=' + current_customer_contact_id, data, function(data) {
 				if ("id" in data) {
 					window.location = '{{ redirect|raw }}';
 				} else {
 					$('.alert').removeClass('visually-hidden');
 					$.each(data, function(key, value) {
-						$('#invoice-contact-form #' + key).addClass('is-invalid');					
-						$('#invoice-contact-form #' + key).parents('.row mb-3').addClass('has-error');
+						$('#invoice-contact-form #' + key).addClass('is-invalid');
+						$('#invoice-contact-form #' + key).parents('.row mb-1 mb-md-3').addClass('has-error');
 					});
 				}
 				return false;
@@ -297,8 +274,27 @@
 			return false;
 		}
 
+		function change_country() {
+				data=$("#country_id").select2('data')[0];
+				console.log(data.iso2);//displays hello world
+				iso2 = data.iso2;
+				$("[data-country-code]").each(function (index, element) {
+					$(element).attr("data-country-code", iso2);
+				});
+
+			$('#vat_prefix').text(iso2);
+		}
 	</script>
 
+
+{#
+			function change_country() {
+				iso2 = $('select[name="customer[country_id]"] option:selected').attr('data-iso2');
+				$("[data-country-code]").each(function (index, element) {
+				$(element).attr("data-country-code", iso2);
+			});
+
+			$('#vat_prefix').text(iso2); #}
 {% endblock body %}
 
 {% block footer %}

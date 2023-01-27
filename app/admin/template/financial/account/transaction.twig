@@ -22,10 +22,10 @@
 								<a href="/financial/account/transaction?bank_account_id={{ bank_account.id }}">
 									{% trans "Bank account" %} &quot;{% if bank_account.alias is not empty %}{{ bank_account.alias }}{% else %}{{ bank_account.description }}{% endif %}&quot;
 								</a>
-							</li>		
+							</li>
 							<li class="breadcrumb-item active">
 								{% trans "Edit transaction" %} #{{ transaction.id }}
-							</li>					
+							</li>
 						</ol>
 					</nav>
 				</div>
@@ -280,14 +280,14 @@
 					</tbody>
 				</table>
 				<div class="well">
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-form-label col-3 text-end">{% trans "Total amount" %}</label>
 						<div class="col-9">
 							<p class="form-control-static" id="total_amount">&euro;0</p>
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<div class="col-9 offset-3">
 							<button type="submit" class="btn btn-primary" id="btn_automatic_link" onclick="automatic_link();">
 								{% trans "Link transactions" %}
@@ -357,7 +357,7 @@
 							</li>
 							<li class="breadcrumb-item active">
 								{% trans "Bank account" %} &quot;{% if bank_account.alias is not empty %}{{ bank_account.alias }}{% else %}{{ bank_account.description }}{% endif %}&quot;
-							</li>							
+							</li>
 						</ol>
 					</nav>
 				</div>
@@ -373,7 +373,7 @@
 			</div>
 			<div class="card-body">
 				<form method="post" action="/financial/account/transaction?bank_account_id={{ bank_account.id }}" class="form-horizontal">
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
 						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
@@ -381,7 +381,7 @@
 					</div>
 					{% set conditions = pager.get_conditions() %}
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-form-label col-3 text-end">{% trans "Bank Account Statement" %}</label>
 						<div class="col-9">
 							<select name="bank_account_statement" class="form-control">
@@ -395,7 +395,7 @@
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-form-label col-3 text-end">{% trans "Balanced" %}</label>
 						<div class="col-9">
 							<select name="balanced" class="form-control">
@@ -406,7 +406,7 @@
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Search" %}

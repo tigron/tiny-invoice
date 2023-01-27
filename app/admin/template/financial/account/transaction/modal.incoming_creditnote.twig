@@ -27,7 +27,7 @@
 
 <h5>2. {% trans "Search invoices" %}</h5>
 	<form action="{{ env.module.get_module_path() }}?action=edit&id={{ transaction.id }}" method="post" class="form-horizontal form-condensed" id="search_incoming_creditnotes">
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-form-label col-3 text-end">{% trans "Search invoice" %}</label>
 		<div class="col-6">
 			<div class="input-group">
@@ -60,14 +60,14 @@
 		{% trans "There is a problem with the amounts you have entered." %} {% trans "The total amount cannot exceed the amount of the transaction" %}.
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-form-label col-3 text-end">{% trans "Current transaction balance" %}</label>
 		<div class="col-3">
 			<p class="form-control-static" id="transaction_balance" data-value="{{ transaction.get_balance() }}">&euro;{{ transaction.get_balance() }}</p>
 		</div>
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-form-label col-3 text-end">{% trans "Link with credit note" %}</label>
 		<div class="col-3">
 			<div class="input-group">
@@ -80,7 +80,7 @@
 		</div>
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-form-label col-3 text-end">{% trans "Link with supplier" %}</label>
 		<div class="col-4">
 			<div class="input-group">
@@ -90,14 +90,14 @@
 		</div>
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-form-label col-3 text-end">{% trans "New transaction balance" %}</label>
 		<div class="col-3">
 			<p class="form-control-static" id="new_transaction_balance"><b>&euro;{{ transaction.get_balance() }}</b></p>
 		</div>
 	</div>
 
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<div class="col-9 offset-3">
 			<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 		</div>

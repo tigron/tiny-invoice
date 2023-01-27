@@ -6,12 +6,34 @@
 	{% if action == 'edit' %}
 
 		{% block breadcrumb %}
-		<ul class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</li></a>
-			<li><a href="/administrative/document">{% trans "Documents" %}</a></li>
-			<li><a href="/administrative/document/creditnote">{% trans "Incoming Creditnotes" %}</a></li>
-			<li class="active">{% trans "Edit Incoming Creditnote" %}</li>
-		</ul>
+			<div class="row">
+				<div class="col">
+					<h4>{% trans "Documents" %}</h4>
+				</div>
+				<div class="col">
+					<div class="float-end">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb">
+								<li class="breadcrumb-item">
+									<a href="/administrative/document">
+										{% trans "Documents" %}
+									</a>
+								</li>
+
+								<li class="breadcrumb-item">
+									<a href="/administrative/document/invoice">
+										{% trans "Incoming Credit Notes" %}
+									</a>
+								</li>
+
+								<li class="breadcrumb-item active">
+									{% trans "Edit Incoming Credit Note" %} {{ document.id }}
+								</li>
+							</ol>
+						</nav>
+					</div>
+				</div>
+			</div>
 		{% endblock breadcrumb %}
 	{% endif %}
 	<ol class="breadcrumb">
@@ -26,21 +48,21 @@
 		</div>
 		<div class="card-body">
 			<form method="post" action="{{ env.module.get_path() }}" class="form-horizontal">
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
 					<div class="col-9">
 						<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Tags" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Paid" %}</label>
 					<div class="col-9">
 						<select name="paid" class="form-control">
@@ -51,7 +73,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="col-3 offset-3">
 						<button class="btn btn-primary">
 							{% trans "Search" %}

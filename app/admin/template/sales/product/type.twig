@@ -7,68 +7,7 @@
 
 	{% if action == 'edit' %}
 
-		<div class="row">
-			<div class="col">
-				<h4>{% trans "Product definitions" %}</h4>
-			</div>
-			<div class="col">
-				<div class="float-end">
-					<nav aria-label="breadcrumb">
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item">
-								<a href="/sales/product/type">
-									{% trans "Product definitions" %}
-								</a>
-							</li>
-							<li class="breadcrumb-item active">
-								{% trans "Product definition" %} {{ product_type.name }}
-							</li>
-						</ol>
-					</nav>
-				</div>
-			</div>
-		</div>
-
-		{% if errors is defined %}
-			{{ base.alert('danger', "The form contains mistakes. Please correct them."|trans) }}
-		{% elseif env.sticky_session.message is defined %}
-			{{ base.alert('success', 'Product definition saved successfully.'|trans) }}
-		{% endif %}
-
-		<div class="card">
-			<div class="card-header">
-				{% trans "Details" %}
-			</div>
-			<div class="card-body">
-				<form class="form form-horizontal form-condensed" method="post" action="/sales/product/type?action=edit&id={{ product_type.id }}">
-					<div class="row mb-3{% if 'name' in errors|keys %} has-error{% endif %}">
-						<label for="username" class="col-form-label col-3 text-end">{% trans "Name" %}</label>
-						<div class="col-9">
-							<input type="text" name="product_type[name]" id="name" class="form-control" value="{{ product_type.name }}">
-							{{ form.invalid_input('name', errors) }}
-						</div>
-					</div>
-
-					<div class="row mb-3{% if 'name' in errors|keys %} has-error{% endif %}">
-						<label for="username" class="col-form-label col-3 text-end">{% trans "Identifier" %}</label>
-						<div class="col-9">
-							<input type="text" name="product_type[identifier]" id="name" class="form-control" value="{{ product_type.identifier }}">
-							{{ form.invalid_input('name', errors) }}
-						</div>
-					</div>
-
-
-					<div class="row mb-3">
-						<div class="col-3 offset-3">
-							<button class="btn btn-primary">
-								{% trans "Save" %}
-							</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-
+		{% include 'sales/product/type/edit.twig' %}
 
 	{% elseif action == 'add' %}
 
@@ -104,7 +43,7 @@
 			</div>
 			<div class="card-body">
 				<form class="form form-horizontal form-condensed" method="post" action="/sales/product/type?action=add">
-					<div class="row mb-3{% if 'name' in errors|keys %} has-error{% endif %}">
+					<div class="row mb-1 mb-md-3{% if 'name' in errors|keys %} has-error{% endif %}">
 						<label for="username" class="col-form-label col-3 text-end">{% trans "Name" %}</label>
 						<div class="col-9">
 							<input type="text" name="product_type[name]" id="name" class="form-control" value="{{ env.post.product_type.name }}">
@@ -112,7 +51,7 @@
 						</div>
 					</div>
 
-					<div class="row mb-3{% if 'name' in errors|keys %} has-error{% endif %}">
+					<div class="row mb-1 mb-md-3{% if 'name' in errors|keys %} has-error{% endif %}">
 						<label for="username" class="col-form-label col-3 text-end">{% trans "Identifier" %}</label>
 						<div class="col-9">
 							<input type="text" name="product_type[identifier]" id="name" class="form-control" value="{{ env.post.product_type.identifier }}">
@@ -120,7 +59,7 @@
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
@@ -134,26 +73,27 @@
 
 	{% else %}
 
-		<ol class="breadcrumb">
-			<li><a href="/">{% trans "Home" %}</a></li>
-			<li class="active">{% trans "Product Types" %}</li>
-		</ol>
+		<div class="row">
+			<div class="col">
+				<h4>{% trans "Invoices" %}</h4>
+			</div>
+		</div>
 
 		<form class="form-horizontal" method="post" action="/sales/product/type">
-		<div class="card">
+		<div class="card mb-3">
 			<div class="card-header">
 				{% trans "Filter" %}
 			</div>
 			<div class="card-body">
-				<div class="row mb-3">
-					<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
+				<div class="row mb-1 mb-md-3">
+					<label class="col-form-label col-12 col-md-3 text-md-end">{% trans "Search" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="search" value="{{ pager.get_search() }}"/>
 					</div>
 				</div>
 
-				<div class="row mb-3">
-					<div class="controls offset-3 col-9">
+				<div class="row mb-1 mb-md-3">
+					<div class="controls offset-2 col-9">
 						<button class="btn btn-primary" type="submit">
 							{% trans "Search" %}
 						</button>

@@ -50,7 +50,7 @@
 		<form class="form-horizontal" method="post" action="/financial/account?action=export&id={{ bank_account.id }}">
 		<div class="card text-bg-light">
 			<div class="card-body">
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Export bank account" %}</label>
 					<div class="col-9">
 						<p class="form-control-plaintext">
@@ -59,7 +59,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Export statements" %}</label>
 					<div class="col-9">
 						<select name="bank_account_statement_ids[]" class="form-control" id="export_statements" multiple="multiple">
@@ -74,7 +74,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Export format" %}</label>
 					<div class="col-4">
 						<select name="export_format" class="form-control select2">
@@ -83,7 +83,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="col-9 offset-3">
 						<button type="submit" class="btn btn-primary">
 							{% trans "Download" %}
@@ -105,7 +105,7 @@
 		<div class="card">
 			<div class="card-header">{% trans "Import bank transactions" %}</div>
 			<div class="card-body">
-				<div class="row mb-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
+				<div class="row mb-1 mb-md-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
 					<label for="file_id" class="col-form-label col-3 text-end">{% trans "File" %}</label>
 					<div class="col-9">
 						<div id="import-file" class="form-control-static hide">
@@ -140,7 +140,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3 hidden form_submit">
+				<div class="row mb-1 mb-md-3 hidden form_submit">
 					<div class="col-9 offset-3">
 						<button type="submit" class="btn btn-primary">{% trans "Start import" %}</button>
 					</div>
@@ -198,7 +198,7 @@
 							$("#import-file").append(template(response));
 							$('#import-dropzone').hide();
 							$('#import-file').find('.help-block').remove();
-							$('#import-file').closest('.row mb-3').removeClass('has-error');
+							$('#import-file').closest('.row mb-1 mb-md-3').removeClass('has-error');
 							$('#import-file').removeClass('hide');
 						}
 						catch (e) {

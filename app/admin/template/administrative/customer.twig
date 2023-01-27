@@ -14,7 +14,6 @@
 		{% include 'administrative/customer/export.twig' %}
 
 	{% elseif env.module.get_name() != 'administrative_customer' %}
-
 		<div class="row">
 			<div class="col">
 				<h4>{% trans "Customers" %}</h4>
@@ -88,16 +87,17 @@
 				{% trans "Filter" %}
 			</div>
 			<div class="card-body">
-				<form method="post" action="/administrative/customer" class="form-horizontal">
-					<div class="row mb-3">
-						<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
+				<form method="post" action="/administrative/customer" class="form-horizontal form-condensed">
+					<div class="row mb-2 mb-md-3">
+						<label class="col-form-label col-12 col-md-2 text-md-end">{% trans "Search" %}</label>
 						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
-					<div class="row mb-3">
-						<div class="col-3 offset-3">
-							<button class="btn btn-primary">
+
+					<div class="row mb-1 mb-md-2">
+						<div class="offset-md-2">
+							<button class="btn btn-primary" type="submit">
 								{% trans "Search" %}
 							</button>
 						</div>
@@ -124,10 +124,10 @@
 				</div>
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="card-body">
+			<div class="card-body table-responsive">
 			{% for customer in pager.items %}
 				{% if loop.first %}
-					<table class="table table-hover table-striped table-condensed table-responsive">
+					<table class="table table-hover table-striped table-condensed ">
 					<thead>
 						<tr>
 							<th>{{ pager.create_header('#', 'id')|raw }}</th>

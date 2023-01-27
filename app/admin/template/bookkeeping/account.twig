@@ -24,17 +24,17 @@
 					{% trans "Details" %}
 				</div>
 				<div class="card-body">
-					<div class="row mb-3 {% if 'number' in errors|keys %} has-error{% endif %}">
+					<div class="row mb-1 mb-md-3 {% if 'number' in errors|keys %} has-error{% endif %}">
 						<label class="col-form-label col-3 text-end">{% trans "Number" %}</label>
 						<div class="col-5"><input type="text" name="bookkeeping_account[number]" class="form-control" value="{{ env.post.bookkeeping_account.number }}"/></div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
 						<div class="col-5"><input type="text" name="bookkeeping_account[name]" class="form-control" value="{{ env.post.bookkeeping_account.name }}"/></div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
@@ -59,13 +59,13 @@
 			</div>
 			<div class="card-body">
 				<form method="post" action="/bookkeeping/account" class="form-horizontal">
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
 						<div class="col-5">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Search" %}

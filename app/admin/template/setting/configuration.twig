@@ -18,14 +18,14 @@
 	<div class="card mb-3">
 		<div class="card-header">{% trans "Invoice delivery" %}</div>
 		<div class="card-body">
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Archive mailbox" %}</label>
 				<div class="col-9">
 					<input type="text" name="setting[archive_mailbox]" class="form-control"	value="{{ settings.archive_mailbox }}">
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Enable invoice reminders" %}</label>
 				<div class="col-9">
 					<div class="form-check form-switch form-control-plaintext">
@@ -35,7 +35,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Invoice reminder email window" %}</label>
 				<div class="col-9">
 					<div class="input-group">
@@ -48,18 +48,18 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Enable Click & Post" %}</label>
 				<div class="col-9">
-					<div class="form-check form-switch form-control-plaintext">				
+					<div class="form-check form-switch form-control-plaintext">
 						<input type="checkbox" id="chk_enable_click_post" data-group-cls="btn-group-xs"
 							name="setting[enable_click_post]" {% if settings.enable_click_post %}checked{% endif %}
 							onchange="toggle_click_post();" class="form-check-input">
 					</div>
 				</div>
-			</div>			
+			</div>
 
-			<div class="row mb-3 click_post_option d-none">
+			<div class="row mb-1 mb-md-3 click_post_option d-none">
 				<label class="col-form-label col-3 text-end">{% trans "Click & Post username" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="setting[click_post_username]"
@@ -67,7 +67,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3 click_post_option d-none">
+			<div class="row mb-1 mb-md-3 click_post_option d-none">
 				<label class="col-form-label col-3 text-end">{% trans "Click & Post password" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="setting[click_post_password]"
@@ -77,7 +77,7 @@
 
 
 
-			<div class="row mb-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
+			<div class="row mb-1 mb-md-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
 				<label for="file_id" class="col-form-label col-3 text-end">{% trans "Conditions file" %}</label>
 				<div class="col-9">
 					<div id="document-file" class="form-control-static hide">
@@ -115,7 +115,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<div class="col-9 offset-3">
 					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 				</div>
@@ -138,7 +138,7 @@
 	<div class="card mb-3">
 		<div class="card-header">{% trans "Skins" %}</div>
 		<div class="card-body">
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Email skin" %}</label>
 				<div class="col-9">
 					<select name="setting[skin_email_id]" class="form-control">
@@ -150,7 +150,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Pdf skin" %}</label>
 				<div class="col-9">
 					<select name="setting[skin_pdf_id]" class="form-control">
@@ -162,7 +162,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<div class="col-9 offset-3">
 					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 				</div>
@@ -175,7 +175,7 @@
 	<div class="card mb-3">
 		<div class="card-header">{% trans "Object indentifiers" %}</div>
 		<div class="card-body">
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Customer identifier" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="setting[customer_identifier]"
@@ -183,7 +183,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Customer contact identifier" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="setting[customer_contact_identifier]"
@@ -191,7 +191,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<div class="col-9 offset-3">
 					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 				</div>
@@ -203,7 +203,7 @@
 	<div class="card mb-3">
 		<div class="card-header">{% trans "Bookkeeping" %}</div>
 		<div class="card-body">
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Start fiscal year" %}</label>
 				<div class="col-9">
 					<select name="setting[bookkeeping_start_month]" class="form-control">
@@ -216,7 +216,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "VAT calculation" %}</label>
 				<div class="col-9">
 					<select name="setting[bookkeeping_vat_period]" class="form-control">
@@ -228,7 +228,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Centralization account customer" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="setting[expertm.centralization_account_customer]"
@@ -236,7 +236,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Centralization account sale" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="setting[expertm.centralization_account_sale]"
@@ -244,7 +244,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<div class="col-9 offset-3">
 					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 				</div>
@@ -257,11 +257,11 @@
 	<div class="card">
 		<div class="card-header">{% trans "Coda files" %}</div>
 		<div class="card-body">
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Fetch CODA files from" %} <a
 						href="https://codabox.tigron.net" target="new">https://codabox.tigron.net</a></label>
 				<div class="col-9">
-					<div class="form-check form-switch form-control-plaintext">				
+					<div class="form-check form-switch form-control-plaintext">
 					<input type="checkbox" data-group-cls="btn-group-xs" id="chk_enable_codabox"
 						name="setting[enable_codabox]" {% if settings.enable_codabox %}checked{% endif %}
 						onchange="toggle_codabox();" class="form-check-input">
@@ -269,7 +269,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3 codabox_option d-none">
+			<div class="row mb-1 mb-md-3 codabox_option d-none">
 				<label class="col-form-label col-3 text-end">{% trans "API Key" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="setting[tigron_api_key]"
@@ -277,7 +277,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<div class="col-9 offset-3">
 					<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 				</div>
@@ -337,7 +337,7 @@
 						$("#document-file").append(template(response));
 						$('#document-dropzone').hide();
 						$('#document-file').find('.help-block').remove();
-						$('#document-file').closest('.row mb-3').removeClass('has-error');
+						$('#document-file').closest('.row mb-1 mb-md-3').removeClass('has-error');
 						$('#document-file').removeClass('hide');
 					}
 					catch (e) {

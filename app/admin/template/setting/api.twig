@@ -18,14 +18,14 @@
 					{{ base.alert('success', 'Settings successfully updated'|trans) }}
 				{% endif %}
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "API keys" %} ({% trans "1 key per line" %})</label>
 					<div class="col-9">
 						<textarea class="form-control autogrow" name="setting[api_keys]">{{ settings.api_keys }}</textarea>
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Make all documents available via API" %}</label>
 					<div class="col-9">
 						<div class="form-check form-switch form-control-plaintext">
@@ -34,14 +34,14 @@
 					</div>
 				</div>
 
-				<div class="row mb-3" id="api_document_tag_ids">
+				<div class="row mb-1 mb-md-3" id="api_document_tag_ids">
 					<label class="col-form-label col-3 text-end">{% trans "Only expose documents with tag" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[api_document_tag_ids]" id="autocomplete-tag" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="col-9 offset-3">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>

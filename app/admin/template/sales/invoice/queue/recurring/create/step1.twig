@@ -1,18 +1,18 @@
 <div class="row">
 	<div class="col">
-		<h4>{% trans "Invoices" %}</h4>
+		<h4>{% trans "Recurring Invoice Queue" %}</h4>
 	</div>
 	<div class="col">
 		<div class="float-end">
 			<nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item">
-						<a href="/sales/invoice">
-							{% trans "Invoices" %}
+						<a href="/sales/invoice/queue/recurring">
+							{% trans "Recurring Invoice queue" %}
 						</a>
 					</li>
 					<li class="breadcrumb-item active">
-						{% trans "Create new invoice" %}
+						{% trans "Create recurring invoice queue item" %}
 					</li>
 				</ol>
 			</nav>
@@ -21,17 +21,17 @@
 </div>
 
 {% if errors is defined %}
-	<div class="alert alert-danger">
-		{% trans "Please select a customer." %}
-	</div>
+<div class="alert alert-danger">
+	{% trans "Please select a customer." %}
+</div>
 {% endif %}
 
 <div class="card">
 	<div class="card-header">
-		{% trans "Select customer" %}
+		{% trans "Step 1: Choose customer" %}
 	</div>
 	<div class="card-body">
-		<form method="post" action="/sales/invoice?action=create_step1" class="form-horizontal" id="invoice-create-step1">
+		<form class="form form-horizontal" method="post" action="?action=add_step1" class="form-horizontal">
 			<div class="row mb-1 mb-md-3">
 				<label class="col-2 col-form-label text-end">{% trans "Customer" %}</label>
 				<div class="col-9">
@@ -61,5 +61,5 @@ $('.autocomplete_customer').select2({
     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
 	},
 });
-
 </script>
+

@@ -1,4 +1,6 @@
-<div class="alert alert-info">{% trans "Values fetched with extractor" %} <b>{{ extractor.name }}</b></div>
+{% import '_default/macro.base.twig' as base %}
+
+{{ base.alert('info', "Values fetched with extractor"|trans ~ ' <b>'|raw ~ extractor.name ~ '</b>'|raw)|raw }}
 
 {% for key, value in fields %}
 	{% if loop.first %}

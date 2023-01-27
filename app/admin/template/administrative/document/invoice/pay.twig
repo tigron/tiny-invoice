@@ -37,7 +37,7 @@
 		<thead>
 			<tr>
 				<th width="120">
-					<div class="form-check form-switch">						
+					<div class="form-check form-switch">
 						<input class="form-check-input" type="checkbox" class="original2" data-group-cls="btn-group-xs" onchange="toggle_all();">
 					</div>
 				</th>
@@ -55,7 +55,7 @@
 
 	<tr data-price="{{ unpaid_invoice.price_incl }}">
 		<td>
-			<div class="form-check form-switch">		
+			<div class="form-check form-switch">
 				<input class="form-check-input" type="checkbox" data-group-cls="btn-group-xs" name="invoice[{{ unpaid_invoice.id }}]" onchange="calculate_sum();">
 			</div>
 		</td>
@@ -93,14 +93,14 @@
 
 		<div class="card text-bg-light">
 			<div class="card-body">
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Total amount" %}</label>
 					<div class="col-9">
 						<p class="form-control-plaintext" id="total_amount">&euro;0</p>
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Export format" %}</label>
 					<div class="col-4">
 						<select name="export_format" class="form-control">
@@ -110,7 +110,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Pay with bank account" %}</label>
 					<div class="col-4">
 						<select name="bank_account_id" class="form-control multiselect">
@@ -121,25 +121,25 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Pay on expiration date" %}</label>
 					<div class="col-9">
-						<div class="form-check form-switch">										
+						<div class="form-check form-switch">
 							<input class="form-check-input" type="checkbox" name="pay_on_expiration_date" data-group-cls="btn-group-xs" />
 						</div>
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Mark selected items as paid" %}</label>
 					<div class="col-9">
-						<div class="form-check form-switch">					
+						<div class="form-check form-switch">
 							<input class="form-check-input" type="checkbox" name="mark_paid" data-group-cls="btn-group-xs"  />
 						</div>
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="col-9 offset-3">
 						<button type="submit" class="btn btn-primary">
 							{% trans "Download" %}

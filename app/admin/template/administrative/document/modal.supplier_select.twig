@@ -5,14 +5,26 @@
 {% block body %}
 
 	<form class="form-horizontal form-condensed" method="post" action="?action=edit_supplier&id={{ document.id }}" id="form-supplier-select-modal">
-		<div class="row mb-3">
-			<label for="supplier_id" class="col-form-label col-3 text-end">{% trans "Supplier" %}</label>
+		<div class="row mb-1 mb-md-3">
+			<label class="col-2 col-form-label text-end">{% trans "Customer" %}</label>
 			<div class="col-9">
-				<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" placeholder="{% trans "Search supplier" %}..."/>
-				<input type="hidden" class="supplier_id" name="document[supplier_id]" value=""/>
+				<select name="document[supplier_id]" class="form-select autocomplete_supplier"></select>
 			</div>
 		</div>
 	</form>
+
+	<script type="text/javascript">
+	$('.autocomplete_supplier').select2({
+		theme: "bootstrap-5",
+		closeOnSelect: true,
+		minimumResultsForSearch: 0,
+		ajax: {
+			url: '/administrative/supplier?action=ajax_search',
+			dataType: 'json',
+		// Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+		},
+	});
+	</script>
 
 
 {% endblock body %}

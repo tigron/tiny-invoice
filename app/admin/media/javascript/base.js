@@ -1,5 +1,4 @@
 $(document).ready(function(){
-
 	/**
 	 * Focus first input element of each form
 	 */
@@ -9,7 +8,6 @@ $(document).ready(function(){
 	 * Feather icons
 	 */
 	feather.replace()
-
 
 	/**
 	 * Auto hide dismissable alerts
@@ -40,21 +38,26 @@ $(document).ready(function(){
 		}
 	});
 
+	// Phone number valdiation
+	init_number_validator();
 
-
-	$('select[multiple=multiple]').select2({
+	// Select 2 settings for the floating labels
+	$('select.select2[multiple=multiple]').select2({
 		theme: "bootstrap-5",
-		closeOnSelect: false,
-		minimumResultsForSearch: Infinity
-	});	
-
-	$('select.select2[multiple!=multiple]').select2({
-		theme: "bootstrap-5",
-		closeOnSelect: true,
+		cache: true,
+		delay: 250,
 		minimumResultsForSearch: Infinity
 	});
 
+	$('select.select2[multiple!=multiple]').select2({
+		theme: "bootstrap-5",
+		cache: true,
+		delay: 250,
+		minimumResultsForSearch: Infinity
+	});
 
+	// Select2 custom js
+	select2_custom(); // Custom js for select2 with floating labels
 });
 
 // function to change delimiters (to prevent twig collision)
@@ -138,3 +141,94 @@ $.fn.equaliseHeights = function(options) {
 
 	return $this.css('height', maxHeight + settings.offset);
 };
+
+/**
+* Phone Number Validator
+*/
+function init_number_validator() {
+	// Initial check of all the number validation fields
+	$('.number-validator').each(function () {
+		if (!!$(this).val()) {
+			validate_number($(this));
+		}
+	});
+
+
+	var timeoutId = 0;
+	$('.number-validator').on('input', function() {
+		var input_field = $(this);
+		// We do not want to execute this on every keypress
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(function() {
+			validate_number(input_field);
+		}, 500);
+	});
+}
+
+/**
+ * The post to check the phone numbers
+ */
+function validate_number(input_field) {
+	var country_code = input_field.attr('data-country-code');
+	var number = input_field.val();
+	var name = input_field.attr('name');
+
+	$.post("/validator?action=phone_number", {number: number, country_code: country_code, name: name},
+		function (respons) {
+			if(respons.valid){
+				input_field.val(respons.formatted);
+				input_field.addClass('is-valid');
+				input_field.removeClass('is-invalid');
+
+				// Check if we already have the hidden input if not add.
+				var hidden_input = $('[name="' + respons.name + '"]');
+				if (hidden_input.length) {
+					hidden_input.val(respons.formatted_db);
+				} else {
+					var hidden_input = $("<input>", {
+						'type': 'hidden',
+						'name': respons.name,
+						'value': respons.formatted_db
+					});
+					input_field.after(hidden_input);
+				}
+			} else {
+				input_field.addClass('is-invalid');
+				input_field.removeClass('is-valid');
+			}
+		},
+		"json"
+	);
+}
+
+function clear_number_inputs(){
+	$('.number-validator').each(function (index, element) {
+		$(element).val("");
+		$(element).removeClass("is-invalid");
+		$(element).removeClass("is-valid");
+		$(element).next('input').remove();
+	});
+}
+
+/**
+ * Js to make select2 compatible with the floating labels of BS-5
+ */
+function select2_custom() {
+	$('.select2')
+		.parent('div')
+		.children('span')
+		.children('span')
+		.children('span')
+		.css('height', ' calc(3.5rem + 2px)');
+	$('.select2')
+		.parent('div')
+		.children('span')
+		.children('span')
+		.children('span')
+		.children('span')
+		.css('margin-top', '18px');
+	$('.select2')
+		.parent('div')
+		.find('label')
+		.css('z-index', '1');
+}

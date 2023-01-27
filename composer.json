@@ -85,7 +85,9 @@
 		"npm-asset/flatpickr": "^4.6",
 		"npm-asset/jquery": "^3.6",
 		"npm-asset/select2": "4.1.0-rc.0",
-		"npm-asset/select2-bootstrap-5-theme": "^1.3"
+		"npm-asset/select2-bootstrap-5-theme": "^1.3",
+		"bower-asset/intl-tel-input": "^17.0",
+		"giggsey/libphonenumber-for-php": "^8.13"
 	},
 	"suggest": {
 		"ext-imap": "*"

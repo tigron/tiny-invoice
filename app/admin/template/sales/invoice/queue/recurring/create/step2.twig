@@ -2,19 +2,19 @@
 
 <div class="row">
 	<div class="col">
-		<h4>{% trans "Invoices" %}</h4>
+		<h4>{% trans "Recurring Invoice Queue" %}</h4>
 	</div>
 	<div class="col">
 		<div class="float-end">
 			<nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item">
-						<a href="/sales/invoice">
-							{% trans "Invoices" %}
+						<a href="/sales/invoice/queue/recurring">
+							{% trans "Recurring Invoice queue" %}
 						</a>
 					</li>
 					<li class="breadcrumb-item active">
-						{% trans "Create new invoice" %}
+						{% trans "Create recurring invoice queue item" %}
 					</li>
 				</ol>
 			</nav>
@@ -22,7 +22,7 @@
 	</div>
 </div>
 
-{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact', 'redirect': '/sales/invoice?action=create_step2', 'modal_size': 'lg'} %}
+{% include 'administrative/customer/modal.customer_contact.twig' with {'id': 'manage-customer-contact','redirect': '/sales/invoice/queue/recurring?action=add_step2', 'modal_size': 'lg'} %}
 
 {% if errors is defined %}
 <div class="alert alert-danger">
@@ -38,7 +38,7 @@
 
 		<div class="row">
 		{% for customer_contact in customer_contacts %}
-			<div class="col-3 mb-3 h-100">
+			<div class="col-3 mb-3">
 				<div class="card customer_contact h-100" data-customer-contact-id="{{ customer_contact.id }}">
 					<div class="card-body">
 						<span class="badge bg-secondary actions visually-hidden">
@@ -69,7 +69,7 @@
 			</div>
 		</div>
 
-		<form method="post" action="/sales/invoice?action=create_step2" id="invoice-create-step2">
+		<form method="post" action="/sales/invoice/queue/recurring?action=add_step2" id="invoice-queue-create-step2">
 			<input type="hidden" name="customer_contact_id" value="{% if customer_contacts|length == 1 %}{{ customer_contacts.0.id }}{% endif %}">
 			<button class="btn btn-primary pull-right">
 				{% trans "Next" %}
@@ -97,7 +97,7 @@
 	});
 
 	function delete_contact(id) {
-		$.get('/administrative/customer/contact?action=delete&id=' + id, function(data) {
+		$.get('/sales/invoice/contact?action=delete&id=' + id, function(data) {
 			if(data['status'] == 1) {
 				$('#customer-contact-' + id).remove();
 				$('#invoice-create-step2 input').val('');

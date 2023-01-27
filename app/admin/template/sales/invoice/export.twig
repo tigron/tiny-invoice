@@ -23,7 +23,7 @@
 <form method="post" action="/sales/invoice?action=export">
 <div class="card text-bg-light">
 	<div class="card-body">
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-3 col-form-label">{% trans "Export invoices" %}</label>
 			<div class="col-9">
 				<select name="months[]" class="form-control multiselect" multiple="multiple">
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<label class="col-3 col-form-label">{% trans "Export format" %}</label>
 			<div class="col-9">
 				<select name="export_format" class="form-control">
@@ -50,7 +50,7 @@
 			</div>
 		</div>
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<div class="col-9 offset-3">
 				<button type="submit" class="btn btn-primary">
 					{% trans "Download" %}

@@ -1,23 +1,37 @@
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Invoice Queue" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/invoice/queue">
+							{% trans "Invoice queue" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Create invoice queue item" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
 
-<ol class="breadcrumb">
-	<li><a href="/">{% trans "Home" %}</a></li>
-	<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
-	<li>{% trans "Create invoice queue item" %}</li>
-	<li class="active">{% trans "Add items" %}</li>
-</ol>
 
 {% if errors is defined %}
 <div class="alert alert-danger">
 	{{ errors|print_r }}
 </div>
 {% endif %}
-
-<div class="card">
-	<div class="card-header">
-		{% trans "Add items" %}
-	</div>
-	<div class="card-body">
-		<form method="post" action="/sales/invoice/queue?action=create_step3">
+<form method="post" action="/sales/invoice/queue?action=create_step3">
+	<div class="card mb-3">
+		<div class="card-header">
+			{% trans "Add items" %}
+		</div>
+		<div class="card-body">
 			<table class="table table-hover table-striped table-condensed">
 				<thead>
 					<tr>
@@ -33,45 +47,50 @@
 			</table>
 
 			<div class="text-right">
-				<button type="button" onclick="javascript:add_item()" class="btn btn-default">
-					<span class="glyphicon glyphicon-plus"></span> {% trans "Add item" %}
-				</button>
-				<button type="submit" class="btn btn-primary">
-					{% trans "Save" %} <span class="glyphicon glyphicon-arrow-right"></span>
+				<button type="button" onclick="javascript:add_item({})" class="btn btn-light">
+					<i data-feather="plus"></i> {% trans "Add item" %}
 				</button>
 			</div>
-		</form>
+		</div>
 	</div>
-</div>
+	<div class="text-right">
+		<button type="submit" class="btn btn-primary">
+			{% trans "Save" %} <span class="glyphicon glyphicon-arrow-right"></span>
+		</button>
+	</div>
+</form>
 
 <script type="text/x-handlebars-template" id="new-invoice-queue-item-tmpl">
 	<tr>
 		<td>
-			<select name="invoice_queue_item[((nr))][product_type_id]" class="form-control">
+			<select name="invoice_queue_item[((nr))][product_type_id]" class="form-select">
 				{% for product_type in product_types %}
 					<option value="{{ product_type.id }}">{{ product_type.name }}</option>
 				{% endfor %}
 			</select>
-		<td>
-			<textarea class="form-control" name="invoice_queue_item[((nr))][description]"></textarea>
 		</td>
 		<td>
-			<input type="text" class="form-control" name="invoice_queue_item[((nr))][qty]">
+			<textarea class="form-control autogrow" name="invoice_queue_item[((nr))][description]">((description))</textarea>
 		</td>
 		<td>
-			<input type="text" class="form-control" name="invoice_queue_item[((nr))][price]">
+			<input type="text" class="form-control qty" name="invoice_queue_item[((nr))][qty]" value="((qty))">
 		</td>
 		<td>
-			<select name="invoice_queue_item[((nr))][vat]" class="form-control">
+			<input type="text" class="form-control price" name="invoice_queue_item[((nr))][price]" value="((price))">
+		</td>
+		<td>
+			<select name="invoice_queue_item[((nr))][vat]" class="form-select">
 			{% for vat_rate in vat_rates %}
 				<option value="{{ vat_rate.vat }}">{{ vat_rate.vat }}%</option>
 			{% endfor %}
 			</select>
 		</td>
 		<td>
-			<a href="javascript:void(0);" onclick="remove_item($(this));">
-				<span class="glyphicon glyphicon-remove"></span>
-			</a>
+			<div class="form-control-static">
+				<a href="javascript:void(0);" onclick="remove_item($(this));">
+					<span class="glyphicon glyphicon-remove"></span>
+				</a>
+			</div>
 		</td>
 	</tr>
 </script>

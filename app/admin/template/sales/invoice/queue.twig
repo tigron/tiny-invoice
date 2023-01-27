@@ -35,14 +35,14 @@
 				{% set conditions = pager.get_conditions() %}
 
 				<form method="post" action="/sales/invoice/queue">
-					<div class="row mb-3">
-						<label class="col-3 col-form-label text-end">{% trans "Search" %}</label>
+					<div class="row mb-1 mb-md-3">
+						<label class="col-2 col-form-label text-end">{% trans "Search" %}</label>
 						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
-					<div class="row mb-3">
-						<label class="col-3 col-form-label text-end">{% trans "Status" %}</label>
+					<div class="row mb-1 mb-md-3">
+						<label class="col-2 col-form-label text-end">{% trans "Status" %}</label>
 						<div class="col-9">
 							<select name="status" class="form-control">
 								<option value=""> - - - </option>
@@ -51,8 +51,8 @@
 							</select>
 						</div>
 					</div>
-					<div class="row mb-3">
-						<div class="col-3 offset-3">
+					<div class="row mb-1 mb-md-3">
+						<div class="col-3 offset-2">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
 							</button>

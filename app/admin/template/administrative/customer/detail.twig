@@ -6,18 +6,29 @@
 {% block tab %}
 	<form class="form form-horizontal form-condensed" method="post" action="/administrative/customer/detail?action=edit&id={{ customer.id }}">
 		{% if errors is defined and errors|length == 1 and errors.vat is defined %}
-			<div class="alert alert-danger" role="alert">
-				<div class="alert-icon">
-				    <i class="align-middle" data-feather="alert-triangle"></i>
+			<div class="row offset-md-2">
+				<div class="col-md-10">
+					<div class="alert alert-danger" role="alert">
+						<div class="d-flex align-items-center mb-3">
+							<div>
+								<i data-feather="alert-triangle" style="width:24px;height:24px;"></i>
+							</div>
+							<div class="ms-1">
+								{% trans "The VAT number could not be verified." %}<br/>
+								{% trans "If you still want to save this VAT number, please confirm." %}<br/>
+							</div>
+						</div>
+						<div class="d-flex align-items-center">
+							<div>
+								<i data-feather="arrow-right" style="width:24px;height:24px;"></i>
+							</div>
+							<button type="submit" class="btn btn-xs btn-danger" name="ignore_vat">
+								{% trans "Confirm VAT number" %}
+							</button>
+						</div>
+					</div>
 				</div>
-				<div class="alert-message">
-					{% trans "The VAT number could not be verified." %}<br />
-					{% trans "If you still want to save this VAT number, please confirm." %}<br />
-					<button type="submit" class="btn btn-xs btn-danger" name="ignore_vat">
-						{% trans "Confirm VAT number" %}
-					</button>
-				</div>
-			</div>	
+			</div>
 		{% elseif errors is defined %}
 			<div class="alert alert-danger">
 				{% trans "The form contains mistakes. Please correct them." %}
@@ -26,140 +37,143 @@
 			{{ base.alert('success', 'Customer successfully updated'|trans) }}
 		{% endif %}
 
-		<div class="row mb-3{% if 'company' in errors|keys %} has-error{% endif %}">
-			<label for="company" class="col-form-label col-3 text-end">{% trans "Company" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[company]" id="company" class="form-control" value="{% if customer.company is defined and customer.company is not empty %}{{ customer.company }}{% elseif env.post.customer.company is defined %}{{ env.post.customer.company }}{% endif %}">
-				{{ form.invalid_input('company', errors) }}
+		<div class="row offset-md-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<input type="text" name="customer[company]" id="company" class="form-control {% if 'company' in errors|keys %}is-invalid{% endif %}" value="{{ customer.company }}" placeholder="{% trans "Company" %}">
+					<label class="form-label col-2" for="company">{% trans "Company" %}</label>
+					{{ form.invalid_input('company', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'firstname' in errors|keys %} has-error{% endif %}">
-			<label for="firstname" class="col-form-label col-3 text-end">{% trans "Firstname" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[firstname]" id="firstname" class="form-control" value="{% if customer.firstname is defined and customer.firstname is not empty %}{{ customer.firstname }}{% elseif env.post.customer.firstname is defined %}{{ env.post.customer.firstname }}{% endif %}">
-				{{ form.invalid_input('firstname', errors) }}
+		<div class="row offset-md-2">
+			<div class="col-md-6 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer[firstname]" id="firstname" class="form-control {% if 'firstname' in errors|keys %}is-invalid{% endif %}" value="{{ customer.firstname }}" placeholder="{% trans "Firstname" %}" %>
+					<label for="firstname" class="col-form-label">{% trans "Firstname" %}</label>
+					{{ form.invalid_input('firstname', errors) }}
+				</div>
+			</div>
+
+			<div class="col-md-4 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer[lastname]" id="firstname" class="form-control {% if 'lastname' in errors|keys %}is-invalid{% endif %}" value="{{ customer.lastname }}" placeholder="{% trans "Lastname" %}">
+					<label for="lastname" class="col-form-label">{% trans "Lastname" %}</label>
+					{{ form.invalid_input('lastname', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'lastname' in errors|keys %} has-error{% endif %}">
-			<label for="lastname" class="col-form-label col-3 text-end">{% trans "Lastname" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[lastname]" id="lastname" class="form-control" value="{% if customer.lastname is defined and customer.lastname is not empty %}{{ customer.lastname }}{% elseif env.post.customer.lastname is defined %}{{ env.post.customer.lastname }}{% endif %}">
-				{{ form.invalid_input('lastname', errors) }}
+		<div class="row offset-md-2">
+			<div class="col-md-7 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer[street]" id="street" class="form-control {% if 'street' in errors|keys %}is-invalid{% endif %}" value="{{ customer.street }}" placeholder="{% trans 'Street' %}">
+					<label for="street" class="col-form-label">{% trans "Street" %}</label>
+					{{ form.invalid_input('street', errors) }}
+				</div>
+			</div>
+
+			<div class="col-md-3 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer[housenumber]" id="housenumber" class="form-control {% if 'housenumber' in errors|keys %}is-invalid{% endif %}" value="{{ customer.housenumber }}" placeholder="{% trans 'Housenumber' %}">
+					<label for="housenumber" class="col-form-label">{% trans "Housenumber" %}</label>
+					{{ form.invalid_input('housenumber', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'street' in errors|keys %} has-error{% endif %}">
-			<label for="street" class="col-form-label col-3 text-end">{% trans "Street" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[street]" id="street" class="form-control" value="{% if customer.street is defined and customer.street is not empty %}{{ customer.street }}{% elseif env.post.customer.street is defined %}{{ env.post.customer.street }}{% endif %}">
-				{{ form.invalid_input('street', errors) }}
+		<div class="row offset-md-2">
+			<div class="col-md-5 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer[zipcode]" id="zipcode" class="form-control {% if 'zipcode' in errors|keys %}is-invalid{% endif %}" value="{{ customer.zipcode }}" placeholder="{% trans 'Zip code' %}">
+					<label for="zipcode" class="col-form-label">{% trans "Zip code" %}</label>
+					{{ form.invalid_input('zipcode', errors) }}
+				</div>
+			</div>
+
+			<div class="col-md-5 mt-2">
+				<div class="form-floating">
+					<input type="text" name="customer[city]" id="city" class="form-control {% if 'city' in errors|keys %}is-invalid{% endif %}" value="{{ customer.city }}" placeholder="{% trans 'City' %}">
+					<label for="city" class="col-form-label">{% trans "City" %}</label>
+					{{ form.invalid_input('city', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'housenumber' in errors|keys %} has-error{% endif %}">
-			<label for="housenumber" class="col-form-label col-3 text-end">{% trans "Housenumber" %}</label>
-			<div class="col-2">
-				<input type="text" name="customer[housenumber]" id="housenumber" class="form-control" value="{% if customer.housenumber is defined and customer.housenumber is not empty %}{{ customer.housenumber }}{% elseif env.post.customer.housenumber is defined %}{{ previous_submit.housenumber }}{% endif %}">
-				{{ form.invalid_input('housenumber', errors) }}
+		<div class="row offset-md-2">
+			<div class="col-md-10 mt-2">
+				<div class="form-floating">
+					{{ form.select_country(countries, 'customer[country_id]', 'country_id', customer.country_id) }}
+					<label for="country_id" class="col-form-label">{% trans "Country" %}</label>
+					{{ form.invalid_input('country_id', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'city' in errors|keys %} has-error{% endif %}">
-			<label for="city" class="col-form-label col-3 text-end">{% trans "City" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[city]" id="city" class="form-control" value="{% if customer.city is defined and customer.city is not empty %}{{ customer.city }}{% elseif env.post.customer.city is defined %}{{ env.post.customer.city }}{% endif %}">
-				{{ form.invalid_input('city', errors) }}
+
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<input type="text" name="customer[email]" id="email" class="form-control {% if 'email' in errors|keys %}is-invalid{% endif %}" value="{{ customer.email }}" placeholder="{% trans "Email" %}">
+					<label class="col-form-label col-2" for="email">{% trans "Email" %}</label>
+					{{ form.invalid_input('email', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'zipcode' in errors|keys %} has-error{% endif %}">
-			<label for="zipcode" class="col-form-label col-3 text-end">{% trans "Zip code" %}</label>
-			<div class="col-2">
-				<input type="text" name="customer[zipcode]" id="zipcode" class="form-control" value="{% if customer.zipcode is defined and customer.zipcode is not empty%}{{ customer.zipcode }}{% elseif env.post.customer.zipcode is defined %}{{ env.post.customer.zipcode }}{% endif %}">
-				{{ form.invalid_input('zipcode', errors) }}
+		<div class="row offset-md-2">
+			<div class="col-md-5 mt-2">
+				<div class="form-floating">
+					<input type="tel" name="customer[phone]" id="phone" data-country-code="BE" class="form-control number-validator {% if 'phone' in errors|keys %}is-invalid{% endif %}" value="{{ customer.phone }}" placeholder="{% trans "Phone" %}">
+					<label for="city" class="col-form-label">{% trans "Phone" %}</label>
+					{{ form.invalid_input('phone', errors) }}
+				</div>
+			</div>
+
+			<div class="col-md-5 mt-2">
+				<div class="form-floating">
+					<input type="tel" name="customer[mobile]" data-country-code="BE" id="mobile" class="form-control number-validator {% if 'mobile' in errors|keys %}is-invalid{% endif %}" value="{{ customer.mobile }}" placeholder="{% trans "Mobile" %}">
+					<label for="city" class="col-form-label">{% trans "Mobile" %}</label>
+					{{ form.invalid_input('mobile', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'country_id' in errors|keys %} has-error{% endif %}">
-			<label for="country_id" class="col-form-label col-3 text-end">{% trans "Country" %}</label>
-			<div class="col-9">
-				<select name="customer[country_id]" class="form-control select2" onchange="change_country();">
-				{% for group in countries|keys  %}
-					{% if group == 'european' %}
-						<optgroup label="{% trans "European" %}">
-					{% else %}
-						<optgroup label="{% trans "Rest of the world" %}">
-					{% endif %}
-
-					{% for country in countries[group] %}
-						<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if customer.country_id is defined and customer.country_id == country.id %}selected="selected"{% elseif env.post.customer.country_id is defined and env.post.customer.country_id == country.id %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
-					{% endfor %}
-					</optgroup>
-				{% endfor %}
-				</select>
-				{{ form.invalid_input('country_id', errors) }}
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="input-group">
+					<span class="input-group-text" id="vat_prefix" readonly/>AT</span>
+					<div class="form-floating">
+						<input type="text" name="customer[vat]" id="vat" class="form-control {% if 'vat' in errors|keys %}is-invalid{% endif %}" value="{{ customer.vat }}" placeholder="{% trans 'Vat' %}">
+						<label for="vat" class="col-form-label">{% trans 'Vat' %}</label>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'email' in errors|keys %} has-error{% endif %}">
-			<label for="email" class="col-form-label col-3 text-end">{% trans "Email" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[email]" id="email" class="form-control" value="{% if customer.email is defined and customer.email is not empty %}{{ customer.email }}{% elseif env.post.customer.email is defined %}{{ env.post.customer.email }}{% endif %}">
-				{{ form.invalid_input('email', errors) }}
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					{{ form.select_language(languages, 'customer[language_id]', 'language_id', customer.language_id) }}
+					<label for="language_id" class="col-form-label">{% trans "Language" %}</label>
+					{{ form.invalid_input('language_id', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'phone' in errors|keys %} has-error{% endif %}">
-			<label for="phone" class="col-form-label col-3 text-end">{% trans "Phone" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[phone]" id="phone" class="form-control" value="{% if customer.phone is defined and customer.phone is not empty %}{{ customer.phone }}{% elseif env.post.customer.phone is defined %}{{ env.post.customer.phone }}{% endif %}">
-				{{ form.invalid_input('phone', errors) }}
+		<div class="row offset-md-2 mt-2">
+			<div class="col-md-10">
+				<div class="form-floating">
+					<textarea name="customer[comment]" class="form-control">{{ customer.comment }}</textarea>
+					<label for="comments" class="col-form-label">{% trans "Comments" %}</label>
+					{{ form.invalid_input('email', errors) }}
+				</div>
 			</div>
 		</div>
 
-		<div class="row mb-3{% if 'mobile' in errors|keys %} has-error{% endif %}">
-			<label for="mobile" class="col-form-label col-3 text-end">{% trans "Mobile" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[mobile]" id="mobile" class="form-control" value="{% if customer.mobile is defined and customer.mobile is not empty %}{{ customer.mobile }}{% elseif env.post.customer.mobile is defined %}{{ env.post.customer.mobile }}{% endif %}">
-				{{ form.invalid_input('mobile', errors) }}
-			</div>
-		</div>
-
-		<div class="row mb-3{% if 'fax' in errors|keys %} has-error{% endif %}">
-			<label for="fax" class="col-form-label col-3 text-end">{% trans "Fax" %}</label>
-			<div class="col-9">
-				<input type="text" name="customer[fax]" id="fax" class="form-control" value="{% if customer.fax is defined and customer.fax is not empty %}{{ customer.fax }}{% elseif env.post.customer.fax is defined %}{{ env.post.customer.fax }}{% endif %}">
-				{{ form.invalid_input('fax', errors) }}
-			</div>
-		</div>
-
-		<div class="row mb-3{% if 'vat' in errors|keys %} has-error{% endif %}">
-			<label for="vat" class="col-form-label col-3 text-end">{% trans "Vat" %}</label>
-			<div class="col-1"><input type="text" class="form-control" id="vat_prefix" readonly value="AT" /></div>
-			<div class="col-3">
-				<input type="text" name="customer[vat]" id="vat" class="form-control" value="{% if customer.vat is defined and customer.vat is not empty %}{{ customer.vat }}{% elseif env.post.customer.vat is defined %}{{ env.post.customer.vat }}{% endif %}">
-				{{ form.invalid_input('vat', errors) }}
-			</div>
-		</div>
-
-		<div class="row mb-3">
-			<label for="language_id" class="col-form-label col-3 text-end">{% trans "Language" %}</label>
-			<div class="col-4">
-				{{ form.select_language(languages, 'customer[language_id]', 'language_id', customer.language_id) }}
-			</div>
-		</div>
-
-		<div class="row mb-3">
-		    <label class="col-form-label col-3 text-end">{% trans "Comments" %}</label>
-		    <div class="col-9">
-		        <textarea name="customer[comment]" class="form-control">{% if customer.comment is defined and customer.comment is not empty %}{{ customer.comment }}{% elseif env.post.customer.comment is defined %}{{ env.post.customer.comment }}{% endif %}</textarea>
-		    </div>
-		</div>
-
-		<div class="row mb-3">
-			<div class="col-9 offset-3">
+		<div class="row input-group offset-md-2 mt-2">
+			<div class="col-md-10">
 				<button class="btn btn-primary">
 					{% trans "Save" %}
 				</button>
@@ -168,11 +182,24 @@
 	</form>
 
 	<script type="text/javascript">
-		function change_country() {
-			iso2 = $('select[name="customer[country_id]"] option:selected').attr('data-iso2');
-			$('#vat_prefix').val(iso2);
+		$(document).ready(function () {
+			change_country();
+
+			$('select[name="customer[country_id]"]').change(function (e) {
+					e.preventDefault();
+					change_country();
+					clear_number_inputs();
+				});
+			});
+
+			function change_country() {
+				iso2 = $('select[name="customer[country_id]"] option:selected').attr('data-iso2');
+				$("[data-country-code]").each(function (index, element) {
+				$(element).attr("data-country-code", iso2);
+			});
+
+			$('#vat_prefix').text(iso2);
 		}
-		change_country();
 	</script>
 
 {% endblock tab %}

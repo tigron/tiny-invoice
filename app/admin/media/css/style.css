@@ -115,17 +115,14 @@ a:not(.btn):hover {
 	cursor: pointer;
 }
 
-.alert-icon {
-	padding: 0.95rem;
-	padding-right: 0px;
-}
+/*
 .alert-message {
 	padding: 0.96rem;
 }
 .alert {
 	display: flex;
 	padding: 0;
-}
+} */
 
 .card-link {
 	cursor: pointer;

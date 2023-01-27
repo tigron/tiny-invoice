@@ -1,0 +1,77 @@
+{% import '_default/macro.base.twig' as base %}
+{% import '_default/form.base.twig' as form %}
+
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Recurring Invoice Queue" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/invoice/queue/recurring">
+							{% trans "Recurring Invoice queue" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Create recurring invoice queue item" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+<div class="card">
+	<div class="card-header">{% trans "Step 3: Queue name and content" %}</div>
+	<div class="card-body">
+		<form class="form form-horizontal form-condensed" method="post" action="?action=add_step3">
+			<div class="alert alert-info" id="error" style="display: none;">{% trans "If you make any changes to this contact, existing invoices for this contact will retain the original contact-information" %}.</div>
+			{% if errors|length > 0 %}
+				{% set message = 'Some fields were filled in incorrectly.'|trans ~ ' ' ~ 'Your modifications were not saved.'|trans ~ ' ' ~ 'Please correct them and save again.'|trans %}
+				{{ base.alert('danger', message) }}
+			{% endif %}
+			<div class="row mb-1 mb-md-3">
+				<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
+				<div class="col-5">
+					<input type="text" class="form-control {% if errors.name is defined %}is-invalid{% endif %}" name="invoice_queue_recurring_group[name]">
+					{{ form.invalid_input('name', errors) }}
+				</div>
+			</div>
+			<div class="row mb-1 mb-md-3">
+				<label class="col-form-label col-3 text-end">{% trans "Repeat" %}</label>
+				<div class="col-5">
+					<select class="form-select {% if errors.repeat_every is defined %}is-invalid{% endif %}" name="invoice_queue_recurring_group[repeat_every]">
+						<option value="+1 day">{% trans "Every day" %}</option>
+						<option value="+1 week">{% trans "Every week" %}</option>
+						<option value="+1 month">{% trans "Every month" %}</option>
+						<option value="+2 months">{% trans "Every 2 months" %}</option>
+						<option value="+3 months">{% trans "Every 3 months" %}</option>
+						<option value="+6 months">{% trans "Every 6 months" %}</option>
+						<option value="+1 year">{% trans "Every year" %}</option>
+					</select>
+					{{ form.invalid_input('repeat_every', errors) }}
+				</div>
+			</div>
+			<div class="row mb-1 mb-md-3 {% if errors.next_run is defined %}has-error{% endif %}">
+				<label class="col-form-label col-3 text-end">{% trans "Start date" %}</label>
+				<div class="col-5">
+					<input type="datetime" class="form-control datepicker" name="invoice_queue_recurring_group[next_run]">
+				</div>
+			</div>
+			<div class="pull-right">
+				<button type="submit" class="btn btn-primary">{% trans "Next" %}</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	flatpickr( $('.datepicker'), {
+		altInput: true,
+		altFormat: "F j, Y",
+		defaultDate: [ '{{ env.post.invoice_queue_recurring_group.next_run }}' ]
+	});
+</script>
+

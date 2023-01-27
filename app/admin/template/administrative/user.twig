@@ -52,7 +52,6 @@
 			</div>
 		</div>
 
-
 	{% elseif action == 'add' %}
 
 		<div class="row">
@@ -87,49 +86,49 @@
 			</div>
 			<div class="card-body">
 				<form class="form form-horizontal form-condensed" method="post" action="/administrative/user?action=add">
-					<div class="row mb-3{% if 'username' in errors|keys %} has-error{% endif %}">
-						<label for="username" class="col-form-label col-3 text-end">{% trans "Username" %}</label>
-						<div class="col-9">
-							<input type="text" name="user[username]" id="username" class="form-control" value="{{ env.post.user.username }}">
+					<div class="row mb-1 mb-md-3">
+						<label for="username" class="col-form-label col-12 col-md-3 text-md-end">{% trans "Username" %}</label>
+						<div class="col-md-9 col-12">
+							<input type="text" name="user[username]" id="username" class="form-control {% if 'username' in errors|keys %} is-invalid {% endif %}" value="{{ env.post.user.username }}">
 							{{ form.invalid_input('username', errors) }}
 						</div>
 					</div>
 
-					<div class="row mb-3{% if 'firstname' in errors|keys %} has-error{% endif %}">
-						<label for="firstname" class="col-form-label col-3 text-end">{% trans "Firstname" %}</label>
-						<div class="col-9">
-							<input type="text" name="user[firstname]" id="firstname" class="form-control" value="{{ env.post.user.firstname }}">
+					<div class="row mb-1 mb-md-3">
+						<label for="firstname" class="col-form-label col-12 col-md-3 text-md-end">{% trans "Firstname" %}</label>
+						<div class="col-md-9 col-12">
+							<input type="text" name="user[firstname]" id="firstname" class="form-control {% if 'firstname' in errors|keys %} is-invalid{% endif %}" value="{{ env.post.user.firstname }}">
 							{{ form.invalid_input('firstname', errors) }}
 						</div>
 					</div>
 
-					<div class="row mb-3{% if 'lastname' in errors|keys %} has-error{% endif %}">
-						<label for="lastname" class="col-form-label col-3 text-end">{% trans "Lastname" %}</label>
-						<div class="col-9">
-							<input type="text" name="user[lastname]" id="lastname" class="form-control" value="{{ env.post.user.lastname }}">
+					<div class="row mb-1 mb-md-3">
+						<label for="lastname" class="col-form-label col-12 col-md-3 text-md-end">{% trans "Lastname" %}</label>
+						<div class="col-md-9 col-12">
+							<input type="text" name="user[lastname]" id="lastname" class="form-control {% if 'lastname' in errors|keys %} is-invalid{% endif %}" value="{{ env.post.user.lastname }}">
 							{{ form.invalid_input('lastname', errors) }}
 						</div>
 					</div>
 
-					<div class="row mb-3{% if 'email' in errors|keys %} has-error{% endif %}">
-						<label for="email" class="col-form-label col-3 text-end">{% trans "Email" %}</label>
-						<div class="col-9">
-							<input type="text" name="user[email]" id="email" class="form-control" value="{{ env.post.user.email }}">
+					<div class="row mb-1 mb-md-3">
+						<label for="email" class="col-form-label col-12 col-md-3 text-md-end">{% trans "Email" %}</label>
+						<div class="col-md-9 col-12">
+							<input type="text" name="user[email]" id="email" class="form-control {% if 'email' in errors|keys %} is-invalid{% endif %}" value="{{ env.post.user.email }}">
 							{{ form.invalid_input('email', errors) }}
 						</div>
 					</div>
 
-					<div class="row mb-3{% if 'password' in errors|keys %} has-error{% endif %}">
-						<label for="password" class="col-form-label col-3 text-end">{% trans "Password" %}</label>
-						<div class="col-9">
-							<input type="password" name="user[password]" id="password" class="form-control" value="{{ env.post.user.password }}">
+					<div class="row mb-1 mb-md-3">
+						<label for="password" class="col-form-label col-12 col-md-3 text-md-end">{% trans "Password" %}</label>
+						<div class="col-md-9 col-12">
+							<input type="password" name="user[password]" id="password" class="form-control {% if 'password' in errors|keys %} is-invalid{% endif %}" value="{{ env.post.user.password }}">
 							{{ form.invalid_input('password', errors) }}
 						</div>
 					</div>
 
-					<div class="row mb-3">
-						<label for="language_id" class="col-form-label col-3 text-end">{% trans "Language" %}</label>
-						<div class="col-9">
+					<div class="row mb-1 mb-md-3">
+						<label for="language_id" class="col-form-label col-12 col-md-3 text-md-end">{% trans "Language" %}</label>
+						<div class="col-md-9 col-12">
 							<select name="user[language_id]" id="language_id" class="form-control">
 								{% for language in languages %}
 									<option value="{{ language.id }}"{% if env.post.user.language_id == language.id %} selected{% endif %}>{{ language.name }}</option>
@@ -138,9 +137,9 @@
 						</div>
 					</div>
 
-					<div class="row mb-3">
-						<label for="language_id" class="col-form-label col-3 text-end">{% trans "Role" %}</label>
-						<div class="col-9">
+					<div class="row mb-1 mb-md-3">
+						<label for="language_id" class="col-form-label col-12 col-md-3 text-md-end">{% trans "Role" %}</label>
+						<div class="col-md-9 col-12">
 							<select name="user[role_id]" id="language_id" class="form-control">
 								{% for role in roles %}
 									<option value="{{ role.id }}"{% if role.id == user.role_id %} selected{% endif %}>{{ role.name }}</option>
@@ -149,17 +148,17 @@
 						</div>
 					</div>
 
-					<div class="row mb-3">
-						<label for="language_id" class="col-form-label col-3 text-end">{% trans "Receive expired invoice overview" %}</label>
-						<div class="col-9">
+					<div class="row mb-1 mb-md-3">
+						<label for="language_id" class="col-form-label col-12 col-md-3 text-md-end">{% trans "Receive expired invoice overview" %}</label>
+						<div class="col-md-9 col-12">
 							<div class="form-check form-switch form-control-plaintext">
 								<input type="checkbox" class="form-check-input" data-group-cls="btn-group-xs" name="user[receive_expired_invoice_overview]">
 							</div>
 						</div>
 					</div>
 
-					<div class="row mb-3">
-						<div class="col-3 offset-3">
+					<div class="row mb-1 mb-md-3">
+						<div class="offset-md-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
 							</button>
@@ -169,8 +168,11 @@
 			</div>
 		</div>
 
-
 	{% else %}
+
+		<div class="col">
+			<h4>{% trans "Users" %}</h4>
+		</div>
 
 		{% if env.sticky_session.message is defined %}
 			{{ base.alert('success', 'User added successfully'|trans) }}
@@ -186,10 +188,10 @@
 				</div>
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="card-body">
+			<div class="card-body table-responsive">
 			{% for user in pager.items %}
 				{% if loop.first %}
-					<table class="table table-hover table-striped table-condensed table-responsive">
+					<table class="table table-hover table-striped table-condensed">
 					<thead>
 						<tr>
 							<th>#</th>

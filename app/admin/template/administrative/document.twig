@@ -32,41 +32,33 @@
 		{% endblock breadcrumb %}
 
 		{% if errors is defined %}
-			<div class="alert alert-danger">
-				{% trans "The form contains mistakes. Please correct them." %}
-			</div>
+			{{ base.alert('danger', 'The form contains mistakes. Please correct them.'|trans) }}
 		{% elseif env.sticky_session.message == 'updated' %}
-			{{ base.display_flash_message(env.sticky_session.message, 'document') }}
+			{{ base.alert('success', 'Document successfully updated'|trans) }}
 		{% elseif env.sticky_session.message == 'tags_updated' %}
-			<div class="alert alert-success alert-dismissable">
-				{% trans "The document tags have been updated." %}
-			</div>
+			{{ base.alert('success', 'The document tags have been updated'|trans) }}
 		{% elseif env.sticky_session.delete_error == 'extractor_exists' %}
-			<div class="alert alert-danger">
-				{% trans "This document cannot be deleted." %} {% trans "It is a basis for a PDF extractor." %} {% trans "Please modify the extractor first before deleting this document." %}
-			</div>
+			{{ base.alert('danger', 'This document cannot be deleted.'|trans ~ ' ' ~ 'It is a basis for a PDF extractor.'|trans ~ ' ' ~ 'Please modify the extractor first before deleting this document.'|trans) }}
 		{% elseif env.sticky_session.delete_error == 'balances_exist' %}
-			<div class="alert alert-danger">
-				{% trans "This document cannot be deleted." %} {% trans "There are bank transactions linked to it." %} {% trans "Please remove the transactions before removing this document." %}
-			</div>
+			{{ base.alert('danger', 'This document cannot be deleted.'|trans ~ ' ' ~  'There are bank transactions linked to it.'|trans ~ ' ' ~ 'Please remove the transactions before removing this document.'|trans) }}
 		{% endif %}
 
-		<div class="row mb-3">
+		<div class="row mb-1 mb-md-3">
 			<div class="{% if document.preview_file_id > 0 %}col-7{% else %}col-12{% endif %}">
 				<div class="card">
 					<div class="card-header">{% trans "Document details" %}</div>
 					<div class="card-body">
 						<form action="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" method="post">
-							<div class="row mb-3 {% if 'title' in errors|keys %}has-error{% endif %}">
-								<label class="col-3 col-form-label">{% trans "Title" %}</label>
+							<div class="row mb-1 mb-md-3 {% if 'title' in errors|keys %}has-error{% endif %}">
+								<label class="col-3 col-form-label text-end">{% trans "Title" %}</label>
 								<div class="col-9">
 									<input type="text" class="form-control" name="document[title]" value="{{ document.title }}" />
 									{{ form.invalid_input('title', errors) }}
 								</div>
 							</div>
 
-							<div class="row mb-3">
-								<label class="col-3 col-form-label">{% trans "Document type" %}</label>
+							<div class="row mb-1 mb-md-3">
+								<label class="col-3 col-form-label text-end">{% trans "Document type" %}</label>
 								<div class="col-9">
 									<select name="document[classname]" class="form-control" onchange="show_classname_fields()" id="slc_classname">
 										<option value="Document" {% if document.classname == 'Document' %}selected{% endif %}>
@@ -88,8 +80,8 @@
 								</div>
 							</div>
 
-							<div class="row mb-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
-								<label for="file_id" class="col-3 col-form-label">{% trans "File" %}</label>
+							<div class="row mb-1 mb-md-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
+								<label for="file_id" class="col-3 col-form-label text-end">{% trans "File" %}</label>
 								<div class="col-9">
 									<div id="document-file" class="form-control-static">
 										{% if document.file_id > 0 %}
@@ -124,16 +116,16 @@
 								</div>
 							</div>
 
-							<div class="row mb-3">
-								<label class="col-3 col-form-label">{% trans "Date" %}</label>
+							<div class="row mb-1 mb-md-3">
+								<label class="col-3 col-form-label text-end">{% trans "Date" %}</label>
 								<div class="col-9">
-									<input type="text" class="form-control datepicker" name="document[date]" value="{{ document.date|date }}" />
+									<input type="text" class="form-control datepicker" name="document[date]" value="{{ document.date }}" />
 								</div>
 							</div>
 
 							<div class="classname_fields classname_document_incoming_invoice classname_document_incoming_creditnote">
-								<div class="row mb-3{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
-									<label class="col-3 col-form-label">{% trans "Expiration date" %}</label>
+								<div class="row mb-1 mb-md-3{% if 'expiration_date' in errors|keys %} has-error{% endif %}">
+									<label class="col-3 col-form-label text-end">{% trans "Expiration date" %}</label>
 									<div class="col-9">
 										<input type="text" class="form-control datepicker" name="document[expiration_date]" value="{{ document.expiration_date }}">
 										{{ form.invalid_input('expiration_date', errors) }}
@@ -141,15 +133,15 @@
 								</div>
 							</div>
 
-							<div class="row mb-3">
-								<label class="col-3 col-form-label">{% trans "Tags" %}</label>
+							<div class="row mb-1 mb-md-3">
+								<label class="col-3 col-form-label text-end">{% trans "Tags" %}</label>
 								<div class="col-9">
 									<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 								</div>
 							</div>
 
-							<div class="row mb-3">
-								<label class="col-3 col-form-label">{% trans "Description" %}</label>
+							<div class="row mb-1 mb-md-3">
+								<label class="col-3 col-form-label text-end">{% trans "Description" %}</label>
 								<div class="col-9">
 									<textarea class="form-control autogrow" name="document[description]">{{ document.description }}</textarea>
 								</div>
@@ -168,12 +160,12 @@
 							</div>
 
 							<hr>
-							<div class="row mb-3">
+							<div class="row mb-1 mb-md-3">
 								<div class="col-9 offset-3">
 									<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 									<a href="/administrative/document?action=delete&id={{ document.id }}" class="btn btn-danger" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure" %}?" >{% trans "Delete" %}</a>
 									{% if settings.setasign_pdf_extractor %}
-										<a href="javascript:void(0);" class="btn btn-default" id="btn_extractor">{% trans "Extractor" %}</a>
+										<a href="javascript:void(0);" class="btn btn-light" id="btn_extractor">{% trans "Extractor" %}</a>
 									{% endif %}
 								</div>
 							</div>
@@ -216,67 +208,18 @@
 		</div>
 
 		{% if document.classname == 'Document_Incoming_Invoice' or document.classname == 'Document_Incoming_Creditnote' %}
-		<div class="row">
-			<div class="col-12">
-				<div class="card mb-3">
-					<div class="card-header">{% trans "Payments" %}</div>
-					<div class="card-body">
-					{% for balance in document.get_bank_account_statement_transaction_balances() %}
-						{% set transaction = balance.bank_account_statement_transaction %}
-						{% if loop.first %}
-							<table class="table table-hover table-alternate">
-								<thead>
-									<tr>
-										<th width="15%">{% trans "Date" %}</th>
-										<th>&nbsp;</th>
-										<th>{% trans "Message" %}</th>
-										<th>{% trans "To" %}</th>
-										<th>{% trans "Account number" %}</th>
-										<th>{% trans "Amount" %}</th>
-									</tr>
-								</thead>
-								<tbody>
-								<tr>
-									<td>{{ document.date|date }}</td>
-									<td colspan="4">{% trans "Incoming invoice" %} {{ document.id }}</td>
-									<td>&euro;{{ document.price_incl|number_format }}</td>
-								</tr>
-						{% endif %}
-						<tr>
-							<td>{{ transaction.date|date }}</td>
-							<td>
-								<a href="/financial/account/transaction?action=edit&id={{ transaction.id }}">
-									{% trans "Transaction" %} {{ transaction.id }}
-								</a>
-							</td>
-							<td>{{ transaction.get_message() }}</td>
-							<td>{{ transaction.other_account_name }}</td>
-							<td>{{ transaction.other_account_number|iban_to_human_format }}</td>
-							<td>&euro;{{ balance.amount|number_format }}</td>
-						</tr>
-						{% if loop.last %}
-							</tbody>
-							<thead>
-								<tr>
-									<th colspan="5">{% trans "Balance" %}</th>
-									<th>&euro;{{ document.get_balance()|number_format }}</th>
-								</tr>
-							</thead>
-							</table>
-						{% endif %}
-					{% else %}
-						<p>{% trans "No payments added yet" %}</p>
-					{% endfor %}
-					</div>
-				</div>
-			</div>
-		</div>
+			{% include 'administrative/document/payments.twig' %}
 		{% endif %}
 
 		{% include 'administrative/document/extractor/modal.extractor_error.twig' with {id: 'extractor_error' }  %}
 		{% include 'administrative/document/extractor/modal.extractor.twig' with {id: 'extractor', modal_size: 'lg' }  %}
 
 		<script type="text/javascript">
+			flatpickr( $('.datepicker'), {
+				altInput: true,
+				altFormat: "F j, Y",
+			});
+
 			function show_classname_fields() {
 				classname = $('#slc_classname').val();
 
@@ -341,7 +284,7 @@
 			<div class="card">
 				<div class="card-body">
 
-					<div class="row mb-3{% if 'title' in errors|keys %} has-error{% endif %}">
+					<div class="row mb-1 mb-md-3{% if 'title' in errors|keys %} has-error{% endif %}">
 						<label for="title" class="col-3 col-form-label text-end">{% trans "Title" %}</label>
 						<div class="col-9">
 							<input type="text" name="document[title]" id="title" class="form-control" value="{{ document.title }}">
@@ -349,7 +292,7 @@
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-3 col-form-label text-end">{% trans "Tags" %}</label>
 						<div class="col-9">
 							<select name="tag_ids" class="form-select autocomplete_tag"></select>
@@ -367,7 +310,7 @@ $('.autocomplete_tag').select2({
 });
 </script>
 
-					<div class="row mb-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
+					<div class="row mb-1 mb-md-3{% if 'file_id' in errors|keys %} has-error{% endif %}">
 						<label for="file_id" class="col-3 col-form-label text-end">{% trans "File" %}</label>
 						<div class="col-9">
 							<div id="document-file" class="form-control-static hide">
@@ -403,7 +346,7 @@ $('.autocomplete_tag').select2({
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<div class="col-3 offset-3">
 							<button class="btn btn-primary">
 								{% trans "Save" %}
@@ -429,14 +372,14 @@ $('.autocomplete_tag').select2({
 			</div>
 			<div class="card-body">
 				<form method="post" action="/administrative/document">
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-2 col-form-label text-end">{% trans "Search" %}</label>
 						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-2 col-form-label text-end">{% trans "Type" %}</label>
 						<div class="col-9">
 							<select name="type" class="form-control">
@@ -460,14 +403,14 @@ $('.autocomplete_tag').select2({
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-2 col-form-label text-end">{% trans "Tags" %}</label>
 						<div class="col-9">
 							<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<div class="col-2 offset-2">
 							<button class="btn btn-primary">
 								{% trans "Search" %}
@@ -631,7 +574,7 @@ $('.autocomplete_tag').select2({
 							$("#document-file").append(template(response));
 							$('#document-dropzone').hide();
 							$('#document-file').find('.help-block').remove();
-							$('#document-file').closest('.row mb-3').removeClass('has-error');
+							$('#document-file').closest('.row mb-1 mb-md-3').removeClass('has-error');
 							$('#document-file').removeClass('hide');
 						}
 						catch (e) {

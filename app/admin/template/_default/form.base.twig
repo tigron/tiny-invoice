@@ -1,17 +1,17 @@
 {% macro select_country(countries, name, id, selected) %}
-	<select name="{{ name }}" class="form-control" id="{{ id }}">
-	{% for group in countries|keys  %}
-		{% if group == 'european' %}
-		    <optgroup label="{% trans "European" %}">
-		{% else %}
-		    <optgroup label="{% trans "Rest of the world" %}">
-		{% endif %}
+	<select name="{{ name }}" id="country_id" class="form-control select2 select2me" placeholder="{% trans 'Country' %}" id="{{ id }}">
+		{% for group in countries|keys  %}
+			{% if group == 'european' %}
+				<optgroup label="{% trans "European" %}">
+			{% else %}
+					<optgroup label="{% trans "Rest of the world" %}">
+			{% endif %}
 
-		{% for country in countries[group] %}
-		    <option value="{{ country.id }}" {% if selected == country.id %}selected="selected"{% endif %}>{{ country.name }}</option>
+			{% for country in countries[group] %}
+				<option value="{{ country.id }}" data-iso2="{{ country.iso2 }}" {% if selected == country.id %}selected="selected"{% endif %}>{{ attribute(country, 'text_' ~ env.language.name_short ~ '_name') }}</option>
+			{% endfor %}
+			</optgroup>
 		{% endfor %}
-		</optgroup>
-	{% endfor %}
 	</select>
 {% endmacro %}
 
@@ -30,7 +30,7 @@
 {% endmacro %}
 
 {% macro select_language(languages, name, id, selected) %}
-	<select name="{{ name }}" class="form-control" id="{{ id }}">
+	<select name="{{ name }}" class="form-control select2 select2me" id="{{ id }} ">
 	{% for language in languages %}
 		<option value="{{ language.id }}"{% if language.id == selected %} selected{% endif %}>{{ language.name }}</option>
 	{% endfor %}

@@ -82,13 +82,14 @@ class Recurring extends Module {
 		if (isset($_POST['invoice_queue_recurring_group'])) {
 			$_SESSION['invoice_queue_recurring']->load_array($_POST['invoice_queue_recurring_group']);
 			$_SESSION['invoice_queue_recurring']->validate($errors);
+
 			if (count($errors) > 0) {
 				$template->assign('errors', $errors);
 			} else {
 				$_SESSION['invoice_queue_recurring']->save();
 				$id = $_SESSION['invoice_queue_recurring']->id;
 				unset($_SESSION['invoice_queue_recurring']);
-				Session::redirect('/sales/invoice/queue/recurring?action=edit_group&id=' . $id);
+				Session::redirect('/sales/invoice/queue/recurring?action=edit&id=' . $id);
 			}
 		}
     }
@@ -165,6 +166,7 @@ class Recurring extends Module {
 		$updated = false;
 
 		if (isset($_POST['invoice_queue_recurring_group'])) {
+			print_r($_POST['invoice_queue_recurring_group']);
 			if (isset($_POST['invoice_queue_recurring_group']['run_forever'])) {
 				$_POST['invoice_queue_recurring_group']['stop_after'] = null;
 			} elseif (empty($_POST['invoice_queue_recurring_group']['stop_after'])) {
@@ -248,7 +250,7 @@ class Recurring extends Module {
 		if ($invoice_queue_recurring_group->customer_contact->vat != '') {
 			$template->assign('vat_rates', \Vat_Rate_Country::get_by_country(\Country::get_by_id(\Setting::get_by_name('country_id')->value)));
 		} else {
-			$template->assign('vat_rates', \Vat_Rate_Country::get_by_country($_SESSION['invoice']->customer_contact->country));
+			$template->assign('vat_rates', \Vat_Rate_Country::get_by_country($invoice_queue_recurring_group->customer_contact->country));
 		}
 
 

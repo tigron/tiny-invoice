@@ -12,6 +12,7 @@ class Customer {
 	use \Skeleton\Object\Get;
 	use \Skeleton\Object\Uuid;
 	use \Skeleton\Object\Save;
+	use \Skeleton\Object\Save;
 	use \Skeleton\Object\Delete;
 	use \Skeleton\Pager\Page;
 
@@ -28,6 +29,38 @@ class Customer {
 		foreach ($required_fields as $required_field) {
 			if (!isset($this->details[$required_field]) OR $this->details[$required_field] == '') {
 				$errors[$required_field] = 'required';
+			}
+		}
+
+
+		// If no country is set, uselesss to try and validate phone numbers
+		if(isset($this->details['country_id'])) {
+			$country = \Country::get_by_id($this->details['country_id']);
+
+			// Validate the phone_numbers
+			$phone_util = \libphonenumber\PhoneNumberUtil::getInstance();
+			if (isset($this->details['phone'])) { // Can be validated on this field when using the lib validator
+				try {
+					$number_object = $phone_util->parse($this->details['phone'], $country->iso2);
+					$is_valid = $phone_util->isValidNumber($number_object);
+				} catch (\Exception $e) {
+					$is_valid = false;
+				}
+				if(!$is_valid){
+					$errors['phone'] = 'syntax error';
+				}
+			}
+
+			if (isset($this->details['mobile'])) { // Can be validated on this field when using the lib validator
+				try {
+					$number_object = $phone_util->parse($this->details['mobile'], $country->iso2);
+					$is_valid = $phone_util->isValidNumber($number_object);
+				} catch (\Exception $e) {
+					$is_valid = false;
+				}
+				if(!$is_valid){
+					$errors['mobile'] = 'syntax error';
+				}
 			}
 		}
 

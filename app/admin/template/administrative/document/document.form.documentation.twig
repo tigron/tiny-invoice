@@ -1,5 +1,5 @@
 	<hr>
-	<div class="row mb-3">
+	<div class="row mb-1 mb-md-3">
 		<label class="col-form-label col-3 text-end" style="line-height: 26px;">{% trans "Documentation for" %}</label>
 
 		<div class="col-9">
@@ -31,7 +31,7 @@
 		}
 	</script>
 
-	<div class="row mb-3{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_customer">
+	<div class="row mb-1 mb-md-3{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_customer">
 		<label class="col-form-label col-3 text-end">{% trans "Customer" %}</label>
 		<div class="col-9">
 			<input type="text" name="customer" class="form-control typeahead autocomplete_customer" value="{% if document.customer_id > 0 %}{{ document.customer.get_display_name() }}{% endif %}" placeholder="{% trans "Search customer" %}...">
@@ -39,7 +39,7 @@
 		</div>
 	</div>
 
-	<div class="row mb-3{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_supplier">
+	<div class="row mb-1 mb-md-3{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_supplier">
 		<label class="col-form-label col-3 text-end">{% trans "Supplier" %}</label>
 		<div class="col-9">
 			<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">

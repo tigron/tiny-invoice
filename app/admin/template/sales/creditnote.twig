@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</div>
-	
+
 		{% include 'sales/creditnote/offcanvas.twig' %}
 
 		{% if env.sticky_session.message == 'updated' %}
@@ -34,7 +34,7 @@
 				{{ "Credit note successfully updated and regenerated" }}
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
-		{% endif %}		
+		{% endif %}
 
 		<div class="row">
 			<div class="col-md-4" id="creditnote-customer">
@@ -134,12 +134,12 @@
 				<td colspan="2"><strong>{% trans "Total" %}</strong></td>
 				<td class="text-right"><strong>&euro;{{ vat_total|number_format }}</strong></td>
 			</tr>
-		</table>		
-	
+		</table>
+
 	{% elseif action == 'create_step1' %}
-		{% include 'sales/creditnote/create/step1.twig' %}	
+		{% include 'sales/creditnote/create/step1.twig' %}
 	{% elseif action == 'create_step2' %}
-		{% include 'sales/creditnote/create/step2.twig' %}	
+		{% include 'sales/creditnote/create/step2.twig' %}
 	{% elseif action == 'edit' %}
 		<ol class="breadcrumb">
 			<li><a href="/">{% trans "Home" %}</a></li>
@@ -184,7 +184,7 @@
 					<div class="card-header">{% trans "Creditnote settings" %}</div>
 					<div class="card-body">
 
-						<div class="row mb-3">
+						<div class="row mb-1 mb-md-3">
 							<label class="col-form-label col-3 text-end">{% trans "VAT mode" %}</label>
 							<div class="col-9">
 								<p class="form-control-static">
@@ -356,14 +356,14 @@
 			</div>
 			<div class="card-body">
 				<form method="post" action="/sales/creditnote">
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<label class="col-2 col-form-label text-end">{% trans "Search" %}</label>
 						<div class="col-9">
 							<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 						</div>
 					</div>
 
-					<div class="row mb-3">
+					<div class="row mb-1 mb-md-3">
 						<div class="col-3 offset-2">
 							<button class="btn btn-primary">
 								{% trans "Search" %}

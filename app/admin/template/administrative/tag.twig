@@ -20,12 +20,12 @@
 		<div class="card">
 			<div class="card-header">{% trans "Tag details" %}</div>
 			<div class="card-body">
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
 					<div class="col-9"><input type="text" name="tag[name]" class="form-control" value="{{ tag.name }}" /></div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="offset-3 col-9">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>
@@ -48,14 +48,14 @@
 			{% trans "Filter" %}
 		</div>
 		<div class="card-body">
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="search" value="{{ pager.get_search() }}"/>
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<div class="controls offset-3 col-9">
 					<button class="btn btn-primary" type="submit">
 						{% trans "Search" %}

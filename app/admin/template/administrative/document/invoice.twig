@@ -87,21 +87,21 @@
 		<div class="card-body">
 			<form method="post" action="{{ env.module.get_path() }}">
 				<input type="hidden" id="input_advanced" name="advanced" value="{% if env.sticky_session.advanced %}1{% else %}0{% endif %}">
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
 					<div class="col-9">
 						<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 					</div>
 				</div>
 
-				<div class="row mb-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
+				<div class="row mb-1 mb-md-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
 					<label class="col-form-label col-3 text-end">{% trans "Tags" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control autocomplete-tag" name="tag_ids" value="" />
 					</div>
 				</div>
 
-				<div class="row mb-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
+				<div class="row mb-1 mb-md-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
 					<label for="supplier_id" class="col-form-label col-3 text-end">{% trans "Supplier" %}</label>
 					<div class="col-9">
 						<input type="text" name="supplier" value="{{ selected_supplier.company }}" class="form-control typeahead autocomplete_supplier" placeholder="{% trans "Search supplier" %}..."/>
@@ -109,7 +109,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
+				<div class="row mb-1 mb-md-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
 					<label class="col-form-label col-3 text-end">{% trans "Paid" %}</label>
 					<div class="col-9">
 						<select name="paid" class="form-control">
@@ -120,7 +120,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
+				<div class="row mb-1 mb-md-3 form-advanced {% if env.sticky_session.advanced is not defined %}visually-hidden{% endif %}">
 					<label class="col-form-label col-3 text-end">{% trans "Booking status" %}</label>
 					<div class="col-9">
 						<select name="accounting_identifier" class="form-control">
@@ -131,7 +131,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="col-3 offset-3">
 						<button class="btn btn-primary">
 							{% trans "Search" %}

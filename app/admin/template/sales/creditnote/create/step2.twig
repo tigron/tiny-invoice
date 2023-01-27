@@ -26,14 +26,14 @@
 			{% trans "Additional info" %}
 		</div>
 		<div class="card-body">
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-3 col-form-label text-end">{% trans "VAT mode" %}</label>
 				<div class="col-9">
 					{% if invoice.vat_mode == 'group' %}
 						{% set vat_mode = "Per group"|trans %}
 					{% else %}
-						{% set vat_mode = "Per line"|trans %}						
-					{% endif %}				
+						{% set vat_mode = "Per line"|trans %}
+					{% endif %}
 					<input type="text" readonly class="form-control-plaintext" value="{{ vat_mode }}">
 				</div>
 			</div>
@@ -93,7 +93,7 @@
 						<td>
 							<div class="col-form-label">
 								<a href="javascript:void(0);" onclick="remove_item($(this));">
-									<i data-feather="trash-2"></i>								
+									<i data-feather="trash-2"></i>
 								</a>
 							</div>
 						</td>

@@ -2,8 +2,8 @@
 
 	<hr>
 
-	<div class="row mb-3 {% if 'supplier_id' in errors|keys %}has-error{% endif %}">
-		<label class="col-3 col-form-label">
+	<div class="row mb-1 mb-md-3 {% if 'supplier_id' in errors|keys %}has-error{% endif %}">
+		<label class="col-3 col-form-label text-end">
 			{% trans "Supplier" %}
 		</label>
 		<div class="col-5">
@@ -12,9 +12,13 @@
 				<input type="hidden" class="supplier_id" name="document[supplier_id]" value=""/>
 			{% else %}
 				<div class="pull-right" style="padding-top: 8px;">
-					<a href="#modal-supplier-select" data-toggle="modal"><span class="glyphicon glyphicon-refresh"></span></a>
+					<a href="#modal-supplier-select" data-bs-toggle="modal">
+						<i data-feather="refresh-cw"></i>
+					</a>
 					&nbsp;
-					<a href="/administrative/supplier/detail?id={{ document.supplier.id }}"><i data-feather="edit"></i></a>
+					<a href="/administrative/supplier/detail?id={{ document.supplier.id }}">
+						<i data-feather="edit"></i>
+					</a>
 				</div>
 				<address style="padding-top: 8px; padding-left: 5px;">
 					<strong style="margin-right: 10px;">{{ document.supplier.company }} {% if document.supplier.accounting_identifier %}({{ document.supplier.accounting_identifier }}){% endif %}</strong>
@@ -41,24 +45,24 @@
 		</div>
 	</div>
 
-	<div class="row mb-3{% if 'supplier_identifier' in errors|keys %} has-error{% endif %}">
-		<label class="col-3 col-form-label">{% trans "Supplier identifier" %}</label>
+	<div class="row mb-1 mb-md-3{% if 'supplier_identifier' in errors|keys %} has-error{% endif %}">
+		<label class="col-3 col-form-label text-end">{% trans "Supplier identifier" %}</label>
 		<div class="col-5">
 			<input type="text" name="document[supplier_identifier]" class="form-control" value="{{ document.supplier_identifier }}" data-toggle="popover" title="{% trans "Already in use" %}" data-content="{% trans "This identifier is already used for another invoice." %}" onchange="check_supplier_identifier();" />
 		</div>
 		{{ form.invalid_input('supplier_identifier', errors) }}
 	</div>
 
-	<div class="row mb-3{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
-		<label class="col-3 col-form-label">{% trans "Accounting identifier" %}</label>
+	<div class="row mb-1 mb-md-3{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
+		<label class="col-3 col-form-label text-end">{% trans "Accounting identifier" %}</label>
 		<div class="col-5">
 			<input type="text" name="document[accounting_identifier]" class="form-control" value="{{ document.accounting_identifier }}"/>
 		</div>
 		{{ form.invalid_input('accounting_identifier', errors) }}
 	</div>
 
-	<div class="row mb-3{% if 'price_excl' in errors|keys %} has-error{% endif %}">
-		<label class="col-3 col-form-label">{% trans "Price excl VAT" %}</label>
+	<div class="row mb-1 mb-md-3{% if 'price_excl' in errors|keys %} has-error{% endif %}">
+		<label class="col-3 col-form-label text-end">{% trans "Price excl VAT" %}</label>
 		<div class="col-5">
 			<div class="input-group">
 				<span class="input-group-text">&euro;</span>
@@ -68,8 +72,8 @@
 		</div>
 	</div>
 
-	<div class="row mb-3{% if 'price_incl' in errors|keys %} has-error{% endif %}">
-		<label class="col-3 col-form-label">{% trans "Price incl VAT" %}</label>
+	<div class="row mb-1 mb-md-3{% if 'price_incl' in errors|keys %} has-error{% endif %}">
+		<label class="col-3 col-form-label text-end">{% trans "Price incl VAT" %}</label>
 		<div class="col-5">
 			<div class="input-group">
 				<span class="input-group-text">&euro;</span>
@@ -123,37 +127,48 @@
 
 	</script>
 
-	<div class="row mb-3">
-		<label class="col-3 col-form-label">{% trans "Payment message" %}</label>
+	<div class="row mb-1 mb-md-3">
+		<label class="col-3 col-form-label text-end">{% trans "Payment message" %}</label>
 		<div class="col-9">
-			<div class="radio">
-				<label><input type="radio" name="payment_message_type" value="payment_message_type_structured" {% if document.payment_message == '' %}checked{% endif %}>{% trans "Structured message" %}</label>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" id="radio_payment_message_type_structured2" name="payment_message_type" value="payment_message_type_structured" {% if document.payment_message == '' %}checked{% endif %}>
+				<label class="form-check-label" for="radio_payment_message_type_structured2">
+					{% trans "Structured message" %}
+				</label>
 			</div>
-			<div class="radio">
-				<label><input type="radio" name="payment_message_type" value="payment_message_type_free" {% if document.payment_message != '' %}checked{% endif %}>{% trans "Free message" %}</label>
+			<div class="form-check">
+				<input class="form-check-input" type="radio" id="radio_payment_message_type_free" name="payment_message_type" value="payment_message_type_free" {% if document.payment_message != '' %}checked{% endif %}>
+				<label class="form-check-label" for="radio_payment_message_type_free">
+					{% trans "Free message" %}
+				</label>
 			</div>
+
 		</div>
 	</div>
 
-	<div class="row mb-3 {% if 'payment_structured_message' in errors|keys %} has-error{% endif %}" id="payment_message_type_structured">
+	<div class="row mb-1 mb-md-3 {% if 'payment_structured_message' in errors|keys %} has-error{% endif %}" id="payment_message_type_structured">
 		<div class="col-9 offset-3">
 			<input type="text" class="form-control" name="document[payment_structured_message]" value="{{ document.payment_structured_message }}" />
 		</div>
 	</div>
 
 
-	<div class="row mb-3" id="payment_message_type_free">
+	<div class="row mb-1 mb-md-3" id="payment_message_type_free">
 		<div class="col-9 offset-3">
 			<textarea name="document[payment_message]" class="form-control autogrow">{{ document.payment_message }}</textarea>
 		</div>
 	</div>
 
-	<div class="row mb-3">
-		<label class="col-3 col-form-label">{% trans "Paid" %}</label>
+	<div class="row mb-1 mb-md-3">
+		<label class="col-form-label col-3 text-end">{% trans "Paid" %}</label>
 		<div class="col-9">
-			<input type="checkbox" name="document[paid]" id="paid" data-group-cls="btn-group-xs" {% if document.paid %}checked{% endif %}/>
+			<div class="form-check form-switch form-control-plaintext">
+				<input type="checkbox" data-group-cls="btn-group-xs" name="document[paid]" {% if
+					document.paid %}checked{% endif %} class="form-check-input">
+			</div>
 		</div>
 	</div>
+
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('input[name="document[payment_structured_message]"]').mask("000/0000/00000", {placeholder: "___/____/_____"});
@@ -165,12 +180,11 @@
 		});
 		function select_payment_message_type() {
 			value = $('input[name=payment_message_type]:checked').val();
-
-			value = $('input[name=payment_message_type]:checked').val();
 			$('#payment_message_type_structured').hide();
 			$('#payment_message_type_free').hide();
 
-			if ( $('input[name=payment_message_type]').parents('.row mb-3').is(':visible') ){
+			if ( $('input[name=payment_message_type]').parents('.row.mb-3').is(':visible') ){
+				console.log('show');
 				$('#' + value).show();
 			}
 		}

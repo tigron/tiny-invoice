@@ -115,19 +115,35 @@ class Supplier extends Module {
 
 		$pager = new Pager('supplier');
 		$pager->add_sort_permission('company');
-		$pager->set_search($_GET['search']);
+		if (isset($_GET['q'])) {
+			$pager->set_search($_GET['q']);
+		}
+		if (isset($_GET['page'])) {
+			$_GET['p'] = $_GET['page'];
+		}	
+		$pager->set_sort('company');
 		$pager->page();
 
 		$data = [];
 		foreach ($pager->items as $supplier) {
-			$name = $supplier->company;
 			$data[] = [
 				'id' => $supplier->id,
-				'value' => $name,
-				'iban' => $supplier->iban
+				'text' => $supplier->company,
 			];
 		}
-		echo json_encode($data);
+
+		$page_count = ceil($pager->item_count / \Skeleton\Pager\Config::$items_per_page);
+
+		$result = [
+			'results' => $data,
+			'pagination' => [
+				'more' => false,
+			]
+		];
+		if ($pager->get_page() < $page_count) {
+			$result['pagination']['more'] = true;
+		}
+		echo json_encode($result);
 	}
 
 	/**

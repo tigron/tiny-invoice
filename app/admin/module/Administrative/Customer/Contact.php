@@ -122,6 +122,13 @@ class Contact extends Module {
 		$this->template = null;
 
 		$customer_contact = \Customer_Contact::get_by_id($_GET['id']);
+
+		// $results = $customer_contact->get_info()
+
+		// We need to add some text values for the select2 data.
+
+
+
 		echo json_encode($customer_contact->get_info());
 	}
 
@@ -134,18 +141,20 @@ class Contact extends Module {
 		session_write_close();
 
 		$this->template = null;
-
 		$countries = \Country::get_grouped();
 		$result = [];
 		foreach ($countries as $group => $country_list) {
+			$country_group = [];
+			$name_value = "text_" . $_SESSION['language']->name_short . "_name";
+
 			foreach ($country_list as $country) {
-				if (!isset($result[$group])) {
-					$result[$group] = [];
-				}
-				$result[$group][] = $country->get_info();
+				$country_group[] = ['id' => $country->id, 'text' => $country->$name_value, 'iso2' => $country->iso2];
 			}
+			$result[] = ['text' => $group,
+						'children' => $country_group];
 		}
-		echo json_encode($result);
+
+		echo json_encode(['results' => $result]);
 	}
 
 	/**
@@ -157,13 +166,13 @@ class Contact extends Module {
 		session_write_close();
 
 		$this->template = null;
-
 		$languages = \Language::get_all();
 		$result = [];
 		foreach ($languages as $language) {
-			$result[] = $language->get_info();
+			$result[] = ['id' => $language->id,
+						'text'=> $language->name];
 		}
-		echo json_encode($result);
+		echo json_encode(['results' => $result]);
 	}
 
 	/**

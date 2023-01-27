@@ -36,7 +36,7 @@
 		</div>
 		<div class="card-body">
 
-			<div class="row mb-3{% if 'company' in errors|keys %} has-error{% endif %}">
+			<div class="row mb-1 mb-md-3{% if 'company' in errors|keys %} has-error{% endif %}">
 				<label for="company" class="col-form-label col-3 text-end">{% trans "Company" %}</label>
 				<div class="col-5">
 					<input type="text" name="supplier[company]" id="company" class="form-control" value="{{ env.post.supplier.company }}">
@@ -44,27 +44,27 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Street" %}</label>
 				<div class="col-5"><input type="text" name="supplier[street]" class="form-control" value="{{ env.post.supplier.street }}"/></div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Housenumber" %}</label>
 				<div class="col-5"><input type="text" name="supplier[housenumber]" class="form-control" value="{{ env.post.supplier.housenumber }}"/></div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "Zipcode" %}</label>
 				<div class="col-5"><input type="text" name="supplier[zipcode]" class="form-control" value="{{ env.post.supplier.zipcode }}"/></div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<label class="col-form-label col-3 text-end">{% trans "City" %}</label>
 				<div class="col-5"><input type="text" name="supplier[city]" class="form-control" value="{{ env.post.supplier.city }}"/></div>
 			</div>
 
-			<div class="row mb-3 {% if 'country_id' in errors|keys %} has-error{% endif %}">
+			<div class="row mb-1 mb-md-3 {% if 'country_id' in errors|keys %} has-error{% endif %}">
 				<label for="country_id" class="col-form-label col-3 text-end">{% trans "Country" %}</label>
 				<div class="col-5">
 					<select name="supplier[country_id]" class="form-control" onchange="change_country();">
@@ -84,7 +84,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3{% if 'vat' in errors|keys %} has-error{% endif %}">
+			<div class="row mb-1 mb-md-3{% if 'vat' in errors|keys %} has-error{% endif %}">
 				<label for="vat" class="col-form-label col-3 text-end">{% trans "Vat" %}</label>
 				<div class="col-1"><input type="text" class="form-control" id="vat_prefix" readonly value="AT" /></div>
 				<div class="col-4">
@@ -93,7 +93,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
+			<div class="row mb-1 mb-md-3{% if 'accounting_identifier' in errors|keys %} has-error{% endif %}">
 				<label for="accounting_identifier" class="col-form-label col-3 text-end">{% trans "Accounting identifier" %}</label>
 				<div class="col-5">
 					<input type="text" name="supplier[accounting_identifier]" id="vat" class="form-control" value="{{ supplier.accounting_identifier }}">
@@ -101,7 +101,7 @@
 				</div>
 			</div>
 
-            <div class="row mb-3{% if 'iban' in errors|keys %} has-error{% endif %}">
+            <div class="row mb-1 mb-md-3{% if 'iban' in errors|keys %} has-error{% endif %}">
 				<label for="accounting_identifier" class="col-form-label col-3 text-end">{% trans "IBAN" %}</label>
 				<div class="col-5">
 					<input type="text" name="supplier[iban]" id="iban" class="form-control" value="{% if supplier.iban is defined %}{{ supplier.iban }}{% elseif env.post.supplier.iban is defined %}{{ env.post.supplier.iban }}{% endif %}">
@@ -109,7 +109,7 @@
 				</div>
 			</div>
 
-			<div class="row mb-3{% if 'bic' in errors|keys %} has-error{% endif %}">
+			<div class="row mb-1 mb-md-3{% if 'bic' in errors|keys %} has-error{% endif %}">
 				<label for="accounting_identifier" class="col-form-label col-3 text-end">{% trans "BIC" %}</label>
 				<div class="col-5">
 					<input type="text" name="supplier[bic]" id="bic" class="form-control" value="{{ supplier.bic }}">
@@ -117,14 +117,14 @@
 				</div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 			    <label class="col-form-label col-3 text-end">{% trans "Comments" %}</label>
 			    <div class="col-5">
 			        <textarea name="supplier[comment]" class="form-control">{{ env.post.supplier.comment }}</textarea>
 			    </div>
 			</div>
 
-			<div class="row mb-3">
+			<div class="row mb-1 mb-md-3">
 				<div class="col-3 offset-3">
 					<button class="btn btn-primary">
 						{% trans "Save" %}

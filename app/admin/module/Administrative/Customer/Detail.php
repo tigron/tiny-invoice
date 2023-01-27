@@ -39,6 +39,10 @@ class Detail extends Module {
 		$template = Template::get();
 		$customer = \Customer::get_by_id($_GET['id']);
 
+		if(!empty($_POST['customer'])) {
+			$customer->load_array($_POST['customer']);
+		}
+
 		$template->assign('customer', $customer);
 		$template->assign('languages', \Language::get_all());
 		$template->assign('countries', \Country::get_grouped());
@@ -53,6 +57,16 @@ class Detail extends Module {
 		$template = Template::get();
 		$customer = \Customer::get_by_id($_GET['id']);
 		$customer->load_array($_POST['customer']);
+
+		// Use the formatted fields
+		if(isset($_POST['customer']['phone_formatted'])) {
+			$customer->phone = $_POST['customer']['phone_formatted'];
+		}
+		if(isset($_POST['customer']['mobile_formatted'])) {
+			$customer->mobile = $_POST['customer']['mobile_formatted'];
+		}
+
+		$errors = [];
 		$customer->validate($errors);
 
 		if (isset($_POST['ignore_vat'])) {
@@ -65,7 +79,6 @@ class Detail extends Module {
 			return;
 		} else {
 			$customer->save(false);
-
 			Session::set_sticky('message', 'updated');
 			Session::redirect('/administrative/customer/detail?id=' . $customer->id);
 		}

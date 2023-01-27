@@ -31,7 +31,7 @@ class Invoice_Queue_Recurring_Group {
 		$errors = [];
 		foreach ($required_fields as $field) {
 			if (!isset($this->details[$field]) || $this->details[$field] == '') {
-				$errors[$field] = $field;
+				$errors[$field] = 'required';
 			}
 		}
 		if (count($errors) > 0) {

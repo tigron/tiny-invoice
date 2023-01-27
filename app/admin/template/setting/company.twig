@@ -21,42 +21,42 @@
 
 				{{ base.alert('info', "Your company information is added to invoice documents."|trans ~ ' ' ~ "Please fill them in correctly."|trans) }}
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[company]" value="{{ settings.company }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Street" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[street]" value="{{ settings.street }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Housenumber" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[housenumber]" value="{{ settings.housenumber }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Zipcode" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[zipcode]" value="{{ settings.zipcode }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "City" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[city]" value="{{ settings.city }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Country" %}</label>
 					<div class="col-md-9">
 						<select name="setting[country_id]" class="form-control" >
@@ -71,56 +71,56 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Phone" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[phone]" value="{{ settings.phone }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Email" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[email]" value="{{ settings.email }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Website" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[website]" value="{{ settings.website }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "VAT" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[vat]" value="{{ settings.vat }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Bank" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[bank]" value="{{ settings.bank }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Bank IBAN" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[iban]" value="{{ settings.iban }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "BIC" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="setting[bic]" value="{{ settings.bic }}" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="col-9 offset-3">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>

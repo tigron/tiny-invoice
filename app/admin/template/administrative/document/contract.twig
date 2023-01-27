@@ -26,21 +26,21 @@
 		</div>
 		<div class="card-body">
 			<form method="post" action="{{ env.module.get_path() }}" class="form-horizontal">
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
 					<div class="col-9">
 						<input type="text" name="search" class="form-control" value="{{ pager.get_search() }}">
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Tags" %}</label>
 					<div class="col-9">
 						<input type="text" class="form-control" name="tag_ids" id="autocomplete-tag" value="" />
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="col-3 offset-3">
 						<button class="btn btn-primary">
 							{% trans "Search" %}

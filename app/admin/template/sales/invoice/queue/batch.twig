@@ -57,7 +57,7 @@
 		<td>
 			<div class="form-check form-switch">
 				<input class="form-check-input" name="customer_contact[{{ customer_contact.id }}]" onchange="calculate_sum();" type="checkbox" role="switch">
-			</div>		
+			</div>
 		</td>
 		<td>
 			<a href="/administrative/customer?action=edit&id={{ customer_contact.customer_id }}">
@@ -81,14 +81,14 @@
 
 		<div class="card text-bg-light">
 			<div class="card-body">
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-3 col-form-label text-end">{% trans "Total amount" %}</label>
 					<div class="col-9">
 						<input type="text" readonly class="form-control-plaintext" id="total_amount" value="&euro;0">
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-3 col-form-label text-end">{% trans "Expiration date" %}</label>
 					<div class="col-9">
 						<select name="invoice[expiration_date]" class="form-control">
@@ -100,16 +100,16 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-3 col-form-label text-end">{% trans "Send invoice" %}</label>
 					<div class="col-9">
 						<div class="form-check form-switch">
 							<input class="form-check-input" name="send_invoice" type="checkbox" role="switch">
-						</div>		
+						</div>
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<div class="col-9 offset-3">
 						<button type="submit" class="btn btn-primary">
 							{% trans "Create invoices" %}

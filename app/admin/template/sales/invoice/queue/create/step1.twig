@@ -1,9 +1,24 @@
-<ol class="breadcrumb">
-	<li><a href="/">{% trans "Home" %}</a></li>
-	<li><a href="/sales/invoice/queue" title="">{% trans "Invoice queue" %}</a></li>
-	<li>{% trans "Create invoice queue item" %}</li>
-	<li class="active">{% trans "Select customer" %}</li>
-</ol>
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Invoice Queue" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/sales/invoice/queue">
+							{% trans "Invoice queue" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Create invoice queue item" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
 
 {% if errors is defined %}
 <div class="alert alert-danger">
@@ -16,16 +31,16 @@
 		{% trans "Select customer" %}
 	</div>
 	<div class="card-body">
-		<form method="post" action="/sales/invoice/queue?action=create_step1" class="form-horizontal" id="invoice-queue-create-step1">
-			<div class="row mb-3">
-				<label class="col-form-label col-3 text-end">{% trans "Customer" %}</label>
-				<div class="col-6">
-					<input type="text" id="autocomplete_customer" name="customer" class="form-control typeahead" value="{% if customer is defined %}{{ customer.firstname }} {{ customer.lastname }}{% endif %}" placeholder="{% trans "Search customer..." %}">
-					<input type="hidden" id="customer_id" name="customer_id" value="{% if customer is defined %}{{ customer.id }}{% endif %}">
+		<form method="post" action="/sales/invoice/queue?action=create_step1" class="form-horizontal" id="invoice-create-step1">
+			<div class="row mb-1 mb-md-3">
+				<label class="col-2 col-form-label text-end">{% trans "Customer" %}</label>
+				<div class="col-9">
+					<select name="customer_id" class="form-select autocomplete_customer"></select>
 				</div>
 			</div>
-			<div class="row mb-3">
-				<div class="col-3 offset-3">
+
+			<div class="row mb-1 mb-md-3">
+				<div class="col-2 offset-2">
 					<button class="btn btn-primary">
 						{% trans "Next" %}
 					</button>
@@ -34,3 +49,16 @@
 		</form>
 	</div>
 </div>
+
+<script type="text/javascript">
+$('.autocomplete_customer').select2({
+	theme: "bootstrap-5",
+	closeOnSelect: true,
+	minimumResultsForSearch: 0,
+	ajax: {
+		url: '/administrative/customer?action=ajax_search',
+		dataType: 'json',
+    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+	},
+});
+</script>

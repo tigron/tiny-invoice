@@ -30,12 +30,12 @@
 	{% else %}
 		{% embed "@skeleton-package-crud/bootstrap3/content.twig" with {'object_name': 'Extractor'|trans} %}
 			{% block form_edit %}
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
 					<div class="col-9"><input type="text" class="form-control" name="object[name]" value="{{ object.name }}" /></div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Document" %}</label>
 					<div class="col-9">
 						<p class="form-control-static">
@@ -56,7 +56,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row mb-1 mb-md-3">
 					<label class="col-form-label col-3 text-end">{% trans "Fingerprints" %}</label>
 					<div class="col-9">
 						<p class="form-control-static">
@@ -82,14 +82,14 @@
 
 					<div class="col-6">
 						<div class="alert alert-danger hide" id="eval_error"></div>
-						<div class="row mb-3">
+						<div class="row mb-1 mb-md-3">
 							<textarea class="form-control autogrow code" id="eval">{{ object.eval }}</textarea>
 						</div>
-						<div class="row mb-3">
+						<div class="row mb-1 mb-md-3">
 							<button type="button" class="btn btn-primary" onclick="run_eval();">{% trans "Run" %}</button>
 						</div>
 
-						<div class="row mb-3 hide" id="parsed_content">
+						<div class="row mb-1 mb-md-3 hide" id="parsed_content">
 							<div class="card">
 								<div class="card-header">{% trans "Data" %}</div>
 								<div class="card-body" id="data"></div>

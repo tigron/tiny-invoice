@@ -27,42 +27,38 @@
 		</div>
 	</div>
 
-	{% if env.sticky_session.message == 'updated' %}
-		{{ base.alert('success', 'Role permissions successfully updated'|trans) }}
-	{% endif %}
-
-
-	<form class="form-horizontal" method="post" action="/administrative/role?action=edit&id={{ role.id }}">
-
-		<div class="card mb-3">
+	<form class="form form-horizontal form-condensed mb-3" method="post" action="/administrative/role?action=edit&id={{ role.id }}">
+		<div class="card">
 			<div class="card-header">{% trans "Role details" %}</div>
 			<div class="card-body">
-				<div class="row mb-3">
-					<label class="col-form-label col-3 text-end">{% trans "Name" %}</label>
+				{% if env.sticky_session.message == 'updated' %}
+					{{ base.alert('success', 'Role permissions successfully updated'|trans) }}
+				{% endif %}
+				<div class="row mb-1 mb-md-3">
+					<label class="col-form-label col-12 col-md-3 text-md-end">{% trans "Name" %}</label>
 					<div class="col-9"><input type="text" name="role[name]" class="form-control" value="{{ role.name }}" /></div>
 				</div>
 
-				<div class="row mb-3">
-					<div class="offset-3 col-9">
+				<div class="row mb-1 mb-md-3">
+					<div class="offset-md-3 mt-2 mt-md-0">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</form>
 
-	{% if env.sticky_session.message == 'updated_permissions' %}
-		{{ base.alert('success', 'Role permissions successfully updated'|trans) }}
-	{% endif %}
 
 	<form class="form-horizontal" method="post" action="/administrative/role?action=edit_permissions&id={{ role.id }}">
 		<div class="card">
 			<div class="card-header">{% trans "Permissions" %}</div>
 			<div class="card-body">
-				<div class="row mb-3">
-					<label class="col-form-label col-3 text-end">{% trans "Select permissions" %}</label>
-					<div class="col-9">
+				{% if env.sticky_session.message == 'updated_permissions' %}
+					{{ base.alert('success', 'Role permissions successfully updated'|trans) }}
+				{% endif %}
+				<div class="row mb-1 mb-md-3">
+					<label class="col-form-label col-12 col-md-3 text-md-end">{% trans "Select permissions" %}</label>
+					<div class="col-md-9 col-12">
 						<select name="permission_ids[]" class="form-control select2" multiple="multiple">
 							{% for permission in permissions %}
 								<option value="{{ permission.id }}" {% if role.has_permission(permission) %}selected{% endif %}>
@@ -98,8 +94,8 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
-					<div class="offset-3 col-9">
+				<div class="row mb-1 mb-md-3">
+					<div class="offset-md-3 mt-2 mt-md-0">
 						<button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
 					</div>
 				</div>
@@ -114,8 +110,8 @@
 	});
 	</script>
 
-
 {% else %}
+
 	<div class="row">
 		<div class="col">
 			<h4>{% trans "Roles" %}</h4>
@@ -128,15 +124,15 @@
 			{% trans "Filter" %}
 		</div>
 		<div class="card-body">
-			<div class="row mb-3">
-				<label class="col-form-label col-3 text-end">{% trans "Search" %}</label>
+			<div class="row mb-2 mb-md-3">
+				<label class="col-form-label col-12 col-md-2 text-md-end">{% trans "Search" %}</label>
 				<div class="col-9">
 					<input type="text" class="form-control" name="search" value="{{ pager.get_search() }}"/>
 				</div>
 			</div>
 
-			<div class="row mb-3">
-				<div class="controls offset-3 col-9">
+			<div class="row mb-md-1 mb-md-2">
+				<div class="offset-md-2">
 					<button class="btn btn-primary" type="submit">
 						{% trans "Search" %}
 					</button>
@@ -148,7 +144,6 @@
 
 	{% include "administrative/role/modal.new.twig" with {"id": "new_role"} %}
 
-
 	<div class="card">
 		<div class="card-header">
 			<div class="pull-right">
@@ -157,13 +152,12 @@
 					{% trans "Add role" %}
 				</a>
 			</div>
-
 			{{ base.pager_count(pager.item_count) }}
 		</div>
 		<div class="card-body">
 			{% for role in pager.items %}
 				{% if loop.first %}
-				<table class="table table-striped table-hover table-condensed">
+				<table class="table table-striped table-hover table-condensed rtab">
 					<thead>
 						<tr>
 							<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>

@@ -112,7 +112,7 @@ class Invoice extends Module {
 		if (!isset($_SESSION['invoice'])) {
 			Session::redirect('/sales/invoice?action=create_step1');
 		}
-		print_r($_POST);
+
 		$template = Template::get();
 		if (isset($_POST['customer_contact_id'])) {
 			if ($_POST['customer_contact_id'] == '') {
