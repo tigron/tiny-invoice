@@ -11,8 +11,6 @@
 	</div>
 
 	<form class="form form-horizontal form-condensed" id="invoice-contact-form" method="post">
-		<input type="hidden" name="customer_contact[customer_id]" id="customer_id" value="">
-
 		<div class="row offset-md-2">
 			<div class="col-md-10">
 				<div class="form-floating">
@@ -190,7 +188,6 @@
 				load_customer_contact_data(invoker.data('customer-contact-id'));
 			}
 
-			// //   <option value="3620194" selected="selected">select2/select2</option> // Need to pre add like that
 			$('#language_id').select2({
 				theme: 'bootstrap-5',
 				closeOnSelect: true,
@@ -214,7 +211,6 @@
 			select2_custom();
 
 			 $('select[name="customer_contact[country_id]"]').change(function (e) {
-				console.log('toedels');
 					e.preventDefault();
 					change_country();
 					clear_number_inputs();
@@ -223,23 +219,37 @@
 
 		function load_customer_data(id) {
 			$.get('/administrative/customer?action=load_customer&id=' + id, function(data) {
+				$('#invoice-contact-form')[0].reset();
 				$.each(data, function(key, value) {
 					if ($('#invoice-contact-form #' + key).length == 1) {
 						$('#invoice-contact-form #' + key).val(value);
 					}
 				});
+
+				current_customer_contact_id = 0;
+				if (data.country_info !== undefined) {
+					$('#vat_prefix').text(data.country_info.iso2);
+				}
 			}, 'json');
 		}
 
 		function load_customer_contact_data(id) {
 			$.get('/administrative/customer/contact?action=load_customer_contact&id=' + id, function(data) {
+				$('#invoice-contact-form')[0].reset()
 				$.each(data, function(key, value) {
+					// Set the text values
+					if(key === 'language_id') {
+						var text = data.language_info.name;
+					} else if ('country_id') {
+						var text = data.country_info.{{ 'text_' ~ env.language.name_short ~ '_name' }};
+					}
 					if($('#invoice-contact-form #' + key).length == 1) {
 						// If we have a select we need to add the active option (for select2)
 						if($('#invoice-contact-form #' + key).is('select')) {
 							selected_option = $("<option>", {
 												'value': value,
-												'selected': 'selected'
+												'selected': 'selected',
+												'text' : text
 											});
 							$('#invoice-contact-form #' + key).append(selected_option);
 						} else {
@@ -247,18 +257,17 @@
 						}
 					}
 				});
-
+				if (data.country_info !== undefined) {
+					$('#vat_prefix').text(data.country_info.iso2);
+				}
 				current_customer_contact_id = id;
 			}, 'json');
-
-			// change_country();
 		}
 
 		function validate_customer_contact() {
 			data = $('#invoice-contact-form').serialize();
-
 			$('.row mb-1 mb-md-3').removeClass('has-error');
-			$.post('/administrative/customer/contact?action=manage&id=' + current_customer_contact_id, data, function(data) {
+			$.post('/administrative/customer/contact?action=manage&id=' + current_customer_contact_id + '&customer_id={{env.get.id}}', data, function(data) {
 				if ("id" in data) {
 					window.location = '{{ redirect|raw }}';
 				} else {
@@ -275,26 +284,15 @@
 		}
 
 		function change_country() {
-				data=$("#country_id").select2('data')[0];
-				console.log(data.iso2);//displays hello world
-				iso2 = data.iso2;
-				$("[data-country-code]").each(function (index, element) {
-					$(element).attr("data-country-code", iso2);
-				});
+			data = $("#country_id").select2('data')[0];
+			iso2 = data.iso2;
+			$("[data-country-code]").each(function (index, element) {
+				$(element).attr("data-country-code", iso2);
+			});
 
 			$('#vat_prefix').text(iso2);
 		}
 	</script>
-
-
-{#
-			function change_country() {
-				iso2 = $('select[name="customer[country_id]"] option:selected').attr('data-iso2');
-				$("[data-country-code]").each(function (index, element) {
-				$(element).attr("data-country-code", iso2);
-			});
-
-			$('#vat_prefix').text(iso2); #}
 {% endblock body %}
 
 {% block footer %}

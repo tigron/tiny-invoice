@@ -54,7 +54,9 @@ class Contact extends Module {
 			$customer_contact = new \Customer_Contact();
 		}
 
+		$errors = [];
 		$customer_contact->load_array($_POST['customer_contact']);
+		$customer_contact->customer_id = \Customer::get_by_id($_GET['customer_id'])->id;
 		if ($customer_contact->validate($errors) === false) {
 			echo json_encode($errors);
 		} else {
@@ -118,17 +120,9 @@ class Contact extends Module {
 	 */
 	public function display_load_customer_contact() {
 		session_write_close();
-
 		$this->template = null;
 
 		$customer_contact = \Customer_Contact::get_by_id($_GET['id']);
-
-		// $results = $customer_contact->get_info()
-
-		// We need to add some text values for the select2 data.
-
-
-
 		echo json_encode($customer_contact->get_info());
 	}
 

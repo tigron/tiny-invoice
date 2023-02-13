@@ -38,7 +38,7 @@
 
 		<div class="card">
 			<div class="card-header">
-				<ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs">
+				<ul class="nav nav-pills flex-column flex-sm-row" data-bs-tabs="tabs">
 					<li class="nav-item">
 						<a href="/administrative/customer/detail?id={{ customer.id }}" class="nav-link {% if env.module.get_name() == 'administrative_customer_detail' %}active{% endif %}">
 							{% trans "Details" %}

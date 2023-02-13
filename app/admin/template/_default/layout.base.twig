@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/codemirror/lib/codemirror.css">
 	<link rel="stylesheet" href="/style.css">
+	{# <link rel="stylesheet" href="/sidebar.css"> #}
 
 	<script type="text/javascript" src="/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/feather-icons/dist/feather.min.js"></script>
@@ -46,22 +47,18 @@
 	{% endapply %}
 </head>
 <body>
-
-
-	<div class="container-fluid">
-		<div class="row">
-			{% include '_default/sidebar.twig' %}
-			<main class="col">
+	<div class="row">
+		{% include '_default/sidebar.twig' %}
+		<main class="col offset-md-3 offset-xl-2">
 				<div class="container-fluid pt-3">
-				{% block content %}{% endblock content %}
+					{% block content %}{% endblock content %}
 				</div>
-			</main>
-		</div>
+		</main>
 	</div>
-
-	{% apply spaceless %}
-		{% block javascript %}{% endblock %}
-	{% endapply %}
-	<script type="text/javascript" src="/base.js"></script>
 </body>
-</html>
+
+
+{% apply spaceless %}
+{% block javascript %}{% endblock %}
+{% endapply %}</div><script type="text/javascript" src="/base.js"></script></body></html>
+

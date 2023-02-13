@@ -1,5 +1,5 @@
-<div class="d-flex flex-column bg-dark" style="width: 280px;" id="sidebar">
-
+{# <div class="d-flex flex-column bg-dark flex-shrink-0 p-4 text-white d-block col-6 col-md-3 col-xl-2" id="sidebar"> #}
+<div class="d-flex flex-column bg-dark flex-shrink-0 p-4 text-white d-none d-md-block col-md-3 col-xl-2" id="sidebar">
 	<a href="/" class="d-flex w-100 mb-3 mt-3 justify-content-center">
 		<img src="/logo.svg" width="180px">
 	</a>
@@ -50,7 +50,6 @@
 				</ul>
 			</div>
 		</li>
-
 
 		<li class="nav-item">
 			<a href="#menu_sales" data-bs-toggle="collapse" class="nav-link">
@@ -192,6 +191,14 @@
 			</li>
 		{% endif %}
 	</ul>
-
 </div>
 
+<div id="top-nav" class="bg-white navbar navbar-expand navbar-light navbar-bg">
+	{# <div class="offset-6 offset-md-3 offset-xl-2" id="hamburger-offset"> #}
+
+	<div class="offset-md-3 offset-xl-2" id="hamburger-offset">
+		<a type="button" class="m-0 p-0 btn" id="hamburger">
+			<i style="width: 40px; height: 40px;" data-feather="menu"></i>
+		</a>
+	</div>
+</div>
