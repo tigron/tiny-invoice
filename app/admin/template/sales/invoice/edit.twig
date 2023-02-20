@@ -32,7 +32,7 @@
 {% endif %}
 
 <div class="row">
-	<div class="col-md-4" id="invoice-customer">
+	<div class="col-12 col-sm-6 col-md-4" id="invoice-customer">
 		<address>
 			<div class="text-muted">{% trans "Customer" %}</div>
 			<strong>{{ invoice.customer.get_display_name() }}</strong><br>
@@ -43,7 +43,7 @@
 		</address>
 	</div>
 
-	<div class="col-md-4" id="invoice-contact">
+	<div class="col-12 col-sm-6 col-md-4" id="invoice-contact">
 		<address>
 			<div class="text-muted">{% trans "Invoice to" %}</div>
 			<strong>{{ invoice.customer_contact.get_display_name() }}</strong><br>
@@ -55,7 +55,7 @@
 		</address>
 	</div>
 
-	<div class="col-md-4">
+	<div class="col-12 col-md-4">
 		<strong>{% trans "Invoice number" %}: </strong>{{ invoice.number }}<br>
 		<strong>{% trans "Paid" %}: </strong>
 			{% if invoice.paid %}
@@ -73,63 +73,68 @@
 
 <hr>
 
-<table class="table table-striped table-hover table-condensed">
-	<thead>
-		<tr>
-			<th>{% trans "Product" %}</th>
-			<th width="50%">{% trans "Description" %}</th>
-			<th width="95">{% trans "VAT" %}</th>
-			<th width="95">{% trans "Qty" %}</th>
-			<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Item ex. VAT" %}</th>
-			<th class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Item inc. VAT" %}</th>
-			<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Total ex. VAT" %}</th>
-			<th class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Total inc. VAT" %}</th>
-		</tr>
-	</thead>
-	<tbody>
-	{% for invoice_item in invoice.get_invoice_items() %}
+<div class="table-responsive">
+	<table class="table table-striped table-hover table-condensed">
+		<thead>
+			<tr>
+				<th>{% trans "Product" %}</th>
+				<th width="50%">{% trans "Description" %}</th>
+				<th width="95">{% trans "VAT" %}</th>
+				<th width="95">{% trans "Qty" %}</th>
+				<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Item ex. VAT" %}</th>
+				<th class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Item inc. VAT" %}</th>
+				<th class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right" width="95">{% trans "Total ex. VAT" %}</th>
+				<th class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right" width="95">{% trans "Total inc. VAT" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for invoice_item in invoice.get_invoice_items() %}
 
+			<tr>
+				<td>{% if invoice_item.product_type_id is defined %}{{ invoice_item.product_type.name }}{% else %}<i>{% trans "Unknown" %}</i>{% endif %}</td>
+				<td>{{ invoice_item.description|nl2br }}</td>
+				<td>{{ invoice_item.vat_rate_value|number_format }}%</td>
+				<td>{{ invoice_item.qty|number_format }}</td>
+				<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ (invoice_item.qty != 0 ? invoice_item.get_price_excl()/invoice_item.qty : invoice_item.price_excl)|number_format }}</td>
+				<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ (invoice_item.qty != 0 ? invoice_item.get_price_incl()/invoice_item.qty : invoice_item.price_incl)|number_format }}</td>
+				<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
+				<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ invoice_item.get_price_incl()|number_format }}</td>
+			</tr>
+		{% endfor %}
 		<tr>
-			<td>{% if invoice_item.product_type_id is defined %}{{ invoice_item.product_type.name }}{% else %}<i>{% trans "Unknown" %}</i>{% endif %}</td>
-			<td>{{ invoice_item.description|nl2br }}</td>
-			<td>{{ invoice_item.vat_rate_value|number_format }}%</td>
-			<td>{{ invoice_item.qty|number_format }}</td>
-			<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ (invoice_item.qty != 0 ? invoice_item.get_price_excl()/invoice_item.qty : invoice_item.price_excl)|number_format }}</td>
-			<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ (invoice_item.qty != 0 ? invoice_item.get_price_incl()/invoice_item.qty : invoice_item.price_incl)|number_format }}</td>
-			<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right">&euro;{{ invoice_item.get_price_excl()|number_format }}</td>
-			<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right">&euro;{{ invoice_item.get_price_incl()|number_format }}</td>
+			<td colspan="6"><strong>{% trans "Total" %}</strong></td>
+			<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_excl()|number_format }}</strong></td>
+			<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_incl()|number_format }}</strong></td>
 		</tr>
-	{% endfor %}
-	<tr>
-		<td colspan="6"><strong>{% trans "Total" %}</strong></td>
-		<td class="{% if invoice.vat_mode == 'line' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_excl()|number_format }}</strong></td>
-		<td class="{% if invoice.vat_mode == 'group' %}text-muted{% endif %} text-right"><strong>&euro;{{ invoice.get_price_incl()|number_format }}</strong></td>
-	</tr>
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
 
-<table class="table table-striped table-hover table-condensed">
-	<thead>
-		<th>{% trans "VAT Rate" %}</th>
-		<th class="text-right" width="95">{% trans "Base" %}</th>
-		<th class="text-right" width="95">{% trans "VAT" %}</th>
-	</thead>
-	<tbody>
-	{% set vat_total = 0 %}
-	{% for invoice_vat in invoice.get_invoice_vat() %}
-		{% set vat_total = vat_total + invoice_vat.vat %}
+
+<div class="table-responsive">
+	<table class="table table-striped table-hover table-condensed">
+		<thead>
+			<th>{% trans "VAT Rate" %}</th>
+			<th class="text-right" width="95">{% trans "Base" %}</th>
+			<th class="text-right" width="95">{% trans "VAT" %}</th>
+		</thead>
+		<tbody>
+		{% set vat_total = 0 %}
+		{% for invoice_vat in invoice.get_invoice_vat() %}
+			{% set vat_total = vat_total + invoice_vat.vat %}
+			<tr>
+				<td>{{ invoice_vat.vat_rate.name }} ({{ invoice_vat.rate }}%)</td>
+				<td class="text-right">&euro;{{ invoice_vat.base }}</td>
+				<td class="text-right">&euro;{{ invoice_vat.vat }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
 		<tr>
-			<td>{{ invoice_vat.vat_rate.name }} ({{ invoice_vat.rate }}%)</td>
-			<td class="text-right">&euro;{{ invoice_vat.base }}</td>
-			<td class="text-right">&euro;{{ invoice_vat.vat }}</td>
+			<td colspan="2"><strong>{% trans "Total" %}</strong></td>
+			<td class="text-right"><strong>&euro;{{ vat_total|number_format }}</strong></td>
 		</tr>
-	{% endfor %}
-	</tbody>
-	<tr>
-		<td colspan="2"><strong>{% trans "Total" %}</strong></td>
-		<td class="text-right"><strong>&euro;{{ vat_total|number_format }}</strong></td>
-	</tr>
-</table>
+	</table>
+</div>
 
 <hr>
 
@@ -153,6 +158,7 @@
 			</div>
 			{% for transfer in invoice.get_transfers() %}
 				{% if loop.first %}
+					<div class="table-responsive">
 					<table class="table table-hover table-alternate">
 						<thead>
 							<tr>
@@ -199,6 +205,7 @@
 						</tr>
 					</thead>
 					</table>
+					</div>
 				{% endif %}
 			{% else %}
 				<p>{% trans "No payments added yet" %}</p>

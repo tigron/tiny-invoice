@@ -19,7 +19,7 @@
 				<h4>{% trans "Customers" %}</h4>
 			</div>
 			<div class="col">
-				<div class="float-end">
+				<div class="float-md-end">
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item">
@@ -38,7 +38,7 @@
 
 		<div class="card">
 			<div class="card-header">
-				<ul class="nav nav-pills flex-column flex-sm-row" data-bs-tabs="tabs">
+				<ul class="nav nav-pills flex-column flex-sm-row nav-fill">
 					<li class="nav-item">
 						<a href="/administrative/customer/detail?id={{ customer.id }}" class="nav-link {% if env.module.get_name() == 'administrative_customer_detail' %}active{% endif %}">
 							{% trans "Details" %}

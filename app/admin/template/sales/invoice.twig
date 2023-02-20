@@ -112,10 +112,10 @@
 				</div>
 				{{ base.pager_count(pager.item_count) }}  - &nbsp; {% trans "VAT excl." %} &euro; {{ pager.get_sum('price_excl')|number_format(2, ',', '.') }} | {% trans "VAT incl." %} &euro; {{ pager.get_sum('price_incl')|number_format(2, ',', '.')  }} &nbsp;
 			</div>
-			<div class="card-body">
+			<div class="card-body table-responsive">
 			{% for invoice in pager.items %}
 			{% if loop.first %}
-				<table class="table table-hover table-striped table-responsive" id="invoice-list">
+				<table class="table table-hover table-striped" id="invoice-list">
 					<thead>
 						<tr>
 							<th width="10%">{{ pager.create_header('Number'|trans, 'number')|raw }}</th>

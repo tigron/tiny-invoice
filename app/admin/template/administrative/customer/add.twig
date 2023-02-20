@@ -6,7 +6,7 @@
 		<h4>{% trans "Customers" %}</h4>
 	</div>
 	<div class="col">
-		<div class="float-end">
+		<div class="float-md-end">
 			<nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item">
@@ -166,7 +166,7 @@
 							{% endfor %}
 						</select>
 						<label for="language_id" class="col-form-label">{% trans "Language" %}</label>
-						{{ form.invalid_input('country_id', errors) }}
+						{{ form.invalid_input('language_id', errors) }}
 					</div>
 				</div>
 			</div>

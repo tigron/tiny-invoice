@@ -1,22 +1,22 @@
 {% extends "administrative/customer.twig" %}
 
 {% block tab %}
-
-
 	{% for document in documents %}
 		{% if loop.first %}
-			<table class="table table-hover table-striped table-condensed table-responsive">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>{% trans "Date" %}</th>
-					<th>{% trans "Type" %}
-					<th>{% trans "Title" %}</th>
-					<th>{% trans "Tags" %}</th>
-					<th>&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody>
+		<div class="card">
+			<div class="card-body table-responsive">
+				<table class="table table-hover table-striped table-condensed table-responsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>{% trans "Date" %}</th>
+							<th>{% trans "Type" %}</th>
+							<th>{% trans "Title" %}</th>
+							<th>{% trans "Tags" %}</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
 		{% endif %}
 
 		<tr>
@@ -47,10 +47,11 @@
 		</tr>
 
 		{% if loop.last %}
-			</tbody>
-			</table>
-
-			{{ pager.links|raw }}
+				</tbody>
+				</table>
+				{{ pager.links|raw }}
+			</div>
+		</div>
 		{% endif %}
 
 	{% else %}

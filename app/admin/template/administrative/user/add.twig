@@ -1,20 +1,38 @@
-{% extends "administrative/user.twig" %}
-
 {% import '_default/macro.base.twig' as base %}
-{% import '_default/form.base.twig' as form %}
 
-{% block tab %}
-	<form class="form form-horizontal form-condensed" method="post" action="/administrative/user/detail?id={{ user.id }}">
+<div class="row">
+	<div class="col">
+		<h4>{% trans "Users" %}</h4>
+	</div>
+	<div class="col">
+		<div class="float-md-end">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item">
+						<a href="/administrative/user">
+							{% trans "Users" %}
+						</a>
+					</li>
+					<li class="breadcrumb-item active">
+						{% trans "Add user" %}
+					</li>
+				</ol>
+			</nav>
+		</div>
+	</div>
+</div>
+
+
+<form class="form form-horizontal form-condensed" method="post" action="/administrative/user?action=add">
+	<div class="card">
 		<div class="card-body">
-          	{% if errors is defined %}
-				{{ base.alert('danger', "The form contains mistakes. Please correct them."|trans) }}
-			{% elseif env.sticky_session.message is defined %}
-				{{ base.display_flash_message(env.sticky_session.message, 'user') }}
-			{% endif %}
+            {% if errors is defined %}
+                {{ base.alert('danger', "The form contains mistakes. Please correct them."|trans) }}
+            {% endif %}
 			<div class="row offset-md-2">
 				<div class="col-md-10">
 					<div class="form-floating">
-						<input type="text" name="user[username]" id="username" class="form-control {% if 'username' in errors|keys %} is-invalid {% endif %}" value="{{ user.username }}" placeholder="{% trans "Username" %}">
+						<input type="text" name="user[username]" id="username" class="form-control {% if 'username' in errors|keys %} is-invalid {% endif %}" value="{{ env.post.user.username }}" placeholder="{% trans "Username" %}">
 						<label class="form-label col-2" for="username">{% trans "Username" %}</label>
 						{{ form.invalid_input('username', errors) }}
 					</div>
@@ -24,7 +42,7 @@
 			<div class="row offset-md-2">
 				<div class="col-md-6 mt-2">
 					<div class="form-floating">
-						<input type="text" name="user[firstname]" id="firstname" class="form-control {% if 'firstname' in errors|keys %}is-invalid{% endif %}" value="{{ user.firstname }}" placeholder="{% trans "Firstname" %}" %>
+						<input type="text" name="user[firstname]" id="firstname" class="form-control {% if 'firstname' in errors|keys %}is-invalid{% endif %}" value="{{ env.post.user.firstname }}" placeholder="{% trans "Firstname" %}" %>
 						<label for="firstname" class="col-form-label">{% trans "Firstname" %}</label>
 						{{ form.invalid_input('firstname', errors) }}
 					</div>
@@ -32,7 +50,7 @@
 
 				<div class="col-md-4 mt-2">
 					<div class="form-floating">
-						<input type="text" name="user[lastname]" id="firstname" class="form-control {% if 'lastname' in errors|keys %}is-invalid{% endif %}" value="{{ user.lastname }}" placeholder="{% trans "Lastname" %}">
+						<input type="text" name="user[lastname]" id="firstname" class="form-control {% if 'lastname' in errors|keys %}is-invalid{% endif %}" value="{{ env.post.user.lastname }}" placeholder="{% trans "Lastname" %}">
 						<label for="lastname" class="col-form-label">{% trans "Lastname" %}</label>
 						{{ form.invalid_input('lastname', errors) }}
 					</div>
@@ -42,7 +60,7 @@
 			<div class="row offset-md-2 mt-2">
 				<div class="col-md-10">
 					<div class="form-floating">
-						<input type="text" name="user[email]" id="email" class="form-control {% if 'email' in errors|keys %}is-invalid{% endif %}" value="{{ user.email }}" placeholder="{% trans "Email" %}">
+						<input type="text" name="user[email]" id="email" class="form-control {% if 'email' in errors|keys %}is-invalid{% endif %}" value="{{ env.post.user.email }}" placeholder="{% trans "Email" %}">
 						<label class="col-form-label col-2" for="email">{% trans "Email" %}</label>
 						{{ form.invalid_input('email', errors) }}
 					</div>
@@ -90,7 +108,7 @@
 			<div class="row offset-md-2 mt-2">
 				<div class="col-md-10">
 					<div class="form-check form-switch">
-						<input class="form-check-input" type="checkbox" id="role_id" name="user[receive_expired_invoice_overview]" {% if user.receive_expired_invoice_overview %} checked {% endif %}>
+						<input class="form-check-input" type="checkbox" id="role_id" name="user[receive_expired_invoice_overview]" {% if env.post.user.receive_expired_invoice_overview %} checked {% endif %}>
 						<label for="role_id" class="form-check-label">{% trans "Receive expired invoice overview" %}</label>
 					</div>
 				</div>
@@ -106,8 +124,5 @@
 
 		</div>
 	</div>
-	</form>
+</form>
 
-
-
-{% endblock tab %}

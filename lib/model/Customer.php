@@ -39,7 +39,7 @@ class Customer {
 
 			// Validate the phone_numbers
 			$phone_util = \libphonenumber\PhoneNumberUtil::getInstance();
-			if (isset($this->details['phone'])) { // Can be validated on this field when using the lib validator
+			if (!empty($this->details['phone']) ) { // Can be validated on this field when using the lib validator
 				try {
 					$number_object = $phone_util->parse($this->details['phone'], $country->iso2);
 					$is_valid = $phone_util->isValidNumber($number_object);
@@ -51,7 +51,7 @@ class Customer {
 				}
 			}
 
-			if (isset($this->details['mobile'])) { // Can be validated on this field when using the lib validator
+			if (!empty($this->details['mobile'])) { // Can be validated on this field when using the lib validator
 				try {
 					$number_object = $phone_util->parse($this->details['mobile'], $country->iso2);
 					$is_valid = $phone_util->isValidNumber($number_object);

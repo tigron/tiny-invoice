@@ -1,31 +1,34 @@
-{% macro display_flash_message(message, object_string) %}
-	{% if message == 'error_delete' %}
-	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		<strong>{% trans "Error" %}</strong> {{ "Could not delete selected %object_string%"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
-  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+{% macro display_flash_message(message, object_string, offset = "offset-md-2", col = "col-md-10") %}
+<div class="row {{ offset }}">
+	<div class="{{ col }}">
+		{% if message == 'error_delete' %}
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<strong>{% trans "Error" %}</strong> {{ "Could not delete selected %object_string%"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{% elseif message == 'created' %}
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			{{ "%object_string% successfully created."|trans|replace({'%object_string%': object_string|capitalize})|raw }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{% elseif message == 'updated' %}
+		<div class="alert alert-success alert-dismissible" role="alert">
+			{{ "%object_string% successfully updated"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{% elseif message == 'deleted' %}
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			{{ "%object_string% successfully removed"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{% endif %}
 	</div>
-	{% elseif message == 'created' %}
-	<div class="alert alert-success alert-dismissible fade show" role="alert">
-		{{ "%object_string% successfully created."|trans|replace({'%object_string%': object_string|capitalize})|raw }}
-  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	</div>
-	{% elseif message == 'updated' %}
-	<div class="alert alert-success alert-dismissible" role="alert">
-		{{ "%object_string% successfully updated"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
-  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	</div>
-	{% elseif message == 'deleted' %}
-	<div class="alert alert-success alert-dismissible fade show" role="alert">
-		{{ "%object_string% successfully removed"|trans|replace({'%object_string%': object_string|capitalize})|raw }}
-  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	</div>
-	{% endif %}
-
+</div>
 {% endmacro display_flash_message %}
 
-{% macro alert(type, message, hide = false) %}
-<div class="row offset-md-2">
-	<div class="col-md-10">
+{% macro alert(type, message, hide = false, offset = "offset-md-2", col = "col-md-10" ) %}
+<div class="row {{ offset }}">
+	<div class="{{ col }}">
 		<div class="alert alert-{{ type }} {% if hide %}d-none{% endif %} d-flex align-items-center" role="alert">
 			<div>
 				{% if type == "primary" or type == "secondary" or type == "info" %}

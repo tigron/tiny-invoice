@@ -30,9 +30,7 @@
 				</div>
 			</div>
 		{% elseif errors is defined %}
-			<div class="alert alert-danger">
-				{% trans "The form contains mistakes. Please correct them." %}
-			</div>
+			{{ base.alert('danger', 'The form contains mistakes. Please correct them.'|trans) }}
 		{% elseif env.sticky_session.message is defined %}
 			{{ base.alert('success', 'Customer successfully updated'|trans) }}
 		{% endif %}

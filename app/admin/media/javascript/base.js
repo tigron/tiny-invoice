@@ -160,11 +160,18 @@ function init_number_validator() {
 	var timeoutId = 0;
 	$('.number-validator').on('input', function () {
 		var input_field = $(this);
-		// We do not want to execute this on every keypress
-		clearTimeout(timeoutId);
-		timeoutId = setTimeout(function () {
-			validate_number(input_field);
-		}, 500);
+		if (input_field.val().length === 0) {
+			$(input_field).val("");
+			$(input_field).removeClass("is-invalid");
+			$(input_field).removeClass("is-valid");
+			$(input_field).next('input').remove();
+		} else {
+			// We do not want to execute this on every keypress
+			clearTimeout(timeoutId);
+			timeoutId = setTimeout(function () {
+				validate_number(input_field);
+			}, 500);
+		}
 	});
 }
 

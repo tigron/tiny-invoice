@@ -6,9 +6,10 @@
 	{% if expired_invoices|length > 0 %}
 		<div class="alert alert-warning">
 			<p>{% trans "There are expired invoices for this customer" %}. {% trans "To download the expiration reminder, click on the invoice contact." %}</p>
-			<dl class="">
+			<hr>
+			<dl>
 				{% for invoice_contact in customer.get_customer_contacts() %}
-					<div class="offset-1">
+					<div>
 						<strong>
 							<a href="/administrative/customer/contact?id={{ invoice_contact.id }}&action=invoice_reminder" class="alert-link">
 								{{ invoice_contact.get_display_name() }} ({{ invoice_contact.get_identifier() }})
@@ -34,7 +35,7 @@
 			<div class="card-header">
 				{{ base.pager_count(pager.item_count) }}
 			</div>
-			<div class="card-body">
+			<div class="card-body table-responsive">
 				<table class="table table-striped table-hover table-condensed">
 					<thead>
 						<tr>

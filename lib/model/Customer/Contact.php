@@ -9,7 +9,9 @@ use \Skeleton\Database\Database;
 
 class Customer_Contact {
 	use \Skeleton\Object\Model;
-	use \Skeleton\Object\Get;
+	use \Skeleton\Object\Get{
+		get_info as trait_get_info;
+	}
 	use \Skeleton\Object\Uuid;
 	use \Skeleton\Object\Save {
 		save as trait_save;
@@ -69,6 +71,21 @@ class Customer_Contact {
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * Get info
+	 *
+	 * @return array
+	 */
+	public function get_info(): array {
+		$info = $this->trait_get_info();
+
+		// Some extra stuff that is usually needed for select2
+		$info['country_info'] = $this->country->get_info();
+		$info['language_info'] = $this->language->get_info();
+
+		return $info;
 	}
 
 	/**
