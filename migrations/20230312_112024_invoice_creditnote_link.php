@@ -15,13 +15,11 @@ class Migration_20230312_112024_Invoice_creditnote_link extends \Skeleton\Databa
 	 */
 	public function up() {
 		$db = Database::get();
-		/*
 		$db->query("
 			ALTER TABLE `creditnote`
 			ADD `invoice_id` int(11) NULL AFTER `customer_id`,
 			ADD FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`id`);
 		", []);
-		*/
 
 		$ids = $db->get_column("
 			SELECT id FROM `log` WHERE `content` LIKE '%Creditnote % created for invoice%'
