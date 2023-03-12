@@ -557,6 +557,7 @@
 						<label class="col-xs-3 control-label">{% trans "Expiration date" %}</label>
 						<div class="col-xs-9">
 							<select name="invoice[expiration_date]" class="form-control">
+								<option value="+0 days">{% trans "Immediate" %}</option>
 								<option value="+14 days">2 {% trans "weeks" %}</option>
 								<option value="+1 month" selected>1 {% trans "month" %}</option>
 								<option value="+60 days">60 {% trans "days" %}</option>
