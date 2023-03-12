@@ -153,6 +153,7 @@ class Creditnote extends Module {
 				$creditnote->customer_contact_id = $invoice->customer_contact_id;
 				$creditnote->vat_mode = $invoice->vat_mode;
 				$creditnote->generate_number();
+				$creditnote->invoice_id = $invoice->id;
 				$creditnote->save();
 
 				foreach ($creditnote_items as $creditnote_item) {
