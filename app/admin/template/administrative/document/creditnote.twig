@@ -1,5 +1,4 @@
 {% extends "/administrative/document.twig" %}
-
 {% import '_default/macro.base.twig' as base %}
 
 {% block pager %}
@@ -68,10 +67,16 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
+			<form action="/administrative/document/creditnote?action=export" method="post" class="form-inline">
+			<input type="hidden" name="hash" value="{{ pager.create_options_hash() }}" />
+
 			<div class="pull-right">
 				<a href="/administrative/document?action=add" title="">
 					<span class="glyphicon glyphicon-plus-sign"></span>
 					{% trans "Add document" %}
+				</a> -
+				<a href="#" onclick="$(this).closest('form').submit();">
+					<i class="fa fa-file"></i> {% trans "Export creditnotes" %}
 				</a>
 			</div>
 
