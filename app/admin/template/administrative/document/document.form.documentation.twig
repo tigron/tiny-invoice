@@ -1,3 +1,5 @@
+{% import '_default/form.base.twig' as form %}
+
 	<hr>
 	<div class="form-group">
 		<label class="col-xs-3 control-label" style="line-height: 26px;">{% trans "Documentation for" %}</label>
@@ -29,6 +31,26 @@
 				$('.documentation_for_supplier').hide();
 			}
 		}
+
+		function check_supplier_identifier() {
+			data = {
+				'supplier_id': $('input[name="document[supplier_id]"]').val(),
+				'supplier_identifier':  $('input[name="document[supplier_identifier]"]').val(),
+				'document_id': {{ document.id }}
+			}
+
+			$.post('/administrative/document/documentation?action=check_supplier_identifier', data, function(response) {
+				$('input[name="document[supplier_identifier]"]').popover({
+					container: 'body'
+				});
+
+				if (response > 0) {
+					$('input[name="document[supplier_identifier]"]').popover('show');
+				} else {
+					$('input[name="document[supplier_identifier]"]').popover('hide');
+				}
+			});
+		}
 	</script>
 
 	<div class="form-group{% if 'customer_id' in errors|keys %} has-error{% endif %} documentation_for_customer">
@@ -45,4 +67,12 @@
 			<input type="text" name="supplier" class="form-control typeahead autocomplete_supplier" value="{% if document.supplier_id > 0 %}{{ document.supplier.company }}{% endif %}" placeholder="{% trans "Search supplier" %}...">
 			<input type="hidden" class="supplier_id" name="document[supplier_id]" value="{{ document.supplier_id }}">
 		</div>
+	</div>
+
+	<div class="form-group{% if 'supplier_identifier' in errors|keys %} has-error{% endif %}">
+		<label class="col-xs-3 control-label">{% trans "Supplier identifier" %}</label>
+		<div class="col-xs-5">
+			<input type="text" name="document[supplier_identifier]" class="form-control" value="{{ document.supplier_identifier }}" data-toggle="popover" title="{% trans "Already in use" %}" data-content="{% trans "This identifier is already used for another documentation." %}" onchange="check_supplier_identifier();" />
+		</div>
+		{{ form.invalid_input('supplier_identifier', errors) }}
 	</div>

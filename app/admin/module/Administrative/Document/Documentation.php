@@ -2,6 +2,7 @@
 /**
  * Module Index
  *
+ * @author Hassan Ahmed <hassan.ahmed@tigron.be>
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
  * @author David Vandemaele <david@tigron.be>
@@ -11,7 +12,6 @@
 namespace App\Admin\Module\Administrative\Document;
 
 use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
 use \Skeleton\Core\Web\Session;
 use \Skeleton\Pager\Web\Pager;
 
@@ -94,17 +94,41 @@ class Documentation extends \App\Admin\Module\Administrative\Document {
 	}
 
 	/**
-	 * Edit an incoming invoice
+	 * Edit a Documentation
 	 *
 	 * @access public
 	 */
 	public function display_edit() {
 		$document = \Document::get_by_id($_GET['id']);
-		if ($document->classname != 'Document_Incoming_Invoice') {
+		if ($document->classname != 'Document_Documentation') {
 			Session::redirect('/administrative/document?action=edit&id=' . $_GET['id']);
 		}
 
 		parent::display_edit();
+	}
+
+	/**
+	 * AJAX: check supplier_identifier
+	 *
+	 * @access public
+	 */
+	public function display_check_supplier_identifier() {
+		$this->template = null;
+
+		try {
+			$supplier = \Supplier::get_by_id($_POST['supplier_id']);
+			$documentations = \Document_Documentation::get_by_supplier_supplier_identifier($supplier, $_POST['supplier_identifier']);
+
+			foreach ($documentations as $key => $documentation) {
+				if ($documentation->id == $_POST['document_id']) {
+					unset($documentation[$key]);
+				}
+			}
+
+			echo count($documentations);
+		} catch (\Exception $e) {
+			echo 0;
+		}
 	}
 
 	/**
@@ -115,5 +139,4 @@ class Documentation extends \App\Admin\Module\Administrative\Document {
 	public function secure() {
 		return 'admin.document';
 	}
-
 }
