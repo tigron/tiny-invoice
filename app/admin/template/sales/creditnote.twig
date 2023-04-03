@@ -347,7 +347,15 @@
 		</div>
 
 		<div class="panel panel-default">
-			<div class="panel-heading">{% trans "Invoice details" %}</div>
+			<div class="panel-heading d-flex ">
+				<span>
+					{% trans "Invoice details" %}
+				</span>
+				<span class="based-on-invoice">
+					{% trans "Creditnote based on invoice:" %}
+					<a href="/sales/invoice?action=edit&id={{ creditnote.invoice_id }}">{{ creditnote.invoice_id }}</a>
+				</span>
+			</div>
 			<div class="panel-body">
 				<table class="table table-striped table-hover table-condensed">
 					<thead>
