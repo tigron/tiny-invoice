@@ -39,15 +39,7 @@ class Account extends Module {
 		$template = Template::Get();
 
 		$bank_accounts = \Bank_Account::get_all();
-		$non_archived_bank_accounts = [];
-		
-		foreach ($bank_accounts as $bank_account){
-			if ($bank_account->archived == null){
-				$non_archived_bank_accounts[] = $bank_account;
-			}
-		}
-
-		$template->assign('bank_accounts', $non_archived_bank_accounts);
+		$template->assign('bank_accounts', $bank_accounts);
 
 		$bookkeeping_accounts = \Bookkeeping_Account::get_all();
 		$template->assign('bookkeeping_accounts', $bookkeeping_accounts);
