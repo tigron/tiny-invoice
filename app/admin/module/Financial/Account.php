@@ -12,7 +12,6 @@ namespace App\Admin\Module\Financial;
 use \Skeleton\Core\Web\Template;
 use \Skeleton\Core\Application\Web\Module;
 use \Skeleton\Core\Web\Session;
-use \Skeleton\Pager\Web\Pager;
 
 class Account extends Module {
 
@@ -40,7 +39,15 @@ class Account extends Module {
 		$template = Template::Get();
 
 		$bank_accounts = \Bank_Account::get_all();
-		$template->assign('bank_accounts', $bank_accounts);
+		$non_archived_bank_accounts = [];
+		
+		foreach ($bank_accounts as $bank_account){
+			if ($bank_account->archived == null){
+				$non_archived_bank_accounts[] = $bank_account;
+			}
+		}
+
+		$template->assign('bank_accounts', $non_archived_bank_accounts);
 
 		$bookkeeping_accounts = \Bookkeeping_Account::get_all();
 		$template->assign('bookkeeping_accounts', $bookkeeping_accounts);
