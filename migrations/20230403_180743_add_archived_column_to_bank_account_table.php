@@ -23,11 +23,12 @@ class Migration_20230403_180743_Add_archived_column_to_bank_account_table extend
 		$bank_accounts = Bank_Account::get_all();
 
 		foreach($bank_accounts as $bank_account){
-			foreach($ibans as $iban){
-				if($bank_account->number !== $iban){
-					$bank_account->archived = date('now');
-					$bank_account->save()
-				}
+			if(!in_array($bank_account->number, $ibans)){
+				$bank_account->archived = date('Y-m-d H:i:s');
+				$bank_account->save();
+			} else {
+				$bank_account->archived = null;
+				$bank_account->save();
 			}
 		}
 	}
