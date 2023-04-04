@@ -26,6 +26,7 @@ class Migration_20230403_180743_Add_archived_column_to_bank_account_table extend
 			foreach($ibans as $iban){
 				if($bank_account->number !== $iban){
 					$bank_account->archived = date('now');
+					$bank_account->save()
 				}
 			}
 		}
