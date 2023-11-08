@@ -6,7 +6,7 @@ return [
 	/**
 	 * Core
 	 */
-	'application_dir' => dirname(__FILE__) . '/../app/',
+	'application_path' => dirname(__FILE__) . '/../app/',
 	'asset_paths' => [
 		dirname(__FILE__) . '/../lib/external/assets/composer/',
 	],

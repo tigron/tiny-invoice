@@ -160,6 +160,9 @@
 							<dt>{% trans "Credit note number" %}</dt>
 							<dd>{{ creditnote.id }}</dd>
 
+							<dt>{% trans "Based on invoice:" %}</dt>
+							<dd><a href="/sales/invoice?action=edit&id={{ creditnote.invoice_id }}">{{ creditnote.invoice_id }}</a></dd>
+
 							<dt>{% trans "Created" %}</dt>
 							<dd>{{ creditnote.created|datetime() }}</dd>
 

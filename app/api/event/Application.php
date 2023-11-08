@@ -9,18 +9,18 @@
 
 namespace App\Api\Event;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Web\Session;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Core\Http\Session;
 use \Skeleton\Database\Database;
 
-class Application extends \Skeleton\Core\Event {
+class Application extends \Skeleton\Core\Application\Event\Application {
 
 	/**
 	 * Display method
 	 *
 	 * @access public
 	 */
-	public function bootstrap(\Skeleton\Core\Application\Web\Module $module) {
+	public function bootstrap(): bool {
 		try {
 			$api_keys = \Setting::get_by_name('api_keys')->value;
 		} catch (Exception $e) {
@@ -31,5 +31,7 @@ class Application extends \Skeleton\Core\Event {
 		foreach ($keys as $key) {
 			\Skeleton\Package\Api\Config::$api_keys[] = trim($key);
 		}
+
+		return true;
 	}
 }

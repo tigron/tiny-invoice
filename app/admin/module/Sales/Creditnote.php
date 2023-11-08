@@ -7,9 +7,9 @@
 
 namespace App\Admin\Module\Sales;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
-use \Skeleton\Core\Web\Session;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Module;
+use \Skeleton\Core\Http\Session;
 use \Skeleton\Pager\Web\Pager;
 
 class Creditnote extends Module {
@@ -153,6 +153,7 @@ class Creditnote extends Module {
 				$creditnote->customer_contact_id = $invoice->customer_contact_id;
 				$creditnote->vat_mode = $invoice->vat_mode;
 				$creditnote->generate_number();
+				$creditnote->invoice_id = $invoice->id;
 				$creditnote->save();
 
 				foreach ($creditnote_items as $creditnote_item) {

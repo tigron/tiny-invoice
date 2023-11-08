@@ -9,56 +9,20 @@
 
 namespace App\Admin\Event;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Web\Session;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Core\Http\Session;
 use \Skeleton\Database\Database;
 
-class Application extends \Skeleton\Core\Event {
+class Application extends \Skeleton\Core\Application\Event\Application {
 
 	/**
 	 * Bootstrap
 	 *
 	 * @access public
 	 */
-	public function bootstrap(\Skeleton\Core\Application\Web\Module $module) {
+	public function bootstrap(): bool {
 		$this->start = microtime(true);
-
-		// Bootsprap the application
-		// Example: check if we need to log in, if we do and we aren't, redirect
-		if ($module->is_login_required()) {
-			if (!isset($_SESSION['user'])) {
-				\Skeleton\Core\Web\Session::destroy();
-				\Skeleton\Core\Web\Session::start();
-
-				if (isset($_SERVER['REQUEST_URI'])) {
-					$_SESSION['redirect_uri'] = $_SERVER['REQUEST_URI'];
-				}
-
-				\Skeleton\Core\Web\Session::redirect('/login');
-			}
-
-			\User::set($_SESSION['user']);
-		}
-
-		\Language::set($_SESSION['language']);
-
-		if (is_callable([ $module, 'secure' ])) {
-			$identifier = $module->secure();
-			if (!$_SESSION['user']->has_permission($identifier)) {
-				\Skeleton\Core\Web\Session::redirect('/403');
-			}
-		}
-
-		// Assign the sticky session object to our template
-		$template = \Skeleton\Core\Web\Template::get();
-		$sticky_session = new \Skeleton\Core\Web\Session\Sticky();
-		$template->add_environment('sticky_session', $sticky_session);
-
-		// Assign settings to template. Used for company information in header
-		$template->assign('settings', \Setting::get_as_array());
-
-		\Skeleton\Pager\Config::$links_template = '@skeleton-pager\bootstrap5\links.twig';
-		\Skeleton\Pager\Config::$header_template = '@skeleton-pager\bootstrap5\header.twig';
+		return true;
 	}
 
 	/**
@@ -66,7 +30,7 @@ class Application extends \Skeleton\Core\Event {
 	 *
 	 * @access private
 	 */
-	public function teardown(\Skeleton\Core\Application\Web\Module $module = null) {
+	public function teardown(): void {
 		$database = Database::get();
 		$queries = $database->query_counter;
 

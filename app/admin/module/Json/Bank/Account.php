@@ -9,8 +9,8 @@
 
 namespace App\Admin\Module\Json\Bank;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Module;
 
 class Account extends Module {
 

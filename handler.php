@@ -1,14 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * Initialize the application
+ * Handler file
  *
- * @author Christophe Gosiau <christophe@tigron.be>
- * @author Gerry Demaret <gerry@tigron.be>
+ * Calls the Handler class
  */
-ini_set('display_errors', '1');
 
 require_once 'lib/base/Bootstrap.php';
 Bootstrap::boot();
-
-\Skeleton\Core\Web\Handler::Run();
-
+\Skeleton\Core\Http\Handler::Run();

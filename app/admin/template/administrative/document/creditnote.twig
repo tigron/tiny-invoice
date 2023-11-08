@@ -1,5 +1,4 @@
 {% extends "/administrative/document.twig" %}
-
 {% import '_default/macro.base.twig' as base %}
 
 {% block pager %}
@@ -94,6 +93,9 @@
 				<a href="/administrative/document?action=add" title="">
 					<i data-feather="plus"></i>
 					{% trans "Add document" %}
+				</a> -
+				<a href="#" onclick="$(this).closest('form').submit();">
+					<i class="fa fa-file"></i> {% trans "Export creditnotes" %}
 				</a>
 			</div>
 

@@ -9,10 +9,10 @@
 
 namespace App\Admin\Module;
 
-use \Skeleton\Core\Application\Web\Module;
+use \Skeleton\Application\Web\Module;
 use \Skeleton\Core\Web\Template;
 use Skeleton\Pager\Web\Pager;
-use Skeleton\Core\Web\Session;
+use Skeleton\Core\Http\Session;
 
 class Export extends Module {
 

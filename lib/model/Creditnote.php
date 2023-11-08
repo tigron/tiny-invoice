@@ -211,4 +211,21 @@ class Creditnote {
 		}
 		$invoice_method->send_creditnote($this);
 	}
+
+	/**
+	 * Get by number
+	 *
+	 * @access public
+	 * @param int $number
+	 * @return Creditnote $creditnote
+	 */
+	public static function get_by_number($number) {
+		$db = Database::get();
+		$id = $db->get_one('SELECT id FROM creditnote WHERE number=?', [ $number ]);
+		if ($id === null) {
+			throw new \Exception('Creditnote with number ' . $number . ' not found');
+		}
+		return self::get_by_id($id);
+	}
+	
 }

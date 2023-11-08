@@ -2,6 +2,7 @@
 /**
  * Document_Documentation class
  *
+ * @author Hassan Ahmed <hassan.ahmed@tigron.be>
  * @author David Vandemaele <david@tigron.be>
  */
 
@@ -103,5 +104,24 @@ class Document_Documentation extends Document {
 			$documentations[] = self::get_by_id($id);
 		}
 		return $documentations;
+	}
+
+	/**
+	 * Get by Supplier supplier_identifier
+	 *
+	 * @access public
+	 * @param Supplier $supplier
+	 * @param string $supplier_identifier
+	 */
+	public static function get_by_supplier_supplier_identifier(Supplier $supplier, $supplier_identifier) {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT document_id FROM document_documentation WHERE supplier_id=? AND supplier_identifier=?', [$supplier->id, $supplier_identifier]);
+
+		$items = [];
+		foreach ($ids as $id) {
+			$items[] = self::get_by_id($id);
+		}
+
+		return $items;
 	}
 }

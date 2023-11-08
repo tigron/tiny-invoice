@@ -9,9 +9,9 @@
 
 namespace App\Admin\Module\Setting;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
-use \Skeleton\Core\Web\Session;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Module;
+use \Skeleton\Core\Http\Session;
 
 class Api extends Module {
 	/**

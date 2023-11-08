@@ -9,8 +9,8 @@
 
 namespace App\Admin\Module\Financial\Account;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Module;
 use \Skeleton\Pager\Web\Pager;
 
 class Chart extends Module {

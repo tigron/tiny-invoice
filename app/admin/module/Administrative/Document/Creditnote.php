@@ -2,6 +2,7 @@
 /**
  * Module Index
  *
+ * @author Hassan Ahmed <hassan.ahmed@tigron.be>
  * @author Christophe Gosiau <christophe@tigron.be>
  * @author Gerry Demaret <gerry@tigron.be>
  * @author David Vandemaele <david@tigron.be>
@@ -10,9 +11,8 @@
 
 namespace App\Admin\Module\Administrative\Document;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
-use \Skeleton\Core\Web\Session;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Core\Http\Session;
 use \Skeleton\Pager\Web\Pager;
 
 class Creditnote extends \App\Admin\Module\Administrative\Document {
@@ -119,6 +119,21 @@ class Creditnote extends \App\Admin\Module\Administrative\Document {
 
 		parent::display_edit();
 	}
+
+	/**
+	 * Export creditnotes
+	 *
+	 * @access public
+	 */
+	public function display_export() {
+		$export = new \Export_Excel_Document_CreditNote();
+		$export->data = json_encode($_REQUEST['hash']);
+		$export->save();
+		$export->run();
+
+		Session::redirect('/export?action=created');
+	}
+
 	/**
 	 * Secure
 	 *
@@ -127,5 +142,4 @@ class Creditnote extends \App\Admin\Module\Administrative\Document {
 	public function secure() {
 		return 'admin.document';
 	}
-
 }

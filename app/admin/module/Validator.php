@@ -7,7 +7,7 @@
 
 namespace App\Admin\Module;
 
-use \Skeleton\Core\Application\Web\Module;
+use \Skeleton\Application\Web\Module;
 
 class Validator extends Module {
 	/**

@@ -454,10 +454,13 @@ class Invoice {
 			}
 		}
 
-		$max_length_fieds = ['reference', 'internal_reference'];
-		foreach ($max_length_fieds as $max_length_fied) {
-			if (strlen($this->details[$max_length_fied]) > 64) {
-				$errors[$max_length_fied] = 'too_long';
+		$max_length_fields = ['reference', 'internal_reference'];
+		foreach ($max_length_fields as $max_length_field) {
+			if (!isset($this->details[$max_length_field])) {
+				continue;
+			}
+			if (strlen($this->details[$max_length_field]) > 64) {
+				$errors[$max_length_field] = 'too_long';
 			}
 		}
 

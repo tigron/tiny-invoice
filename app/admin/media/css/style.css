@@ -148,3 +148,16 @@ a:not(.btn):hover {
 	cursor: pointer;
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * Typeahead
+ */
+.form-control.typeahead {
+	width: 100%;
+}
+
+.based-on-invoice {
+	margin-left: 9rem;
+}
+>>>>>>> development

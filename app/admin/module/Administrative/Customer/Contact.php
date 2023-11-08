@@ -7,9 +7,9 @@
 
 namespace App\Admin\Module\Administrative\Customer;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
-use \Skeleton\Core\Web\Session;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Module;
+use \Skeleton\Core\Http\Session;
 
 class Contact extends Module {
 	/**
