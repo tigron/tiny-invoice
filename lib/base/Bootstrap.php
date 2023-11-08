@@ -61,7 +61,7 @@ class Bootstrap {
 		$database = \Skeleton\Database\Database::Get($config->database, true);
 		\Skeleton\Database\Config::$query_log = false;
 		\Skeleton\Database\Config::$query_counter = true;
-		\Skeleton\Database\Config::$auto_discard = true;		
+		\Skeleton\Database\Config::$auto_discard = true;
 
 		/**
 		 * Initialize the file store
@@ -84,10 +84,27 @@ class Bootstrap {
 		/**
 		 * Initialize the translations
 		 */
-		\Skeleton\I18n\Config::$po_directory = $root_path . '/po/';
-		\Skeleton\I18n\Config::$cache_directory = $root_path . '/tmp/languages/';
-		\Skeleton\I18n\Config::$additional_template_paths['pdf'] = $root_path . '/store/pdf/';
-		\Skeleton\I18n\Config::$additional_template_paths['email'] = $root_path . '/store/email/default';
+		\Skeleton\I18n\Config::$language_interface = '\Language';
+		\Skeleton\I18n\Translator\Storage\Po::set_default_configuration(['storage_path' => $root_path . '/po/']);
+		\Skeleton\I18n\Config::$cache_path = $root_path . '/tmp/languages/';
+
+		// PDF Translator
+		$storage = new \Skeleton\I18n\Translator\Storage\Po();
+		$translator = new \Skeleton\I18n\Translator('pdf');
+		$translator->set_translator_storage($storage);
+		$translator_extractor_twig = new \Skeleton\I18n\Translator\Extractor\Twig();
+		$translator_extractor_twig->set_template_path($root_path . '/store/pdf/');
+		$translator->set_translator_extractor($translator_extractor_twig);
+		$translator->save();
+
+		// Email Translator
+		$storage = new \Skeleton\I18n\Translator\Storage\Po();
+		$translator = new \Skeleton\I18n\Translator('email');
+		$translator->set_translator_storage($storage);
+		$translator_extractor_twig = new \Skeleton\I18n\Translator\Extractor\Twig();
+		$translator_extractor_twig->set_template_path($root_path . '/store/email/default');
+		$translator->set_translator_extractor($translator_extractor_twig);
+		$translator->save();
 
 		/**
 		 * Initialize the template caching path

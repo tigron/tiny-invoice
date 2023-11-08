@@ -10,9 +10,9 @@
 
 namespace App\Admin\Module\Administrative\Document;
 
-use \Skeleton\Core\Web\Template;
+use \Skeleton\Application\Web\Template;
 use \Skeleton\Database\Database;
-use \Skeleton\Core\Web\Session;
+use \Skeleton\Core\Http\Session;
 use \Skeleton\Pager\Web\Pager;
 
 class Invoice extends \App\Admin\Module\Administrative\Document {

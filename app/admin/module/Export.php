@@ -11,7 +11,7 @@ namespace App\Admin\Module;
 
 use Skeleton\Package\Crud\Web\Module\Crud;
 use Skeleton\Pager\Web\Pager;
-use Skeleton\Core\Web\Session;
+use Skeleton\Core\Http\Session;
 
 class Export extends Crud {
 

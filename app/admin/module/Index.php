@@ -9,8 +9,8 @@
 
 namespace App\Admin\Module;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Module;
 
 class Index extends Module {
 
@@ -35,6 +35,6 @@ class Index extends Module {
 	 * @access public
 	 */
 	public function display() {
-		\Skeleton\Core\Web\Session::redirect('/sales/invoice');
+		\Skeleton\Core\Http\Session::redirect('/sales/invoice');
 	}
 }

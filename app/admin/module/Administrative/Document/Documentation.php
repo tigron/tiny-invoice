@@ -11,8 +11,8 @@
 
 namespace App\Admin\Module\Administrative\Document;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Web\Session;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Core\Http\Session;
 use \Skeleton\Pager\Web\Pager;
 
 class Documentation extends \App\Admin\Module\Administrative\Document {
