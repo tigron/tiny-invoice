@@ -40,7 +40,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">{% trans "Document details" %}</div>
 					<div class="panel-body">
-						<form class="form-horizontal form-condensed" action="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" method="post">
+						<form id="edit-form" class="form-horizontal form-condensed" action="{{ env.module.get_module_path() }}?action=edit&id={{ document.id }}" method="post">
 							<div class="form-group {% if 'title' in errors|keys %}has-error{% endif %}">
 								<label class="col-xs-3 control-label">{% trans "Title" %}</label>
 								<div class="col-xs-9">
@@ -261,6 +261,13 @@
 		{% include 'administrative/document/extractor/modal.extractor.twig' with {id: 'extractor', modal_size: 'lg' }  %}
 
 		<script type="text/javascript">
+			$(function (){
+				$('#edit-form').on('submit', function (){
+					classname = $('#slc_classname').val().toLowerCase();
+					$('[class^="classname_document_"]').not('[class^="classname_' + classname + '"]').remove();
+				})
+			});
+
 			function show_classname_fields() {
 				classname = $('#slc_classname').val();
 

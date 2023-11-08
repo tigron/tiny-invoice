@@ -8,8 +8,8 @@
 
 namespace App\Admin\Module;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Application\Web\Module;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Module;
 
 class 403 extends Module {
 	/**

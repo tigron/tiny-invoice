@@ -11,8 +11,8 @@ namespace App\Admin\Module\Setting\Extractor;
 
 use Skeleton\Package\Crud\Web\Module\Crud;
 use Skeleton\Pager\Web\Pager;
-use Skeleton\Core\Web\Session;
-use Skeleton\Core\Web\Template;
+use Skeleton\Core\Http\Session;
+use Skeleton\Application\Web\Template;
 
 class Pdf extends Crud {
 

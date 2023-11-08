@@ -234,3 +234,7 @@ dt, label {
 .form-control.typeahead {
 	width: 100%;
 }
+
+.based-on-invoice {
+	margin-left: 9rem;
+}

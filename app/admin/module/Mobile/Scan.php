@@ -9,9 +9,9 @@
 
 namespace App\Admin\Module\Mobile;
 
-use \Skeleton\Core\Web\Template;
-use \Skeleton\Core\Web\Session;
-use \Skeleton\Core\Application\Web\Module;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Core\Http\Session;
+use \Skeleton\Application\Web\Module;
 use \setasign\Fpdi\TcpdfFpdi;
 
 class Scan extends Module {
