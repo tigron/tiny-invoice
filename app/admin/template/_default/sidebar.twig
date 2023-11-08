@@ -201,4 +201,9 @@
 			<i style="width: 40px; height: 40px;" data-feather="menu"></i>
 		</a>
 	</div>
+
+	<div class="w-100 text-end pe-2">
+		{% trans "Logged in as" %} <i>{{ env.session.user.username }}</i>
+		<a href="/login?action=logout"><i data-feather="log-out"></i></a>
+	</div>
 </div>
