@@ -91,7 +91,7 @@
 			<td>{{ bank_account.name }}</td>
 			<td>{{ bank_account.alias }}</td>
 			<td>{{ bank_account.number }}</td>
-			<td><a href="/financial/account?action=restore&id={{ bank_account.id }}" title="{% trans 'Restore' %}" data-confirm-title="{% trans "Please confirm" %}" data-confirm-message="{% trans "Are you sure you want to restore the account" %} {{ bank_account.number }} ?"><span class="glyphicon glyphicon-repeat"></span></a></td>
+			<td><a href="/financial/account?action=restore&id={{ bank_account.id }}" title="{% trans 'Restore' %}"><span class="glyphicon glyphicon-repeat"></span></a></td>
 		</tr>
 		{% if loop.last %}
 				</tbody>
