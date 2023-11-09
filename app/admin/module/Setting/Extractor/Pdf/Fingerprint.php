@@ -9,10 +9,10 @@
 
 namespace App\Admin\Module\Setting\Extractor\Pdf;
 
-use Skeleton\Pager\Web\Pager;
-use Skeleton\Core\Http\Session;
-use Skeleton\Core\Application\Web\Module;
-use Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Template;
+use \Skeleton\Application\Web\Module;
+use \Skeleton\Core\Http\Session;
+use \Skeleton\Pager\Web\Pager;
 
 class Fingerprint extends Module {
 
