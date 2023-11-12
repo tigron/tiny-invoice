@@ -41,6 +41,9 @@ class Account extends Module {
 		$bank_accounts = \Bank_Account::get_all();
 		$template->assign('bank_accounts', $bank_accounts);
 
+		$archived_bank_accounts = \Bank_Account::get_archived();
+		$template->assign('archived_bank_accounts', $archived_bank_accounts);
+
 		$bookkeeping_accounts = \Bookkeeping_Account::get_all();
 		$template->assign('bookkeeping_accounts', $bookkeeping_accounts);
 	}
@@ -60,6 +63,11 @@ class Account extends Module {
 			}
 		} else {
 			$_POST['bank_account']['default_for_payment'] = false;
+		}
+		if (isset($_POST['bank_account']['archived'])) {
+			$_POST['bank_account']['archived'] = date('Y-m-d H:i:s');
+		} else {
+			$_POST['bank_account']['archived'] = null;
 		}
 
 		$bank_account = \Bank_Account::get_by_id($_GET['id']);
@@ -90,6 +98,21 @@ class Account extends Module {
 		$bank_account->load_array($_POST['bank_account']);
 		$bank_account->save();
 
+		Session::redirect('/financial/account');
+	}
+
+	/**
+	 * Restore a bank account
+	 *
+	 * @access public
+	 */
+	public function display_restore() {
+		$this->template = false;
+		if (isset($_GET['id']) === false || empty($_GET['id'])) {
+			Session::redirect('/financial/account');
+		}
+		$bank_account = \Bank_Account::get_by_id($_GET['id']);
+		$bank_account->restore();
 		Session::redirect('/financial/account');
 	}
 

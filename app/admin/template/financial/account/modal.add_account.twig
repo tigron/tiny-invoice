@@ -3,69 +3,115 @@
 
 {% block body %}
 
-<form class="form-horizontal" action="/financial/account?action=add" method="post" id="frm_add_account">
-	<div class="alert alert-danger hide">
-		{% trans "Some fields were not filled in correcty." %} {% trans "Please correct them in order to continue." %}
-	</div>
+<ul class="nav nav-tabs mb-2">
+	<li id='add' role="presentation" class="active"><a href="javascript:show('add')">{% trans "Add" %}</a></li>
+	<li id='restore' role="presentation"><a href="javascript:show('restore')">{% trans "Restore" %}</a></li>
+</ul>
+<br>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Name" %}</label>
-		<div class="col-xs-8">
-			<input type="text" class="form-control" name="bank_account[name]" value="{{ bank_account.name }}" />
+<div id="add">
+	<form class="form-horizontal" action="/financial/account?action=add" method="post" id="frm_add_account">
+		<div class="alert alert-danger hide">
+			{% trans "Some fields were not filled in correcty." %} {% trans "Please correct them in order to continue." %}
 		</div>
-	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Description" %}</label>
-		<div class="col-xs-8">
-			<input type="text" class="form-control" name="bank_account[description]" value="{{ bank_account.description }}" />
+		<div class="form-group">
+			<label class="col-xs-4 control-label">{% trans "Name" %}</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" name="bank_account[name]" value="{{ bank_account.name }}" />
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Number" %}</label>
-		<div class="col-xs-8">
-			<input type="text" class="form-control" name="bank_account[number]" value="{{ bank_account.number }}" />
+		<div class="form-group">
+			<label class="col-xs-4 control-label">{% trans "Description" %}</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" name="bank_account[description]" value="{{ bank_account.description }}" />
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "BIC" %}</label>
-		<div class="col-xs-8">
-			<input type="text" class="form-control" name="bank_account[bic]" value="{{ bank_account.bic }}" />
+		<div class="form-group">
+			<label class="col-xs-4 control-label">{% trans "Number" %}</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" name="bank_account[number]" value="{{ bank_account.number }}" />
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Alias" %}</label>
-		<div class="col-xs-8">
-			<input type="text" class="form-control" name="bank_account[alias]" value="{{ bank_account.alias }}" />
+		<div class="form-group">
+			<label class="col-xs-4 control-label">{% trans "BIC" %}</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" name="bank_account[bic]" value="{{ bank_account.bic }}" />
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Bookkeeping account" %}</label>
-		<div class="col-xs-8">
-			<select name="bank_account[bookkeeping_account_id]" class="form-control">
-				<option value="0">{% trans "Please select an account" %}</option>
-				{% for bookkeeping_account in bookkeeping_accounts %}
-					<option value="{{ bookkeeping_account.id }}" {% if bank_account.bookkeeping_account_id == bookkeeping_account.id%}selected{% endif %}>
-						{{ bookkeeping_account.number }} - {{ bookkeeping_account.name }}
-					</option>
-				{% endfor %}
-			</select>
+		<div class="form-group">
+			<label class="col-xs-4 control-label">{% trans "Alias" %}</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" name="bank_account[alias]" value="{{ bank_account.alias }}" />
+			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
-		<label class="col-xs-4 control-label">{% trans "Make default for payment" %}</label>
-		<div class="col-xs-8">
-			<input type="checkbox" data-group-cls="btn-group-xs"  name="bank_account[default_for_payment]" {% if bank_account.default_for_payment %}checked{% endif %}>
+		<div class="form-group">
+			<label class="col-xs-4 control-label">{% trans "Bookkeeping account" %}</label>
+			<div class="col-xs-8">
+				<select name="bank_account[bookkeeping_account_id]" class="form-control">
+					<option value="0">{% trans "Please select an account" %}</option>
+					{% for bookkeeping_account in bookkeeping_accounts %}
+						<option value="{{ bookkeeping_account.id }}" {% if bank_account.bookkeeping_account_id == bookkeeping_account.id%}selected{% endif %}>
+							{{ bookkeeping_account.number }} - {{ bookkeeping_account.name }}
+						</option>
+					{% endfor %}
+				</select>
+			</div>
 		</div>
-	</div>
-</form>
+
+		<div class="form-group">
+			<label class="col-xs-4 control-label">{% trans "Make default for payment" %}</label>
+			<div class="col-xs-8">
+				<input type="checkbox" data-group-cls="btn-group-xs"  name="bank_account[default_for_payment]" {% if bank_account.default_for_payment %}checked{% endif %}>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div id="restore" class="hidden">
+	{% for bank_account in archived_bank_accounts %}
+		{% if loop.first %}
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>{% trans 'Name' %}</th>
+						<th>{% trans 'Alias' %}</th>
+						<th>{% trans 'Number' %}</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+		{% endif %}
+		<tr>
+			<td>{{ bank_account.name }}</td>
+			<td>{{ bank_account.alias }}</td>
+			<td>{{ bank_account.number }}</td>
+			<td><a href="/financial/account?action=restore&id={{ bank_account.id }}" title="{% trans 'Restore' %}"><span class="glyphicon glyphicon-repeat"></span></a></td>
+		</tr>
+		{% if loop.last %}
+				</tbody>
+			</table>
+		{% endif %}
+	{% else %}
+		{% trans "There is no bank account archived" %}
+	{% endfor %}
+</div>
 
 <script type="text/javascript">
+	function show(id) {
+		$('div#add').addClass('hidden');
+		$('li#add').removeClass('active');
+		$('div#restore').addClass('hidden');
+		$('li#restore').removeClass('active');
+		$('div#' + id).removeClass('hidden');
+		$('li#' + id).addClass('active');
+	}
+
 	$('#frm_add_account').on('submit', function() {
 		return validate_bank_account_new();
 	});

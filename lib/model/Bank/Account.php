@@ -104,4 +104,20 @@ class Bank_Account {
 		}
 		return self::get_by_id($id);
 	}
+
+	/**
+	 * Get archived
+	 *
+	 * @access public
+	 * @return array Bank_Account
+	 */
+	public static function get_archived(): array {
+		$db = Database::get();
+		$ids = $db->get_column('SELECT id FROM bank_account WHERE archived IS NOT NULL');
+		$results = [];
+		foreach ($ids as $id) {
+			$results[] = self::get_by_id($id);
+		}
+		return $results;
+	}
 }
