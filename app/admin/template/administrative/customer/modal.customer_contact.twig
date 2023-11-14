@@ -211,7 +211,7 @@
 
 				var $invoker = $(e.relatedTarget);
 
-				if($invoker.data('customer-contacts') == 0) {
+				if($invoker.data('customer-contact-id') == '') {
 					load_customer_data($invoker.data('customer-id'));
 				} else if($invoker.data('customer-contact-id')) {
 					load_customer_contact_data($invoker.data('customer-contact-id'));
@@ -256,6 +256,7 @@
 		function load_customer_data(id) {
 			$.get('/administrative/customer?action=load_customer&id=' + id, function(data) {
 				$.each(data, function(key, value) {
+console.log(key + ' -> ' + value);
 					if ($('#invoice-contact-form #' + key).length == 1) {
 						$('#invoice-contact-form #' + key).val(value);
 					}
