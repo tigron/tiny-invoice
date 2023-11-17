@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b23032cb3a429863db4a69a021ea3bc",
+    "content-hash": "f658be575d36ccc3f9adb9d1d45079f4",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1937,26 +1937,11 @@
             ]
         },
         {
-            "name": "npm-asset/uglify-js",
-            "version": "3.17.4",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/uglify-js/-/uglify-js-3.17.4.tgz"
-            },
-            "type": "npm-asset",
-            "license": [
-                "BSD-2-Clause"
-            ]
-        },
-        {
             "name": "npm-asset/webcam-easy",
-            "version": "1.0.9",
+            "version": "1.0.5",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/webcam-easy/-/webcam-easy-1.0.9.tgz"
-            },
-            "require": {
-                "npm-asset/uglify-js": ">=3.17.4,<4.0.0"
+                "url": "https://registry.npmjs.org/webcam-easy/-/webcam-easy-1.0.5.tgz"
             },
             "type": "npm-asset",
             "license": [
