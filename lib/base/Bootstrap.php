@@ -79,7 +79,15 @@ class Bootstrap {
 		/**
 		 * Initialize the error handler
 		 */
-		\Skeleton\Error\Config::$debug = true;
+		\Skeleton\Error\Config::$debug = $config->debug;
+		if (isset($config->debug_sentry_dsn)) {
+			\Skeleton\Error\Config::$sentry_dsn = $config->debug_sentry_dsn; // Your Sentry DSN (optional)
+		}
+		if (isset($config->environment)) {
+			\Skeleton\Error\Config::$environment = $config->environment;
+		} else {
+			\Skeleton\Error\Config::$environment = gethostname();
+		}
 		\Skeleton\Error\Handler::enable();
 
 		/**
