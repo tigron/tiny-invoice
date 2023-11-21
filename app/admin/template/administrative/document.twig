@@ -264,6 +264,10 @@
 			$(function (){
 				$('#edit-form').on('submit', function (){
 					classname = $('#slc_classname').val().toLowerCase();
+					if (classname == 'document_incoming_creditnote') {
+						// invoice & creditnote share the same fieldset
+						classname = 'document_incoming_invoice';
+					}
 					$('[class^="classname_document_"]').not('[class^="classname_' + classname + '"]').remove();
 				})
 			});
