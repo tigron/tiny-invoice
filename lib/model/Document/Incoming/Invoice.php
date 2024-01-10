@@ -171,7 +171,7 @@ class Document_Incoming_Invoice extends Document {
 	public function get_transaction_amount() {
 		$amount = 0;
 		foreach ($this->get_bank_account_statement_transaction_balances() as $transaction) {
-			$amount -= $transaction->amount;
+			$amount = bcsub($amount, $transaction->amount, 2);
 		}
 		return $amount;
 	}
@@ -192,7 +192,7 @@ class Document_Incoming_Invoice extends Document {
 	 * @access public
 	 */
 	public function get_balance() {
-		return $this->price_incl - $this->get_transaction_amount();
+		return bcsub($this->price_incl, $this->get_transaction_amount(), 2);
 	}
 
 	/**
