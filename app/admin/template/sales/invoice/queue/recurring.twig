@@ -64,7 +64,7 @@
 					<hr>
 
 					<div class="form-group" id="stop_after">
-						<label class="col-xs-4 control-label">{% trans "Stop after" %}</label>
+						<label class="col-xs-4 control-label">{% trans "Stop at (not included)" %}</label>
 						<div class="col-xs-8">
 							<input type="text" class="form-control datepicker" name="invoice_queue_recurring_group[stop_after]" value="{{ invoice_queue_recurring_group.stop_after }}">
 						</div>
@@ -604,7 +604,7 @@
 							<th width="50">{{ pager.create_header('Id'|trans, 'id')|raw }}</th>
 							<th>{{ pager.create_header('Created'|trans, 'created')|raw }}</th>
 							<th>{{ pager.create_header('Next run'|trans, 'next_run')|raw }}</th>
-							<th>{{ pager.create_header('Stop after'|trans, 'stop_after')|raw }}</th>
+							<th>{{ pager.create_header('Stop at (not included)'|trans, 'stop_after')|raw }}</th>
 							<th>{{ pager.create_header('Customer'|trans, 'customer_id')|raw }}</th>
 							<th>{{ pager.create_header('Contact'|trans, 'invoice_customer_contact_id')|raw }}</th>
 							<th>{{ pager.create_header('Name'|trans, 'name')|raw }}</th>
